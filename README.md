@@ -5,12 +5,18 @@ Deploy URL: http://45.55.69.44/
 Domain Name: http://flowchart.russfeld.me/
 Domain registered at https://www.namecheap.com
 
+JSFiddle: http://jsfiddle.net/1u9u1nh8/2/
+
 # Worklog
+
+#### 2015-07-06
+Worked on flowchart UI using Snap.svg http://snapsvg.io/
+Deployed at http://flowchart.russfeld.me/flowchart_test.html
 
 #### 2015-06-30
 Worked on the Meteor todo app tutorial https://www.meteor.com/tutorials/blaze/creating-an-app
 
-# Record of Useful Commands
+# Useful Meteor Commands
 
 ## Installing Meteor
 1. `curl https://install.meteor.com/ | sh`
@@ -39,3 +45,6 @@ https://kadira.io
 1. `meteor add meteorhacks:kadira`
 2. Add appID and appSecret to settings.json
 3. Deploy as usual
+
+# Helpful Reference URLs
+1. http://jsfiddle.net/38ne4/6/ JSFiddle for Drag/Drop handlers with Snap.svg
