@@ -5,9 +5,12 @@ Deploy URL: http://45.55.69.44/
 Domain Name: http://flowchart.russfeld.me/
 Domain registered at https://www.namecheap.com
 
-JSFiddle: http://jsfiddle.net/1u9u1nh8/3/
+JSFiddle: http://jsfiddle.net/1u9u1nh8/4/
 
 # Worklog
+
+#### 2015-07-08
+Refactored Javascript code to be MUCH cleanr, very few bug fixes
 
 #### 2015-07-06
 Worked on flowchart UI using Snap.svg http://snapsvg.io/

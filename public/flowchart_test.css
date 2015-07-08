@@ -1,0 +1,45 @@
+.container{
+	width: 100%;
+	padding: 5px;
+}
+
+.flowchart{
+	width: 100%;
+}
+
+.flowchart .boxTool{
+	fill: #DEFABC;
+    stroke: 000;
+    stroke-width: 2;
+}
+
+.flowchart .arrowTool{
+	fill: #FEDBCA;
+    stroke: 000;
+    stroke-width: 2;
+}
+
+.flowchart .arrowToolLine{
+	stroke-width: 1;
+	stroke: red;
+}
+
+.flowchart .selected{
+	stroke: blue;
+}
+
+.flowchart .dropZone{
+	fill: #FEFEFE;
+	stroke: #EEEFFF;
+    stroke-width: 2
+}
+
+.flowchart .dropZone.hover{
+	fill: #ABCDEF;
+}
+
+.flowchart .box{
+	fill: #512888;
+    stroke: 000;
+    stroke-width: 2;
+}
