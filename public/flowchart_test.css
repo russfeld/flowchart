@@ -43,3 +43,9 @@
     stroke: 000;
     stroke-width: 2;
 }
+
+.flowchart .line{
+	stroke-width: 1;
+	stroke: blue;
+	fill: none;
+}

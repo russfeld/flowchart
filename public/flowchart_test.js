@@ -22,7 +22,7 @@ var flowchart = {
             dropBoxRadius: 5,       //radius of the corners on the drop boxes
             toolboxLeft: 0,         //size of the toolbox at left (calculated at init)
             menuTop: 0,             //size of the menu at the top (calculated at init)
-            animationSpeed: 250     //speed of the drop animations
+            animationSpeed: 100     //speed of the drop animations
         },
         toolbox: {              //size settings for the toolbox
             toolHeight: 50,         //height of each tool object
@@ -43,6 +43,7 @@ var flowchart = {
     
     data: {                 //essential flowchart data
         boxes: [],              //array of flowchart boxes
+        lines: [],              //array of flowchart lines
         drops: [],              //array of flowchart drop zones
         tools: {                //toolbox tools
             boxTool: {},            //toolbox box tool (for dragging/dropping)
@@ -107,6 +108,9 @@ var flowchart = {
         //draw the flowchart boxes
         flowchart.ops.drawFlowchartBoxes();
 
+        //draw any needed prereq lines
+        flowchart.ops.drawFlowchartLines();
+
         //update the viewBox now that the SVG has been drawn
         flowchart.utils.updateViewBox();
 
@@ -127,6 +131,24 @@ var flowchart = {
             this.flowY = -1;            //y coordinate of the box on the grid (not pixels)
             this.flowID = -1;           //position of the object in the data array
             this.svgElem = {};          //svg element of the box within the image
+            this.lines = [];            //array of lines connecting to this object
+        },
+
+        /**
+         * Class for representing lines (prerequisite arrows) on the flowchart
+         */
+        flowchartLine: function(){
+            this.startBoxID = -1;       //the ID of the flowchart box at the start of the line
+            this.endBoxID = -1;         //the ID of the flowchart box at the end of the line
+            this.firstX = -1;           //the X coorindate of the side of the first box
+            this.startX = -1;           //the X coordinate of the starting point
+            this.startY = -1;           //the Y coordinate of the starting point
+            this.mainY = -1;            //the Y coordinate of the main line
+            this.endX = -1;             //the X coordinate of the ending point
+            this.endY = -1;             //the Y coordinate of the ending point
+            this.lastX = -1;            //the X coordinate of the side of the last box
+            this.flowID = -1;           //the position of this line within the data array
+            this.svgElem = {};          //svg element of this line within the image
         }
     },
 
@@ -305,7 +327,7 @@ var flowchart = {
         /**
          * Function to draw the drop zone boxes on the flowchart
          */
-         drawDropZones: function(){
+        drawDropZones: function(){
             //Alias for the flowchart settings for code readability
             var fsc = flowchart.settings.chart;
 
@@ -329,7 +351,7 @@ var flowchart = {
         /**
          * Function to draw the flowchart boxes on the flowchart
          */
-         drawFlowchartBoxes: function(){
+        drawFlowchartBoxes: function(){
             //Alias for the flowchart settings for code readability
             var fsc = flowchart.settings.chart;
 
@@ -340,7 +362,7 @@ var flowchart = {
             for(i = 0; i < 4; i++){
                 flowchart.data.boxes[i] = new flowchart.classes.flowchartBox();
                 flowchart.data.boxes[i].svgElem = flowchart.s.rect(
-                    fsc.toolboxLeft + fsc.dropBoxOffset, fsc.menuTop + fsc.dropBoxOffset + (i * 2 * (fsc.boxHeight + fsc.horizSpacing)), 
+                    fsc.toolboxLeft + fsc.dropBoxOffset + (2 * i * (fsc.boxWidth + fsc.horizSpacing)), fsc.menuTop + fsc.dropBoxOffset + (i * 2 * (fsc.boxHeight + fsc.horizSpacing)), 
                     fsc.boxWidth - fsc.dropBoxOffset - fsc.dropBoxOffset, fsc.boxHeight - fsc.dropBoxOffset - fsc.dropBoxOffset);
                 flowchart.data.boxes[i].svgElem.addClass("box");
 
@@ -352,7 +374,98 @@ var flowchart = {
                 //add a variable to the SVG element attributes to help with tracking it in click handlers
                 flowchart.data.boxes[i].svgElem.flowID = i;
             }
-         }
+        },
+
+        updateLine: function(line){
+            //get bounding boxes for each box
+            var bbox1 = flowchart.data.boxes[line.startBoxID].svgElem.getBBox();
+            var bbox2 = flowchart.data.boxes[line.endBoxID].svgElem.getBBox();
+
+            //alias
+            var fsc = flowchart.settings.chart;
+
+            //set line points
+            line.firstX = bbox1.x2;
+            line.startX = bbox1.x2 + fsc.dropBoxOffset + (fsc.horizSpacing / 2);
+            line.startY = bbox1.cy;
+            line.endX = bbox2.x - fsc.dropBoxOffset - (fsc.horizSpacing / 2);
+            line.endY = bbox2.cy;
+            line.lastX = bbox2.x;
+
+            //determine initial direction of line
+            if(line.startY < line.endY){ //if the starting box is above the ending box, go below
+                line.mainY = bbox1.y2 + fsc.dropBoxOffset + (fsc.vertSpacing / 2);
+            }else{ //if not, go above
+                line.mainY = bbox1.y - fsc.dropBoxOffset - (fsc.vertSpacing / 2);
+            }
+
+            line.svgElem.attr({points: [
+                line.firstX, line.startY, 
+                line.startX, line.startY, 
+                line.startX, line.mainY, 
+                line.endX, line.mainY, 
+                line.endX, line.endY, 
+                line.lastX, line.endY
+                ]});
+        },
+
+        /**
+         * Function to create a line between the boxes given on the flowchart
+         * 
+         * @param box1 {flowchartBox object} - the source flowchart box
+         * @param box2 {flowchartBox object} - the destination flowchart box
+         */
+        createLine: function(box1, box2){
+            //variables
+            var line = new flowchart.classes.flowchartLine();
+            
+            //set IDs of each box in the line object
+            line.startBoxID = box1.flowID;
+            line.endBoxID = box2.flowID;
+            line.svgElem = flowchart.s.polyline();
+            line.svgElem.addClass("line");
+
+            flowchart.ops.updateLine(line);
+
+            //add line to data storage areas
+            line.flowID = flowchart.data.lines.length;
+            box1.lines.push(line);
+            box2.lines.push(line);
+            flowchart.data.lines.push(line);
+
+            return line;
+        },
+
+        /**
+         * Function to draw a given line on the flowchart
+         * 
+         * @param line {flowchartLine object} - the flowchart line to be drawn
+         */
+        /*drawLine: function(line){
+            line.svgElem = flowchart.s.polyline(
+                line.firstX, line.startY, 
+                line.startX, line.startY, 
+                line.startX, line.mainY, 
+                line.endX, line.mainY, 
+                line.endX, line.endY, 
+                line.lastX, line.endY);
+        },*/
+
+        /**
+         * Function to create flowchart prerequisite lines
+         *
+         */
+        drawFlowchartLines: function(){
+            var i;
+
+            //for now, draw lines between consecutive flowchart boxes as a test
+            for(i = 0; i < 3; i++){
+                flowchart.ops.createLine(flowchart.data.boxes[i], flowchart.data.boxes[i+1]);
+            }
+            //for(i = 0; i < flowchart.data.lines.length; i++){
+            //    flowchart.ops.drawLine(flowchart.data.lines[i]);
+            //}
+        } 
     },
 
     //utility functions
@@ -388,7 +501,7 @@ var flowchart = {
                 flowchart.utils.highlightDropClear();
 
                 //make sure drop zone is valid
-                if(row >= 0 && row <= flowchart.config.gridRows && col >= 0 && col <= flowchart.config.gridCols){
+                if(row >= 0 && row < flowchart.config.gridRows && col >= 0 && col < flowchart.config.gridCols){
                     //update to new drop zone
                     fr.dropZoneX = row;
                     fr.dropZoneY = col;
@@ -412,6 +525,10 @@ var flowchart = {
             if(fr.dropZoneX >= 0 && fr.dropZoneY >= 0){
                 flowchart.data.drops[fr.dropZoneX][fr.dropZoneY].removeClass("hover");
             }
+
+            //clear variables
+            fr.dropZoneX = -1;
+            fr.dropZoneY = -1;
         },
 
         /**
@@ -432,9 +549,11 @@ var flowchart = {
                 var y = fsc.menuTop + fsc.dropBoxOffset + (fr.dropZoneY * (fsc.boxHeight + fsc.horizSpacing));
 
                 //animate the element to those coordinates
-                element.svgElem.animate({x: x, y: y}, fsc.animationSpeed);
+                element.svgElem.animate({x: x, y: y}, fsc.animationSpeed, mina.linear, function(){
+                    flowchart.utils.updateLines(element);
+                });
 
-                            //update the position of the current element
+                //update the position of the current element
                 element.flowX = flowchart.runtime.dropZoneX;
                 element.flowY = flowchart.runtime.dropZoneY;
             }else{
@@ -443,8 +562,23 @@ var flowchart = {
                 var y = fsc.menuTop + fsc.dropBoxOffset + (element.flowY * (fsc.boxHeight + fsc.horizSpacing));
 
                 //animate the element to those coordinates
-                element.svgElem.animate({x: x, y: y}, fsc.animationSpeed);
+                element.svgElem.animate({x: x, y: y}, fsc.animationSpeed, mina.linear, function(){
+                    flowchart.utils.updateLines(element);
+                });
             }
+        },
+
+        /**
+         * Helper function to update lines attached to a box after it has been animated into place
+         *
+         * @param box {flowchatBox object} - the box attached to the lines to be animated
+         */
+        updateLines: function(box){
+            flowchart.debug("Updating lines attached to " + box.flowID + " at " + box.svgElem.attr("x") + "," + box.svgElem.attr("y"));
+            //update any lines attached to the box
+            box.lines.forEach(function(element){
+                flowchart.ops.updateLine(element);
+            });
         },
 
          /**
