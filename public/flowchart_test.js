@@ -30,6 +30,16 @@ var flowchart = {
             vertSpacing: 20,        //vertical spacing between tools
             toolRightGutter: 20     //gutter between the toolbox and the flowchart
         },
+        forces: {               //constants used in the force-directed line spacing algorithm
+            c1: 1,                  //scale of the force magnitude between lines
+            c2: 20,                 //numerator of the force division between lines (distance must be less than this this to trigger a force), recommend using horizSpacing from above
+            c3: 0.1,                //scale of the overall force applied as movement
+            c4: 0.01,               //scale of the force applied based on direction of attached lines
+            c5: 900,                //numerator of the force division based on attached lines (distance must be less than this to trigger a force)
+            c6: 0.5,                //scale of the force applied based on the channels                 
+            c7: 15,                 //numerator of the force division based on attached lines (distance must be less than this to trigger a force)
+            t: 1                    //the maximum force must be at least this high to trigger another iteration
+        },
         viewBoxWidth: 1200,     //height of the resulting SVG image
         viewBoxHeight: 900      //width of the resulting SVG image
     },
@@ -149,6 +159,9 @@ var flowchart = {
             this.lastX = -1;            //the X coordinate of the side of the last box
             this.flowID = -1;           //the position of this line within the data array
             this.svgElem = {};          //svg element of this line within the image
+            this.mainForce = 0;         //force acting on the main line for force directed drawing
+            this.startForce = 0;        //force acting on the starting line for force directed drawing
+            this.endForce = 0;          //force acting on the ending line for force directed drawing
         }
     },
 
@@ -359,10 +372,10 @@ var flowchart = {
             var i;
 
             //for now, draw 4 boxes for testing
-            for(i = 0; i < 4; i++){
+            for(i = 0; i < 8; i++){
                 flowchart.data.boxes[i] = new flowchart.classes.flowchartBox();
                 flowchart.data.boxes[i].svgElem = flowchart.s.rect(
-                    fsc.toolboxLeft + fsc.dropBoxOffset + (2 * i * (fsc.boxWidth + fsc.horizSpacing)), fsc.menuTop + fsc.dropBoxOffset + (i * 2 * (fsc.boxHeight + fsc.horizSpacing)), 
+                    fsc.toolboxLeft + fsc.dropBoxOffset + (i * (fsc.boxWidth + fsc.horizSpacing)), fsc.menuTop + fsc.dropBoxOffset + (2 * (fsc.boxHeight + fsc.horizSpacing)), 
                     fsc.boxWidth - fsc.dropBoxOffset - fsc.dropBoxOffset, fsc.boxHeight - fsc.dropBoxOffset - fsc.dropBoxOffset);
                 flowchart.data.boxes[i].svgElem.addClass("box");
 
@@ -376,6 +389,11 @@ var flowchart = {
             }
         },
 
+        /**
+         * This function will update a line to connect with its flowchart boxes after being created or moved
+         *
+         * @param line (flowchartLine object) - the line to be updated
+         */
         updateLine: function(line){
             //get bounding boxes for each box
             var bbox1 = flowchart.data.boxes[line.startBoxID].svgElem.getBBox();
@@ -386,9 +404,9 @@ var flowchart = {
 
             //set line points
             line.firstX = bbox1.x2;
-            line.startX = bbox1.x2 + fsc.dropBoxOffset + (fsc.horizSpacing / 2);
+            line.startX = bbox1.x2 + fsc.dropBoxOffset + (fsc.horizSpacing / 3);
             line.startY = bbox1.cy;
-            line.endX = bbox2.x - fsc.dropBoxOffset - (fsc.horizSpacing / 2);
+            line.endX = bbox2.x - fsc.dropBoxOffset - (fsc.horizSpacing / 3);
             line.endY = bbox2.cy;
             line.lastX = bbox2.x;
 
@@ -399,6 +417,15 @@ var flowchart = {
                 line.mainY = bbox1.y - fsc.dropBoxOffset - (fsc.vertSpacing / 2);
             }
 
+            flowchart.ops.setLineAttrs(line);
+        },
+
+        /**
+         * This function will update the attributes of the current line to match the coordinates given
+         *
+         * @param line {flowchartLine object} - the line to be updated
+         */
+        setLineAttrs: function(line){
             line.svgElem.attr({points: [
                 line.firstX, line.startY, 
                 line.startX, line.startY, 
@@ -437,35 +464,182 @@ var flowchart = {
         },
 
         /**
-         * Function to draw a given line on the flowchart
-         * 
-         * @param line {flowchartLine object} - the flowchart line to be drawn
-         */
-        /*drawLine: function(line){
-            line.svgElem = flowchart.s.polyline(
-                line.firstX, line.startY, 
-                line.startX, line.startY, 
-                line.startX, line.mainY, 
-                line.endX, line.mainY, 
-                line.endX, line.endY, 
-                line.lastX, line.endY);
-        },*/
-
-        /**
          * Function to create flowchart prerequisite lines
          *
          */
         drawFlowchartLines: function(){
             var i;
 
-            //for now, draw lines between consecutive flowchart boxes as a test
-            for(i = 0; i < 3; i++){
-                flowchart.ops.createLine(flowchart.data.boxes[i], flowchart.data.boxes[i+1]);
+            //for now, draw lines between varying flowchart boxes as a test
+            flowchart.ops.createLine(flowchart.data.boxes[7], flowchart.data.boxes[0]);
+            flowchart.ops.createLine(flowchart.data.boxes[0], flowchart.data.boxes[6]);
+            flowchart.ops.createLine(flowchart.data.boxes[6], flowchart.data.boxes[1]);
+            flowchart.ops.createLine(flowchart.data.boxes[1], flowchart.data.boxes[5]);
+            flowchart.ops.createLine(flowchart.data.boxes[5], flowchart.data.boxes[2]);
+            flowchart.ops.createLine(flowchart.data.boxes[2], flowchart.data.boxes[4]);
+            flowchart.ops.createLine(flowchart.data.boxes[4], flowchart.data.boxes[3]);
+
+            flowchart.ops.flowchartLineSpacing();
+        },
+
+        /**
+         * Function to automatically space the flowchart lines to prevent run-ins
+         */
+        flowchartLineSpacing: function(){
+            var i, j, k, distance, force, chanTop, chanBot;
+            var maxForce = 0;
+            var fdl = flowchart.data.lines;
+            var fsf = flowchart.settings.forces;
+
+            //number of iterations to attempt to reach equilibrium
+            for(k = 0; k < 50; k++){
+                maxForce = 0;
+
+                for(i = 0; i < fdl.length; i++){
+
+                    //add minor forces for overall direction of arrow to main line if possible
+                    if(fdl[i].startY > fdl[i].mainY){
+                        distance = fdl[i].startY - fdl[i].mainY;
+                        force = Math.max(fsf.c4 * Math.log(fsf.c5 / distance), 0);
+                        fdl[i].mainForce += force;
+                    }else{
+                        distance = fdl[i].mainY - fdl[i].startY;
+                        force = Math.max(fsf.c4 * Math.log(fsf.c5 / distance), 0);
+                        fdl[i].mainForce -= force;
+                    }
+                    if(fdl[i].endY > fdl[i].mainY){
+                        distance = fdl[i].endY - fdl[i].mainY;
+                        force = Math.max(fsf.c4 * Math.log(fsf.c5 / distance), 0);
+                        fdl[i].mainForce += force;
+                    }else{
+                        distance = fdl[i].mainY - fdl[i].endY;
+                        force = Math.max(fsf.c4 * Math.log(fsf.c5 / distance), 0);
+                        fdl[i].mainForce -= force;
+                    }
+
+                    //deal with channel forces by finding the channels for the y direction
+                    chanTop = flowchart.settings.chart.menuTop + flowchart.settings.chart.boxHeight;
+                    chanBot = flowchart.settings.chart.menuTop + flowchart.settings.chart.boxHeight + flowchart.settings.chart.vertSpacing;
+
+                    while(!(fdl[i].mainY >= chanTop - (flowchart.settings.chart.boxHeight / 2) && fdl[i].mainY <= chanBot + (flowchart.settings.chart.boxHeight / 2))){
+                       chanTop += flowchart.settings.chart.boxHeight + flowchart.settings.chart.vertSpacing;
+                       chanBot += flowchart.settings.chart.boxHeight + flowchart.settings.chart.vertSpacing;
+                    }
+
+                    //top of the channel
+                    distance = fdl[i].mainY - chanTop + 1;
+                    //line jumped the channel, needs to move up a channel
+                    if(distance <= 0){
+                        fdl[i].mainY -= flowchart.settings.chart.boxHeight;
+                        flowchart.debug("Iteration " + k + ": jumped line " + i + " up a channel to " + fdl[i].mainY);
+                        fdl[i].mainForce = 0;
+                        continue;
+                    }
+                    force = Math.max(fsf.c6 * Math.log(fsf.c7 / distance), 0);
+                    fdl[i].mainForce += force;
+
+                    //bottom of the channel
+                    distance = chanBot - fdl[i].mainY  + 1;
+                    //line jumped the channel, needs to move down a channel
+                    if(distance <= 0){
+                        fdl[i].mainY += flowchart.settings.chart.boxHeight;
+                        flowchart.debug("Iteration " + k + ": jumped line " + i + " down a channel to " + fdl[i].mainY);
+                        fdl[i].mainForce = 0;
+                        continue;
+                    }
+                    force = Math.max(fsf.c6 * Math.log(fsf.c7 / distance), 0);
+                    fdl[i].mainForce -= force;
+
+                    //TODO: channel forces for starting & ending lines
+
+                    //compare to each additional arrow
+                    for(j = i+1; j < fdl.length; j++){
+
+                        //mainY lines
+                        if(flowchart.utils.linesOverlap(fdl[i].startX, fdl[i].endX, fdl[j].startX, fdl[j].endX)){
+                            force = flowchart.ops.compareLines(fdl[i], fdl[j], "mainY", "mainY", "mainForce", "mainForce");
+                            maxForce = force > maxForce ? force : maxForce;
+                        }
+
+                        //startX and startX
+                        if(flowchart.utils.linesOverlap(fdl[i].startY, fdl[i].mainY, fdl[j].startY, fdl[j].mainY)){
+                            force = flowchart.ops.compareLines(fdl[i], fdl[j], "startX", "startX", "startForce", "startForce");
+                            maxForce = force > maxForce ? force : maxForce;
+                        }
+
+                        //startX and endX
+                        if(flowchart.utils.linesOverlap(fdl[i].startY, fdl[i].mainY, fdl[j].endY, fdl[j].mainY)){
+                            force = flowchart.ops.compareLines(fdl[i], fdl[j], "startX", "endX", "startForce", "endForce");
+                            maxForce = force > maxForce ? force : maxForce;
+                        }
+
+                        //endX and startX
+                        if(flowchart.utils.linesOverlap(fdl[i].endY, fdl[i].mainY, fdl[j].startY, fdl[j].mainY)){
+                            force = flowchart.ops.compareLines(fdl[i], fdl[j], "endX", "startX", "endForce", "startForce");
+                            maxForce = force > maxForce ? force : maxForce;
+                        }
+
+                        //endX and endX
+                        if(flowchart.utils.linesOverlap(fdl[i].endY, fdl[i].mainY, fdl[j].endY, fdl[j].mainY)){
+                            force = flowchart.ops.compareLines(fdl[i], fdl[j], "endX", "endX", "endForce", "endForce");
+                            maxForce = force > maxForce ? force : maxForce;
+                        }
+
+                    }
+
+                    //update the coordinates based on the force applied
+                    fdl[i].mainY = +fdl[i].mainY + (+fsf.c3 * fdl[i].mainForce);
+                    fdl[i].startX = +fdl[i].startX + (+fsf.c3 * fdl[i].startForce);
+                    fdl[i].endX = +fdl[i].endX + (+fsf.c3 * fdl[i].endForce);
+                    flowchart.ops.setLineAttrs(fdl[i]);
+                    flowchart.debug("Iteration " + k + ": moved line " + i + " to " + fdl[i].startX + "," + fdl[i].mainY + "," + fdl[i].endX);
+                    fdl[i].mainForce = 0;
+                    fdl[i].startForce = 0;
+                    fdl[i].endForce = 0;
+                }
+
+                //if none of the forces were larger than the threshhold, stop trying and lock them in place
+                if(maxForce < fsf.t){
+                    break;
+                }
             }
-            //for(i = 0; i < flowchart.data.lines.length; i++){
-            //    flowchart.ops.drawLine(flowchart.data.lines[i]);
-            //}
-        } 
+        },
+
+        /**
+         * Function to compare lines for force directed drawing. This helps minimize 
+         * the code in the flowchartLineSpacing function above 
+         *
+         * @param line1 {flowchartLine object} - the first line to compare
+         * @param line2 {flowchartLine object} - the second line to compare
+         * @param prop1 {flowchartLine property name as a string} - the property of the first line to use
+         * @param prop2 {flowchartLine property name as a string} - the property of the second line to use
+         * @param force1 {flowchartLine property name as a string} - the property of the first line to update
+         * @param force2 {flowchartLine property name as a string} - the property of the second line to update
+         * @return {float} - the calculated force value
+         */
+        compareLines: function(line1, line2, prop1, prop2, force1, force2){
+            var force, distance;
+            var fsf = flowchart.settings.forces;
+            //check to see if they are close enough to matter
+            if(Math.abs(line1[prop1] - line2[prop2]) <= fsf.c2){
+
+                //if so, figure out which one is greatest
+                if(line1[prop1] > line2[prop2]){
+                    distance = line1[prop1] - line2[prop2] + 0.1;
+                    force = Math.max(fsf.c1 * Math.log(fsf.c2 / distance), 0);
+                    line1[force1] += force;
+                    line2[force2] -= force;
+                }else{
+                    distance = line2[prop2] - line1[prop1] + 0.1;
+                    force = Math.max(fsf.c1 * Math.log(fsf.c2 / distance), 0);
+                    line1[force1] -= force;
+                    line2[force2] += force;
+                }
+                return force
+            }
+
+            return 0;
+        }
     },
 
     //utility functions
@@ -473,11 +647,45 @@ var flowchart = {
         /**
          * This function will remove the given CSS class from ALL objects in the flowchart
          */
-         removeClassFromAll: function(classCSS){
+        removeClassFromAll: function(classCSS){
             //remove the given class from any flowchart elements
             flowchart.s.selectAll("." + classCSS).forEach(function(element) {
                 element.removeClass(classCSS);
             });
+        },
+
+        /**
+         * Determine if lines overlap
+         *
+         * @param x1 {float} - the first point of the first line
+         * @param y1 {float} - the second point of the first line
+         * @param x2 {float} - the first point of the second line
+         * @param y2 {float} - the second point of the second line
+         * @return {boolean} - if the lines overlap
+         */
+        linesOverlap: function(x1, y1, x2, y2){
+            var start1, end1, start2, end2;
+            if(x1 < y1){
+                start1 = x1;
+                end1 = y1;
+            }else{
+                start1 = y1;
+                end1 = x1;
+            }
+            if(x2 < y2){
+                start2 = x2;
+                end2 = y2;
+            }else{
+                start2 = y2;
+                end2 = x2;
+            }
+            if(start1 <= start2 && end1 + flowchart.settings.forces.c2 >= start2){
+                return true;
+            }
+            if(start2 <= start1 && end2 + flowchart.settings.forces.c2 >= start1){
+                return true;
+            }
+            return false;
         },
 
         /**
@@ -486,7 +694,7 @@ var flowchart = {
          * @param {int} x - the x position of our hover object
          * @param {int} y - the y position of our hover object
          */
-         highlightDrop: function(x, y){
+        highlightDrop: function(x, y){
             //Alias for the flowchart settings & runtime for code readability
             var fsc = flowchart.settings.chart;
             var fr = flowchart.runtime;
@@ -574,11 +782,15 @@ var flowchart = {
          * @param box {flowchatBox object} - the box attached to the lines to be animated
          */
         updateLines: function(box){
-            flowchart.debug("Updating lines attached to " + box.flowID + " at " + box.svgElem.attr("x") + "," + box.svgElem.attr("y"));
+            flowchart.debug("Updating lines after move");
+            
             //update any lines attached to the box
-            box.lines.forEach(function(element){
+            flowchart.data.lines.forEach(function(element){
                 flowchart.ops.updateLine(element);
             });
+
+            //use force directed spacing to arrange the lines
+            flowchart.ops.flowchartLineSpacing();
         },
 
          /**
