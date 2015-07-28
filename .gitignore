@@ -1,2 +1,5 @@
-.meteor/local
-.meteor/meteorite
+/vendor
+/node_modules
+Homestead.yaml
+Homestead.json
+.env
