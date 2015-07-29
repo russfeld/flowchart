@@ -9200,7 +9200,7 @@ fieldset[disabled] .btn-danger.active {
 .fa-fonticons:before {
   content: "\f280";
 }
-.container {
+.svgcontainer {
   width: 100%;
   padding: 5px;
 }
