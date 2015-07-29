@@ -28,7 +28,8 @@ $release = 'release_' . date('YmdHis');
 @task('configure_project')
     cd {{ $release_dir }}/{{ $release }};
     composer install --prefer-dist --no-scripts;
-    bower update -p
+    npm install
+    bower update -p --allow-root
     gulp --production
     php artisan clear-compiled --env=production;
     php artisan optimize --env=production;
