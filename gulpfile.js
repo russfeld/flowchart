@@ -1,4 +1,5 @@
 var elixir = require('laravel-elixir');
+var gulp = require('gulp');
 
 /*
  |--------------------------------------------------------------------------
@@ -26,4 +27,12 @@ elixir(function(mix) {
     mix.scripts([
     	'flowchart.js'
     ], 'public/js/flowchart.js');
+
+    mix.task('copyfonts');
+});
+
+//From http://ilikekillnerds.com/2014/07/copying-files-from-one-folder-to-another-in-gulp-js/
+gulp.task('copyfonts', function() {
+   gulp.src('resources/assets/bower/fontawesome/fonts/**/*.{ttf,woff,eot,svg,woff2}')
+   .pipe(gulp.dest('public/fonts'));
 });

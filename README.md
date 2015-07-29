@@ -9,6 +9,11 @@ JSFiddle: http://jsfiddle.net/1u9u1nh8/4/
 
 # Worklog
 
+#### 2015-07-29
+Installed Elixir, Gulp and Bower
+Installed Bootstrap, FontAwesome, JQuery, and SnapSVG through Bower
+Moved all CSS and JS to resources folder for compilation/minification
+
 #### 2015-07-28
 Switching to Laravel to deploy with Envoy.
 
@@ -53,6 +58,8 @@ https://mattstauffer.co/blog/convert-laravel-5-frontend-scaffold-to-bower
 3. `sudo npm install -g bower`
 4. `bower init`
 5. `bower install jquery bootstrap fontawesome --save`
+6. `gulp` to compile it all, `gulp --production` for minification
+7. `gulp watch` to watch all files for changes and auto-compile
 
 # Useful Meteor Commands
 
