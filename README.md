@@ -61,6 +61,9 @@ https://mattstauffer.co/blog/convert-laravel-5-frontend-scaffold-to-bower
 6. `gulp` to compile it all, `gulp --production` for minification
 7. `gulp watch` to watch all files for changes and auto-compile
 
+## Blade Templates
+https://scotch.io/tutorials/simple-laravel-layouts-using-blade
+
 # Useful Meteor Commands
 
 ## Installing Meteor
