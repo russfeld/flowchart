@@ -28,11 +28,14 @@ $release = 'release_' . date('YmdHis');
 @task('configure_project')
     cd {{ $release_dir }}/{{ $release }};
     composer install --prefer-dist --no-scripts;
-    npm install
-    bower update -p --allow-root
-    gulp --production
     php artisan clear-compiled --env=production;
     php artisan optimize --env=production;
+@endtask
+
+@task('configure_dev')
+	sudo npm install
+	bower update
+	gulp --production
 @endtask
 
 @task('update_permissions')
