@@ -10,7 +10,7 @@ $release = 'release_' . date('YmdHis');
 @macro('deploy', ['on' => 'web'])
     fetch_repo
     delete_old
-    run_composer
+    configure_project
     update_permissions
     update_symlinks
 @endmacro
@@ -25,9 +25,11 @@ $release = 'release_' . date('YmdHis');
 	find {{ $release_dir }}/* -maxdepth 0 -type d | sort -n | head -n -4 | cut -f 2- | xargs rm -rf
 @endtask
 
-@task('run_composer')
+@task('configure_project')
     cd {{ $release_dir }}/{{ $release }};
     composer install --prefer-dist --no-scripts;
+    bower update -p
+    gulp --production
     php artisan clear-compiled --env=production;
     php artisan optimize --env=production;
 @endtask

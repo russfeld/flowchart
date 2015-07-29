@@ -12,5 +12,18 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-    mix.sass('app.scss');
+    mix.less('app.less');
+
+    mix.scripts([
+    	'../bower/jquery/dist/jquery.js',
+    	'../bower/bootstrap/dist/js/bootstrap.js',
+    ],'public/js/vendor.js');
+
+    mix.scripts([
+    	'../bower/snap.svg/dist/snap.svg.js'
+    ], 'public/js/snapsvg.js');
+
+    mix.scripts([
+    	'flowchart.js'
+    ], 'public/js/flowchart.js');
 });

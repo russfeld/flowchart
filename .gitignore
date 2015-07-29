@@ -4,3 +4,6 @@ Homestead.yaml
 Homestead.json
 .env
 /public/.htaccess
+/public/css
+/public/js
+/resources/assets/bower

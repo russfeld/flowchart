@@ -44,6 +44,16 @@ http://laravel.com/docs/5.1#installation
 https://serversforhackers.com/video/deploying-with-envoy-cast
 https://serversforhackers.com/video/enhancing-envoy-deployment
 
+## Gulp, Bower & Elixir
+http://laravel.com/docs/5.1/elixir
+http://laravelcoding.com/blog/laravel-5-beauty-using-bower
+https://mattstauffer.co/blog/convert-laravel-5-frontend-scaffold-to-bower
+1. `sudo npm install --global gulp`
+2. `sudo npm install`
+3. `sudo npm install -g bower`
+4. `bower init`
+5. `bower install jquery bootstrap fontawesome --save`
+
 # Useful Meteor Commands
 
 ## Installing Meteor

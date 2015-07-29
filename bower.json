@@ -1,0 +1,24 @@
+{
+  "name": "flowchart",
+  "version": "0.0.0",
+  "homepage": "https://github.com/russfeld/flowchart",
+  "authors": [
+    "Russell Feldhausen <russfeldh@gmail.com>"
+  ],
+  "description": "K-State Engineering Advising & Flowchart System",
+  "main": "public/index.php",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "resources/assets/bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "bootstrap": "~3.3.5",
+    "fontawesome": "~4.4.0"
+  }
+}
