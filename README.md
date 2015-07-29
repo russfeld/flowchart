@@ -25,6 +25,18 @@ Deployed at http://flowchart.russfeld.me/flowchart_test.html
 #### 2015-06-30
 Worked on the Meteor todo app tutorial https://www.meteor.com/tutorials/blaze/creating-an-app
 
+# Useful Laravel Commands
+
+## Installing Composer Globally
+https://getcomposer.org/doc/00-intro.md#globally
+1. `curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer`
+
+## Installing Laravel
+http://laravel.com/docs/5.1#installation
+1. `composer global require "laravel/installer=~1.1"`
+2. Add to ~/.bashrc: "export PATH=$PATH:~/.composer/vendor/bin"
+3. Don't forget to move .htaccess to default Apache config for speed
+
 # Useful Meteor Commands
 
 ## Installing Meteor
