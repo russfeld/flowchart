@@ -9,6 +9,9 @@ JSFiddle: http://jsfiddle.net/1u9u1nh8/4/
 
 # Worklog
 
+#### 2015-07-28
+Switching to Laravel to deploy with Envoy.
+
 #### 2015-07-20
 Added more code for force-directed line drawing. Need to add forces for vertical channels
 
