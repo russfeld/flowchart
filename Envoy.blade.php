@@ -9,6 +9,7 @@ $release = 'release_' . date('YmdHis');
 
 @macro('deploy', ['on' => 'web'])
     fetch_repo
+    delete_old
     run_composer
     update_permissions
     update_symlinks
@@ -18,6 +19,10 @@ $release = 'release_' . date('YmdHis');
     [ -d {{ $release_dir }} ] || mkdir {{ $release_dir }};
     cd {{ $release_dir }};
     git clone -b master {{ $repo }} {{ $release }};
+@endtask
+
+@task('delete_old')
+	find {{ $release_dir }}/* -maxdepth 0 -type d | sort -n | head -n -4 | cut -f 2- | xargs rm -rf
 @endtask
 
 @task('run_composer')
@@ -34,7 +39,7 @@ $release = 'release_' . date('YmdHis');
 @endtask
 
 @task('update_symlinks')
-    ln -nfs {{ $release_dir }}/{{ $release }} {{ $app_dir }};
+    ln -nfs {{ $release_dir }}/{{ $release }}/public {{ $app_dir }};
     chgrp -h www-data {{ $app_dir }};
 
     cd {{ $release_dir }}/{{ $release }};
