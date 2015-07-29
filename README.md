@@ -40,6 +40,10 @@ http://laravel.com/docs/5.1#installation
 2. Add to ~/.bashrc: "export PATH=$PATH:~/.composer/vendor/bin"
 3. Don't forget to move .htaccess to default Apache config for speed
 
+## Deploying with Envoy
+https://serversforhackers.com/video/deploying-with-envoy-cast
+https://serversforhackers.com/video/enhancing-envoy-deployment
+
 # Useful Meteor Commands
 
 ## Installing Meteor
