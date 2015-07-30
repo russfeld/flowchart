@@ -18,7 +18,8 @@
   ],
   "dependencies": {
     "jquery": "~2.1.4",
-    "bootstrap": "~3.3.5",
-    "fontawesome": "~4.4.0"
+    "fontawesome": "~4.4.0",
+    "bootstrap-sass": "~3.3.5",
+    "snap.svg": "~0.4.1"
   }
 }

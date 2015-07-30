@@ -13,11 +13,11 @@ var gulp = require('gulp');
  */
 
 elixir(function(mix) {
-    mix.less('app.less');
+    mix.sass('app.scss');
 
     mix.scripts([
     	'../bower/jquery/dist/jquery.js',
-    	'../bower/bootstrap/dist/js/bootstrap.js',
+    	'../bower/bootstrap-sass/assets/javascripts/bootstrap.js',
     ],'public/js/vendor.js');
 
     mix.scripts([
