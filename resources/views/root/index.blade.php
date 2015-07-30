@@ -8,7 +8,7 @@
       <div class="container">
         <h1>Engineering Advising</h1>
         <p>Welcome to the new K-State Engineering Advising System. This is your one-stop-shop to find classes, view your flowcharts and degree progress, schedule advising appointments, and more! Check out the sections below to get started.</p>
-        <p><a class="btn btn-purple btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
       </div>
     </div>
 

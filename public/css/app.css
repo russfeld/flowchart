@@ -2882,23 +2882,23 @@ fieldset[disabled] a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #337ab7;
-  border-color: #2e6da4; }
+  background-color: #512888;
+  border-color: #452274; }
   .btn-primary:focus,
   .btn-primary.focus {
     color: #fff;
-    background-color: #286090;
-    border-color: #122b40; }
+    background-color: #3a1c61;
+    border-color: #0b0512; }
   .btn-primary:hover {
     color: #fff;
-    background-color: #286090;
-    border-color: #204d74; }
+    background-color: #3a1c61;
+    border-color: #291445; }
   .btn-primary:active,
   .btn-primary.active,
   .open > .btn-primary.dropdown-toggle {
     color: #fff;
-    background-color: #286090;
-    border-color: #204d74; }
+    background-color: #3a1c61;
+    border-color: #291445; }
     .btn-primary:active:hover,
     .btn-primary:active:focus,
     .btn-primary:active.focus,
@@ -2909,8 +2909,8 @@ fieldset[disabled] a.btn {
     .open > .btn-primary.dropdown-toggle:focus,
     .open > .btn-primary.dropdown-toggle.focus {
       color: #fff;
-      background-color: #204d74;
-      border-color: #122b40; }
+      background-color: #291445;
+      border-color: #0b0512; }
   .btn-primary:active,
   .btn-primary.active,
   .open > .btn-primary.dropdown-toggle {
@@ -2933,10 +2933,10 @@ fieldset[disabled] a.btn {
   fieldset[disabled] .btn-primary.focus,
   fieldset[disabled] .btn-primary:active,
   fieldset[disabled] .btn-primary.active {
-    background-color: #337ab7;
-    border-color: #2e6da4; }
+    background-color: #512888;
+    border-color: #452274; }
   .btn-primary .badge {
-    color: #337ab7;
+    color: #512888;
     background-color: #fff; }
 
 .btn-success {
@@ -6088,20 +6088,20 @@ button.close {
     background-image: none; }
 
 .btn-primary {
-  background-image: linear-gradient(to bottom, #337ab7 0%, #265a88 100%);
+  background-image: linear-gradient(to bottom, #512888 0%, #351a59 100%);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF337AB7', endColorstr='#FF265A88', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF512888', endColorstr='#FF351A59', GradientType=0);
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
   background-repeat: repeat-x;
-  border-color: #245580; }
+  border-color: #301851; }
   .btn-primary:hover,
   .btn-primary:focus {
-    background-color: #265a88;
+    background-color: #351a59;
     background-position: 0 -15px; }
   .btn-primary:active,
   .btn-primary.active {
-    background-color: #265a88;
-    border-color: #245580; }
+    background-color: #351a59;
+    border-color: #301851; }
   .btn-primary.disabled,
   .btn-primary.disabled:hover,
   .btn-primary.disabled:focus,
@@ -6120,7 +6120,7 @@ button.close {
   fieldset[disabled] .btn-primary.focus,
   fieldset[disabled] .btn-primary:active,
   fieldset[disabled] .btn-primary.active {
-    background-color: #265a88;
+    background-color: #351a59;
     background-image: none; }
 
 .btn-success {
@@ -6451,65 +6451,6 @@ button.close {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFE8E8E8', endColorstr='#FFF5F5F5', GradientType=0);
   border-color: gainsboro;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1); }
-
-.btn-purple {
-  color: #fff;
-  background-color: #512888;
-  border-color: #452274; }
-  .btn-purple:focus,
-  .btn-purple.focus {
-    color: #fff;
-    background-color: #3a1c61;
-    border-color: #0b0512; }
-  .btn-purple:hover {
-    color: #fff;
-    background-color: #3a1c61;
-    border-color: #291445; }
-  .btn-purple:active,
-  .btn-purple.active,
-  .open > .btn-purple.dropdown-toggle {
-    color: #fff;
-    background-color: #3a1c61;
-    border-color: #291445; }
-    .btn-purple:active:hover,
-    .btn-purple:active:focus,
-    .btn-purple:active.focus,
-    .btn-purple.active:hover,
-    .btn-purple.active:focus,
-    .btn-purple.active.focus,
-    .open > .btn-purple.dropdown-toggle:hover,
-    .open > .btn-purple.dropdown-toggle:focus,
-    .open > .btn-purple.dropdown-toggle.focus {
-      color: #fff;
-      background-color: #291445;
-      border-color: #0b0512; }
-  .btn-purple:active,
-  .btn-purple.active,
-  .open > .btn-purple.dropdown-toggle {
-    background-image: none; }
-  .btn-purple.disabled,
-  .btn-purple.disabled:hover,
-  .btn-purple.disabled:focus,
-  .btn-purple.disabled.focus,
-  .btn-purple.disabled:active,
-  .btn-purple.disabled.active,
-  .btn-purple[disabled],
-  .btn-purple[disabled]:hover,
-  .btn-purple[disabled]:focus,
-  .btn-purple[disabled].focus,
-  .btn-purple[disabled]:active,
-  .btn-purple[disabled].active,
-  fieldset[disabled] .btn-purple,
-  fieldset[disabled] .btn-purple:hover,
-  fieldset[disabled] .btn-purple:focus,
-  fieldset[disabled] .btn-purple.focus,
-  fieldset[disabled] .btn-purple:active,
-  fieldset[disabled] .btn-purple.active {
-    background-color: #512888;
-    border-color: #452274; }
-  .btn-purple .badge {
-    color: #512888;
-    background-color: #fff; }
 
 /*!
  *  Font Awesome 4.4.0 by @davegandy - http://fontawesome.io - @fontawesome
