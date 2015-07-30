@@ -4,51 +4,33 @@
 
 @section('content')
 
-<div class="jumbotron">
-        <h1>Theme example</h1>
-        <p>This is a template showcasing the optional theme stylesheet included in Bootstrap. Use it as a starting point to create something more unique by building on or modifying it.</p>
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Engineering Advising</h1>
+        <p>Welcome to the new K-State Engineering Advising System. This is your one-stop-shop to find classes, view your flowcharts and degree progress, schedule advising appointments, and more! Check out the sections below to get started.</p>
+        <p><a class="btn btn-purple btn-lg" href="#" role="button">Learn more &raquo;</a></p>
       </div>
+    </div>
 
-
-      <div class="page-header">
-        <h1>Buttons</h1>
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-4">
+          <h2>Courses</h2>
+          <p>Find unique and interesting K-State courses from across the campus. View the current semester's schedule, and see course prerequisites and notes.</p>
+          <p><a class="btn btn-default" href="{{ url('/courses') }}" role="button">Find Courses &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+          <h2>Flowcharts</h2>
+          <p>View your flowchart for your current degree program, try out other degree programs, and explore other K-State Engineering majors.</p>
+          <p><a class="btn btn-default" href="{{ url('/flowcharts') }}" role="button">View Flowcharts &raquo;</a></p>
+       </div>
+        <div class="col-md-4">
+          <h2>Advising</h2>
+          <p>When you are ready to enroll or if you have any questions, quickly schedule an appointment with your academic advisor. They can easily find your current flowcharts, class requests, and notes.</p>
+          <p><a class="btn btn-default" href="{{ url('/advising') }}" role="button">Schedule an Appointment &raquo;</a></p>
+        </div>
       </div>
-      <p>
-        <button type="button" class="btn btn-lg btn-default">Default</button>
-        <button type="button" class="btn btn-lg btn-primary">Primary</button>
-        <button type="button" class="btn btn-lg btn-success">Success</button>
-        <button type="button" class="btn btn-lg btn-info">Info</button>
-        <button type="button" class="btn btn-lg btn-warning">Warning</button>
-        <button type="button" class="btn btn-lg btn-danger">Danger</button>
-        <button type="button" class="btn btn-lg btn-link">Link</button>
-      </p>
-      <p>
-        <button type="button" class="btn btn-default">Default</button>
-        <button type="button" class="btn btn-primary">Primary</button>
-        <button type="button" class="btn btn-success">Success</button>
-        <button type="button" class="btn btn-info">Info</button>
-        <button type="button" class="btn btn-warning">Warning</button>
-        <button type="button" class="btn btn-danger">Danger</button>
-        <button type="button" class="btn btn-link">Link</button>
-      </p>
-      <p>
-        <button type="button" class="btn btn-sm btn-default">Default</button>
-        <button type="button" class="btn btn-sm btn-primary">Primary</button>
-        <button type="button" class="btn btn-sm btn-success">Success</button>
-        <button type="button" class="btn btn-sm btn-info">Info</button>
-        <button type="button" class="btn btn-sm btn-warning">Warning</button>
-        <button type="button" class="btn btn-sm btn-danger">Danger</button>
-        <button type="button" class="btn btn-sm btn-link">Link</button>
-      </p>
-      <p>
-        <button type="button" class="btn btn-xs btn-default">Default</button>
-        <button type="button" class="btn btn-xs btn-primary">Primary</button>
-        <button type="button" class="btn btn-xs btn-success">Success</button>
-        <button type="button" class="btn btn-xs btn-info">Info</button>
-        <button type="button" class="btn btn-xs btn-warning">Warning</button>
-        <button type="button" class="btn btn-xs btn-danger">Danger</button>
-        <button type="button" class="btn btn-xs btn-link">Link</button>
-      </p>
+    </div>
 
-      
 @endsection

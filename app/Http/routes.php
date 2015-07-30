@@ -15,6 +15,16 @@ Route::get('/', function () {
     return view('root/index');
 });
 
+Route::controller('courses', 'CoursesController');
+
+Route::controller('flowcharts', 'FlowchartsController');
+
+Route::controller('advising', 'AdvisingController');
+
+/*
+Routes to test sites
+*/
+
 Route::get('/test', function() {
 	return view('flowchart_test');
 });
