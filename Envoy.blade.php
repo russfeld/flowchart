@@ -28,7 +28,7 @@ $release = 'release_' . date('YmdHis');
 @task('configure_project')
     cd {{ $release_dir }}/{{ $release }};
     composer install --prefer-dist --no-scripts --no-dev;
-    php artisan migrate:refresh --seed
+    php artisan migrate:refresh --seed --force
     php artisan clear-compiled --env=production;
     php artisan optimize --env=production;
 @endtask
