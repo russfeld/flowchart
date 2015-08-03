@@ -16,11 +16,20 @@
             <li class="{{ Request::is('flowcharts*') ? 'active' : '' }}"><a href="{{ url('/flowcharts') }}">Flowcharts</a></li>
             <li class="{{ Request::is('advising*') ? 'active' : '' }}"><a href="{{ url('/advising') }}">Advising</a></li>
           </ul>
+        @if( Auth::check())
           <ul class="nav navbar-nav navbar-right">
+              <li><a href="{{ url('/profile') }}">{{ Auth::user()->name }}</a></li>
               <li><p class="navbar-btn">
-                <a href="#login" class="btn btn-success">Sign in</a>
+                <a href="{{ url('auth/logout') }}" class="btn btn-success">Logout</a>
               </p></li>
           </ul>
+        @else
+          <ul class="nav navbar-nav navbar-right">
+              <li><p class="navbar-btn">
+                <a href="{{ url('auth/login') }}" class="btn btn-success">Sign in</a>
+              </p></li>
+          </ul>
+        @endif
         </div><!--/.nav-collapse -->
       </div>
     </nav>

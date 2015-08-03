@@ -5,3 +5,6 @@
 
 <!-- CSS Files -->
 <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
+
+<!-- favicon -->
+<link href="favicon.ico" rel="shortcut icon">

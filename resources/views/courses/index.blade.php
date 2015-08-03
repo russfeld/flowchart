@@ -4,6 +4,15 @@
 
 @section('content')
 
-<p>Coming Soon!</p>
+@foreach($colleges as $college)
+	<h4>{{ $college->college_name }}</h4>
+
+	<ul>
+	@foreach($college->categories as $category)
+		<li><a href="{{ url('courses/' . $category->url) }}">{{ $category->category_name }}</a></li>
+	@endforeach
+	</ul>
+	
+@endforeach
 
 @endsection

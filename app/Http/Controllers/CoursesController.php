@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\College;
+use App\Category;
+use App\Course;
+
 class CoursesController extends Controller
 {
     /**
@@ -9,12 +13,31 @@ class CoursesController extends Controller
      */
     public function getIndex()
     {
-        return view('courses/index');
+        $colleges = College::with('categories')->get();
+
+        return view('courses/index')->with('colleges', $colleges);
     }
 
-    public function getSearch()
+    public function getCategory($category)
     {
-    	return view('courses/index');
+        $category = Category::where('url', $category)->with('prefixes')->first();
+
+        $prefixes = array();
+
+        foreach($category->prefixes as $prefix){
+            $prefixes[] = $prefix->prefix;
+        }
+
+        $courses = Course::whereIn('prefix', $prefixes)->get();
+
+        return view('courses/list')->with('courses', $courses)->with('category', $category);
+    }
+
+    public function getCourse($slug)
+    {
+        $courses = Course::where('slug', $slug)->with('prerequisites', 'followers', 'areas')->get();
+
+        return view('courses/detail')->with('courses', $courses)->with('slug', $slug);
     }
 
 }
