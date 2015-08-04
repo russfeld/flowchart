@@ -32,4 +32,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+
+    // http://stackoverflow.com/questions/23910553/laravel-check-if-related-model-exists
+    public function student(){
+        return $this->hasOne('App\Student');
+    }
+
+    public function advisor(){
+        return $this->hasOne('App\Advisor');
+    }
 }

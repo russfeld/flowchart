@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PrefixesTableSeeder::class);
         $this->call(CoursesTableSeeder::class);
         $this->call(PrerequisitesTableSeeder::class);
+        $this->call(SchedulerSeeder::class);
+        $this->call(StudentSeeder::class);
 
         Model::reguard();
     }
