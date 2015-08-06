@@ -114,3 +114,27 @@ body {
 .top-header{
   margin-top: 0px !important;
 }
+
+.panel-title > a:before {
+    font-family: FontAwesome;
+    content: "\f147";
+    padding-right: 5px;
+}
+.panel-title > a.collapsed:before {
+    content: "\f196";
+}
+
+//override fullcalendar styles
+.fc{
+  font-size: 140% !important;
+}
+
+.fc-bgevent { 
+  opacity: .6 !important;
+  filter: alpha(opacity=50) !important; /* for IE */
+}
+
+.fc-green{
+  background: #14CC43 !important;
+  cursor: pointer;
+}

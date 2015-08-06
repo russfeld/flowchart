@@ -17,11 +17,4 @@ class Meeting extends Model
     //hidden from JSON view
     protected $hidden = ['advisor_id', 'student_id', 'advisor', 'student', 'created_at', 'updated_at'];
 
-    //added to JSON view
-    protected $appends = ['type'];
-
-    public function getTypeAttribute(){
-    	return "m";
-    }
-
 }

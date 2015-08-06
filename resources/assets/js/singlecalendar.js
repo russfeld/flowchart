@@ -6,10 +6,16 @@ $(document).ready(function() {
         }
 	});
 
+	$('#createEvent').on('shown.bs.modal', function () {
+	  $('#desc').focus()
+	})
+
 	var calendarFeedURL = $('#calendarFeedURL').val().trim();
 	var calendarAdvisorID = $('#calendarAdvisorID').val().trim();
 	var calendarBlackoutFeedURL = $('#calendarBlackoutFeedURL').val().trim();
 	var calendarPostURL = $('#calendarPostURL').val().trim();
+	var studentName = $('#studentName').val().trim();
+	var calendarDeleteURL = $('#calendarDeleteURL').val().trim();
 
     // page is now ready, initialize the calendar...
 
@@ -59,16 +65,30 @@ $(document).ready(function() {
 		        error: function() {
 		            alert('Error fetching blackout events from database');
 		        },
-		        color: '#FF6666',
+		        color: '#FF8888',
 		        textColor: 'black',
 		        rendering: 'background'
 		    },
 		],
-	    timeFormat: '',
+	    timeFormat: ' ',
 	    eventRender: function(event, element){
 		    if(event.type == 'b'){
 		        element.append("<div style=\"color: #000000; z-index: 5;\">" + event.title + "</div>");
 		    }
+		    if(event.type == 's'){
+		    	element.addClass("fc-green");
+		    }
+		},
+		eventClick: function(event, element, view){
+			if(event.type == 's'){
+				$('#title').val(event.title);
+				$('#start').val(event.start.format("LLL"));
+				$('#end').val(event.end.format("LLL"));
+				$('#desc').val(event.desc);
+				$('#meetingID').val(event.id);
+				$('#deleteButton').show();
+				$('#createEvent').modal('show');
+			}
 		},
 		selectable: true,
 		selectHelper: true,
@@ -76,24 +96,63 @@ $(document).ready(function() {
 	        return event.rendering === 'background';
 	    },
 		select: function(start, end) {
-			var title = prompt('Meeting Title:');
-			console.log(start.format());
-			console.log(end.format());
-			if (title) {
-				$.ajax({
-				  method: "POST",
-				  url: calendarPostURL,
-				  data: { start: start.format(), end: end.format(), title: title, id: calendarAdvisorID }
-				})
-			  	.done(function( message ) {
-			  		$('#calendar').fullCalendar('refetchEvents');
-			  	}).fail(function( header, message ){
-			  		alert("Unable to save meeting: " + message);
-			  	});
-			  	$('#calendar').fullCalendar('unselect');
-			}
+			$('#title').val(studentName);
+			$('#start').val(start.format("LLL"));
+			$('#end').val(end.format("LLL"));
+			$('#meetingID').val(-1);
+			$('#deleteButton').hide();
+			$('#createEvent').modal('show');
 		},
 
-	})
+	});
+
+	$('#saveButton').bind('click', function(){
+		var data = { start: moment($('#start').val(), "LLL").format(), end: moment($('#end').val(), "LLL").format(), title: $('#title').val(), id: calendarAdvisorID, desc: $('#desc').val() };
+		if($('#meetingID').val() > 0){
+			data.meetingid = $('#meetingID').val();
+		}
+		$.ajax({
+		  method: "POST",
+		  url: calendarPostURL,
+		  data: data
+		})
+	  	.success(function( message ) {
+	  		$('#createEvent').modal('hide');
+	  		$('#calendar').fullCalendar('unselect');
+	  		$('#calendar').fullCalendar('refetchEvents');
+	  	}).fail(function( jqXHR, message ){
+	  		if (jqXHR.status == 422)
+		    {
+		    	$('.form-group').each(function (){
+		    		$(this).removeClass('has-error');
+		    		$(this).find('span').text('');
+		    	})
+		        $.each(jqXHR.responseJSON, function (key, value) {
+		            $('#' + key).parent().addClass('has-error');
+		            $('#' + key + 'help').text(value);
+		        });
+		    }else{
+	  			alert("Unable to save meeting: " + JSON.stringify(jqXHR) + ' ' + message)
+	  		}
+	  	});
+	});
+
+	$('#deleteButton').bind('click', function(){
+		var choice = confirm("Are you sure?");
+		if(choice == true){
+			$.ajax({
+			  method: "POST",
+			  url: calendarDeleteURL,
+			  data: { meetingid: $('#meetingID').val() }
+			})
+			.success(function( message ) {
+		  		$('#createEvent').modal('hide');
+		  		$('#calendar').fullCalendar('unselect');
+		  		$('#calendar').fullCalendar('refetchEvents');
+		  	}).fail(function( jqXHR, message ){
+	  			alert("Unable to delete meeting: " + JSON.stringify(jqXHR) + ' ' + message)
+		  	});
+		}
+	});
 
 });

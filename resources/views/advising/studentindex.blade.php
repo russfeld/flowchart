@@ -4,11 +4,13 @@
 
 @section('content')
 
-<h3 class="top-header">Welcome {{ $user->student->first_name}}! Your currently assigned advisor is:</h3>
+<h3 class="top-header">Welcome {{ $user->student->first_name}}! Your currently selected advisor is:</h3>
 
-@include('advising._advisor', ['advisor' => $user->student->advisor])
-<h3>Click an open time below to schedule a meeting or <a href="{{ url('advising/select') }}">view all available advisors.</a></h3>
+@include('advising._advisor', ['advisor' => $advisor, 'link' => false])
 
-@include('advising._singlecalendar', ['advisor' => $user->student->advisor])
+<h4>Click an open time below to schedule a meeting or <a href="{{ url('advising/select/' . $user->student->department->id) }}">view all available advisors.</a></h4>
+
+@include('advising._singlecalendar', ['advisor' => $advisor])
+<input type="hidden" id="studentName" value="{{ $user->student->name }}" />
 <br>
 @endsection
