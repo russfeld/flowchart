@@ -22,6 +22,7 @@ elixir(function(mix) {
     mix.scripts([
     	'../bower/jquery/dist/jquery.js',
     	'../bower/bootstrap-sass/assets/javascripts/bootstrap.js',
+        '../bower/bootstrap-datepicker/dist/js/bootstrap-datepicker.js'
     ],'public/js/vendor.js');
 
     mix.scripts([
@@ -41,8 +42,12 @@ elixir(function(mix) {
     ], 'public/js/flowchart.js');
 
     mix.scripts([
-        'singlecalendar.js'
-    ], 'public/js/singlecalendar.js');
+        'studentcalendar.js'
+    ], 'public/js/studentcalendar.js');
+
+    mix.scripts([
+        'advisorcalendar.js'
+    ], 'public/js/advisorcalendar.js');
 
     mix.task('copyfonts');
 });

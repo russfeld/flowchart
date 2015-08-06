@@ -1,15 +1,3 @@
-@section('scripts')
-    @parent
-    <script type="text/javascript" src="{{ asset('js/moment.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/fullcalendar.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/singlecalendar.js') }}"></script>
-@endsection
-
-@section('styles')
-    @parent
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/fullcalendar.css') }}">
-@endsection
-
 <div class="modal fade" id="createEvent" tabindex="-1" role="dialog" aria-labelledby="createEventLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -40,6 +28,7 @@
         		<span id="deschelp" class="help-block"></span>
         	</div>
         	<input type="hidden" id="meetingID" value="-1" />
+        </form>
       </div>
       <div class="modal-footer">
       	<button type="button" class="btn btn-danger" id="deleteButton">Delete</button>
@@ -49,13 +38,3 @@
     </div>
   </div>
 </div>
-
-<div id="calendar">
-</div>
-
-<input type="hidden" id="calendarFeedURL" value="{{ url('advising/meetingfeed') }}" />
-<input type="hidden" id="calendarBlackoutFeedURL" value="{{ url('advising/blackoutfeed') }}" />
-<input type="hidden" id="calendarAdvisorID" value="{{ $advisor->id }}" />
-<input type="hidden" id="calendarPostURL" value="{{ url('advising/createmeeting') }}" />
-<input type="hidden" id="calendarDeleteURL" value="{{ url('advising/deletemeeting') }}" />
-

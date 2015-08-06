@@ -35,14 +35,14 @@ class AdvisingController extends Controller
 
         if($id < 0){
         	//currently authenticated user is an advisor
-        	if($user->advisor()->count()){
+        	if($user->isadvisor){
         		$user->load('advisor.department');
-        		return view('advising/advisorindex')->with('user', $user);
-        	}else if($user->student()->count()){
+        		return view('advising/advisorindex')->with('user', $user)->with('advisor', $user->advisor);
+        	}else if($user->isstudent){
         		$user->load('student.advisor.department');
         		return view('advising/studentindex')->with('user', $user)->with('advisor', $user->student->advisor);
         	}else{
-        		abort('404', "AdvisingController: The currently authenticated user does not match any student or advisor records!");
+        		abort('500', "AdvisingController: The currently authenticated user does not match any student or advisor records!");
         	}
         }else{
             $advisor = Advisor::findOrFail($id);
@@ -56,12 +56,12 @@ class AdvisingController extends Controller
 
     	if($dept < 0){
 	    	//currently authenticated user is an advisor
-	    	if($user->advisor()->count()){
+	    	if($user->isadvisor){
 	    		$dept = $user->advisor->department->id;
-	    	}else if($user->student()->count()){
+	    	}else if($user->isstudent){
 	    		$dept = $user->student->department->id;
 	    	} else{
-    			abort('404', "AdvisingController: The currently authenticated user does not match any student or advisor records!");
+    			abort('500', "AdvisingController: The currently authenticated user does not match any student or advisor records!");
     		}
 	    }else{
 	    	Department::findOrFail($dept);
@@ -83,23 +83,39 @@ class AdvisingController extends Controller
         $start = $request->input('start');
         $end = $request->input('end');
         $sid = -1;
+        $advisor = false;
 
         $user = Auth::user();
-        if($user->student()->count()){
+        if($user->isstudent){
             $sid = $user->student->id;
+        }else if($user->isadvisor){
+            $advisor = true;
+        }else{
+            return response()->json("The currently authenticated user does not match any student or advisor records", 500);
         }
 
     	$meetings = Meeting::where('advisor_id', $id)->where('start', '>=', new DateTime($start))->where('end', '<=', new DateTime($end))->get();
 
-        $resource = new Collection($meetings, function($meeting) use ($sid) {
-            return[
-                'id' => $meeting->id,
-                'start' => $meeting->start,
-                'end' => $meeting->end,
-                'type' => ($sid == $meeting->student_id) ? 's' : 'm',
-                'title' => ($sid == $meeting->student_id) ? $meeting->title : 'Advising',
-                'desc' => ($sid == $meeting->student_id) ? $meeting->description : ''
-            ];
+        $resource = new Collection($meetings, function($meeting) use ($sid, $advisor) {
+            if($advisor){
+                return[
+                    'id' => $meeting->id,
+                    'start' => $meeting->start,
+                    'end' => $meeting->end,
+                    'type' => 'm',
+                    'title' => $meeting->title,
+                    'desc' => $meeting->description
+                ];
+            }else{
+                return[
+                    'id' => $meeting->id,
+                    'start' => $meeting->start,
+                    'end' => $meeting->end,
+                    'type' => ($sid == $meeting->student_id) ? 's' : 'm',
+                    'title' => ($sid == $meeting->student_id) ? $meeting->title : 'Advising',
+                    'desc' => ($sid == $meeting->student_id) ? $meeting->description : ''
+                ];
+            }
         }); 
 
         $this->fractal->setSerializer(new JsonSerializer());
@@ -120,16 +136,19 @@ class AdvisingController extends Controller
 
     	$meetings = Blackoutevent::where('advisor_id', $id)->where('start', '>=', new DateTime($start))->where('end', '<=', new DateTime($end))->get();
 
-        $meeting = new Blackoutevent();
-        $startd = new DateTime($start);
-        $meeting->start = $startd->format('Y-m-d H:i:s');
-        $endd = new DateTime();
-        $endd->add(new DateInterval("PT4H"));
-        $meeting->end = $endd->format('Y-m-d H:00:00');
-        $meeting->id = 0;
-        $meeting->title = '';
+        $user = Auth::user();
+        if($user->isstudent){
+            $meeting = new Blackoutevent();
+            $startd = new DateTime($start);
+            $meeting->start = $startd->format('Y-m-d H:i:s');
+            $endd = new DateTime();
+            $endd->add(new DateInterval("PT4H"));
+            $meeting->end = $endd->format('Y-m-d H:00:00');
+            $meeting->id = 0;
+            $meeting->title = '';
 
-        $meetings->prepend($meeting);
+            $meetings->prepend($meeting);
+        }
 
     	return $meetings->toJson();
     }
@@ -152,14 +171,14 @@ class AdvisingController extends Controller
 
         if($request->has('meetingid')){
             $meeting = Meeting::find($request->input('meetingid'));
-            if($user->student()->count()){
+            if($user->isstudent){
                 if($meeting->student_id != $user->student->id){
                     return response()->json("Cannot modify an appointment not assigned to your student record", 500);
                 }
             }
         }else{
             $meeting = new Meeting;
-            if($user->student()->count()){
+            if($user->isstudent){
                 $meeting->student_id = $user->student->id;
             }
         }
@@ -183,7 +202,7 @@ class AdvisingController extends Controller
 
         $meeting = Meeting::find($request->input('meetingid'));
 
-        if($user->student()->count()){
+        if($user->isstudent){
             if($meeting->student_id != $user->student->id){
                 return response()->json("Cannot delete an appointment not assigned to your student record", 500);
             }

@@ -10,7 +10,7 @@
 
 <h4>Click an open time below to schedule a meeting or <a href="{{ url('advising/select/' . $user->student->department->id) }}">view all available advisors.</a></h4>
 
-@include('advising._singlecalendar', ['advisor' => $advisor])
+@include('advising._studentcalendar', ['advisor' => $advisor])
 <input type="hidden" id="studentName" value="{{ $user->student->name }}" />
 <br>
 @endsection

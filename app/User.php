@@ -42,4 +42,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function advisor(){
         return $this->hasOne('App\Advisor');
     }
+
+    public function getIsstudentAttribute(){
+        return $this->student()->count() > 0;
+    }
+
+    public function getIsadvisorAttribute(){
+        return $this->advisor()->count() > 0;
+    }
 }
