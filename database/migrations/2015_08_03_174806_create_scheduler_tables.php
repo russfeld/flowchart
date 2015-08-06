@@ -31,6 +31,7 @@ class CreateSchedulerTables extends Migration
             $table->string('phone');
             $table->string('pic');
             $table->integer('department_id')->unsigned();
+            $table->longText('notes');
             $table->timestamps();
             $table->foreign('department_id')->references('id')->on('departments');
             $table->foreign('user_id')->references('id')->on('users');
@@ -39,12 +40,15 @@ class CreateSchedulerTables extends Migration
          Schema::create('students', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->unique()->nullable();
-            $table->string('name');
+            $table->string('first_name');
+            $table->string('last_name');
             $table->string('email');
             $table->integer('advisor_id')->unsigned();
+            $table->integer('department_id')->unsigned();
             $table->timestamps();
             $table->foreign('advisor_id')->references('id')->on('advisors');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('department_id')->references('id')->on('departments');
         });
 
         Schema::create('meetings', function (Blueprint $table) {
@@ -94,7 +98,7 @@ class CreateSchedulerTables extends Migration
      */
     public function down()
     {
-        Schema::drop('blackout_events');
+        Schema::drop('blackoutevents');
         Schema::drop('blackouts');
         Schema::drop('meetings');
         Schema::drop('students');

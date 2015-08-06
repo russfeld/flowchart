@@ -17,4 +17,8 @@ class Student extends Model
     public function advisor(){
     	return $this->belongsTo('App\Advisor');
     }
+
+    public function department(){
+    	return $this->belongsTo('App\Department');
+    }
 }

@@ -75,3 +75,42 @@ body {
 .kstate8 {
   margin-bottom: 2px;
 }
+
+.advisor-img{
+  max-height: 150px;
+  width: 100px;
+  margin: 10px;
+}
+
+.bg-light-purple{
+  background: #EEEAF3;
+  margin-bottom: 5px
+}
+
+.rounded{
+  -webkit-border-radius: 15px;
+     -moz-border-radius: 15px;
+          border-radius: 15px;
+}
+
+.rounded-left{
+  -webkit-border-top-left-radius: 15px;
+     -moz-border-top-left-radius: 15px;
+          border-top-left-radius: 15px;
+  -webkit-border-bottom-left-radius: 15px;
+     -moz-border-bottom-left-radius: 15px;
+          border-bottom-left-radius: 15px;
+}
+
+.rounded-right{
+  -webkit-border-top-right-radius: 15px;
+     -moz-border-top-right-radius: 15px;
+          border-top-right-radius: 15px;
+  -webkit-border-bottom-right-radius: 15px;
+     -moz-border-bottom-right-radius: 15px;
+          border-bottom-right-radius: 15px;
+}
+
+.top-header{
+  margin-top: 0px !important;
+}

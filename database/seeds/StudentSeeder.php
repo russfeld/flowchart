@@ -13,31 +13,39 @@ class StudentSeeder extends Seeder
     {
         DB::table('students')->insert([
         	'id' => '1',
-    		'name' => 'Test Student',
+    		'first_name' => 'Test',
+            'last_name' => 'Student',
     		'email' => 'teststudent@ksu.edu',
     		'advisor_id' => '1',
-    		'user_id' => '2'
+    		'user_id' => '2',
+            'department_id' => '1'
     	]);
 
     	DB::table('students')->insert([
         	'id' => '2',
-    		'name' => 'Christopher Piggott',
+    		'first_name' => 'Christopher',
+            'last_name' => 'Piggott',
     		'email' => 'cpiggott@ksu.edu',
-    		'advisor_id' => '1'
+    		'advisor_id' => '1',
+            'department_id' => '1'
     	]);
 
     	DB::table('students')->insert([
         	'id' => '5',
-    		'name' => 'Miriam Cox',
+    		'first_name' => 'Miriam',
+            'last_name' => 'Cox',
     		'email' => 'miriamc@ksu.edu',
-    		'advisor_id' => '5'
+    		'advisor_id' => '5',
+            'department_id' => '2'
     	]);
 
     	DB::table('students')->insert([
         	'id' => '4',
-    		'name' => 'James Tyson',
+    		'first_name' => 'James',
+            'last_name' => 'Tyson',
     		'email' => 'jbtyson@ksu.edu',
-    		'advisor_id' => '5'
+    		'advisor_id' => '5',
+            'department_id' => '2'
     	]);
     }
 }

@@ -20,6 +20,7 @@
     "jquery": "~2.1.4",
     "fontawesome": "~4.4.0",
     "bootstrap-sass": "~3.3.5",
-    "snap.svg": "~0.4.1"
+    "snap.svg": "~0.4.1",
+    "fullcalendar": "~2.3.2"
   }
 }

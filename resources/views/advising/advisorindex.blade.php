@@ -4,6 +4,6 @@
 
 @section('content')
 
-<p>Coming Soon!</p>
+<p>Welcome advisor {{ $advisor->name }}</p>
 
 @endsection

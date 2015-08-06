@@ -35,6 +35,7 @@ class SchedulerSeeder extends Seeder
     		'phone' => '785-532-7929',
     		'pic' => 'russfeld.png',
     		'department_id' => '1',
+            'notes' => 'I advise the IS students primarily',
     		'user_id' => '1'
     	]);
 
