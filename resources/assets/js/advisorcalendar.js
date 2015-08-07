@@ -176,4 +176,48 @@ $(document).ready(function() {
 		}
 	});
 
+	$('#saveBlackoutButton').bind('click', function(){
+		var data = { bstart: moment($('#bstart').val(), "LLL").format(), bend: moment($('#bend').val(), "LLL").format(), btitle: $('#btitle').val(), brepeat: $('#brepeat').val()};
+		if($('#blackoutID').val() > 0){
+			data.bblackoutid = $('#blackoutID').val();
+		}
+		if($('#brepeat').val() == 1){
+			data.brepeatevery= $('#brepeatdaily').val();
+			data.brepeatuntil = moment($('#brepeatuntil').val(), "MM/DD/YYYY").format();
+		}
+		if($('#brepeat').val() == 2){
+			data.brepeatevery = $('#brepeatweekly').val();
+			data.brepeatweekdaysm = $('#brepeatweekdays1').prop('checked');
+			data.brepeatweekdayst = $('#brepeatweekdays2').prop('checked');
+			data.brepeatweekdaysw = $('#brepeatweekdays3').prop('checked');
+			data.brepeatweekdaysu = $('#brepeatweekdays4').prop('checked');
+			data.brepeatweekdaysf = $('#brepeatweekdays5').prop('checked');
+			data.brepeatuntil = moment($('#brepeatuntil').val(), "MM/DD/YYYY").format();
+		}
+		$.ajax({
+		  method: "POST",
+		  url: blackoutPostURL,
+		  data: data
+		})
+	  	.success(function( message ) {
+	  		$('#createBlackout').modal('hide');
+	  		$('#calendar').fullCalendar('unselect');
+	  		$('#calendar').fullCalendar('refetchEvents');
+	  	}).fail(function( jqXHR, message ){
+	  		if (jqXHR.status == 422)
+		    {
+		    	$('.form-group').each(function (){
+		    		$(this).removeClass('has-error');
+		    		$(this).find('span').text('');
+		    	})
+		        $.each(jqXHR.responseJSON, function (key, value) {
+		            $('#' + key).parent().addClass('has-error');
+		            $('#' + key + 'help').text(value);
+		        });
+		    }else{
+	  			alert("Unable to save blackout: " + JSON.stringify(jqXHR) + ' ' + message)
+	  		}
+	  	});
+	});
+
 });

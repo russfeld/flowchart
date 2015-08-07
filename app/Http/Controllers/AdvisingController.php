@@ -7,6 +7,7 @@ use App\Department;
 use App\Meeting;
 use App\Blackoutevent;
 use App\Advisor;
+use App\Blackout;
 
 use Auth;
 use Illuminate\Http\Request;
@@ -209,6 +210,74 @@ class AdvisingController extends Controller
         }
 
         $meeting->delete();
+
+        return ("success");
+    }
+
+    public function postCreateblackout(Request $request){
+        $this->validate($request, [
+            'bstart' => 'required|date',
+            'bend' => 'required|date|after:start',
+            'btitle' => 'required|string',
+            'bblackoutid' => 'sometimes|required|exists:blackoutevents,id',
+            'brepeat' => 'required|integer|between:0,2',
+            'brepeatevery' => 'sometimes|required|integer|required_if:brepeat,1|required_if:brepeat,2',
+            'brepeatweekdaysm' => 'sometimes|required|required_if:brepeat,2',
+            'brepeatweekdayst' => 'sometimes|required|required_if:brepeat,2',
+            'brepeatweekdaysw' => 'sometimes|required|required_if:brepeat,2',
+            'brepeatweekdaysu' => 'sometimes|required|required_if:brepeat,2',
+            'brepeatweekdaysf' => 'sometimes|required|required_if:brepeat,2',
+            'brepeatuntil' => 'sometimes|required|date|required_if:brepeat,2|required_if:brepeat,1'
+        ]);
+
+        $user = Auth::user();
+
+        if($request->has('bblackoutid')){
+            $blackout = Blackout::find($request->input('bblackoutid'));
+            if($user->isadvisor){
+                if($blackout->advisor_id != $user->advisor->id){
+                    return response()->json("Cannot modify an appointment not assigned to your advisor record", 500);
+                }
+            }
+        }else{
+            $blackout = new Blackout;
+            if($user->isadvisor){
+                $blackout->advisor_id = $user->advisor->id;
+            }
+        }
+
+        $blackout->start = $request->input('bstart');
+        $blackout->end = $request->input('bend');
+        $blackout->title = $request->input('btitle');
+        $blackout->repeat_type = $request->input('brepeat');
+        if($blackout->repeat_type > 0){
+            $blackout->repeat_every_type = $request->input('brepeatevery');
+            $blackout->repeat_end = $request->input('brepeatuntil');
+            $startd = new DateTime($blackout->start);
+            $blackout->repeat_start = $startd->format('Y-m-d');
+        }
+        if($blackout->repeat_type == 2){
+            $detail = "";
+            if($request->input('brepeatweekdaysm') == 'true'){
+                $detail = $detail . "m";
+            }
+            if($request->input('brepeatweekdayst') == 'true'){
+                $detail = $detail . "t";
+            }
+            if($request->input('brepeatweekdaysw') == 'true'){
+                $detail = $detail . "w";
+            }
+            if($request->input('brepeatweekdaysu') == 'true'){
+                $detail = $detail . "u";
+            }
+            if($request->input('brepeatweekdaysf') == 'true'){
+                $detail = $detail . "f";
+            }
+            $blackout->repeat_detail = $detail;
+        }
+
+        $blackout->save();
+
 
         return ("success");
     }

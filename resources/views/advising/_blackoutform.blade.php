@@ -77,7 +77,7 @@
             <div class="form-group">
               <label class="control-label" for="brepeatuntil">Repeat Until</label>
               <div class="input-group date">
-                <input type="text" class="form-control" aria-describedby="brepeatuntilhelp"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                <input id="brepeatuntil" type="text" class="form-control" aria-describedby="brepeatuntilhelp"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
               </div>
               <span id="brepeatuntilhelp" class="help-block"></span>
             </div>
