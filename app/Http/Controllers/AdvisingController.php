@@ -151,6 +151,32 @@ class AdvisingController extends Controller
             $meetings->prepend($meeting);
         }
 
+        $resource = new Collection($meetings, function($meeting) use ($user){
+            if($user->isadvisor){
+                return[
+                    'id' => $meeting->id,
+                    'start' => $meeting->start,
+                    'end' => $meeting->end,
+                    'type' => 'b',
+                    'title' => $meeting->title,
+                    'blackout_id' => $meeting->blackout_id,
+                ];
+            }else{
+                return[
+                    'id' => $meeting->id,
+                    'start' => $meeting->start,
+                    'end' => $meeting->end,
+                    'type' => 'b',
+                    'title' => $meeting->title,
+                    'blackout_id' => $meeting->blackout_id
+                ];
+            }
+        }); 
+
+        $this->fractal->setSerializer(new JsonSerializer());
+
+        return $this->fractal->createData($resource)->toJson();
+
     	return $meetings->toJson();
     }
 
@@ -161,7 +187,7 @@ class AdvisingController extends Controller
 
         $this->validate($request, [
             'id' => 'required|exists:advisors,id',
-            'start' => 'required|date|after:' . $end,
+            'start' => 'required|date',
             'end' => 'required|date|after:start',
             'title' => 'required|string',
             'desc' => 'string',
@@ -169,6 +195,12 @@ class AdvisingController extends Controller
         ]);
 
         $user = Auth::user();
+
+        if($user->isstudent){
+            $this->validate($request, [
+                'start' => 'after:' . $end
+            ]);
+        }
 
         if($request->has('meetingid')){
             $meeting = Meeting::find($request->input('meetingid'));
@@ -227,7 +259,7 @@ class AdvisingController extends Controller
             'brepeatweekdaysw' => 'sometimes|required|required_if:brepeat,2',
             'brepeatweekdaysu' => 'sometimes|required|required_if:brepeat,2',
             'brepeatweekdaysf' => 'sometimes|required|required_if:brepeat,2',
-            'brepeatuntil' => 'sometimes|required|date|required_if:brepeat,2|required_if:brepeat,1'
+            'brepeatuntil' => 'sometimes|required|date|after:bstart|required_if:brepeat,2|required_if:brepeat,1'
         ]);
 
         $user = Auth::user();
@@ -251,33 +283,52 @@ class AdvisingController extends Controller
         $blackout->title = $request->input('btitle');
         $blackout->repeat_type = $request->input('brepeat');
         if($blackout->repeat_type > 0){
-            $blackout->repeat_every_type = $request->input('brepeatevery');
-            $blackout->repeat_end = $request->input('brepeatuntil');
+            $blackout->repeat_every = $request->input('brepeatevery');
+            $blackout->repeat_until = $request->input('brepeatuntil');
             $startd = new DateTime($blackout->start);
-            $blackout->repeat_start = $startd->format('Y-m-d');
         }
         if($blackout->repeat_type == 2){
             $detail = "";
             if($request->input('brepeatweekdaysm') == 'true'){
-                $detail = $detail . "m";
+                $detail = $detail . "1";
             }
             if($request->input('brepeatweekdayst') == 'true'){
-                $detail = $detail . "t";
+                $detail = $detail . "2";
             }
             if($request->input('brepeatweekdaysw') == 'true'){
-                $detail = $detail . "w";
+                $detail = $detail . "3";
             }
             if($request->input('brepeatweekdaysu') == 'true'){
-                $detail = $detail . "u";
+                $detail = $detail . "4";
             }
             if($request->input('brepeatweekdaysf') == 'true'){
-                $detail = $detail . "f";
+                $detail = $detail . "5";
             }
             $blackout->repeat_detail = $detail;
         }
 
         $blackout->save();
 
+
+        return ("success");
+    }
+
+    public function postDeleteblackout(Request $request){
+        $this->validate($request, [
+            'bblackoutid' => 'required|exists:blackouts,id'
+        ]);
+
+        $user = Auth::user();
+
+        $blackout = Blackout::find($request->input('bblackoutid'));
+
+        if($user->isadvisor){
+            if($blackout->advisor_id != $user->advisor->id){
+                return response()->json("Cannot delete a blackout not assigned to your advisor record", 500);
+            }
+        }
+
+        $blackout->delete();
 
         return ("success");
     }

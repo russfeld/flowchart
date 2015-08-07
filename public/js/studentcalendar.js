@@ -128,7 +128,7 @@ $(document).ready(function() {
 		    		$(this).find('span').text('');
 		    	})
 		        $.each(jqXHR.responseJSON, function (key, value) {
-		            $('#' + key).parent().addClass('has-error');
+		            $('#' + key).parents('.form-group').addClass('has-error')
 		            $('#' + key + 'help').text(value);
 		        });
 		    }else{
@@ -153,6 +153,10 @@ $(document).ready(function() {
 	  			alert("Unable to delete meeting: " + JSON.stringify(jqXHR) + ' ' + message)
 		  	});
 		}
+	});
+
+	$('.modal').on('hidden.bs.modal', function(){
+	    $(this).find('form')[0].reset();
 	});
 
 });

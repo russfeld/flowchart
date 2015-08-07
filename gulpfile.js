@@ -56,4 +56,6 @@ elixir(function(mix) {
 gulp.task('copyfonts', function() {
    gulp.src('resources/assets/bower/fontawesome/fonts/**/*.{ttf,woff,eot,svg,woff2}')
    .pipe(gulp.dest('public/fonts'));
+   gulp.src('resources/assets/bower/bootstrap-sass/assets/fonts/bootstrap/**/*.{ttf,woff,eot,svg,woff2}')
+   .pipe(gulp.dest('public/fonts'));
 });

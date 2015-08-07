@@ -82,7 +82,7 @@
               <span id="brepeatuntilhelp" class="help-block"></span>
             </div>
           </div>
-        	<input type="hidden" id="blackoutID" value="-1" />
+        	<input type="hidden" id="bblackoutid" value="-1" />
         </form>
       </div>
       <div class="modal-footer">

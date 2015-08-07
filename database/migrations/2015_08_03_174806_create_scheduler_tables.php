@@ -71,10 +71,9 @@ class CreateSchedulerTables extends Migration
             $table->dateTime('end');
             $table->integer('advisor_id')->unsigned();
             $table->smallInteger('repeat_type');
-            $table->smallInteger('repeat_every_type');
+            $table->smallInteger('repeat_every');
             $table->smallInteger('repeat_detail');
-            $table->dateTime('repeat_start');
-            $table->dateTime('repeat_end');
+            $table->dateTime('repeat_until');
             $table->timestamps();
             $table->foreign('advisor_id')->references('id')->on('advisors');
         });
@@ -88,7 +87,7 @@ class CreateSchedulerTables extends Migration
             $table->integer('blackout_id')->unsigned();
             $table->timestamps();
             $table->foreign('advisor_id')->references('id')->on('advisors');
-            $table->foreign('blackout_id')->references('id')->on('blackouts');
+            $table->foreign('blackout_id')->references('id')->on('blackouts')->onDelete('cascade');;
         });
     }
 
