@@ -42,7 +42,7 @@ var calendarData = {
 	},
 	eventSources: [ 
 		{
-			url: 'advising/meetingfeed',
+			url: '/advising/meetingfeed',
 			type: 'GET',
 			error: function() {
 				alert('Error fetching meeting events from database');
@@ -51,7 +51,7 @@ var calendarData = {
 			textColor: 'white',
 		},
 		{
-			url: 'advising/blackoutfeed',
+			url: '/advising/blackoutfeed',
 			type: 'GET',
 			error: function() {
 				alert('Error fetching blackout events from database');
@@ -68,14 +68,34 @@ var calendarData = {
 	timeFormat: ' ',
 };
 
+var datePickerData = {
+    daysOfWeekDisabled: [0, 6],
+    format: 'LLL',
+    stepping: 20,
+    enabledHours: [8, 9, 10, 11, 12, 13, 14, 15, 16],
+    sideBySide: true,
+    ignoreReadonly: true,
+    allowInputToggle: true
+};
+
+var datePickerDateOnly = {
+    daysOfWeekDisabled: [0, 6],
+    format: 'MM/DD/YYYY',
+    ignoreReadonly: true,
+    allowInputToggle: true
+};
+
 var saveMeeting = function(){
 	var data = { start: moment($('#start').val(), "LLL").format(), end: moment($('#end').val(), "LLL").format(), title: $('#title').val(), id: calendarAdvisorID, desc: $('#desc').val() };
 	if($('#meetingID').val() > 0){
 		data.meetingid = $('#meetingID').val();
 	}
+	if($('#studentidval').val() > 0){
+		data.studentid = $('#studentidval').val();
+	}
 	$.ajax({
 	  method: "POST",
-	  url: 'advising/createmeeting',
+	  url: '/advising/createmeeting',
 	  data: data
 	})
 	.success(function( message ) {
@@ -88,7 +108,7 @@ var saveMeeting = function(){
 		{
 			$('.form-group').each(function (){
 				$(this).removeClass('has-error');
-				$(this).find('span').text('');
+				$(this).find('.help-block').text('');
 			});
 			$.each(jqXHR.responseJSON, function (key, value) {
 				$('#' + key).parents('.form-group').addClass('has-error');
@@ -105,7 +125,7 @@ var deleteMeeting = function(){
 	if(choice === true){
 		$.ajax({
 		  method: "POST",
-		  url: 'advising/deletemeeting',
+		  url: '/advising/deletemeeting',
 		  data: { meetingid: $('#meetingID').val() }
 		})
 		.success(function( message ) {
@@ -138,6 +158,7 @@ var createMeetingForm = function(studentName){
 	$('#start').val(session.start.format("LLL"));
 	$('#end').val(session.end.format("LLL"));
 	$('#meetingID').val(-1);
+	$('#studentidval').val(-1);
 	$('#deleteButton').hide();
 	$('#createEvent').modal('show');
 };
@@ -151,3 +172,20 @@ var resetForm = function(){
 		$(this).text('');
 	});
 };
+
+var linkDatePickers = function(elem1, elem2){
+	$(elem1 + "_datepicker").on("dp.change", function (e) {
+		var date2 = moment($(elem2).val(), 'LLL');
+		if(e.date.isAfter(date2) || e.date.isSame(date2)){
+			date2 = e.date.clone();
+			$(elem2).val(date2.format("LLL"));
+		}
+    });
+    $(elem2 + "_datepicker").on("dp.change", function (e) {
+        var date1 = moment($(elem1).val(), 'LLL');
+		if(e.date.isBefore(date1) || e.date.isSame(date1)){
+			date1 = e.date.clone();
+			$(elem1).val(date1.format("LLL"));
+		}
+    });
+}

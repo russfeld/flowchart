@@ -12,10 +12,17 @@
         		<input type="text" class="form-control" id="title" aria-describedby="titlehelp" disabled>
         		<span id="titlehelp" class="help-block"></span>
         	</div>
+          <div id="studentiddiv" hidden>
+            <div class="form-group">
+              <label class="control-label" for="studentid">Student</label>
+              <input type="text" class="form-control" id="studentid" aria-describedby="studentidhelp" disabled>
+              <span id="studentidhelp" class="help-block"></span>
+            </div>
+          </div>
         	<div class="form-group">
         		<label class="control-label" for="start">Start Time</label>
         		<div class="input-group date" id="start_datepicker" aria-describedby="starthelp">
-                <input type="text" class="form-control" id="start" />
+                <input type="text" class="form-control" id="start" readonly/>
                 <span id="start_span" class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                 </span>
@@ -25,7 +32,7 @@
         	<div class="form-group">
         		<label class="control-label" for="end">End Time</label>
         		<div class="input-group date" id="end_datepicker" aria-describedby="endhelp">
-                <input type="text" class="form-control" id="end" />
+                <input type="text" class="form-control" id="end" readonly/>
                 <span  id="end_span" class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                 </span>
@@ -38,6 +45,7 @@
         		<span id="deschelp" class="help-block"></span>
         	</div>
         	<input type="hidden" id="meetingID" value="-1" />
+          <input type="hidden" id="studentidval" value="-1" />
         </form>
       </div>
       <div class="modal-footer">

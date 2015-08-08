@@ -3,7 +3,7 @@ $(document).ready(function() {
 	ajaxcrsf();
 
 	$('#createEvent').on('shown.bs.modal', function () {
-	  $('#desc').focus();
+	  $('#title').focus();
 	});
 
 	$('#createBlackout').on('shown.bs.modal', function () {
@@ -14,24 +14,55 @@ $(document).ready(function() {
 		$('#repeatdailydiv').hide();
 		$('#repeatweeklydiv').hide();
 		$('#repeatuntildiv').hide();
-		resetForm();
+		$(this).find('form')[0].reset();
+	    $(this).find('.has-error').each(function(){
+			$(this).removeClass('has-error');
+		});
+		$(this).find('.help-block').each(function(){
+			$(this).text('');
+		});
 	});
 
-	$('#createMeeting').on('hidden.bs.modal', resetForm);
+	$('#createEvent').on('hidden.bs.modal', resetForm);
 
 	$('#title').prop('disabled', false);
 	$('#start').prop('disabled', false);
+	$('#studentid').prop('disabled', false);
 	$('#start_span').removeClass('datepicker-disabled');
 	$('#end').prop('disabled', false);
 	$('#end_span').removeClass('datepicker-disabled');
+	$('#studentiddiv').show();
 
-	$('#start').datetimepicker({
-        daysOfWeekDisabled: [0, 6],
-        format: 'LLL',
-        stepping: 20,
-        enabledHours: [8, 9, 10, 11, 12, 13, 14, 15, 16],
-        sideBySide: true
-    });
+	$('#studentid').autocomplete({
+	    serviceUrl: 'profile/studentfeed',
+	    ajaxSettings: {
+	    	dataType: "json"
+	    },
+	    onSelect: function (suggestion) {
+	        $('#studentidval').val(suggestion.data);
+	    },
+	    transformResult: function(response) {
+        return {
+            suggestions: $.map(response.data, function(dataItem) {
+                return { value: dataItem.value, data: dataItem.data };
+            })
+        };
+    }
+	});
+
+	$('#start_datepicker').datetimepicker(datePickerData);
+
+    $('#end_datepicker').datetimepicker(datePickerData);
+
+ 	linkDatePickers('#start', '#end');
+
+ 	$('#bstart_datepicker').datetimepicker(datePickerData);
+
+    $('#bend_datepicker').datetimepicker(datePickerData);
+
+ 	linkDatePickers('#bstart', '#bend');
+
+ 	$('#brepeatuntil_datepicker').datetimepicker(datePickerDateOnly);
 
 	calendarAdvisorID = $('#calendarAdvisorID').val().trim();
 
@@ -43,12 +74,18 @@ $(document).ready(function() {
 	};
 	calendarData.eventClick = function(event, element, view){
 		if(event.type == 'm'){
+			$('#studentid').val(event.studentname);
+			$('#studentidval').val(event.student_id);
 			showMeetingForm(event);
 		}else if (event.type == 'b'){
 			session = {
 				event: event
 			};
-			$('#blackoutOption').modal('show');
+			if(event.repeat == '0'){
+				blackoutSeries();
+			}else{
+				$('#blackoutOption').modal('show');
+			}
 		}
 	};
 	calendarData.select = function(start, end) {
@@ -56,6 +93,9 @@ $(document).ready(function() {
 			start: start,
 			end: end
 		};
+		$('#bblackoutid').val(-1);
+		$('#bblackouteventid').val(-1);
+		$('#meetingID').val(-1);
 		$('#meetingOption').modal('show');
 	};
 
@@ -106,7 +146,6 @@ var createBlackoutForm = function(){
 };
 
 var blackoutOccurrence = function(){
-	var event = $('#calendar').fullCalendar( 'clientEvents', $('#bblackoutid').val() )[0]; 
 	$('#blackoutOption').modal('hide');
 	$('#btitle').val(session.event.title);
 	$('#bstart').val(session.event.start.format("LLL"));
@@ -123,20 +162,42 @@ var blackoutOccurrence = function(){
 
 var blackoutSeries = function(){
 	$('#blackoutOption').modal('hide');
-	//ajax call here
-	/*
-	$('#btitle').val(event.title);
-	$('#bstart').val(event.start.format("LLL"));
-	$('#bend').val(event.end.format("LLL"));
-	$('#bblackoutid').val(event.blackout_id);
-	$('#blackouteventid').val(-1);
-	$('#deleteBlackoutButton').show();
-	$('#createBlackout').modal('show');
-	*/
+	$.ajax({
+	  method: "GET",
+	  url: '/advising/blackout',
+	  data: {id: session.event.blackout_id},
+	  dataType: 'json'
+	})
+	.success(function( series ) {
+			$('#btitle').val(series.title)
+			$('#bstart').val(moment(series.start, 'YYYY-MM-DD HH:mm:ss').format('LLL'));
+			$('#bend').val(moment(series.end, 'YYYY-MM-DD HH:mm:ss').format('LLL'));
+			$('#bblackoutid').val(series.id);
+			$('#bblackouteventid').val(-1);
+			$('#repeatdiv').show();
+			$('#brepeat').val(series.repeat_type);
+			$('#brepeat').trigger('change');
+			if(series.repeat_type == 1){
+				$('#brepeatdaily').val(series.repeat_every);
+				$('#brepeatuntil').val(moment(series.repeat_until, 'YYYY-MM-DD HH:mm:ss').format('MM/DD/YYYY'));
+			}else if (series.repeat_type == 2){
+				$('#brepeatweekly').val(series.repeat_every);
+				$('#brepeatweekdays1').prop('checked', (series.repeat_detail.indexOf("1") >= 0));
+				$('#brepeatweekdays2').prop('checked', (series.repeat_detail.indexOf("2") >= 0));
+				$('#brepeatweekdays3').prop('checked', (series.repeat_detail.indexOf("3") >= 0));
+				$('#brepeatweekdays4').prop('checked', (series.repeat_detail.indexOf("4") >= 0));
+				$('#brepeatweekdays5').prop('checked', (series.repeat_detail.indexOf("5") >= 0));
+				$('#brepeatuntil').val(moment(series.repeat_until, 'YYYY-MM-DD HH:mm:ss').format('MM/DD/YYYY'));
+			}
+			$('#deleteBlackoutButton').show();
+			$('#createBlackout').modal('show');
+	}).fail(function( jqXHR, message ){
+		alert("Unable to retrieve blackout series: " + JSON.stringify(jqXHR) + ' ' + message);
+	});
 };
 
 var repeatChange = function(){
-	if($(this).val() === 0){
+	if($(this).val() == 0){
 		$('#repeatdailydiv').hide();
 		$('#repeatweeklydiv').hide();
 		$('#repeatuntildiv').hide();
@@ -156,10 +217,10 @@ var saveBlackout = function(){
 	var url;
 
 	if($('#bblackouteventid').val() > 0){
-		url = 'advising/createblackoutevent';
+		url = '/advising/createblackoutevent';
 		data.bblackouteventid = $('#bblackouteventid').val();
 	}else{
-		url = 'advising/createblackout';
+		url = '/advising/createblackout';
 		if($('#bblackoutid').val() > 0){
 			data.bblackoutid = $('#bblackoutid').val();
 		}
@@ -193,7 +254,7 @@ var saveBlackout = function(){
 		{
 			$('.form-group').each(function (){
 				$(this).removeClass('has-error');
-				$(this).find('span').text('');
+				$(this).find('.help-block').text('');
 			});
 			$.each(jqXHR.responseJSON, function (key, value) {
 				$('#' + key).parents('.form-group').addClass('has-error');
@@ -210,10 +271,10 @@ var deleteBlackout = function(){
 	if(choice === true){
 		var url, data;
 		if($('#bblackouteventid').val() > 0){
-			url = 'advising/deleteblackoutevent';
+			url = '/advising/deleteblackoutevent';
 			data = { bblackouteventid: $('#bblackouteventid').val() };
 		}else{
-			url = 'advising/deleteblackout';
+			url = '/advising/deleteblackout';
 			data = { bblackoutid: $('#bblackoutid').val() };
 		}
 		$.ajax({

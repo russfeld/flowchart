@@ -83,6 +83,7 @@ class CreateSchedulerTables extends Migration
             $table->string('title');
             $table->dateTime('start');
             $table->dateTime('end');
+            $table->boolean('repeat');
             $table->integer('advisor_id')->unsigned();
             $table->integer('blackout_id')->unsigned();
             $table->timestamps();

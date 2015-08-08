@@ -20,7 +20,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Blackout::saved(function ($blackout) {
-            echo $blackout;
             if($blackout->repeat_type == 1){ //daily
                 Blackoutevent::where('blackout_id', $blackout->id)->delete();
                 $start = new DateTime($blackout->start);
@@ -35,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
                     $blackoutevent->end = $end;
                     $blackoutevent->advisor_id = $blackout->advisor_id;
                     $blackoutevent->blackout_id = $blackout->id;
+                    $blackoutevent->repeat = true;
                     $blackoutevent->save();
                     $start->add($interval);
                     $end->add($interval);
@@ -56,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
                         $blackoutevent->end = $end;
                         $blackoutevent->advisor_id = $blackout->advisor_id;
                         $blackoutevent->blackout_id = $blackout->id;
+                        $blackoutevent->repeat = true;
                         $blackoutevent->save();
                     }
                     if($dow == 6){
@@ -67,6 +68,14 @@ class AppServiceProvider extends ServiceProvider
                 }
             }else if ($blackout->repeat_type == 0){//no repeat
                 Blackoutevent::where('blackout_id', $blackout->id)->delete();
+                $blackoutevent = new Blackoutevent;
+                $blackoutevent->title = $blackout->title;
+                $blackoutevent->start = $blackout->start;
+                $blackoutevent->end = $blackout->end;
+                $blackoutevent->advisor_id = $blackout->advisor_id;
+                $blackoutevent->blackout_id = $blackout->id;
+                $blackoutevent->repeat = false;
+                $blackoutevent->save();
             }
         });
     }

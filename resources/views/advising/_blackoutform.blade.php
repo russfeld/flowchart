@@ -88,8 +88,11 @@
           <div id="repeatuntildiv" hidden>
             <div class="form-group">
               <label class="control-label" for="brepeatuntil">Repeat Until</label>
-              <div class="input-group date">
-                <input id="brepeatuntil" type="text" class="form-control" aria-describedby="brepeatuntilhelp"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+              <div class="input-group date" id="brepeatuntil_datepicker" aria-describedby="brepeatuntilhelp">
+                <input type="text" class="form-control" id="brepeatuntil" />
+                <span id="brepeatuntil_span" class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
               </div>
               <span id="brepeatuntilhelp" class="help-block"></span>
             </div>
@@ -131,7 +134,7 @@
       </div>
       <div class="modal-body">
         <button type="button" class="btn btn-primary" id="advisingButton">Advising Meeting</button>
-        <button type="button" class="btn btn-primary" id="blackoutButton">Blackout Times</button>
+        <button type="button" class="btn btn-primary" id="blackoutButton">Blackout Time</button>
       </div>
     </div>
   </div>

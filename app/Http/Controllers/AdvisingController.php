@@ -16,6 +16,7 @@ use DateInterval;
 
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
+use League\Fractal\Resource\Item;
 use App\JsonSerializer;
 
 class AdvisingController extends Controller
@@ -105,7 +106,9 @@ class AdvisingController extends Controller
                     'end' => $meeting->end,
                     'type' => 'm',
                     'title' => $meeting->title,
-                    'desc' => $meeting->description
+                    'desc' => $meeting->description,
+                    'studentname' => $meeting->student->name,
+                    'student_id' => $meeting->student->id,
                 ];
             }else{
                 return[
@@ -160,6 +163,7 @@ class AdvisingController extends Controller
                     'type' => 'b',
                     'title' => $meeting->title,
                     'blackout_id' => $meeting->blackout_id,
+                    'repeat' => $meeting->repeat
                 ];
             }else{
                 return[
@@ -167,8 +171,7 @@ class AdvisingController extends Controller
                     'start' => $meeting->start,
                     'end' => $meeting->end,
                     'type' => 'b',
-                    'title' => $meeting->title,
-                    'blackout_id' => $meeting->blackout_id
+                    'title' => $meeting->title
                 ];
             }
         }); 
@@ -194,7 +197,7 @@ class AdvisingController extends Controller
             }
         }
 
-        $resource = new Collection($blackout, function($blackout){
+        $resource = new Item($blackout, function($blackout){
             return[
                 'id' => $blackout->id,
                 'start' => $blackout->start,
@@ -232,6 +235,10 @@ class AdvisingController extends Controller
             $this->validate($request, [
                 'start' => 'after:' . $end
             ]);
+        }else{
+            $this->validate($request, [
+                'studentid' => 'required|exists:students,id',
+            ]);
         }
 
         if($request->has('meetingid')){
@@ -243,9 +250,12 @@ class AdvisingController extends Controller
             }
         }else{
             $meeting = new Meeting;
-            if($user->isstudent){
-                $meeting->student_id = $user->student->id;
-            }
+        }
+
+        if($user->isstudent){
+            $meeting->student_id = $user->student->id;
+        }else{
+            $meeting->student_id = $request->input('studentid');
         }
 
         $meeting->title = $request->input('title');
@@ -281,7 +291,7 @@ class AdvisingController extends Controller
     public function postCreateblackout(Request $request){
         $this->validate($request, [
             'bstart' => 'required|date',
-            'bend' => 'required|date|after:start',
+            'bend' => 'required|date|after:bstart',
             'btitle' => 'required|string',
             'bblackoutid' => 'sometimes|required|exists:blackouts,id',
             'brepeat' => 'required|integer|between:0,2',
@@ -348,7 +358,7 @@ class AdvisingController extends Controller
     public function postCreateblackoutevent(Request $request){
         $this->validate($request, [
             'bstart' => 'required|date',
-            'bend' => 'required|date|after:start',
+            'bend' => 'required|date|after:bstart',
             'btitle' => 'required|string',
             'bblackouteventid' => 'sometimes|required|exists:blackoutevents,id'
         ]);

@@ -25,4 +25,11 @@ class Student extends Model
     public function getNameAttribute(){
         return $this->first_name . ' ' . $this->last_name;
     }
+
+    public function scopeFilterName($query, $name)
+    {
+            $filter = str_replace('"', "", $name);
+            $queryStr = "concat(students.first_name, \" \", students.last_name) LIKE \"%" . $filter . "%\"";
+            return $query->whereRaw($queryStr);
+    }
 }

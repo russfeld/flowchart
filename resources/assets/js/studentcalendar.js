@@ -5,14 +5,17 @@ $(document).ready(function() {
 	ajaxcrsf();
 
 	$('#createEvent').on('shown.bs.modal', function () {
-	  $('#desc').focus()
+	  $('#desc').focus();
 	});
 
 	$('#title').prop('disabled', true);
 	$("#start").prop('disabled', true);
+	$('#studentid').prop('disabled', true);
 	$("#start_span").addClass('datepicker-disabled');
 	$("#end").prop('disabled', true);
 	$("#end_span").addClass('datepicker-disabled');
+	$('#studentiddiv').hide();
+	$('#studentidval').val(-1);
 
 	calendarAdvisorID = $('#calendarAdvisorID').val().trim();
 	studentName = $('#studentName').val().trim();
@@ -48,6 +51,7 @@ $(document).ready(function() {
 				start: start,
 				end: end
 			};
+			$('#meetingID').val(-1);
 			createMeetingForm(studentName);
 		}
 	};
@@ -59,6 +63,5 @@ $(document).ready(function() {
 	$('#deleteButton').bind('click', deleteMeeting);
 
 	$('.modal').on('hidden.bs.modal', resetForm);
-	});
 
 });

@@ -17,18 +17,19 @@ elixir(function(mix) {
 
     mix.styles([
         '../bower/fullcalendar/dist/fullcalendar.css',
-        "../bower/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css"
+        "../bower/russfeld-eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css"
     ], 'public/css/calendar.css');
 
     mix.scripts([
     	'../bower/jquery/dist/jquery.js',
-    	'../bower/bootstrap-sass/assets/javascripts/bootstrap.js'
+    	'../bower/bootstrap-sass/assets/javascripts/bootstrap.js',
+        '../bower/devbridge-autocomplete/dist/jquery.autocomplete.js'
     ],'public/js/vendor.js');
 
     mix.scripts([
         '../bower/moment/moment.js',
         '../bower/fullcalendar/dist/fullcalendar.js',
-        '../bower/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js'
+        '../bower/russfeld-eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js'
     ], 'public/js/calendar.js');
 
     mix.scripts([
