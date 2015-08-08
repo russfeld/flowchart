@@ -14,23 +14,35 @@
         	</div>
         	<div class="form-group">
         		<label class="control-label" for="bstart">Start Time</label>
-        		<input type="datetime-local" class="form-control" id="bstart" aria-describedby="bstarthelp" disabled>
+        		<div class="input-group date" id="bstart_datepicker" aria-describedby="bstarthelp">
+                <input type="text" class="form-control" id="bstart" />
+                <span id="bstart_span" class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
         		<span id="bstarthelp" class="help-block"></span>
         	</div>
         	<div class="form-group">
         		<label class="control-label" for="bend">End Time</label>
-        		<input type="datetime-local" class="form-control" id="bend" aria-describedby="bendhelp" disabled>
+        		<div class="input-group date" id="bend_datepicker" aria-describedby="bendhelp">
+                <input type="text" class="form-control" id="bend" />
+                <span id="bend_span" class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
         		<span id="bendhelp" class="help-block"></span>
         	</div>
-          <hr>
-          <div class="form-group">
-            <label class="control-label" for="brepeat">Repeat</label>
-            <select class="form-control" id="brepeat" aria-describedby="brepeathelp">
-              <option value="0" selected>None</option>
-              <option value="1">Daily</option>
-              <option value="2">Weekly</option>
-            </select>
-            <span id="brepeathelp" class="help-block"></span>  
+          <div id="repeatdiv">
+            <hr>
+            <div class="form-group">
+              <label class="control-label" for="brepeat">Repeat</label>
+              <select class="form-control" id="brepeat" aria-describedby="brepeathelp">
+                <option value="0" selected>None</option>
+                <option value="1">Daily</option>
+                <option value="2">Weekly</option>
+              </select>
+              <span id="brepeathelp" class="help-block"></span>  
+            </div>
           </div>
           <div id="repeatdailydiv" hidden>
             <div class="form-group">
@@ -83,12 +95,43 @@
             </div>
           </div>
         	<input type="hidden" id="bblackoutid" value="-1" />
+          <input type="hidden" id="bblackouteventid" value="-1" />
         </form>
       </div>
       <div class="modal-footer">
       	<button type="button" class="btn btn-danger" id="deleteBlackoutButton">Delete</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" id="saveBlackoutButton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="blackoutOption" tabindex="-1" role="dialog" aria-labelledby="blackoutOptionLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="blackoutOptionLabel">This event has multiple occurrences:</h4>
+      </div>
+      <div class="modal-body">
+        <button type="button" class="btn btn-primary" id="blackoutSeries">Edit the series</button>
+        <button type="button" class="btn btn-primary" id="blackoutOccurrence">Edit this occurrence</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="meetingOption" tabindex="-1" role="dialog" aria-labelledby="meetingOptionLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="meetingOptionLabel">Create which type of event</h4>
+      </div>
+      <div class="modal-body">
+        <button type="button" class="btn btn-primary" id="advisingButton">Advising Meeting</button>
+        <button type="button" class="btn btn-primary" id="blackoutButton">Blackout Times</button>
       </div>
     </div>
   </div>

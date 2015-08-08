@@ -3,7 +3,6 @@
 @import "../bower/bootstrap-sass/assets/stylesheets/bootstrap/theme";
 @import "bootstrap-custom-items";
 @import "../bower/fontawesome/scss/font-awesome";
-@import "../bower/bootstrap-datepicker/dist/css/bootstrap-datepicker3";
 @import "flowchart.scss";
 
 html {
@@ -143,3 +142,19 @@ body {
 .fc-clickable{
   cursor: pointer;
 }
+
+.datepicker-disabled{
+  cursor: not-allowed !important;
+}
+
+#message {
+    position: fixed;
+    top: 55px;
+    width: auto;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 100;
+    -webkit-border-radius: 15px;
+       -moz-border-radius: 15px;
+            border-radius: 15px;
+  }

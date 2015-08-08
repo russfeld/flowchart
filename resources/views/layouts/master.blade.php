@@ -8,6 +8,8 @@
         @include('includes.navbar');
 
         <div class="container" role="main">
+            <div id="message">
+            </div>
             @yield('content')
         </div>
 

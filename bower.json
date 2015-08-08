@@ -22,6 +22,6 @@
     "bootstrap-sass": "~3.3.5",
     "snap.svg": "~0.4.1",
     "fullcalendar": "~2.3.2",
-    "bootstrap-datepicker": "~1.4.0"
+    "eonasdan-bootstrap-datetimepicker": "~4.15.35"
   }
 }

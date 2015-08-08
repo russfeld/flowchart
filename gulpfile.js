@@ -17,35 +17,32 @@ elixir(function(mix) {
 
     mix.styles([
         '../bower/fullcalendar/dist/fullcalendar.css',
-    ], 'public/css/fullcalendar.css');
+        "../bower/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css"
+    ], 'public/css/calendar.css');
 
     mix.scripts([
     	'../bower/jquery/dist/jquery.js',
-    	'../bower/bootstrap-sass/assets/javascripts/bootstrap.js',
-        '../bower/bootstrap-datepicker/dist/js/bootstrap-datepicker.js'
+    	'../bower/bootstrap-sass/assets/javascripts/bootstrap.js'
     ],'public/js/vendor.js');
 
     mix.scripts([
-        '../bower/moment/moment.js'
-    ], 'public/js/moment.js');
+        '../bower/moment/moment.js',
+        '../bower/fullcalendar/dist/fullcalendar.js',
+        '../bower/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js'
+    ], 'public/js/calendar.js');
 
     mix.scripts([
-        '../bower/fullcalendar/dist/fullcalendar.js'
-    ], 'public/js/fullcalendar.js');
-
-    mix.scripts([
-    	'../bower/snap.svg/dist/snap.svg.js'
-    ], 'public/js/snapsvg.js');
-
-    mix.scripts([
-    	'flowchart.js'
+    	'../bower/snap.svg/dist/snap.svg.js',
+        'flowchart.js'
     ], 'public/js/flowchart.js');
 
     mix.scripts([
+        'calendarutilities.js',
         'studentcalendar.js'
     ], 'public/js/studentcalendar.js');
 
     mix.scripts([
+        'calendarutilities.js',
         'advisorcalendar.js'
     ], 'public/js/advisorcalendar.js');
 

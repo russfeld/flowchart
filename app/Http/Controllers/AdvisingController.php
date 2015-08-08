@@ -176,8 +176,40 @@ class AdvisingController extends Controller
         $this->fractal->setSerializer(new JsonSerializer());
 
         return $this->fractal->createData($resource)->toJson();
+    }
 
-    	return $meetings->toJson();
+    public function getBlackout(Request $request){
+        $this->validate($request, [
+            'id' => 'required|exists:blackouts,id'
+        ]);
+
+        $id = $request->input('id');
+
+        $blackout = Blackout::find($id);
+        
+        $user = Auth::user();
+        if($user->isadvisor){
+            if($user->advisor->id != $blackout->advisor_id){
+                return response()->json("Cannot edit a blackout not assigned to your advisor record", 500);
+            }
+        }
+
+        $resource = new Collection($blackout, function($blackout){
+            return[
+                'id' => $blackout->id,
+                'start' => $blackout->start,
+                'end' => $blackout->end,
+                'title' => $blackout->title,
+                'repeat_type' => $blackout->repeat_type,
+                'repeat_every' => $blackout->repeat_every,
+                'repeat_detail' => $blackout->repeat_detail,
+                'repeat_until' => $blackout->repeat_until
+            ];
+        }); 
+
+        $this->fractal->setSerializer(new JsonSerializer());
+
+        return $this->fractal->createData($resource)->toJson();
     }
 
     public function postCreatemeeting(Request $request){
@@ -223,7 +255,7 @@ class AdvisingController extends Controller
         $meeting->advisor_id = $request->input('id');
         $meeting->save();
 
-        return ("success");
+        return ("Advising meeting saved!");
     }
 
     public function postDeletemeeting(Request $request){
@@ -243,7 +275,7 @@ class AdvisingController extends Controller
 
         $meeting->delete();
 
-        return ("success");
+        return ("Advising meeting deleted!");
     }
 
     public function postCreateblackout(Request $request){
@@ -251,7 +283,7 @@ class AdvisingController extends Controller
             'bstart' => 'required|date',
             'bend' => 'required|date|after:start',
             'btitle' => 'required|string',
-            'bblackoutid' => 'sometimes|required|exists:blackoutevents,id',
+            'bblackoutid' => 'sometimes|required|exists:blackouts,id',
             'brepeat' => 'required|integer|between:0,2',
             'brepeatevery' => 'sometimes|required|integer|required_if:brepeat,1|required_if:brepeat,2',
             'brepeatweekdaysm' => 'sometimes|required|required_if:brepeat,2',
@@ -310,7 +342,41 @@ class AdvisingController extends Controller
         $blackout->save();
 
 
-        return ("success");
+        return ("Blackout series saved!");
+    }
+
+    public function postCreateblackoutevent(Request $request){
+        $this->validate($request, [
+            'bstart' => 'required|date',
+            'bend' => 'required|date|after:start',
+            'btitle' => 'required|string',
+            'bblackouteventid' => 'sometimes|required|exists:blackoutevents,id'
+        ]);
+
+        $user = Auth::user();
+
+        if($request->has('bblackouteventid')){
+            $blackout = Blackoutevent::find($request->input('bblackouteventid'));
+            if($user->isadvisor){
+                if($blackout->advisor_id != $user->advisor->id){
+                    return response()->json("Cannot modify a blackout not assigned to your advisor record", 500);
+                }
+            }
+        }else{
+            $blackout = new Blackoutevent;
+            if($user->isadvisor){
+                $blackout->advisor_id = $user->advisor->id;
+            }
+        }
+
+        $blackout->start = $request->input('bstart');
+        $blackout->end = $request->input('bend');
+        $blackout->title = $request->input('btitle');
+
+        $blackout->save();
+
+
+        return ("Blackout event saved!");
     }
 
     public function postDeleteblackout(Request $request){
@@ -330,7 +396,27 @@ class AdvisingController extends Controller
 
         $blackout->delete();
 
-        return ("success");
+        return ("Blackout series deleted!");
+    }
+
+    public function postDeleteblackoutevent(Request $request){
+        $this->validate($request, [
+            'bblackouteventid' => 'required|exists:blackoutevents,id'
+        ]);
+
+        $user = Auth::user();
+
+        $blackout = Blackoutevent::find($request->input('bblackouteventid'));
+
+        if($user->isadvisor){
+            if($blackout->advisor_id != $user->advisor->id){
+                return response()->json("Cannot delete a blackout not assigned to your advisor record", 500);
+            }
+        }
+
+        $blackout->delete();
+
+        return ("Blackout event deleted!");
     }
 
 }

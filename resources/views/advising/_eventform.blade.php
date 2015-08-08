@@ -14,12 +14,22 @@
         	</div>
         	<div class="form-group">
         		<label class="control-label" for="start">Start Time</label>
-        		<input type="datetime-local" class="form-control" id="start" aria-describedby="starthelp" disabled>
-        		<span id="starthelp" class="help-block"></span>
+        		<div class="input-group date" id="start_datepicker" aria-describedby="starthelp">
+                <input type="text" class="form-control" id="start" />
+                <span id="start_span" class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+            <span id="starthelp" class="help-block"></span>
         	</div>
         	<div class="form-group">
         		<label class="control-label" for="end">End Time</label>
-        		<input type="datetime-local" class="form-control" id="end" aria-describedby="endhelp" disabled>
+        		<div class="input-group date" id="end_datepicker" aria-describedby="endhelp">
+                <input type="text" class="form-control" id="end" />
+                <span  id="end_span" class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
         		<span id="endhelp" class="help-block"></span>
         	</div>
         	<div class="form-group">
