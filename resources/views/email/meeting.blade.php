@@ -10,6 +10,4 @@
 <p><b>Student:</b> {{ $meeting->student->name }}</p>
 <p><b>Description:</b> {{ $meeting->description }}</p>
 
-
-
 @endsection

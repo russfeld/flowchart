@@ -17,7 +17,8 @@ class MeetingSeeder extends Seeder
             'start' => '2015-08-05 15:00:00',
             'end' => '2015-08-05 15:20:00',
             'advisor_id' => '1',
-            'student_id' => '1' 
+            'student_id' => '1',
+            'sequence' => '0'
         ]);
 
         DB::table('meetings')->insert([
@@ -26,7 +27,8 @@ class MeetingSeeder extends Seeder
             'start' => '2015-08-06 14:00:00',
             'end' => '2015-08-06 14:20:00',
             'advisor_id' => '1',
-            'student_id' => '2' 
+            'student_id' => '2',
+            'sequence' => '0'
         ]);
 
         DB::table('meetings')->insert([
@@ -35,7 +37,8 @@ class MeetingSeeder extends Seeder
             'start' => '2015-08-04 16:00:00',
             'end' => '2015-08-04 16:20:00',
             'advisor_id' => '1',
-            'student_id' => '1' 
+            'student_id' => '1',
+            'sequence' => '0'
         ]);
 
         DB::table('meetings')->insert([
@@ -44,7 +47,8 @@ class MeetingSeeder extends Seeder
             'start' => '2015-08-05 8:00:00',
             'end' => '2015-08-05 8:20:00',
             'advisor_id' => '1',
-            'student_id' => '2' 
+            'student_id' => '2',
+            'sequence' => '0' 
         ]);
 
         DB::table('blackouts')->insert([

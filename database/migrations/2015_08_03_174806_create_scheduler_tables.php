@@ -56,6 +56,7 @@ class CreateSchedulerTables extends Migration
             $table->string('title');
             $table->dateTime('start');
             $table->dateTime('end');
+            $table->integer('sequence');
             $table->longText('description')->nullable();
             $table->integer('advisor_id')->unsigned();
             $table->integer('student_id')->unsigned();

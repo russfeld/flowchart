@@ -1,1 +1,1 @@
-<a href="http://flowchart.russfeld.me">Visit the Advising System</a>
+<a href="{{ url('/') }}">Visit the Advising System</a>

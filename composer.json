@@ -8,7 +8,7 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
         "league/fractal": "^0.12.0",
-        "sabre/vobject" : "~3.4"
+        "phpmailer/phpmailer": "^5.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -9,13 +9,9 @@ use App\Meeting;
 use DateTime;
 use DateInterval;
 use Mail;
-use Swift_Attachment;
-use Swift_Encoding;
-use Swift_Mailer;
-use Swift_Message;
+use PHPMailer;
 
 use Illuminate\Support\ServiceProvider;
-use Sabre\VObject\Component\VCalendar;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -88,97 +84,136 @@ class AppServiceProvider extends ServiceProvider
         
         Meeting::created(function ($meeting) {
             $type = "created";
-            $start = new DateTime($meeting->start);
-            $end = new DateTime($meeting->end);
-
-            $ical = "BEGIN:VCALENDAR\r
-METHOD:REQUEST\r
-PRODID:-//Microsoft Corporation//Outlook 11.0 MIMEDIR//EN\r
-VERSION:2.0\r
-BEGIN:VTIMEZONE\r
-TZID:Central Standard Time\r
-BEGIN:STANDARD\r
-DTSTART:16010101T020000\r
-TZOFFSETFROM:-0500\r
-TZOFFSETTO:-0600\r
-RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=1SU;BYMONTH=11\r
-END:STANDARD\r
-BEGIN:DAYLIGHT\r
-DTSTART:16010101T020000\r
-TZOFFSETFROM:-0600\r
-TZOFFSETTO:-0500\r
-RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=2SU;BYMONTH=3\r
-END:DAYLIGHT\r
-END:VTIMEZONE\r
-BEGIN:VEVENT\r
-ORGANIZER;CN=Russell Feldhausen:MAILTO:russfeld@ksu.edu\r
-ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN=" . $meeting->advisor->name . ":MAILTO:" . $meeting->advisor->email . "\r
-ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN=" . $meeting->student->name . ":MAILTO:" . $meeting->student->email . "\r
-DESCRIPTION;LANGUAGE=en-US:" . $meeting->description . "\r
-UID:" . $meeting->id . "-12345678901234567890-cis.ksu.edu\r
-SUMMARY;LANGUAGE=en-US:" . $meeting->title . "\r
-DTSTART;TZID=Central Standard Time:" . $start->format("Ymd\THis") . "\r
-DTEND;TZID=Central Standard Time:" . $end->format("Ymd\THis") . "\r
-CLASS:PUBLIC\r
-PRIORITY:5\r
-DTSTAMP:" . gmdate("Ymd\THis") ."Z\r
-TRANSP:OPAQUE\r
-STATUS:CONFIRMED\r
-SEQUENCE:0\r
-LOCATION;LANGUAGE=en-US:" . $meeting->advisor->office ."\r
-BEGIN:VALARM\r
-DESCRIPTION:REMINDER\r
-TRIGGER;RELATED=START:-PT15M\r
-ACTION:DISPLAY\r
-END:VALARM\r
-END:VEVENT\r
-END:VCALENDAR\r";
-
-// X-MICROSOFT-CDO-APPT-SEQUENCE:0\r\n
-// X-MICROSOFT-CDO-OWNERAPPTID:715687903\r\n
-// X-MICROSOFT-CDO-BUSYSTATUS:TENTATIVE\r\n
-// X-MICROSOFT-CDO-INTENDEDSTATUS:BUSY\r\n
-// X-MICROSOFT-CDO-ALLDAYEVENT:FALSE\r\n
-// X-MICROSOFT-CDO-IMPORTANCE:1\r\n
-// X-MICROSOFT-CDO-INSTTYPE:0\r\n
-// X-MICROSOFT-DISALLOW-COUNTER:FALSE\r\n
-        
-            $messageObject = Swift_Message::newInstance();
-            $messageObject->setContentType("multipart/alternative");
-            $messageObject->getHeaders()->AddTextHeader('Content-class', 'urn:content-classes:calendarmessage');
-            $messageObject->addPart("A meeting has been created!", "text/plain");
-
-            $messageObject->setSubject("Advising meeting created")
-              ->setFrom("russfeld@ksu.edu");
-
-            $messageObject->setTo(array($meeting->advisor->email, $meeting->student->email));
-            $ics_attachment = Swift_Attachment::newInstance()
-              ->setBody(trim($ical))
-              ->setEncoder(Swift_Encoding::get7BitEncoding())
-              ->setDisposition('inline;filename=invite.ics');
-            $headers = $ics_attachment->getHeaders();
-            $content_type_header = $headers->get("Content-Type");
-            $content_type_header->setValue("text/calendar");
-            $content_type_header->setParameters(array(
-              'charset' => 'UTF-8',
-              'method' => 'REQUEST'
-            ));
-            //$headers->remove('Content-Disposition');
-            $messageObject->attach($ics_attachment);
-
-            $mailObject = Mail::getSwiftMailer();
-            $mailObject->send($messageObject);
-
-            
+            AppServiceProvider::sendMail($meeting, $type);
         });
 
         Meeting::updated(function ($meeting) {
-
+            $type = "updated";
+            AppServiceProvider::sendMail($meeting, $type);
         });
 
-        Meeting::deleted(function ($meeting) {
-
+        Meeting::deleting(function ($meeting) {
+            $type = "removed";
+            AppServiceProvider::sendMail($meeting, $type);
         });
+    }
+
+    public static function sendMail($meeting, $type){
+            $start = new DateTime($meeting->start);
+            $end = new DateTime($meeting->end);
+
+            $mail = new PHPMailer;
+
+            //$mail->SMTPDebug = 3;                               // Enable verbose debug output
+
+            $mail->isSMTP();                                      // Set mailer to use SMTP
+            $mail->Host = env('MAIL_HOST', 'smtp.mailgun.org');  // Specify main and backup SMTP servers
+            $mail->SMTPAuth = true;                               // Enable SMTP authentication
+            $mail->Username = env('MAIL_USERNAME');                 // SMTP username
+            $mail->Password = env('MAIL_PASSWORD');                           // SMTP password
+            $mail->SMTPSecure = env('MAIL_ENCRYPTION', 'tls');                            // Enable TLS encryption, `ssl` also accepted
+            $mail->Port = env('MAIL_PORT', 587);                                    // TCP port to connect to
+
+            $mail->From = 'russfeldh@gmail.com';
+            $mail->FromName = 'Russell Feldhausen';
+            $mail->addAddress("Russell Feldhausen", "russfeldh@gmail.com");     // Add a recipient
+            $mail->addAddress($meeting->advisor->email, $meeting->advisor->name);               // Name is optional
+            $mail->addReplyTo('russfeldh@gmail.com', 'Russell Feldhausen');
+            
+            //Convert MYSQL datetime and construct iCal start, end and issue dates
+            $meetingstart = strtotime($meeting->start);    
+            $dtstart= gmdate("Ymd\THis\Z",$meetingstart);
+            $meetingend = strtotime($meeting->end); 
+            $dtend= gmdate("Ymd\THis\Z",$meetingend);
+            $todaystamp = gmdate("Ymd\THis\Z");
+            
+            //Create unique identifier
+            $cal_uid = $meeting->id ."-123123123123123-@ksu.edu";
+            
+            //Create Mime Boundry
+            $mime_boundary = "----Meeting Booking----".md5(time());
+                
+            //Create Email Headers
+            $mail->ContentType = "multipart/alternative; boundary=".$mime_boundary;
+            $mail->addCustomHeader("Content-class: urn:content-classes:calendarmessage");
+            
+            //Create Email Body (Text)
+            $message = "--$mime_boundary\n";
+            $message .= "Content-Type: text/plain; charset=UTF-8\n";
+            $message .= "Content-Transfer-Encoding: 8bit\n\n";
+            
+            $message .= view('email.meetingtext')->with('meeting', $meeting)->with('type', $type);
+            $message .= "\n";
+
+            //Create Email Body (HTML)
+            $message = "--$mime_boundary\n";
+            $message .= "Content-Type: text/html; charset=UTF-8\n";
+            $message .= "Content-Transfer-Encoding: 8bit\n\n";
+            
+            $message .= view('email.meeting')->with('meeting', $meeting)->with('type', $type);
+            $message .= "\n";
+
+            $message .= "--$mime_boundary\n";
+        
+            if($type != "removed"){    
+            //Create ICAL Content (Google rfc 2445 for details and examples of usage) 
+                $ical =    'BEGIN:VCALENDAR
+PRODID:-//Microsoft Corporation//Outlook 11.0 MIMEDIR//EN
+VERSION:2.0
+METHOD:REQUEST
+BEGIN:VEVENT
+ORGANIZER;CN=Russell Feldhausen:MAILTO:russfeldh@gmail.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN='.$meeting->advisor->email.':MAILTO:'.$meeting->advisor->email.'
+DTSTART:'.$dtstart.'
+DTEND:'.$dtend.'
+LOCATION:'.$meeting->advisor->office.'
+TRANSP:OPAQUE
+SEQUENCE:'.$meeting->sequence.'
+UID:'.$cal_uid.'
+DTSTAMP:'.$todaystamp.'
+DESCRIPTION:'.$meeting->description.'
+SUMMARY:'.$meeting->title.'
+END:VEVENT
+END:VCALENDAR';   
+    
+                $message .= "Content-Type: text/calendar;name=\"meeting.ics\";method=REQUEST;charset=utf-8\n";
+                $message .= "Content-Transfer-Encoding: 8bit\n\n";
+                $message .= $ical; 
+            }else{
+                //Create ICAL Content (Google rfc 2445 for details and examples of usage) 
+                $ical =    'BEGIN:VCALENDAR
+PRODID:-//Microsoft Corporation//Outlook 11.0 MIMEDIR//EN
+VERSION:2.0
+METHOD:CANCEL
+BEGIN:VEVENT
+ORGANIZER;CN=Russell Feldhausen:MAILTO:russfeldh@gmail.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN='.$meeting->advisor->email.':MAILTO:'.$meeting->advisor->email.'
+DTSTART:'.$dtstart.'
+DTEND:'.$dtend.'
+LOCATION:'.$meeting->advisor->office.'
+TRANSP:OPAQUE
+SEQUENCE:'.$meeting->sequence.'
+UID:'.$cal_uid.'
+DTSTAMP:'.$todaystamp.'
+DESCRIPTION:'.$meeting->description.'
+SUMMARY:'.$meeting->title.'
+STATUS:CANCELLED
+END:VEVENT
+END:VCALENDAR';   
+    
+                $message .= "Content-Type: text/calendar;name=\"meeting.ics\";method=CANCEL;charset=utf-8\n";
+                $message .= "Content-Transfer-Encoding: 8bit\n\n";
+                $message .= $ical;
+            }
+            
+
+
+            $mail->Subject = "Advising - " . $meeting->title;
+            $mail->Body = $message;
+
+            if(!$mail->send()) {
+                echo 'Message could not be sent.';
+            } 
     }
 
     /**

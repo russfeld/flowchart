@@ -248,8 +248,10 @@ class AdvisingController extends Controller
                     return response()->json("Cannot modify an appointment not assigned to your student record", 500);
                 }
             }
+            $meeting->sequence++;
         }else{
             $meeting = new Meeting;
+            $meeting->sequence = 0;
         }
 
         if($user->isstudent){

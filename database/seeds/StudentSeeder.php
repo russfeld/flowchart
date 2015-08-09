@@ -31,12 +31,13 @@ class StudentSeeder extends Seeder
     	]);
 
     	DB::table('students')->insert([
-        	'id' => '5',
+        	'id' => '3',
     		'first_name' => 'Miriam',
             'last_name' => 'Cox',
     		'email' => 'miriamc@ksu.edu',
-    		'advisor_id' => '5',
-            'department_id' => '2'
+    		'advisor_id' => '1',
+            'department_id' => '2',
+            'user_id' => '3'
     	]);
 
     	DB::table('students')->insert([
@@ -44,7 +45,7 @@ class StudentSeeder extends Seeder
     		'first_name' => 'James',
             'last_name' => 'Tyson',
     		'email' => 'jbtyson@ksu.edu',
-    		'advisor_id' => '5',
+    		'advisor_id' => '1',
             'department_id' => '2'
     	]);
     }
