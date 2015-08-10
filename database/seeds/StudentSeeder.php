@@ -15,7 +15,7 @@ class StudentSeeder extends Seeder
         	'id' => '1',
     		'first_name' => 'Test',
             'last_name' => 'Student',
-    		'email' => 'teststudent@ksu.edu',
+    		'email' => 'russfeld@ksu.edu',
     		'advisor_id' => '1',
     		'user_id' => '2',
             'department_id' => '1'

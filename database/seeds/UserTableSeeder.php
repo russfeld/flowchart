@@ -31,5 +31,12 @@ class UserTableSeeder extends Seeder
             'email' => 'miriamc@ksu.edu',
             'password' => bcrypt('LnxRkx')
         ]);
+
+        DB::table('users')->insert([
+            'id' => '4',
+            'name' => 'Nathan Bean',
+            'email' => 'nhbean@ksu.edu',
+            'password' => bcrypt('LnxRkx')
+        ]);
     }
 }
