@@ -116,7 +116,7 @@ class AppServiceProvider extends ServiceProvider
 
             $mail->From = 'russfeldh@gmail.com';
             $mail->FromName = 'Russell Feldhausen';
-            $mail->addAddress("Russell Feldhausen", "russfeldh@gmail.com");     // Add a recipient
+            $mail->addAddress($meeting->student->email, $meeting->student->name);     // Add a recipient
             $mail->addAddress($meeting->advisor->email, $meeting->advisor->name);               // Name is optional
             $mail->addReplyTo('russfeldh@gmail.com', 'Russell Feldhausen');
             
@@ -164,6 +164,7 @@ METHOD:REQUEST
 BEGIN:VEVENT
 ORGANIZER;CN=Russell Feldhausen:MAILTO:russfeldh@gmail.com
 ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN='.$meeting->advisor->email.':MAILTO:'.$meeting->advisor->email.'
+ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN='.$meeting->student->email.':MAILTO:'.$meeting->student->email.'
 DTSTART:'.$dtstart.'
 DTEND:'.$dtend.'
 LOCATION:'.$meeting->advisor->office.'
