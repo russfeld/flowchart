@@ -5,7 +5,7 @@
         <title>K-State Engineering Advising - @yield('title')</title>
     </head>
     <body role="document">
-        @include('includes.navbar');
+        @include('includes.navbar')
 
         <div class="container" role="main">
             <div id="message">

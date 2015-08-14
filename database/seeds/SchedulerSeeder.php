@@ -46,7 +46,8 @@ class SchedulerSeeder extends Seeder
     		'office' => '216 Nichols Hall',
     		'phone' => '785-532-7942',
     		'pic' => 'nhbean.png',
-    		'department_id' => '1'
+    		'department_id' => '1',
+            'user_id' => '4'
     	]);
 
     	DB::table('advisors')->insert([

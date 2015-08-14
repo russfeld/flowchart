@@ -2,8 +2,9 @@
 
 <?php
 $repo = 'git@github.com:russfeld/flowchart.git';
-$release_dir = '/var/www/releases';
-$app_dir = '/var/www/html';
+$release_dir = '/var/www/flowchart_releases';
+$data_dir = '/var/www/flowchart_data';
+$app_dir = '/var/www/flowchart';
 $release = 'release_' . date('YmdHis');
 ?>
 
@@ -57,11 +58,11 @@ $release = 'release_' . date('YmdHis');
     chgrp -h www-data {{ $app_dir }};
 
     cd {{ $release_dir }}/{{ $release }};
-    ln -nfs ../../.env .env;
+    ln -nfs {{ $data_dir }}/.env .env;
     chgrp -h www-data .env;
 
     rm -r {{ $release_dir }}/{{ $release }}/storage/logs;
     cd {{ $release_dir }}/{{ $release }}/storage;
-    ln -nfs ../../../logs logs;
+    ln -nfs {{ $data_dir }}/logs logs;
     chgrp -h www-data logs;
 @endtask
