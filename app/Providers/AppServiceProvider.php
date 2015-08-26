@@ -111,7 +111,9 @@ class AppServiceProvider extends ServiceProvider
             $mail->SMTPAuth = true;                               // Enable SMTP authentication
             $mail->Username = env('MAIL_USERNAME');                 // SMTP username
             $mail->Password = env('MAIL_PASSWORD');                           // SMTP password
-            $mail->SMTPSecure = env('MAIL_ENCRYPTION', '');                            // Enable TLS encryption, `ssl` also accepted
+            if(env('MAIL_ENCRYPTION') !== null){
+                $mail->SMTPSecure = env('MAIL_ENCRYPTION', 'tls');                            // Enable TLS encryption, `ssl` also accepted
+            }
             $mail->Port = env('MAIL_PORT', 587);                                    // TCP port to connect to
 
             $mail->From = 'russfeldh@gmail.com';
