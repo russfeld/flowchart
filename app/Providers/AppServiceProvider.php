@@ -108,11 +108,16 @@ class AppServiceProvider extends ServiceProvider
 
             $mail->isSMTP();                                      // Set mailer to use SMTP
             $mail->Host = env('MAIL_HOST', 'smtp.mailgun.org');  // Specify main and backup SMTP servers
-            $mail->SMTPAuth = true;                               // Enable SMTP authentication
-            $mail->Username = env('MAIL_USERNAME');                 // SMTP username
-            $mail->Password = env('MAIL_PASSWORD');                           // SMTP password
             if(env('MAIL_ENCRYPTION') !== null){
+                $mail->SMTPAuth = true;                               // Enable SMTP authentication
+                $mail->Username = env('MAIL_USERNAME');                 // SMTP username
+                $mail->Password = env('MAIL_PASSWORD');                           // SMTP password
                 $mail->SMTPSecure = env('MAIL_ENCRYPTION', 'tls');                            // Enable TLS encryption, `ssl` also accepted
+            }else{
+                $mail->SMTPDebug = 2;
+                $mail->Debugoutput = 'html';
+                $mail->SMTPAuth = false;
+                $mail->SMTPAutoTLS = false;
             }
             $mail->Port = env('MAIL_PORT', 587);                                    // TCP port to connect to
 
