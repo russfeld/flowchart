@@ -1,14 +1,17 @@
-@servers(['web' => 'root@104.131.70.168'])
+@servers(['web' => 'root@104.131.70.168', 'cis' => 'russfeld@cislinux.cis.ksu.edu'])
 
 <?php
 $repo = 'git@github.com:russfeld/flowchart.git';
 $release_dir = '/var/www/flowchart_releases';
 $data_dir = '/var/www/flowchart_data';
 $app_dir = '/var/www/flowchart';
+$release_dir_cis = '/web/cis-advising/flowchart_releases';
+$data_dir_cis = '/web/cis-advising/flowchart_data';
+$app_dir_cis = '/web/cis-advising/html';
 $release = 'release_' . date('YmdHis');
 ?>
 
-@macro('deploy', ['on' => 'web'])
+@macro('test', ['on' => 'web'])
     fetch_repo
     delete_old
     configure_project
@@ -17,25 +20,57 @@ $release = 'release_' . date('YmdHis');
     database_setup
 @endmacro
 
-@task('fetch_repo')
+@macro('cis', ['on' => 'cis'])
+    fetch_repo_cis
+    delete_old_cis
+    configure_project_cis
+    update_permissions_cis
+    update_symlinks_cis
+@endmacro
+
+@task('fetch_repo', ['on' => 'web'])
     [ -d {{ $release_dir }} ] || mkdir {{ $release_dir }};
     cd {{ $release_dir }};
     git clone -b master {{ $repo }} {{ $release }};
 @endtask
 
-@task('delete_old')
+@task('fetch_repo_cis', ['on' => 'cis'])
+    [ -d {{ $release_dir_cis }} ] || mkdir {{ $release_dir_cis }};
+    cd {{ $release_dir_cis }};
+    git clone -b master {{ $repo }} {{ $release }};
+@endtask
+
+@task('delete_old', ['on' => 'web'])
 	find {{ $release_dir }}/* -maxdepth 0 -type d | sort -n | head -n -4 | cut -f 2- | xargs rm -rf
 @endtask
 
-@task('configure_project')
+@task('delete_old_cis', ['on' => 'cis'])
+    find {{ $release_dir_cis }}/* -maxdepth 0 -type d | sort -n | head -n -4 | cut -f 2- | xargs rm -rf
+@endtask
+
+@task('configure_project', ['on' => 'web'])
     cd {{ $release_dir }}/{{ $release }};
     composer install --prefer-dist --no-scripts --no-dev;
     php artisan clear-compiled --env=production;
     php artisan optimize --env=production;
 @endtask
 
-@task('database_setup')
+@task('configure_project_cis', ['on' => 'cis'])
+    cd {{ $release_dir_cis }}/{{ $release }};
+    /home/r/russfeld/bin/composer install --prefer-dist --no-scripts --no-dev;
+    php artisan clear-compiled --env=production;
+    php artisan optimize --env=production;
+@endtask
+
+@task('database_setup', ['on' => 'web'])
     cd {{ $release_dir }}/{{ $release }};
+    php artisan down
+    php artisan migrate:refresh --seed --force
+    php artisan up
+@endtask
+
+@task('database_setup_cis', ['on' => 'cis'])
+    cd {{ $release_dir_cis }}/{{ $release }};
     php artisan down
     php artisan migrate:refresh --seed --force
     php artisan up
@@ -47,13 +82,18 @@ $release = 'release_' . date('YmdHis');
 	gulp --production
 @endtask
 
-@task('update_permissions')
+@task('update_permissions', ['on' => 'web'])
     cd {{ $release_dir }};
     chgrp -R www-data {{ $release }};
     chmod -R ug+rwx {{ $release }};
 @endtask
 
-@task('update_symlinks')
+@task('update_permissions_cis', ['on' => 'cis'])
+    cd {{ $release_dir_cis }};
+    chmod -R ug+rwx {{ $release }};
+@endtask
+
+@task('update_symlinks', ['on' => 'web'])
     ln -nfs {{ $release_dir }}/{{ $release }}/public {{ $app_dir }};
     chgrp -h www-data {{ $app_dir }};
 
@@ -65,4 +105,15 @@ $release = 'release_' . date('YmdHis');
     cd {{ $release_dir }}/{{ $release }}/storage;
     ln -nfs {{ $data_dir }}/logs logs;
     chgrp -h www-data logs;
+@endtask
+
+@task('update_symlinks_cis', ['on' => 'cis'])
+    ln -nfs {{ $release_dir_cis }}/{{ $release }}/public {{ $app_dir_cis }};
+
+    cd {{ $release_dir_cis }}/{{ $release }};
+    ln -nfs {{ $data_dir_cis }}/.env .env;
+
+    rm -r {{ $release_dir_cis }}/{{ $release }}/storage/logs;
+    cd {{ $release_dir_cis }}/{{ $release }}/storage;
+    ln -nfs {{ $data_dir_cis }}/logs logs;
 @endtask
