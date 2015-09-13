@@ -115,8 +115,8 @@ class AppServiceProvider extends ServiceProvider
                 $mail->Password = env('MAIL_PASSWORD');                           // SMTP password
                 $mail->SMTPSecure = env('MAIL_ENCRYPTION', 'tls');                            // Enable TLS encryption, `ssl` also accepted
             }else{
-                $mail->SMTPDebug = 2;
-                $mail->Debugoutput = 'html';
+                //$mail->SMTPDebug = 2;
+                //$mail->Debugoutput = 'html';
                 $mail->SMTPAuth = false;
                 $mail->SMTPAutoTLS = false;
             }
