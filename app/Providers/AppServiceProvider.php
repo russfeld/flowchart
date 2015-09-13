@@ -99,6 +99,7 @@ class AppServiceProvider extends ServiceProvider
     }
 
     public static function sendMail($meeting, $type){
+        if(env('SEND_EMAIL') == 'true'){
             $start = new DateTime($meeting->start);
             $end = new DateTime($meeting->end);
 
@@ -222,6 +223,9 @@ END:VCALENDAR';
             if(!$mail->send()) {
                 echo 'Message could not be sent.';
             } 
+        }else{
+            echo 'Email disabled ';
+        }
     }
 
     /**

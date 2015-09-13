@@ -18,7 +18,7 @@
           </ul>
         @if( Auth::check())
           <ul class="nav navbar-nav navbar-right">
-              <li><a href="{{ url('/profile') }}">{{ Auth::user()->name }}</a></li>
+              <li><a href="{{ url('/profile') }}">{{ Auth::user()->eid }}</a></li>
               <li><p class="navbar-btn">
                 <a href="{{ url('auth/logout') }}" class="btn btn-success">Logout</a>
               </p></li>

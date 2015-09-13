@@ -19,14 +19,6 @@ class SchedulerSeeder extends Seeder
     		'office' => '234 Nichols Hall'
     	]);
 
-    	DB::table('departments')->insert([
-        	'id' => '2',
-    		'name' => 'Electrical and Computer Engineering',
-    		'phone' => '785-532-5600',
-    		'email' => 'undergrad@eece.ksu.edu',
-    		'office' => '2061 Rathbone Hall'
-    	]);
-
     	DB::table('advisors')->insert([
         	'id' => '1',
     		'name' => 'Russell Feldhausen',
@@ -35,8 +27,7 @@ class SchedulerSeeder extends Seeder
     		'phone' => '785-532-7929',
     		'pic' => 'russfeld.png',
     		'department_id' => '1',
-            'notes' => 'I advise the IS students primarily',
-    		'user_id' => '1'
+    		'user_id' => '2'
     	]);
 
     	DB::table('advisors')->insert([
@@ -47,7 +38,7 @@ class SchedulerSeeder extends Seeder
     		'phone' => '785-532-7942',
     		'pic' => 'nhbean.png',
     		'department_id' => '1',
-            'user_id' => '4'
+            'user_id' => '3'
     	]);
 
     	DB::table('advisors')->insert([
@@ -57,7 +48,8 @@ class SchedulerSeeder extends Seeder
     		'office' => '228 Nichols Hall',
     		'phone' => '785-532-7785',
     		'pic' => 'juliet.png',
-    		'department_id' => '1'
+    		'department_id' => '1',
+            'user_id' => '4'
     	]);
 
     	DB::table('advisors')->insert([
@@ -67,17 +59,8 @@ class SchedulerSeeder extends Seeder
     		'office' => '213 Nichols Hall',
     		'phone' => '785-532-7768',
     		'pic' => 'dlang1.png',
-    		'department_id' => '1'
-    	]);
-
-    	DB::table('advisors')->insert([
-        	'id' => '5',
-    		'name' => 'Andy Fund',
-    		'email' => 'andyfund@ksu.edu',
-    		'office' => '2062 Rathbone Hall',
-    		'phone' => '785-532-5600',
-    		'pic' => 'andyfund.png',
-    		'department_id' => '2'
+    		'department_id' => '1',
+            'user_id' => '5'
     	]);
     }
 }

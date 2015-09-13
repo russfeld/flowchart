@@ -39,6 +39,17 @@
             </div>
         		<span id="endhelp" class="help-block"></span>
         	</div>
+          <div id="durationdiv">
+            <div class="form-group">
+              <label class="control-label" for="duration">Duration</label>
+              <select class="form-control" id="duration" aria-describedby="durationhelp">
+                <option value="20">20 minutes</option>
+                <option value="40">40 minutes</option>
+                <option value="60">60 minutes</option>
+              </select>
+              <span id="durationhelp" class="help-block"></span>
+            </div>
+          </div>
         	<div class="form-group">
         		<label class="control-label" for="desc">Description</label>
         		<input type="text" class="form-control" id="desc" aria-describedby="deschelp" >

@@ -17,7 +17,7 @@ class ProfilesController extends Controller
 
 	public function __construct()
 	{
-		$this->middleware('auth');
+		$this->middleware('cas');
         $this->fractal = new Manager();
 	}
 
@@ -31,7 +31,7 @@ class ProfilesController extends Controller
 
     public function getStudentfeed(Request $request){
     	$user = Auth::user();
-    	if($user->isadvisor){
+    	if($user->is_advisor){
 	    	$this->validate($request, [
 	            'query' => 'required|string',
 	        ]);

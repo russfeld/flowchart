@@ -3,7 +3,7 @@ $(document).ready(function() {
 	ajaxcrsf();
 
 	$('#createEvent').on('shown.bs.modal', function () {
-	  $('#title').focus();
+	  $('#studentid').focus();
 	});
 
 	$('#createBlackout').on('shown.bs.modal', function () {
@@ -25,7 +25,7 @@ $(document).ready(function() {
 
 	$('#createEvent').on('hidden.bs.modal', resetForm);
 
-	$('#title').prop('disabled', false);
+	$('#title').prop('disabled', true);
 	$('#start').prop('disabled', false);
 	$('#studentid').prop('disabled', false);
 	$('#start_span').removeClass('datepicker-disabled');
@@ -40,6 +40,7 @@ $(document).ready(function() {
 	    },
 	    onSelect: function (suggestion) {
 	        $('#studentidval').val(suggestion.data);
+	        $('#title').val($('#studentid').val());
 	    },
 	    transformResult: function(response) {
         return {
@@ -54,13 +55,13 @@ $(document).ready(function() {
 
     $('#end_datepicker').datetimepicker(datePickerData);
 
- 	linkDatePickers('#start', '#end');
+ 	linkDatePickers('#start', '#end', '#duration');
 
  	$('#bstart_datepicker').datetimepicker(datePickerData);
 
     $('#bend_datepicker').datetimepicker(datePickerData);
 
- 	linkDatePickers('#bstart', '#bend');
+ 	linkDatePickers('#bstart', '#bend', '#bduration');
 
  	$('#brepeatuntil_datepicker').datetimepicker(datePickerDateOnly);
 
@@ -130,6 +131,8 @@ $(document).ready(function() {
 		$('#meetingOption').modal('hide');
 		createBlackoutForm();
 	});
+
+	$('#duration').on('change', changeDuration);
 
 });
 

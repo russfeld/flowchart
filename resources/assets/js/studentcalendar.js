@@ -64,4 +64,6 @@ $(document).ready(function() {
 
 	$('.modal').on('hidden.bs.modal', resetForm);
 
+	$('#duration').on('change', changeDuration);
+
 });

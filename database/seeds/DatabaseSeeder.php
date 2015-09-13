@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PrerequisitesTableSeeder::class);
         $this->call(SchedulerSeeder::class);
         $this->call(StudentSeeder::class);
-        $this->call(MeetingSeeder::class);
+        //$this->call(MeetingSeeder::class);
         Model::reguard();
     }
 }

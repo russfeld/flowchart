@@ -144,6 +144,7 @@ var showMeetingForm = function(event){
 	$('#start').val(event.start.format("LLL"));
 	$('#end').val(event.end.format("LLL"));
 	$('#desc').val(event.desc);
+	durationOptions(event.start, event.end);
 	$('#meetingID').val(event.id);
 	$('#deleteButton').show();
 	$('#createEvent').modal('show');
@@ -157,6 +158,7 @@ var createMeetingForm = function(studentName){
 	}
 	$('#start').val(session.start.format("LLL"));
 	$('#end').val(session.end.format("LLL"));
+	durationOptions(session.start, session.end);
 	$('#meetingID').val(-1);
 	$('#studentidval').val(-1);
 	$('#deleteButton').hide();
@@ -173,7 +175,19 @@ var resetForm = function(){
 	});
 };
 
-var linkDatePickers = function(elem1, elem2){
+var durationOptions = function(start, end){
+	$('#duration').empty();
+	$('#duration').append("<option value='20'>20 minutes</option>");
+	if(start.hour() < 16 || (start.hour() == 16 && start.minutes() <= 20)){
+		$('#duration').append("<option value='40'>40 minutes</option>");
+	}
+	if(start.hour() < 16 || (start.hour() == 16 && start.minutes() <= 0)){
+		$('#duration').append("<option value='60'>60 minutes</option>");
+	}
+	$('#duration').val(end.diff(start, "minutes"));
+}
+
+var linkDatePickers = function(elem1, elem2, duration){
 	$(elem1 + "_datepicker").on("dp.change", function (e) {
 		var date2 = moment($(elem2).val(), 'LLL');
 		if(e.date.isAfter(date2) || e.date.isSame(date2)){
@@ -189,3 +203,9 @@ var linkDatePickers = function(elem1, elem2){
 		}
     });
 }
+
+var changeDuration = function(){
+	var newDate = moment($('#start').val(), 'LLL').add($(this).val(), "minutes");
+	$('#end').val(newDate.format("LLL"));
+}
+

@@ -13,30 +13,32 @@ class UserTableSeeder extends Seeder
     {
         DB::table('users')->insert([
             'id' => '1',
-            'name' => 'Russell Feldhausen',
-            'email' => 'russfeld@ksu.edu',
-            'password' => bcrypt('LnxRkx'),
+            'eid' => 'test-student',
+            'is_advisor' => false
         ]);
 
         DB::table('users')->insert([
             'id' => '2',
-            'name' => 'Test Student',
-            'email' => 'teststudent@ksu.edu',
-            'password' => bcrypt('LnxRkx'),
+            'eid' => 'russfeld',
+            'is_advisor' => true
         ]);
 
         DB::table('users')->insert([
             'id' => '3',
-            'name' => 'Miriam Cox',
-            'email' => 'miriamc@ksu.edu',
-            'password' => bcrypt('LnxRkx')
+            'eid' => 'nhbean',
+            'is_advisor' => true
         ]);
 
         DB::table('users')->insert([
             'id' => '4',
-            'name' => 'Nathan Bean',
-            'email' => 'nhbean@ksu.edu',
-            'password' => bcrypt('LnxRkx')
+            'eid' => 'juliet',
+            'is_advisor' => true
+        ]);
+
+        DB::table('users')->insert([
+            'id' => '5',
+            'eid' => 'dlang1',
+            'is_advisor' => true
         ]);
     }
 }

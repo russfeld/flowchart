@@ -43,8 +43,8 @@ class CreateSchedulerTables extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email');
-            $table->integer('advisor_id')->unsigned();
-            $table->integer('department_id')->unsigned();
+            $table->integer('advisor_id')->unsigned()->nullable();
+            $table->integer('department_id')->unsigned()->nullable();
             $table->timestamps();
             $table->foreign('advisor_id')->references('id')->on('advisors');
             $table->foreign('user_id')->references('id')->on('users');

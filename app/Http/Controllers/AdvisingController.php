@@ -19,12 +19,14 @@ use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use App\JsonSerializer;
 
+use Cas;
+
 class AdvisingController extends Controller
 {
 
 	public function __construct()
 	{
-		$this->middleware('auth');
+		$this->middleware('cas');
         $this->fractal = new Manager();
 	}
 
@@ -33,18 +35,19 @@ class AdvisingController extends Controller
      */
     public function getIndex($id = -1)
     {
-    	$user = Auth::user();
+        $user = Auth::user();
 
         if($id < 0){
         	//currently authenticated user is an advisor
-        	if($user->isadvisor){
+        	if($user->is_advisor){
         		$user->load('advisor.department');
         		return view('advising/advisorindex')->with('user', $user)->with('advisor', $user->advisor);
-        	}else if($user->isstudent){
+        	}else{
+                if($user->student->advisor === null){
+                    return redirect('advising/select');
+                }
         		$user->load('student.advisor.department');
         		return view('advising/studentindex')->with('user', $user)->with('advisor', $user->student->advisor);
-        	}else{
-        		abort('500', "AdvisingController: The currently authenticated user does not match any student or advisor records!");
         	}
         }else{
             $advisor = Advisor::findOrFail($id);
@@ -58,13 +61,15 @@ class AdvisingController extends Controller
 
     	if($dept < 0){
 	    	//currently authenticated user is an advisor
-	    	if($user->isadvisor){
+	    	if($user->is_advisor){
 	    		$dept = $user->advisor->department->id;
-	    	}else if($user->isstudent){
-	    		$dept = $user->student->department->id;
-	    	} else{
-    			abort('500', "AdvisingController: The currently authenticated user does not match any student or advisor records!");
-    		}
+	    	}else{
+                if($user->student->department === null){
+                    $dept = 1;
+                }else{
+	    		    $dept = $user->student->department->id;
+                }
+	    	}
 	    }else{
 	    	Department::findOrFail($dept);
 	    }
@@ -88,12 +93,10 @@ class AdvisingController extends Controller
         $advisor = false;
 
         $user = Auth::user();
-        if($user->isstudent){
-            $sid = $user->student->id;
-        }else if($user->isadvisor){
+        if($user->is_advisor){
             $advisor = true;
         }else{
-            return response()->json("The currently authenticated user does not match any student or advisor records", 500);
+            $sid = $user->student->id;
         }
 
     	$meetings = Meeting::where('advisor_id', $id)->where('start', '>=', new DateTime($start))->where('end', '<=', new DateTime($end))->get();
@@ -141,7 +144,7 @@ class AdvisingController extends Controller
     	$meetings = Blackoutevent::where('advisor_id', $id)->where('start', '>=', new DateTime($start))->where('end', '<=', new DateTime($end))->get();
 
         $user = Auth::user();
-        if($user->isstudent){
+        if(!$user->is_advisor){
             $meeting = new Blackoutevent();
             $startd = new DateTime($start);
             $meeting->start = $startd->format('Y-m-d H:i:s');
@@ -155,7 +158,7 @@ class AdvisingController extends Controller
         }
 
         $resource = new Collection($meetings, function($meeting) use ($user){
-            if($user->isadvisor){
+            if($user->is_advisor){
                 return[
                     'id' => $meeting->id,
                     'start' => $meeting->start,
@@ -191,7 +194,7 @@ class AdvisingController extends Controller
         $blackout = Blackout::find($id);
         
         $user = Auth::user();
-        if($user->isadvisor){
+        if($user->is_advisor){
             if($user->advisor->id != $blackout->advisor_id){
                 return response()->json("Cannot edit a blackout not assigned to your advisor record", 500);
             }
@@ -231,7 +234,7 @@ class AdvisingController extends Controller
 
         $user = Auth::user();
 
-        if($user->isstudent){
+        if(!$user->is_advisor){
             $this->validate($request, [
                 'start' => 'after:' . $end
             ]);
@@ -243,7 +246,7 @@ class AdvisingController extends Controller
 
         if($request->has('meetingid')){
             $meeting = Meeting::find($request->input('meetingid'));
-            if($user->isstudent){
+            if(!$user->is_advisor){
                 if($meeting->student_id != $user->student->id){
                     return response()->json("Cannot modify an appointment not assigned to your student record", 500);
                 }
@@ -254,7 +257,7 @@ class AdvisingController extends Controller
             $meeting->sequence = 0;
         }
 
-        if($user->isstudent){
+        if(!$user->is_advisor){
             $meeting->student_id = $user->student->id;
         }else{
             $meeting->student_id = $request->input('studentid');
@@ -279,7 +282,7 @@ class AdvisingController extends Controller
 
         $meeting = Meeting::find($request->input('meetingid'));
 
-        if($user->isstudent){
+        if(!$user->is_advisor){
             if($meeting->student_id != $user->student->id){
                 return response()->json("Cannot delete an appointment not assigned to your student record", 500);
             }
@@ -310,14 +313,14 @@ class AdvisingController extends Controller
 
         if($request->has('bblackoutid')){
             $blackout = Blackout::find($request->input('bblackoutid'));
-            if($user->isadvisor){
+            if($user->is_advisor){
                 if($blackout->advisor_id != $user->advisor->id){
                     return response()->json("Cannot modify an appointment not assigned to your advisor record", 500);
                 }
             }
         }else{
             $blackout = new Blackout;
-            if($user->isadvisor){
+            if($user->is_advisor){
                 $blackout->advisor_id = $user->advisor->id;
             }
         }
@@ -369,14 +372,14 @@ class AdvisingController extends Controller
 
         if($request->has('bblackouteventid')){
             $blackout = Blackoutevent::find($request->input('bblackouteventid'));
-            if($user->isadvisor){
+            if($user->is_advisor){
                 if($blackout->advisor_id != $user->advisor->id){
                     return response()->json("Cannot modify a blackout not assigned to your advisor record", 500);
                 }
             }
         }else{
             $blackout = new Blackoutevent;
-            if($user->isadvisor){
+            if($user->is_advisor){
                 $blackout->advisor_id = $user->advisor->id;
             }
         }
@@ -400,7 +403,7 @@ class AdvisingController extends Controller
 
         $blackout = Blackout::find($request->input('bblackoutid'));
 
-        if($user->isadvisor){
+        if($user->is_advisor){
             if($blackout->advisor_id != $user->advisor->id){
                 return response()->json("Cannot delete a blackout not assigned to your advisor record", 500);
             }
@@ -420,7 +423,7 @@ class AdvisingController extends Controller
 
         $blackout = Blackoutevent::find($request->input('bblackouteventid'));
 
-        if($user->isadvisor){
+        if($user->is_advisor){
             if($blackout->advisor_id != $user->advisor->id){
                 return response()->json("Cannot delete a blackout not assigned to your advisor record", 500);
             }
