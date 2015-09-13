@@ -4,14 +4,6 @@
 
 @section('content')
 
-    <div class="jumbotron">
-      <div class="container">
-        <h1>Engineering Advising</h1>
-        <p>Welcome to the new K-State Engineering Advising System. This is your one-stop-shop to find classes, view your flowcharts and degree progress, schedule advising appointments, and more! Check out the sections below to get started.</p>
-        <p><a class="btn btn-primary btn-lg" href="{{ url('/about') }}" role="button">Learn more &raquo;</a></p>
-      </div>
-    </div>
-
     <div class="container">
       <!-- Example row of columns -->
       <div class="row">
@@ -27,10 +19,9 @@
           <p><a class="btn btn-default" href="{{ url('/flowcharts') }}" role="button">View Flowcharts &raquo;</a></p>
        </div>
      -->
-        <div class="col-md-4">
-          <h2>Advising</h2>
-          <p>When you are ready to enroll or if you have any questions, quickly schedule an appointment with your academic advisor.</p>
-          <p><a class="btn btn-default" href="{{ url('/advising') }}" role="button">Schedule an Appointment &raquo;</a></p>
+        <div class="col-md-12">
+          <h2>About the new Engineering Advising System</h2>
+          <p>This site is a work in progress. Our goal is to create the best academic advising experience for students and advisors alike. Contact russfeld@ksu.edu if you have any questions or comments</p>
         </div>
       </div>
     </div>

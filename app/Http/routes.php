@@ -15,13 +15,17 @@ Route::get('/', function () {
     return view('root/index');
 });
 
+Route::get('/about', function () {
+    return view('root/about');
+});
 
-Route::get('courses/{category}', 'CoursesController@getCategory')->where('category', '[A-Za-z]+');
-Route::get('courses/{slug}', 'CoursesController@getCourse')->where('slug', '[A-Za-z]+[0-9][0-9][0-9]');
 
-Route::controller('courses', 'CoursesController');
+//Route::get('courses/{category}', 'CoursesController@getCategory')->where('category', '[A-Za-z]+');
+//Route::get('courses/{slug}', 'CoursesController@getCourse')->where('slug', '[A-Za-z]+[0-9][0-9][0-9]');
 
-Route::controller('flowcharts', 'FlowchartsController');
+//Route::controller('courses', 'CoursesController');
+
+//Route::controller('flowcharts', 'FlowchartsController');
 
 Route::controller('advising', 'AdvisingController');
 
@@ -39,6 +43,6 @@ Route::get('auth/caslogout', 'Auth\AuthController@CASLogout');
 //Route::post('auth/register', 'Auth\AuthController@postRegister');
 
 //Test Routes
-Route::get('/test', function() {
-	return view('flowchart_test');
-});
+//Route::get('/test', function() {
+//	return view('flowchart_test');
+//});

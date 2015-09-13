@@ -37,7 +37,7 @@ $release = 'release_' . date('YmdHis');
 @task('fetch_repo_cis', ['on' => 'cis'])
     [ -d {{ $release_dir_cis }} ] || mkdir {{ $release_dir_cis }};
     cd {{ $release_dir_cis }};
-    git clone -b master {{ $repo }} {{ $release }};
+    git clone -b cis {{ $repo }} {{ $release }};
 @endtask
 
 @task('delete_old', ['on' => 'web'])
