@@ -169,7 +169,7 @@ PRODID:-//Microsoft Corporation//Outlook 11.0 MIMEDIR//EN
 VERSION:2.0
 METHOD:REQUEST
 BEGIN:VEVENT
-ORGANIZER;CN=Russell Feldhausen:MAILTO:russfeldh@gmail.com
+ORGANIZER;CN=Engineering Advising:MAILTO:noreply@cis.ksu.edu
 ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN='.$meeting->advisor->email.':MAILTO:'.$meeting->advisor->email.'
 ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN='.$meeting->student->email.':MAILTO:'.$meeting->student->email.'
 DTSTART:'.$dtstart.'
@@ -194,7 +194,7 @@ PRODID:-//Microsoft Corporation//Outlook 11.0 MIMEDIR//EN
 VERSION:2.0
 METHOD:CANCEL
 BEGIN:VEVENT
-ORGANIZER;CN=Russell Feldhausen:MAILTO:russfeldh@gmail.com
+ORGANIZER;CN=Engineering Advising:MAILTO:noreply@cis.ksu.edu
 ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN='.$meeting->advisor->email.':MAILTO:'.$meeting->advisor->email.'
 DTSTART:'.$dtstart.'
 DTEND:'.$dtend.'
