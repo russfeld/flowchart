@@ -91,7 +91,7 @@ $release = 'release_' . date('YmdHis');
 @task('update_permissions_cis', ['on' => 'cis'])
     cd {{ $release_dir_cis }};
     chmod -R ug+rwx {{ $release }};
-    chmod -R a+rwx {{ $release/storage }}
+    chmod -R a+rwx {{ $release }}/storage;
 @endtask
 
 @task('update_symlinks', ['on' => 'web'])
