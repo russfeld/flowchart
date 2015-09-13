@@ -122,11 +122,10 @@ class AppServiceProvider extends ServiceProvider
             }
             $mail->Port = env('MAIL_PORT', 587);                                    // TCP port to connect to
 
-            $mail->From = 'russfeldh@gmail.com';
-            $mail->FromName = 'Russell Feldhausen';
+            $mail->From = 'noreply@cis.ksu.edu';
+            $mail->FromName = 'CIS Advising Scheduler';
             $mail->addAddress($meeting->student->email, $meeting->student->name);     // Add a recipient
             $mail->addAddress($meeting->advisor->email, $meeting->advisor->name);               // Name is optional
-            $mail->addReplyTo('russfeldh@gmail.com', 'Russell Feldhausen');
             
             //Convert MYSQL datetime and construct iCal start, end and issue dates
             $meetingstart = strtotime($meeting->start);    
