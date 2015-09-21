@@ -1,1 +1,510 @@
-var session,calendarAdvisorID,studentName,displayMessage=function(e,t){var a='<div class="alert fade in alert-dismissable alert-'+t+'"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="h4">'+e+"</span></div>";$("#message").append(a),setTimeout(function(){$(".alert").alert("close")},3e3)},ajaxcrsf=function(){$.ajaxSetup({headers:{"X-CSRF-TOKEN":$('meta[name="csrf-token"]').attr("content")}})},calendarData={header:{left:"prev,next today",center:"title",right:"agendaWeek,agendaDay"},editable:!1,eventLimit:!0,height:"auto",weekends:!1,businessHours:{start:"8:00",end:"17:00",dow:[1,2,3,4,5]},defaultView:"agendaWeek",views:{agenda:{allDaySlot:!1,slotDuration:"00:20:00",minTime:"08:00:00",maxTime:"17:00:00"}},eventSources:[{url:"/advising/meetingfeed",type:"GET",error:function(){alert("Error fetching meeting events from database")},color:"#512888",textColor:"white"},{url:"/advising/blackoutfeed",type:"GET",error:function(){alert("Error fetching blackout events from database")},color:"#FF8888",textColor:"black"}],selectable:!0,selectHelper:!0,selectOverlap:function(e){return"background"===e.rendering},timeFormat:" "},datePickerData={daysOfWeekDisabled:[0,6],format:"LLL",stepping:20,enabledHours:[8,9,10,11,12,13,14,15,16],sideBySide:!0,ignoreReadonly:!0,allowInputToggle:!0},datePickerDateOnly={daysOfWeekDisabled:[0,6],format:"MM/DD/YYYY",ignoreReadonly:!0,allowInputToggle:!0},saveMeeting=function(){var e={start:moment($("#start").val(),"LLL").format(),end:moment($("#end").val(),"LLL").format(),title:$("#title").val(),id:calendarAdvisorID,desc:$("#desc").val()};$("#meetingID").val()>0&&(e.meetingid=$("#meetingID").val()),$("#studentidval").val()>0&&(e.studentid=$("#studentidval").val()),$.ajax({method:"POST",url:"/advising/createmeeting",data:e}).success(function(e){$("#createEvent").modal("hide"),displayMessage(e,"success"),$("#calendar").fullCalendar("unselect"),$("#calendar").fullCalendar("refetchEvents")}).fail(function(e,t){422==e.status?($(".form-group").each(function(){$(this).removeClass("has-error"),$(this).find(".help-block").text("")}),$.each(e.responseJSON,function(e,t){$("#"+e).parents(".form-group").addClass("has-error"),$("#"+e+"help").text(t)})):alert("Unable to save meeting: "+JSON.stringify(e)+" "+t)})},deleteMeeting=function(){var e=confirm("Are you sure?");e===!0&&$.ajax({method:"POST",url:"/advising/deletemeeting",data:{meetingid:$("#meetingID").val()}}).success(function(e){$("#createEvent").modal("hide"),displayMessage(e,"success"),$("#calendar").fullCalendar("unselect"),$("#calendar").fullCalendar("refetchEvents")}).fail(function(e,t){alert("Unable to delete meeting: "+JSON.stringify(e)+" "+t)})},showMeetingForm=function(e){$("#title").val(e.title),$("#start").val(e.start.format("LLL")),$("#end").val(e.end.format("LLL")),$("#desc").val(e.desc),durationOptions(e.start,e.end),$("#meetingID").val(e.id),$("#deleteButton").show(),$("#createEvent").modal("show")},createMeetingForm=function(e){$("#title").val(void 0!==e?e:""),$("#start").val(session.start.format("LLL")),$("#end").val(session.end.format("LLL")),durationOptions(session.start,session.end),$("#meetingID").val(-1),$("#studentidval").val(-1),$("#deleteButton").hide(),$("#createEvent").modal("show")},resetForm=function(){$(this).find("form")[0].reset(),$(this).find(".has-error").each(function(){$(this).removeClass("has-error")}),$(this).find(".help-block").each(function(){$(this).text("")})},durationOptions=function(e,t){$("#duration").empty(),$("#duration").append("<option value='20'>20 minutes</option>"),(e.hour()<16||16==e.hour()&&e.minutes()<=20)&&$("#duration").append("<option value='40'>40 minutes</option>"),(e.hour()<16||16==e.hour()&&e.minutes()<=0)&&$("#duration").append("<option value='60'>60 minutes</option>"),$("#duration").val(t.diff(e,"minutes"))},linkDatePickers=function(e,t,a){$(e+"_datepicker").on("dp.change",function(e){var a=moment($(t).val(),"LLL");(e.date.isAfter(a)||e.date.isSame(a))&&(a=e.date.clone(),$(t).val(a.format("LLL")))}),$(t+"_datepicker").on("dp.change",function(t){var a=moment($(e).val(),"LLL");(t.date.isBefore(a)||t.date.isSame(a))&&(a=t.date.clone(),$(e).val(a.format("LLL")))})},changeDuration=function(){var e=moment($("#start").val(),"LLL").add($(this).val(),"minutes");$("#end").val(e.format("LLL"))};$(document).ready(function(){ajaxcrsf(),$("#createEvent").on("shown.bs.modal",function(){$("#studentid").focus()}),$("#createBlackout").on("shown.bs.modal",function(){$("#btitle").focus()}),$("#createBlackout").on("hidden.bs.modal",function(){$("#repeatdailydiv").hide(),$("#repeatweeklydiv").hide(),$("#repeatuntildiv").hide(),$(this).find("form")[0].reset(),$(this).find(".has-error").each(function(){$(this).removeClass("has-error")}),$(this).find(".help-block").each(function(){$(this).text("")})}),$("#createEvent").on("hidden.bs.modal",resetForm),$("#title").prop("disabled",!0),$("#start").prop("disabled",!1),$("#studentid").prop("disabled",!1),$("#start_span").removeClass("datepicker-disabled"),$("#end").prop("disabled",!1),$("#end_span").removeClass("datepicker-disabled"),$("#studentiddiv").show(),$("#studentid").autocomplete({serviceUrl:"profile/studentfeed",ajaxSettings:{dataType:"json"},onSelect:function(e){$("#studentidval").val(e.data),$("#title").val($("#studentid").val())},transformResult:function(e){return{suggestions:$.map(e.data,function(e){return{value:e.value,data:e.data}})}}}),$("#start_datepicker").datetimepicker(datePickerData),$("#end_datepicker").datetimepicker(datePickerData),linkDatePickers("#start","#end","#duration"),$("#bstart_datepicker").datetimepicker(datePickerData),$("#bend_datepicker").datetimepicker(datePickerData),linkDatePickers("#bstart","#bend","#bduration"),$("#brepeatuntil_datepicker").datetimepicker(datePickerDateOnly),calendarAdvisorID=$("#calendarAdvisorID").val().trim(),calendarData.eventSources[0].data={id:calendarAdvisorID},calendarData.eventSources[1].data={id:calendarAdvisorID},calendarData.eventRender=function(e,t){t.addClass("fc-clickable")},calendarData.eventClick=function(e,t,a){"m"==e.type?($("#studentid").val(e.studentname),$("#studentidval").val(e.student_id),showMeetingForm(e)):"b"==e.type&&(session={event:e},"0"==e.repeat?blackoutSeries():$("#blackoutOption").modal("show"))},calendarData.select=function(e,t){session={start:e,end:t},$("#bblackoutid").val(-1),$("#bblackouteventid").val(-1),$("#meetingID").val(-1),$("#meetingOption").modal("show")},$("#calendar").fullCalendar(calendarData),$("#saveButton").bind("click",saveMeeting),$("#deleteButton").bind("click",deleteMeeting),$("#brepeat").change(repeatChange),$("#saveBlackoutButton").bind("click",saveBlackout),$("#deleteBlackoutButton").bind("click",deleteBlackout),$("#blackoutSeries").bind("click",function(){$("#blackoutOption").modal("hide"),blackoutSeries()}),$("#blackoutOccurrence").bind("click",function(){$("#blackoutOption").modal("hide"),blackoutOccurrence()}),$("#advisingButton").bind("click",function(){$("#meetingOption").modal("hide"),createMeetingForm()}),$("#blackoutButton").bind("click",function(){$("#meetingOption").modal("hide"),createBlackoutForm()}),$("#duration").on("change",changeDuration)});var createBlackoutForm=function(){$("#btitle").val(""),$("#bstart").val(session.start.format("LLL")),$("#bend").val(session.end.format("LLL")),$("#bblackoutid").val(-1),$("#repeatdiv").show(),$("#brepeat").val(0),$("#brepeat").trigger("change"),$("#deleteBlackoutButton").hide(),$("#createBlackout").modal("show")},blackoutOccurrence=function(){$("#blackoutOption").modal("hide"),$("#btitle").val(session.event.title),$("#bstart").val(session.event.start.format("LLL")),$("#bend").val(session.event.end.format("LLL")),$("#repeatdiv").hide(),$("#repeatdailydiv").hide(),$("#repeatweeklydiv").hide(),$("#repeatuntildiv").hide(),$("#bblackoutid").val(session.event.blackout_id),$("#bblackouteventid").val(session.event.id),$("#deleteBlackoutButton").show(),$("#createBlackout").modal("show")},blackoutSeries=function(){$("#blackoutOption").modal("hide"),$.ajax({method:"GET",url:"/advising/blackout",data:{id:session.event.blackout_id},dataType:"json"}).success(function(e){$("#btitle").val(e.title),$("#bstart").val(moment(e.start,"YYYY-MM-DD HH:mm:ss").format("LLL")),$("#bend").val(moment(e.end,"YYYY-MM-DD HH:mm:ss").format("LLL")),$("#bblackoutid").val(e.id),$("#bblackouteventid").val(-1),$("#repeatdiv").show(),$("#brepeat").val(e.repeat_type),$("#brepeat").trigger("change"),1==e.repeat_type?($("#brepeatdaily").val(e.repeat_every),$("#brepeatuntil").val(moment(e.repeat_until,"YYYY-MM-DD HH:mm:ss").format("MM/DD/YYYY"))):2==e.repeat_type&&($("#brepeatweekly").val(e.repeat_every),$("#brepeatweekdays1").prop("checked",e.repeat_detail.indexOf("1")>=0),$("#brepeatweekdays2").prop("checked",e.repeat_detail.indexOf("2")>=0),$("#brepeatweekdays3").prop("checked",e.repeat_detail.indexOf("3")>=0),$("#brepeatweekdays4").prop("checked",e.repeat_detail.indexOf("4")>=0),$("#brepeatweekdays5").prop("checked",e.repeat_detail.indexOf("5")>=0),$("#brepeatuntil").val(moment(e.repeat_until,"YYYY-MM-DD HH:mm:ss").format("MM/DD/YYYY"))),$("#deleteBlackoutButton").show(),$("#createBlackout").modal("show")}).fail(function(e,t){alert("Unable to retrieve blackout series: "+JSON.stringify(e)+" "+t)})},repeatChange=function(){0==$(this).val()?($("#repeatdailydiv").hide(),$("#repeatweeklydiv").hide(),$("#repeatuntildiv").hide()):1==$(this).val()?($("#repeatdailydiv").show(),$("#repeatweeklydiv").hide(),$("#repeatuntildiv").show()):2==$(this).val()&&($("#repeatdailydiv").hide(),$("#repeatweeklydiv").show(),$("#repeatuntildiv").show())},saveBlackout=function(){var e,t={bstart:moment($("#bstart").val(),"LLL").format(),bend:moment($("#bend").val(),"LLL").format(),btitle:$("#btitle").val()};$("#bblackouteventid").val()>0?(e="/advising/createblackoutevent",t.bblackouteventid=$("#bblackouteventid").val()):(e="/advising/createblackout",$("#bblackoutid").val()>0&&(t.bblackoutid=$("#bblackoutid").val()),t.brepeat=$("#brepeat").val(),1==$("#brepeat").val()&&(t.brepeatevery=$("#brepeatdaily").val(),t.brepeatuntil=moment($("#brepeatuntil").val(),"MM/DD/YYYY").format()),2==$("#brepeat").val()&&(t.brepeatevery=$("#brepeatweekly").val(),t.brepeatweekdaysm=$("#brepeatweekdays1").prop("checked"),t.brepeatweekdayst=$("#brepeatweekdays2").prop("checked"),t.brepeatweekdaysw=$("#brepeatweekdays3").prop("checked"),t.brepeatweekdaysu=$("#brepeatweekdays4").prop("checked"),t.brepeatweekdaysf=$("#brepeatweekdays5").prop("checked"),t.brepeatuntil=moment($("#brepeatuntil").val(),"MM/DD/YYYY").format())),$.ajax({method:"POST",url:e,data:t}).success(function(e){$("#createBlackout").modal("hide"),displayMessage(e,"success"),$("#calendar").fullCalendar("unselect"),$("#calendar").fullCalendar("refetchEvents")}).fail(function(e,t){422==e.status?($(".form-group").each(function(){$(this).removeClass("has-error"),$(this).find(".help-block").text("")}),$.each(e.responseJSON,function(e,t){$("#"+e).parents(".form-group").addClass("has-error"),$("#"+e+"help").text(t)})):alert("Unable to save blackout: "+JSON.stringify(e)+" "+t)})},deleteBlackout=function(){var e=confirm("Are you sure?");if(e===!0){var t,a;$("#bblackouteventid").val()>0?(t="/advising/deleteblackoutevent",a={bblackouteventid:$("#bblackouteventid").val()}):(t="/advising/deleteblackout",a={bblackoutid:$("#bblackoutid").val()}),$.ajax({method:"POST",url:t,data:a}).success(function(e){$("#createBlackout").modal("hide"),displayMessage(e,"success"),$("#calendar").fullCalendar("unselect"),$("#calendar").fullCalendar("refetchEvents")}).fail(function(e,t){alert("Unable to delete blackout: "+JSON.stringify(e)+" "+t)})}};
+var session, calendarAdvisorID, studentName;
+
+var displayMessage = function(message, type){
+	var html = '<div class="alert fade in alert-dismissable alert-' + type + '"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="h4">' + message + '</span></div>';
+	$('#message').append(html);
+	setTimeout(function() {
+		$(".alert").alert('close');
+	}, 3000);
+};
+
+var ajaxcrsf = function(){
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		}
+	});
+};
+
+var calendarData = {
+	header: {
+		left: 'prev,next today',
+		center: 'title',
+		right: 'agendaWeek,agendaDay'
+	},
+	editable: false,
+	eventLimit: true,
+	height: 'auto',
+	weekends: false,
+	businessHours: {
+		start: '8:00', // a start time (10am in this example)
+		end: '17:00', // an end time (6pm in this example)
+		dow: [ 1, 2, 3, 4, 5 ]
+	},
+	defaultView: 'agendaWeek',
+	views: {
+		agenda: {
+			allDaySlot: false,
+			slotDuration: '00:20:00',
+			minTime: '08:00:00',
+			maxTime: '17:00:00'
+		}
+	},
+	eventSources: [ 
+		{
+			url: '/advising/meetingfeed',
+			type: 'GET',
+			error: function() {
+				alert('Error fetching meeting events from database');
+			},
+			color: '#512888',
+			textColor: 'white',
+		},
+		{
+			url: '/advising/blackoutfeed',
+			type: 'GET',
+			error: function() {
+				alert('Error fetching blackout events from database');
+			},
+			color: '#FF8888',
+			textColor: 'black',
+		},
+	],
+	selectable: true,
+	selectHelper: true,
+	selectOverlap: function(event) {
+		return event.rendering === 'background';
+	},
+	timeFormat: ' ',
+};
+
+var datePickerData = {
+    daysOfWeekDisabled: [0, 6],
+    format: 'LLL',
+    stepping: 20,
+    enabledHours: [8, 9, 10, 11, 12, 13, 14, 15, 16],
+    sideBySide: true,
+    ignoreReadonly: true,
+    allowInputToggle: true
+};
+
+var datePickerDateOnly = {
+    daysOfWeekDisabled: [0, 6],
+    format: 'MM/DD/YYYY',
+    ignoreReadonly: true,
+    allowInputToggle: true
+};
+
+var saveMeeting = function(){
+	var data = { start: moment($('#start').val(), "LLL").format(), end: moment($('#end').val(), "LLL").format(), title: $('#title').val(), id: calendarAdvisorID, desc: $('#desc').val() };
+	if($('#meetingID').val() > 0){
+		data.meetingid = $('#meetingID').val();
+	}
+	if($('#studentidval').val() > 0){
+		data.studentid = $('#studentidval').val();
+	}
+	$.ajax({
+	  method: "POST",
+	  url: '/advising/createmeeting',
+	  data: data
+	})
+	.success(function( message ) {
+		$('#createEvent').modal('hide');
+		displayMessage(message, "success");
+		$('#calendar').fullCalendar('unselect');
+		$('#calendar').fullCalendar('refetchEvents');
+	}).fail(function( jqXHR, message ){
+		if (jqXHR.status == 422)
+		{
+			$('.form-group').each(function (){
+				$(this).removeClass('has-error');
+				$(this).find('.help-block').text('');
+			});
+			$.each(jqXHR.responseJSON, function (key, value) {
+				$('#' + key).parents('.form-group').addClass('has-error');
+				$('#' + key + 'help').text(value);
+			});
+		}else{
+			alert("Unable to save meeting: " + JSON.stringify(jqXHR) + ' ' + message);
+		}
+	});
+};
+
+var deleteMeeting = function(){
+	var choice = confirm("Are you sure?");
+	if(choice === true){
+		$.ajax({
+		  method: "POST",
+		  url: '/advising/deletemeeting',
+		  data: { meetingid: $('#meetingID').val() }
+		})
+		.success(function( message ) {
+			$('#createEvent').modal('hide');
+			displayMessage(message, "success");
+			$('#calendar').fullCalendar('unselect');
+			$('#calendar').fullCalendar('refetchEvents');
+		}).fail(function( jqXHR, message ){
+			alert("Unable to delete meeting: " + JSON.stringify(jqXHR) + ' ' + message);
+		});
+	}
+};
+
+var showMeetingForm = function(event){
+	$('#title').val(event.title);
+	$('#start').val(event.start.format("LLL"));
+	$('#end').val(event.end.format("LLL"));
+	$('#desc').val(event.desc);
+	durationOptions(event.start, event.end);
+	$('#meetingID').val(event.id);
+	$('#deleteButton').show();
+	$('#createEvent').modal('show');
+};
+
+var createMeetingForm = function(studentName){
+	if(studentName !== undefined){
+		$('#title').val(studentName);
+	}else{
+		$('#title').val('');
+	}
+	$('#start').val(session.start.format("LLL"));
+	$('#end').val(session.end.format("LLL"));
+	durationOptions(session.start, session.end);
+	$('#meetingID').val(-1);
+	$('#studentidval').val(-1);
+	$('#deleteButton').hide();
+	$('#createEvent').modal('show');
+};
+
+var resetForm = function(){
+    $(this).find('form')[0].reset();
+    $(this).find('.has-error').each(function(){
+		$(this).removeClass('has-error');
+	});
+	$(this).find('.help-block').each(function(){
+		$(this).text('');
+	});
+};
+
+var durationOptions = function(start, end){
+	$('#duration').empty();
+	$('#duration').append("<option value='20'>20 minutes</option>");
+	if(start.hour() < 16 || (start.hour() == 16 && start.minutes() <= 20)){
+		$('#duration').append("<option value='40'>40 minutes</option>");
+	}
+	if(start.hour() < 16 || (start.hour() == 16 && start.minutes() <= 0)){
+		$('#duration').append("<option value='60'>60 minutes</option>");
+	}
+	$('#duration').val(end.diff(start, "minutes"));
+}
+
+var linkDatePickers = function(elem1, elem2, duration){
+	$(elem1 + "_datepicker").on("dp.change", function (e) {
+		var date2 = moment($(elem2).val(), 'LLL');
+		if(e.date.isAfter(date2) || e.date.isSame(date2)){
+			date2 = e.date.clone();
+			$(elem2).val(date2.format("LLL"));
+		}
+    });
+    $(elem2 + "_datepicker").on("dp.change", function (e) {
+        var date1 = moment($(elem1).val(), 'LLL');
+		if(e.date.isBefore(date1) || e.date.isSame(date1)){
+			date1 = e.date.clone();
+			$(elem1).val(date1.format("LLL"));
+		}
+    });
+}
+
+var changeDuration = function(){
+	var newDate = moment($('#start').val(), 'LLL').add($(this).val(), "minutes");
+	$('#end').val(newDate.format("LLL"));
+}
+
+
+$(document).ready(function() {
+
+	ajaxcrsf();
+
+	$('#createEvent').on('shown.bs.modal', function () {
+	  $('#studentid').focus();
+	});
+
+	$('#createBlackout').on('shown.bs.modal', function () {
+	  $('#btitle').focus();
+	});
+
+	$('#createBlackout').on('hidden.bs.modal', function(){
+		$('#repeatdailydiv').hide();
+		$('#repeatweeklydiv').hide();
+		$('#repeatuntildiv').hide();
+		$(this).find('form')[0].reset();
+	    $(this).find('.has-error').each(function(){
+			$(this).removeClass('has-error');
+		});
+		$(this).find('.help-block').each(function(){
+			$(this).text('');
+		});
+	});
+
+	$('#createEvent').on('hidden.bs.modal', resetForm);
+
+	$('#title').prop('disabled', true);
+	$('#start').prop('disabled', false);
+	$('#studentid').prop('disabled', false);
+	$('#start_span').removeClass('datepicker-disabled');
+	$('#end').prop('disabled', false);
+	$('#end_span').removeClass('datepicker-disabled');
+	$('#studentiddiv').show();
+
+	$('#studentid').autocomplete({
+	    serviceUrl: 'profile/studentfeed',
+	    ajaxSettings: {
+	    	dataType: "json"
+	    },
+	    onSelect: function (suggestion) {
+	        $('#studentidval').val(suggestion.data);
+	        $('#title').val($('#studentid').val());
+	    },
+	    transformResult: function(response) {
+        return {
+            suggestions: $.map(response.data, function(dataItem) {
+                return { value: dataItem.value, data: dataItem.data };
+            })
+        };
+    }
+	});
+
+	$('#start_datepicker').datetimepicker(datePickerData);
+
+    $('#end_datepicker').datetimepicker(datePickerData);
+
+ 	linkDatePickers('#start', '#end', '#duration');
+
+ 	$('#bstart_datepicker').datetimepicker(datePickerData);
+
+    $('#bend_datepicker').datetimepicker(datePickerData);
+
+ 	linkDatePickers('#bstart', '#bend', '#bduration');
+
+ 	$('#brepeatuntil_datepicker').datetimepicker(datePickerDateOnly);
+
+	calendarAdvisorID = $('#calendarAdvisorID').val().trim();
+
+	// page is now ready, initialize the calendar...
+	calendarData.eventSources[0].data = {id: calendarAdvisorID};
+	calendarData.eventSources[1].data = {id: calendarAdvisorID};
+	calendarData.eventRender = function(event, element){
+		element.addClass("fc-clickable");
+	};
+	calendarData.eventClick = function(event, element, view){
+		if(event.type == 'm'){
+			$('#studentid').val(event.studentname);
+			$('#studentidval').val(event.student_id);
+			showMeetingForm(event);
+		}else if (event.type == 'b'){
+			session = {
+				event: event
+			};
+			if(event.repeat == '0'){
+				blackoutSeries();
+			}else{
+				$('#blackoutOption').modal('show');
+			}
+		}
+	};
+	calendarData.select = function(start, end) {
+		session = {
+			start: start,
+			end: end
+		};
+		$('#bblackoutid').val(-1);
+		$('#bblackouteventid').val(-1);
+		$('#meetingID').val(-1);
+		$('#meetingOption').modal('show');
+	};
+
+	$('#calendar').fullCalendar(calendarData);
+
+	$('#saveButton').bind('click', saveMeeting);
+
+	$('#deleteButton').bind('click', deleteMeeting);
+
+	$('#brepeat').change(repeatChange);
+
+	$('#saveBlackoutButton').bind('click', saveBlackout);
+
+	$('#deleteBlackoutButton').bind('click', deleteBlackout);
+
+	$('#blackoutSeries').bind('click', function(){
+		$('#blackoutOption').modal('hide');
+		blackoutSeries();
+	});
+
+	$('#blackoutOccurrence').bind('click', function(){
+		$('#blackoutOption').modal('hide');
+		blackoutOccurrence();
+	});
+
+	$('#advisingButton').bind('click', function(){
+		$('#meetingOption').modal('hide');
+		createMeetingForm();
+	});
+
+	$('#blackoutButton').bind('click', function(){
+		$('#meetingOption').modal('hide');
+		createBlackoutForm();
+	});
+
+	$('#duration').on('change', changeDuration);
+
+});
+
+var createBlackoutForm = function(){
+	$('#btitle').val("");
+	$('#bstart').val(session.start.format('LLL'));
+	$('#bend').val(session.end.format('LLL'));
+	$('#bblackoutid').val(-1);
+	$('#repeatdiv').show();
+	$('#brepeat').val(0);
+	$('#brepeat').trigger('change');
+	$('#deleteBlackoutButton').hide();
+	$('#createBlackout').modal('show');
+};
+
+var blackoutOccurrence = function(){
+	$('#blackoutOption').modal('hide');
+	$('#btitle').val(session.event.title);
+	$('#bstart').val(session.event.start.format("LLL"));
+	$('#bend').val(session.event.end.format("LLL"));
+	$('#repeatdiv').hide();
+	$('#repeatdailydiv').hide();
+	$('#repeatweeklydiv').hide();
+	$('#repeatuntildiv').hide();
+	$('#bblackoutid').val(session.event.blackout_id);
+	$('#bblackouteventid').val(session.event.id);
+	$('#deleteBlackoutButton').show();
+	$('#createBlackout').modal('show');
+};
+
+var blackoutSeries = function(){
+	$('#blackoutOption').modal('hide');
+	$.ajax({
+	  method: "GET",
+	  url: '/advising/blackout',
+	  data: {id: session.event.blackout_id},
+	  dataType: 'json'
+	})
+	.success(function( series ) {
+			$('#btitle').val(series.title)
+			$('#bstart').val(moment(series.start, 'YYYY-MM-DD HH:mm:ss').format('LLL'));
+			$('#bend').val(moment(series.end, 'YYYY-MM-DD HH:mm:ss').format('LLL'));
+			$('#bblackoutid').val(series.id);
+			$('#bblackouteventid').val(-1);
+			$('#repeatdiv').show();
+			$('#brepeat').val(series.repeat_type);
+			$('#brepeat').trigger('change');
+			if(series.repeat_type == 1){
+				$('#brepeatdaily').val(series.repeat_every);
+				$('#brepeatuntil').val(moment(series.repeat_until, 'YYYY-MM-DD HH:mm:ss').format('MM/DD/YYYY'));
+			}else if (series.repeat_type == 2){
+				$('#brepeatweekly').val(series.repeat_every);
+				$('#brepeatweekdays1').prop('checked', (series.repeat_detail.indexOf("1") >= 0));
+				$('#brepeatweekdays2').prop('checked', (series.repeat_detail.indexOf("2") >= 0));
+				$('#brepeatweekdays3').prop('checked', (series.repeat_detail.indexOf("3") >= 0));
+				$('#brepeatweekdays4').prop('checked', (series.repeat_detail.indexOf("4") >= 0));
+				$('#brepeatweekdays5').prop('checked', (series.repeat_detail.indexOf("5") >= 0));
+				$('#brepeatuntil').val(moment(series.repeat_until, 'YYYY-MM-DD HH:mm:ss').format('MM/DD/YYYY'));
+			}
+			$('#deleteBlackoutButton').show();
+			$('#createBlackout').modal('show');
+	}).fail(function( jqXHR, message ){
+		alert("Unable to retrieve blackout series: " + JSON.stringify(jqXHR) + ' ' + message);
+	});
+};
+
+var repeatChange = function(){
+	if($(this).val() == 0){
+		$('#repeatdailydiv').hide();
+		$('#repeatweeklydiv').hide();
+		$('#repeatuntildiv').hide();
+	}else if($(this).val() == 1){
+		$('#repeatdailydiv').show();
+		$('#repeatweeklydiv').hide();
+		$('#repeatuntildiv').show();
+	}else if($(this).val() == 2){
+		$('#repeatdailydiv').hide();
+		$('#repeatweeklydiv').show();
+		$('#repeatuntildiv').show();
+	}
+};
+
+var saveBlackout = function(){
+	var data = { bstart: moment($('#bstart').val(), 'LLL').format(), bend: moment($('#bend').val(), 'LLL').format(), btitle: $('#btitle').val()};
+	var url;
+
+	if($('#bblackouteventid').val() > 0){
+		url = '/advising/createblackoutevent';
+		data.bblackouteventid = $('#bblackouteventid').val();
+	}else{
+		url = '/advising/createblackout';
+		if($('#bblackoutid').val() > 0){
+			data.bblackoutid = $('#bblackoutid').val();
+		}
+		data.brepeat = $('#brepeat').val();
+		if($('#brepeat').val() == 1){
+			data.brepeatevery= $('#brepeatdaily').val();
+			data.brepeatuntil = moment($('#brepeatuntil').val(), "MM/DD/YYYY").format();
+		}
+		if($('#brepeat').val() == 2){
+			data.brepeatevery = $('#brepeatweekly').val();
+			data.brepeatweekdaysm = $('#brepeatweekdays1').prop('checked');
+			data.brepeatweekdayst = $('#brepeatweekdays2').prop('checked');
+			data.brepeatweekdaysw = $('#brepeatweekdays3').prop('checked');
+			data.brepeatweekdaysu = $('#brepeatweekdays4').prop('checked');
+			data.brepeatweekdaysf = $('#brepeatweekdays5').prop('checked');
+			data.brepeatuntil = moment($('#brepeatuntil').val(), "MM/DD/YYYY").format();
+		}
+	}
+	$.ajax({
+	  method: "POST",
+	  url: url,
+	  data: data
+	})
+	.success(function( message ) {
+		$('#createBlackout').modal('hide');
+		displayMessage(message, 'success');
+		$('#calendar').fullCalendar('unselect');
+		$('#calendar').fullCalendar('refetchEvents');
+	}).fail(function( jqXHR, message ){
+		if (jqXHR.status == 422)
+		{
+			$('.form-group').each(function (){
+				$(this).removeClass('has-error');
+				$(this).find('.help-block').text('');
+			});
+			$.each(jqXHR.responseJSON, function (key, value) {
+				$('#' + key).parents('.form-group').addClass('has-error');
+				$('#' + key + 'help').text(value);
+			});
+		}else{
+			alert("Unable to save blackout: " + JSON.stringify(jqXHR) + ' ' + message);
+		}
+	});
+};
+
+var deleteBlackout = function(){
+	var choice = confirm("Are you sure?");
+	if(choice === true){
+		var url, data;
+		if($('#bblackouteventid').val() > 0){
+			url = '/advising/deleteblackoutevent';
+			data = { bblackouteventid: $('#bblackouteventid').val() };
+		}else{
+			url = '/advising/deleteblackout';
+			data = { bblackoutid: $('#bblackoutid').val() };
+		}
+		$.ajax({
+		  method: 'POST',
+		  url: url,
+		  data: data
+		})
+		.success(function( message ) {
+			$('#createBlackout').modal('hide');
+			displayMessage(message, 'success');
+			$('#calendar').fullCalendar('unselect');
+			$('#calendar').fullCalendar('refetchEvents');
+		}).fail(function( jqXHR, message ){
+			alert("Unable to delete blackout: " + JSON.stringify(jqXHR) + ' ' + message);
+		});
+	}
+};
+//# sourceMappingURL=advisorcalendar.js.map
