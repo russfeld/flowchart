@@ -73,7 +73,7 @@ class AdvisingController extends Controller
 	    }else{
 	    	Department::findOrFail($dept);
 	    }
-		
+
 		$departments = Department::with('advisors')->get();
 
 		return view('advising/selectadvisor')->with('departments', $departments)->with('dept', $dept);
@@ -123,7 +123,7 @@ class AdvisingController extends Controller
                     'desc' => ($sid == $meeting->student_id) ? $meeting->description : ''
                 ];
             }
-        }); 
+        });
 
         $this->fractal->setSerializer(new JsonSerializer());
 
@@ -177,7 +177,7 @@ class AdvisingController extends Controller
                     'title' => $meeting->title
                 ];
             }
-        }); 
+        });
 
         $this->fractal->setSerializer(new JsonSerializer());
 
@@ -192,7 +192,7 @@ class AdvisingController extends Controller
         $id = $request->input('id');
 
         $blackout = Blackout::find($id);
-        
+
         $user = Auth::user();
         if($user->is_advisor){
             if($user->advisor->id != $blackout->advisor_id){
@@ -211,7 +211,7 @@ class AdvisingController extends Controller
                 'repeat_detail' => $blackout->repeat_detail,
                 'repeat_until' => $blackout->repeat_until
             ];
-        }); 
+        });
 
         $this->fractal->setSerializer(new JsonSerializer());
 
@@ -231,6 +231,48 @@ class AdvisingController extends Controller
             'desc' => 'string',
             'meetingid' => 'sometimes|required|exists:meetings,id'
         ]);
+
+//Added by chris
+		$startTime = $request->input('start');
+		//$sotStartTime = strtotime($startTime);
+
+		$endTime = $request->input('end');
+		//$sotEndTime = $strtotime($endTime);
+
+		$advisorId = $request->input('id');
+
+		$lengthScheduled = (strtotime($startTime) - strtotime($endTime)) / 3600;
+
+		if($lengthScheduled > 1){
+		return ("Meeting cannot be longer than one hour.");
+		}//Is the scheduled meeting longer than one hour?
+
+
+		//$midnight = strtotime(date('d-m-Y',$startTime));
+
+		//$endOfDay = date("Y-m-d H:i:s", strtotime('+5 hours', $startOfDay))
+		$dateObject = date_parse($startTime);
+
+		$startOfDay = date('Y-m-d H:i:s', mktime(0,0,0, $dateObject['month'], $dateObject['day'], $dateObject['year'] ));//creates a time starting that time at 00:00:00
+		$endOfDay = date('Y-m-d H:i:s', mktime(23,59,59, $dateObject['month'], $dateObject['day'], $dateObject['year'] ));//create a time at 23:59:59
+
+
+		//Returns meetings that would be during the event time.
+		$canCreate = true;
+		//return strtotime($startTime) . " hey " . strtotime($startOfDay);
+		$meetings = Meeting::whereRaw('start BETWEEN ? AND ? AND advisor_id = ?', [$startOfDay, $endOfDay, $advisorId])->get();
+
+		$hello = "";
+		foreach($meetings as $meeting){
+			if((strtotime($startTime) < strtotime($meeting->end)) && (strtotime($endTime) <= strtotime($meeting->start))){
+				$hello = "yeah";
+			}
+		}
+
+		return $hello;
+
+
+
 
         $user = Auth::user();
 

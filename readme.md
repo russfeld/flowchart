@@ -1,27 +1,98 @@
-## Laravel PHP Framework
+# flowchart
+Advising and Flowchart System for K-State Engineering
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+Deploy URL: http://45.55.69.44/
+Domain Name: http://flowchart.russfeld.me/
+Domain registered at https://www.namecheap.com
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+JSFiddle: http://jsfiddle.net/1u9u1nh8/4/
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+# Worklog
 
-## Official Documentation
+#### 2015-07-29
+Installed Elixir, Gulp and Bower
+Installed Bootstrap, FontAwesome, JQuery, and SnapSVG through Bower
+Moved all CSS and JS to resources folder for compilation/minification
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+#### 2015-07-28
+Switching to Laravel to deploy with Envoy.
 
-## Contributing
+#### 2015-07-20
+Added more code for force-directed line drawing. Need to add forces for vertical channels
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+#### 2015-07-16
+Initial code added for drawing lines
 
-## Security Vulnerabilities
+#### 2015-07-08
+Refactored Javascript code to be MUCH cleanr, very few bug fixes
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+#### 2015-07-06
+Worked on flowchart UI using Snap.svg http://snapsvg.io/
+Deployed at http://flowchart.russfeld.me/flowchart_test.html
 
-### License
+#### 2015-06-30
+Worked on the Meteor todo app tutorial https://www.meteor.com/tutorials/blaze/creating-an-app
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+# Useful Laravel Commands
+
+## Installing Composer Globally
+https://getcomposer.org/doc/00-intro.md#globally
+1. `curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer`
+
+## Installing Laravel
+http://laravel.com/docs/5.1#installation
+1. `composer global require "laravel/installer=~1.1"`
+2. Add to ~/.bashrc: "export PATH=$PATH:~/.composer/vendor/bin"
+3. Don't forget to move .htaccess to default Apache config for speed
+
+## Deploying with Envoy
+https://serversforhackers.com/video/deploying-with-envoy-cast
+https://serversforhackers.com/video/enhancing-envoy-deployment
+
+## Gulp, Bower & Elixir
+http://laravel.com/docs/5.1/elixir
+http://laravelcoding.com/blog/laravel-5-beauty-using-bower
+https://mattstauffer.co/blog/convert-laravel-5-frontend-scaffold-to-bower
+1. `sudo npm install --global gulp`
+2. `sudo npm install`
+3. `sudo npm install -g bower`
+4. `bower init`
+5. `bower install jquery bootstrap fontawesome --save`
+6. `gulp` to compile it all, `gulp --production` for minification
+7. `gulp watch` to watch all files for changes and auto-compile
+
+## Blade Templates
+https://scotch.io/tutorials/simple-laravel-layouts-using-blade
+
+# Useful Meteor Commands
+
+## Installing Meteor
+1. `curl https://install.meteor.com/ | sh`
+2. `meteor create ~/flowchart`
+
+## Editing Mongo Database
+1. `meteor mongo`
+2. `db.tasks.insert({ text: "Hello World!", createdAt: new Date() });`
+
+## Adding User Accounts
+1. `meteor add accounts-ui accounts-password`
+
+## Security
+1. `meteor remove insecure` Cannot edit database directly from Client
+2. `meteor remove autopublish` Cannot access all data from Client
+
+## Deployment
+http://meteortips.com/deployment-tutorial/digitalocean-part-1/
+1. `sudo npm install -g mup`
+2. Configure the mup.json file
+3. `mup setup`
+4. **`mup deploy`**
+
+## Monitoring
+https://kadira.io
+1. `meteor add meteorhacks:kadira`
+2. Add appID and appSecret to settings.json
+3. Deploy as usual
+
+# Helpful Reference URLs
+1. http://jsfiddle.net/38ne4/6/ JSFiddle for Drag/Drop handlers with Snap.svg
