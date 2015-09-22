@@ -20,15 +20,16 @@ use League\Fractal\Resource\Item;
 use App\JsonSerializer;
 
 use Cas;
+use Carbon\Carbon;
 
 class AdvisingController extends Controller
 {
 
-	public function __construct()
-	{
-		$this->middleware('cas');
+    public function __construct()
+    {
+        $this->middleware('cas');
         $this->fractal = new Manager();
-	}
+    }
 
     /**
      * Responds to requests to GET /courses
@@ -38,17 +39,17 @@ class AdvisingController extends Controller
         $user = Auth::user();
 
         if($id < 0){
-        	//currently authenticated user is an advisor
-        	if($user->is_advisor){
-        		$user->load('advisor.department');
-        		return view('advising/advisorindex')->with('user', $user)->with('advisor', $user->advisor);
-        	}else{
+            //currently authenticated user is an advisor
+            if($user->is_advisor){
+                $user->load('advisor.department');
+                return view('advising/advisorindex')->with('user', $user)->with('advisor', $user->advisor);
+            }else{
                 if($user->student->advisor === null){
                     return redirect('advising/select');
                 }
-        		$user->load('student.advisor.department');
-        		return view('advising/studentindex')->with('user', $user)->with('advisor', $user->student->advisor);
-        	}
+                $user->load('student.advisor.department');
+                return view('advising/studentindex')->with('user', $user)->with('advisor', $user->student->advisor);
+            }
         }else{
             $advisor = Advisor::findOrFail($id);
             return view('advising/studentindex')->with('user', $user)->with('advisor', $advisor);
@@ -57,30 +58,30 @@ class AdvisingController extends Controller
 
     public function getSelect($dept = -1)
     {
-    	$user = Auth::user();
+        $user = Auth::user();
 
-    	if($dept < 0){
-	    	//currently authenticated user is an advisor
-	    	if($user->is_advisor){
-	    		$dept = $user->advisor->department->id;
-	    	}else{
+        if($dept < 0){
+            //currently authenticated user is an advisor
+            if($user->is_advisor){
+                $dept = $user->advisor->department->id;
+            }else{
                 if($user->student->department === null){
                     $dept = 1;
                 }else{
-	    		    $dept = $user->student->department->id;
+                    $dept = $user->student->department->id;
                 }
-	    	}
-	    }else{
-	    	Department::findOrFail($dept);
-	    }
-		
-		$departments = Department::with('advisors')->get();
+            }
+        }else{
+            Department::findOrFail($dept);
+        }
 
-		return view('advising/selectadvisor')->with('departments', $departments)->with('dept', $dept);
+        $departments = Department::with('advisors')->get();
+
+        return view('advising/selectadvisor')->with('departments', $departments)->with('dept', $dept);
     }
 
     public function getMeetingfeed(Request $request){
-    	$this->validate($request, [
+        $this->validate($request, [
             'id' => 'required|exists:advisors,id',
             'start' => 'required|date',
             'end' => 'required|date|after:start',
@@ -99,14 +100,14 @@ class AdvisingController extends Controller
             $sid = $user->student->id;
         }
 
-    	$meetings = Meeting::where('advisor_id', $id)->where('start', '>=', new DateTime($start))->where('end', '<=', new DateTime($end))->get();
+        $meetings = Meeting::where('advisor_id', $id)->where('start', '>=', new DateTime($start))->where('end', '<=', new DateTime($end))->get();
 
         $resource = new Collection($meetings, function($meeting) use ($sid, $advisor) {
             if($advisor){
                 return[
                     'id' => $meeting->id,
-                    'start' => $meeting->start,
-                    'end' => $meeting->end,
+                    'start' => $meeting->start->toDateTimeString(),
+                    'end' => $meeting->end->toDateTimeString(),
                     'type' => 'm',
                     'title' => $meeting->title,
                     'desc' => $meeting->description,
@@ -116,22 +117,22 @@ class AdvisingController extends Controller
             }else{
                 return[
                     'id' => $meeting->id,
-                    'start' => $meeting->start,
-                    'end' => $meeting->end,
+                    'start' => $meeting->start->toDateTimeString(),
+                    'end' => $meeting->end->toDateTimeString(),
                     'type' => ($sid == $meeting->student_id) ? 's' : 'm',
                     'title' => ($sid == $meeting->student_id) ? $meeting->title : 'Advising',
                     'desc' => ($sid == $meeting->student_id) ? $meeting->description : ''
                 ];
             }
-        }); 
+        });
 
         $this->fractal->setSerializer(new JsonSerializer());
 
-    	return $this->fractal->createData($resource)->toJson();
+        return $this->fractal->createData($resource)->toJson();
     }
 
     public function getBlackoutfeed(Request $request){
-    	$this->validate($request, [
+        $this->validate($request, [
             'id' => 'required|exists:advisors,id',
             'start' => 'required|date',
             'end' => 'required|date|after:start'
@@ -141,7 +142,7 @@ class AdvisingController extends Controller
         $start = $request->input('start');
         $end = $request->input('end');
 
-    	$meetings = Blackoutevent::where('advisor_id', $id)->where('start', '>=', new DateTime($start))->where('end', '<=', new DateTime($end))->get();
+        $meetings = Blackoutevent::where('advisor_id', $id)->where('start', '>=', new DateTime($start))->where('end', '<=', new DateTime($end))->get();
 
         $user = Auth::user();
         if(!$user->is_advisor){
@@ -161,8 +162,8 @@ class AdvisingController extends Controller
             if($user->is_advisor){
                 return[
                     'id' => $meeting->id,
-                    'start' => $meeting->start,
-                    'end' => $meeting->end,
+                    'start' => $meeting->start->toDateTimeString(),
+                    'end' => $meeting->end->toDateTimeString(),
                     'type' => 'b',
                     'title' => $meeting->title,
                     'blackout_id' => $meeting->blackout_id,
@@ -171,13 +172,13 @@ class AdvisingController extends Controller
             }else{
                 return[
                     'id' => $meeting->id,
-                    'start' => $meeting->start,
-                    'end' => $meeting->end,
+                    'start' => $meeting->start->toDateTimeString(),
+                    'end' => $meeting->end->toDateTimeString(),
                     'type' => 'b',
                     'title' => $meeting->title
                 ];
             }
-        }); 
+        });
 
         $this->fractal->setSerializer(new JsonSerializer());
 
@@ -192,7 +193,7 @@ class AdvisingController extends Controller
         $id = $request->input('id');
 
         $blackout = Blackout::find($id);
-        
+
         $user = Auth::user();
         if($user->is_advisor){
             if($user->advisor->id != $blackout->advisor_id){
@@ -203,15 +204,15 @@ class AdvisingController extends Controller
         $resource = new Item($blackout, function($blackout){
             return[
                 'id' => $blackout->id,
-                'start' => $blackout->start,
-                'end' => $blackout->end,
+                'start' => Carbon::parse($blackout->start),
+                'end' => Carbon::parse($blackout->end),
                 'title' => $blackout->title,
                 'repeat_type' => $blackout->repeat_type,
                 'repeat_every' => $blackout->repeat_every,
                 'repeat_detail' => $blackout->repeat_detail,
-                'repeat_until' => $blackout->repeat_until
+                'repeat_until' => Carbon::parse($blackout->repeat_until)
             ];
-        }); 
+        });
 
         $this->fractal->setSerializer(new JsonSerializer());
 
@@ -233,6 +234,41 @@ class AdvisingController extends Controller
         ]);
 
         $user = Auth::user();
+
+        //using Carbon for dates 
+        //http://laravel.com/docs/5.1/eloquent-mutators#date-mutators
+        //http://stackoverflow.com/questions/24824624/laravel-q-where-between-dates
+        //http://carbon.nesbot.com/docs/
+
+        $startTime = Carbon::parse($request->input('start'));
+        $endTime = Carbon::parse($request->input('end'));
+        $advisorId = $request->input('id');
+
+        if(!$user->is_advisor){
+            if($endTime->diffInMinutes($startTime) > 60){
+                return response()->json("Meeting cannot be longer than one hour.", 500);
+            }//Is the scheduled meeting longer than one hour?
+
+            if(!($startTime->isSameDay($endTime))){
+                return response()->json("Meetings must begin and end on the same date.", 500);
+            }
+        }
+
+        if($request->has('meetingid')){
+            $collisions = Meeting::where('advisor_id', $advisorId)->where('end', '>', $startTime)->where('start', '<', $endTime)->where('id', '!=', $request->input('meetingid'))->get();
+        }else{
+            $collisions = Meeting::where('advisor_id', $advisorId)->where('end', '>', $startTime)->where('start', '<', $endTime)->get();
+        }
+
+        if(!$collisions->isEmpty()){
+            return response()->json("There is another meeting scheduled during that time.", 500);
+        }
+
+        $blackouts = Blackoutevent::where('advisor_id', $advisorId)->where('end', '>', $startTime)->where('start', '<', $endTime)->get();
+
+        if(!$blackouts->isEmpty()){
+            return response()->json("That time is blacked out by the advisor.", 500);
+        }
 
         if(!$user->is_advisor){
             $this->validate($request, [
@@ -264,8 +300,8 @@ class AdvisingController extends Controller
         }
 
         $meeting->title = $request->input('title');
-        $meeting->start = $request->input('start');
-        $meeting->end = $request->input('end');
+        $meeting->start = $startTime;
+        $meeting->end = $endTime;
         $meeting->description = $request->input('desc');
         $meeting->advisor_id = $request->input('id');
         $meeting->save();
@@ -325,13 +361,13 @@ class AdvisingController extends Controller
             }
         }
 
-        $blackout->start = $request->input('bstart');
-        $blackout->end = $request->input('bend');
+        $blackout->start = Carbon::parse($request->input('bstart'));
+        $blackout->end = Carbon::parse($request->input('bend'));
         $blackout->title = $request->input('btitle');
         $blackout->repeat_type = $request->input('brepeat');
         if($blackout->repeat_type > 0){
             $blackout->repeat_every = $request->input('brepeatevery');
-            $blackout->repeat_until = $request->input('brepeatuntil');
+            $blackout->repeat_until = Carbon::parse($request->input('brepeatuntil'));
             $startd = new DateTime($blackout->start);
         }
         if($blackout->repeat_type == 2){
@@ -355,7 +391,6 @@ class AdvisingController extends Controller
         }
 
         $blackout->save();
-
 
         return ("Blackout series saved!");
     }
@@ -384,8 +419,8 @@ class AdvisingController extends Controller
             }
         }
 
-        $blackout->start = $request->input('bstart');
-        $blackout->end = $request->input('bend');
+        $blackout->start = Carbon::parse($request->input('bstart'));
+        $blackout->end = Carbon::parse($request->input('bend'));
         $blackout->title = $request->input('btitle');
 
         $blackout->save();
