@@ -14,4 +14,6 @@ class Blackoutevent extends Model
     	return $this->belongsTo('App\Advisor');
     }
 
+    protected $dates = ['created_at', 'updated_at', 'start', 'end'];
+
 }

@@ -13,4 +13,6 @@ class Blackout extends Model
     public function events(){
     	return $this->hasMany('App\Blackoutevent');
     }
+
+    protected $dates = ['created_at', 'updated_at', 'start', 'end', 'repeat_until'];
 }

@@ -11574,7 +11574,7 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /**
-*  Ajax Autocomplete for jQuery, version 1.2.23
+*  Ajax Autocomplete for jQuery, version 1.2.21
 *  (c) 2015 Tomas Kirda
 *
 *  Ajax Autocomplete for jQuery is freely distributable under the terms of an MIT-style license.
@@ -11702,15 +11702,15 @@ if (typeof jQuery === 'undefined') {
     $.Autocomplete = Autocomplete;
 
     Autocomplete.formatResult = function (suggestion, currentValue) {
-        var pattern = '(' + utils.escapeRegExChars(currentValue) + ')';
-        
-        return suggestion.value
-            .replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
+        var htmlSafeString = suggestion.value
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/&lt;(\/?strong)&gt;/g, '<$1>');
+            .replace(/"/g, '&quot;');
+
+        var pattern = '(' + utils.escapeRegExChars(currentValue) + ')';
+
+        return htmlSafeString.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>');
     };
 
     Autocomplete.prototype = {
@@ -11921,7 +11921,6 @@ if (typeof jQuery === 'undefined') {
             var that = this;
             that.stopKillSuggestions();
             that.intervalId = window.setInterval(function () {
-                that.el.val(that.currentValue);
                 that.hide();
                 that.stopKillSuggestions();
             }, 50);
