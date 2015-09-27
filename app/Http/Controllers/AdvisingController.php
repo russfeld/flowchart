@@ -150,8 +150,8 @@ class AdvisingController extends Controller
             $startd = new DateTime($start);
             $meeting->start = $startd->format('Y-m-d H:i:s');
             $endd = new DateTime();
-            $endd->add(new DateInterval("PT4H"));
-            $meeting->end = $endd->format('Y-m-d H:00:00');
+            $endd->add(new DateInterval(env('IN_ADVANCE')));
+            $meeting->end = $endd->format('Y-m-d H:59:59');
             $meeting->id = 0;
             $meeting->title = '';
 
@@ -204,13 +204,13 @@ class AdvisingController extends Controller
         $resource = new Item($blackout, function($blackout){
             return[
                 'id' => $blackout->id,
-                'start' => Carbon::parse($blackout->start),
-                'end' => Carbon::parse($blackout->end),
+                'start' => $blackout->start->toDateTimeString(),
+                'end' => $blackout->end->toDateTimeString(),
                 'title' => $blackout->title,
                 'repeat_type' => $blackout->repeat_type,
                 'repeat_every' => $blackout->repeat_every,
                 'repeat_detail' => $blackout->repeat_detail,
-                'repeat_until' => Carbon::parse($blackout->repeat_until)
+                'repeat_until' => $blackout->repeat_until->toDateTimeString()
             ];
         });
 
@@ -221,8 +221,8 @@ class AdvisingController extends Controller
 
     public function postCreatemeeting(Request $request){
         $endd = new DateTime();
-        $endd->add(new DateInterval("PT4H"));
-        $end = $endd->format('Y-m-d H:00:00');
+        $endd->add(new DateInterval(env('IN_ADVANCE')));
+        $end = $endd->format('Y-m-d H:59:59');
 
         $this->validate($request, [
             'id' => 'required|exists:advisors,id',

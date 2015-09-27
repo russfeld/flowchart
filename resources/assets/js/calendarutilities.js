@@ -72,7 +72,8 @@ var datePickerData = {
     daysOfWeekDisabled: [0, 6],
     format: 'LLL',
     stepping: 20,
-    enabledHours: [8, 9, 10, 11, 12, 13, 14, 15, 16],
+    enabledHours: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+    maxHour: 17,
     sideBySide: true,
     ignoreReadonly: true,
     allowInputToggle: true
@@ -115,7 +116,7 @@ var saveMeeting = function(){
 				$('#' + key + 'help').text(value);
 			});
 		}else{
-			alert("Unable to save meeting: " + JSON.stringify(jqXHR) + ' ' + message);
+			alert("Unable to save meeting: " + jqXHR.responseJSON);
 		}
 	});
 };
@@ -134,7 +135,7 @@ var deleteMeeting = function(){
 			$('#calendar').fullCalendar('unselect');
 			$('#calendar').fullCalendar('refetchEvents');
 		}).fail(function( jqXHR, message ){
-			alert("Unable to delete meeting: " + JSON.stringify(jqXHR) + ' ' + message);
+			alert("Unable to delete meeting: " + jqXHR.responseJSON);
 		});
 	}
 };

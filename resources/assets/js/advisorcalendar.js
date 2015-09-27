@@ -195,7 +195,7 @@ var blackoutSeries = function(){
 			$('#deleteBlackoutButton').show();
 			$('#createBlackout').modal('show');
 	}).fail(function( jqXHR, message ){
-		alert("Unable to retrieve blackout series: " + JSON.stringify(jqXHR) + ' ' + message);
+		alert("Unable to retrieve blackout series: " + jqXHR.responseJSON);
 	});
 };
 
@@ -264,7 +264,7 @@ var saveBlackout = function(){
 				$('#' + key + 'help').text(value);
 			});
 		}else{
-			alert("Unable to save blackout: " + JSON.stringify(jqXHR) + ' ' + message);
+			alert("Unable to save blackout: " + jqXHR.responseJSON);
 		}
 	});
 };
@@ -291,7 +291,7 @@ var deleteBlackout = function(){
 			$('#calendar').fullCalendar('unselect');
 			$('#calendar').fullCalendar('refetchEvents');
 		}).fail(function( jqXHR, message ){
-			alert("Unable to delete blackout: " + JSON.stringify(jqXHR) + ' ' + message);
+			alert("Unable to delete blackout: " + jqXHR.responseJSON);
 		});
 	}
 };
