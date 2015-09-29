@@ -87,6 +87,7 @@ var datePickerDateOnly = {
 };
 
 var saveMeeting = function(){
+	$('#createEventSpin').removeClass('hide-spin');
 	var data = { start: moment($('#start').val(), "LLL").format(), end: moment($('#end').val(), "LLL").format(), title: $('#title').val(), id: calendarAdvisorID, desc: $('#desc').val() };
 	if($('#meetingID').val() > 0){
 		data.meetingid = $('#meetingID').val();
@@ -104,6 +105,7 @@ var saveMeeting = function(){
 		displayMessage(message, "success");
 		$('#calendar').fullCalendar('unselect');
 		$('#calendar').fullCalendar('refetchEvents');
+		$('#createEventSpin').addClass('hide-spin');
 	}).fail(function( jqXHR, message ){
 		if (jqXHR.status == 422)
 		{
@@ -118,12 +120,14 @@ var saveMeeting = function(){
 		}else{
 			alert("Unable to save meeting: " + jqXHR.responseJSON);
 		}
+		$('#createEventSpin').addClass('hide-spin');
 	});
 };
 
 var deleteMeeting = function(){
 	var choice = confirm("Are you sure?");
 	if(choice === true){
+		$('#createEventSpin').removeClass('hide-spin');
 		$.ajax({
 		  method: "POST",
 		  url: '/advising/deletemeeting',
@@ -134,8 +138,10 @@ var deleteMeeting = function(){
 			displayMessage(message, "success");
 			$('#calendar').fullCalendar('unselect');
 			$('#calendar').fullCalendar('refetchEvents');
+			$('#createEventSpin').addClass('hide-spin');
 		}).fail(function( jqXHR, message ){
 			alert("Unable to delete meeting: " + jqXHR.responseJSON);
+			$('#createEventSpin').addClass('hide-spin');
 		});
 	}
 };

@@ -60,6 +60,7 @@
         </form>
       </div>
       <div class="modal-footer">
+        <span id="createEventSpin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
       	<button type="button" class="btn btn-danger" id="deleteButton">Delete</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" id="saveButton">Save</button>

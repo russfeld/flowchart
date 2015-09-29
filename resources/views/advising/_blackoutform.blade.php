@@ -102,6 +102,7 @@
         </form>
       </div>
       <div class="modal-footer">
+        <span id="createBlackoutSpin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
       	<button type="button" class="btn btn-danger" id="deleteBlackoutButton">Delete</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" id="saveBlackoutButton">Save</button>

@@ -216,6 +216,7 @@ var repeatChange = function(){
 };
 
 var saveBlackout = function(){
+	$('#createBlackoutSpin').removeClass('hide-spin');
 	var data = { bstart: moment($('#bstart').val(), 'LLL').format(), bend: moment($('#bend').val(), 'LLL').format(), btitle: $('#btitle').val()};
 	var url;
 
@@ -252,6 +253,7 @@ var saveBlackout = function(){
 		displayMessage(message, 'success');
 		$('#calendar').fullCalendar('unselect');
 		$('#calendar').fullCalendar('refetchEvents');
+		$('#createBlackoutSpin').addClass('hide-spin');
 	}).fail(function( jqXHR, message ){
 		if (jqXHR.status == 422)
 		{
@@ -266,12 +268,14 @@ var saveBlackout = function(){
 		}else{
 			alert("Unable to save blackout: " + jqXHR.responseJSON);
 		}
+		$('#createBlackoutSpin').addClass('hide-spin');
 	});
 };
 
 var deleteBlackout = function(){
 	var choice = confirm("Are you sure?");
 	if(choice === true){
+		$('#createBlackoutSpin').removeClass('hide-spin');
 		var url, data;
 		if($('#bblackouteventid').val() > 0){
 			url = '/advising/deleteblackoutevent';
@@ -290,8 +294,10 @@ var deleteBlackout = function(){
 			displayMessage(message, 'success');
 			$('#calendar').fullCalendar('unselect');
 			$('#calendar').fullCalendar('refetchEvents');
+			$('#createBlackoutSpin').addClass('hide-spin');
 		}).fail(function( jqXHR, message ){
 			alert("Unable to delete blackout: " + jqXHR.responseJSON);
+			$('#createBlackoutSpin').addClass('hide-spin');
 		});
 	}
 };
