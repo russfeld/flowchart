@@ -29,6 +29,10 @@ $(document).ready(function() {
 
 	$('#resolveConflict').on('hidden.bs.modal', loadConflicts);
 
+	$('#resolveConflict').on('hidden.bs.modal', function(){
+		$('#calendar').fullCalendar('refetchEvents');
+	});
+
 	$('#title').prop('disabled', true);
 	$('#start').prop('disabled', false);
 	$('#studentid').prop('disabled', false);

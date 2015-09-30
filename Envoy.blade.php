@@ -26,6 +26,7 @@ $release = 'release_' . date('YmdHis');
     configure_project_cis
     update_permissions_cis
     update_symlinks_cis
+    database_setup_cis
 @endmacro
 
 @task('fetch_repo', ['on' => 'web'])
@@ -72,7 +73,7 @@ $release = 'release_' . date('YmdHis');
 @task('database_setup_cis', ['on' => 'cis'])
     cd {{ $release_dir_cis }}/{{ $release }};
     php artisan down
-    php artisan migrate:refresh --seed --force
+    php artisan migrate
     php artisan up
 @endtask
 
