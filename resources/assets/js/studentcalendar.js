@@ -56,6 +56,10 @@ $(document).ready(function() {
 		}
 	};
 
+	if($(window).width() < 600){
+		calendarData.defaultView = 'agendaDay';
+	}
+
     $('#calendar').fullCalendar(calendarData);
 
 	$('#saveButton').bind('click', saveMeeting);

@@ -25,6 +25,10 @@ $(document).ready(function() {
 
 	$('#createEvent').on('hidden.bs.modal', resetForm);
 
+	$('#createEvent').on('hidden.bs.modal', loadConflicts);
+
+	$('#resolveConflict').on('hidden.bs.modal', loadConflicts);
+
 	$('#title').prop('disabled', true);
 	$('#start').prop('disabled', false);
 	$('#studentid').prop('disabled', false);
@@ -99,6 +103,10 @@ $(document).ready(function() {
 		$('#meetingID').val(-1);
 		$('#meetingOption').modal('show');
 	};
+	
+	if($(window).width() < 600){
+		calendarData.defaultView = 'agendaDay';
+	}
 
 	$('#calendar').fullCalendar(calendarData);
 
@@ -134,6 +142,9 @@ $(document).ready(function() {
 
 	$('#duration').on('change', changeDuration);
 
+	$('#resolveButton').on('click', resolveConflicts);
+
+	loadConflicts();
 });
 
 var createBlackoutForm = function(){
@@ -254,6 +265,7 @@ var saveBlackout = function(){
 		$('#calendar').fullCalendar('unselect');
 		$('#calendar').fullCalendar('refetchEvents');
 		$('#createBlackoutSpin').addClass('hide-spin');
+		loadConflicts();
 	}).fail(function( jqXHR, message ){
 		if (jqXHR.status == 422)
 		{
@@ -295,9 +307,93 @@ var deleteBlackout = function(){
 			$('#calendar').fullCalendar('unselect');
 			$('#calendar').fullCalendar('refetchEvents');
 			$('#createBlackoutSpin').addClass('hide-spin');
+			loadConflicts();
 		}).fail(function( jqXHR, message ){
 			alert("Unable to delete blackout: " + jqXHR.responseJSON);
 			$('#createBlackoutSpin').addClass('hide-spin');
 		});
 	}
+};
+
+var loadConflicts = function(){
+	$.ajax({
+	  method: "GET",
+	  url: '/advising/conflicts',
+	  dataType: 'json'
+	})
+	.success(function(data, message, jqXHR) {
+		if(jqXHR.status == 200){
+			$('#resolveConflictMeetings').empty();
+			$.each(data, function(index, value){
+				$('<div/>', {
+					'class': 'meeting-conflict',
+			        'html': 	'<p>&nbsp;<button type="button" class="btn btn-danger pull-right deleteConflict" data-id='+value.id+'>Delete</button>' +
+			        			'&nbsp;<button type="button" class="btn btn-primary pull-right editConflict" data-id='+value.id+'>Edit</button> ' +
+			        			'<button type="button" class="btn btn-success pull-right resolveConflict" data-id='+value.id+'>Resolve</button>' +
+			        	   		'<b>'+value.title+'</b> ('+value.start+')</p><hr>'
+			    }).appendTo('#resolveConflictMeetings');
+			});
+			$(document).on('click', '.deleteConflict', deleteConflict);
+			$(document).on('click', '.editConflict', editConflict);
+			$(document).on('click', '.resolveConflict', resolveConflict);
+			$('#conflictingMeetings').removeClass('hidden');
+		}else if (jqXHR.status == 204){
+			$('#conflictingMeetings').addClass('hidden');
+		}
+	}).fail(function( jqXHR, message ){
+		alert("Unable to retrieve conflicting meetings: " + jqXHR.responseJSON);
+	});
+}
+
+var resolveConflicts = function(){
+	$('#resolveConflict').modal('show');
+};
+
+var deleteConflict = function(){
+	var caller = $(this);
+	var choice = confirm("Are you sure?");
+	if(choice === true){
+		$.ajax({
+		  method: "POST",
+		  url: '/advising/deletemeeting',
+		  data: {meetingid: $(this).data('id')}
+		})
+		.success(function( message ) {
+			caller.parent().parent().addClass('hidden');
+		}).fail(function( jqXHR, message ){
+			alert("Unable to delete meeting: " + jqXHR.responseJSON);
+		});
+	}
+};
+
+var editConflict = function(){
+	var caller = $(this);
+	$.ajax({
+	  method: 'get',
+	  url: '/advising/meeting',
+	  data: {meetingid: $(this).data('id')}
+	})
+	.success(function( message ) {
+		$('#resolveConflict').modal('hide');
+		event = JSON.parse(message);
+		event.start = moment(event.start);
+		event.end = moment(event.end);
+		showMeetingForm(event);
+	}).fail(function( jqXHR, message ){
+		alert("Unable to retrieve meeting: " + jqXHR.responseJSON);
+	});
+};
+
+var resolveConflict = function(){
+	var caller = $(this);
+	$.ajax({
+	  method: 'POST',
+	  url: '/advising/resolveconflict',
+	  data: {meetingid: $(this).data('id')}
+	})
+	.success(function( message ) {
+		caller.parent().parent().addClass('hidden');
+	}).fail(function( jqXHR, message ){
+		alert("Unable to resolve: " + jqXHR.responseJSON);
+	});
 };

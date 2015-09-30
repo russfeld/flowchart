@@ -25,12 +25,16 @@ class AppServiceProvider extends ServiceProvider
         Blackout::saved(function ($blackout) {
             if($blackout->repeat_type == 1){ //daily
                 Blackoutevent::where('blackout_id', $blackout->id)->delete();
-                $start = new DateTime($blackout->start);
-                $end = new DateTime($blackout->end);
-                $stop = new DateTime($blackout->repeat_until);
-                $stop->setTime(23,59,59);
-                $interval = new DateInterval("P" . $blackout->repeat_every . "D");
+                $start = $blackout->start;
+                $end = $blackout->end;
+                $stop = $blackout->repeat_until;
+                $stop->hour(23)->minute(59)->second(59);
                 while($start < $stop){
+                    $collisions = Meeting::where('advisor_id', $blackout->advisor_id)->where('end', '>', $start)->where('start', '<', $end)->get();
+                    foreach($collisions as $meeting){
+                        $meeting->conflict = true;
+                        $meeting->save();
+                    }
                     $blackoutevent = new Blackoutevent;
                     $blackoutevent->title = $blackout->title;
                     $blackoutevent->start = $start;
@@ -39,20 +43,25 @@ class AppServiceProvider extends ServiceProvider
                     $blackoutevent->blackout_id = $blackout->id;
                     $blackoutevent->repeat = true;
                     $blackoutevent->save();
-                    $start->add($interval);
-                    $end->add($interval);
+                    $start->addDays($blackout->repeat_every);
+                    $end->addDays($blackout->repeat_every);
                 }
             }else if ($blackout->repeat_type == 2){//weekly
                 Blackoutevent::where('blackout_id', $blackout->id)->delete();
-                $start = new DateTime($blackout->start);
-                $end = new DateTime($blackout->end);
-                $stop = new DateTime($blackout->repeat_until);
-                $stop->setTime(23,59,59);
+                $start = $blackout->start;
+                $end = $blackout->end;
+                $stop = $blackout->repeat_until;
+                $stop->hour(23)->minute(59)->second(59);
                 $interval = new DateInterval("P" . ($blackout->repeat_every - 1) . "W");
                 $day = new DateInterval("P1D");
                 while($start < $stop){
                     $dow = $start->format('w');
                     if(strpos($blackout->repeat_detail, $dow) !== FALSE){
+                        $collisions = Meeting::where('advisor_id', $blackout->advisor_id)->where('end', '>', $start)->where('start', '<', $end)->get();
+                        foreach($collisions as $meeting){
+                            $meeting->conflict = true;
+                            $meeting->save();
+                        }
                         $blackoutevent = new Blackoutevent;
                         $blackoutevent->title = $blackout->title;
                         $blackoutevent->start = $start;
@@ -63,14 +72,19 @@ class AppServiceProvider extends ServiceProvider
                         $blackoutevent->save();
                     }
                     if($dow == 6){
-                        $start->add($interval);
-                        $end->add($interval);
+                        $start->addWeeks($blackout->repeat_every - 1);
+                        $end->addWeeks($blackout->repeat_every - 1);
                     }
-                    $start->add($day);
-                    $end->add($day);
+                    $start->addDay();
+                    $end->addDay();
                 }
             }else if ($blackout->repeat_type == 0){//no repeat
                 Blackoutevent::where('blackout_id', $blackout->id)->delete();
+                $collisions = Meeting::where('advisor_id', $blackout->advisor_id)->where('end', '>', $blackout->start)->where('start', '<', $blackout->end)->get();
+                foreach($collisions as $meeting){
+                    $meeting->conflict = true;
+                    $meeting->save();
+                }
                 $blackoutevent = new Blackoutevent;
                 $blackoutevent->title = $blackout->title;
                 $blackoutevent->start = $blackout->start;

@@ -219,6 +219,71 @@ class AdvisingController extends Controller
         return $this->fractal->createData($resource)->toJson();
     }
 
+    public function getMeeting(Request $request){
+        $this->validate($request, [
+            'meetingid' => 'required|exists:meetings,id'
+        ]);
+
+        $id = $request->input('meetingid');
+
+        $meeting = Meeting::find($id);
+
+        $user = Auth::user();
+        if($user->is_advisor){
+            if($user->advisor->id != $meeting->advisor_id){
+                return response()->json("Cannot request a meeting not assigned to your advisor record", 500);
+            }
+        }else{
+            return response()->json("Students cannot request individual meetings", 500);
+        }
+
+        $resource = new Item($meeting, function($meeting){
+            return[
+                'id' => $meeting->id,
+                'start' => $meeting->start->toDateTimeString(),
+                'end' => $meeting->end->toDateTimeString(),
+                'type' => 'm',
+                'title' => $meeting->title,
+                'desc' => $meeting->description,
+                'studentname' => $meeting->student->name,
+                'student_id' => $meeting->student->id,
+            ];
+        });
+
+        $this->fractal->setSerializer(new JsonSerializer());
+
+        return $this->fractal->createData($resource)->toJson();
+    }
+
+    public function getConflicts(Request $request){
+        $user = Auth::user();
+
+        if($user->is_advisor){
+
+            $id = $user->advisor->id;
+            $meetings = Meeting::where('advisor_id', $id)->where('conflict', true)->get();
+
+            if(!$meetings->isEmpty()){
+                $resource = new Collection($meetings, function($meeting) use ($user){
+                    return[
+                        'id' => $meeting->id,
+                        'start' => $meeting->start->toDateTimeString(),
+                        'end' => $meeting->end->toDateTimeString(),
+                        'title' => $meeting->title,
+                    ];
+                });
+
+                $this->fractal->setSerializer(new JsonSerializer());
+
+                return $this->fractal->createData($resource)->toJson();
+            }else{
+                return response()->json("No conflicts", 204);
+            }
+        }else{
+            return response()->json("Advisor Access Only", 403);
+        }
+    }
+
     public function postCreatemeeting(Request $request){
         $endd = new DateTime();
         $endd->add(new DateInterval(env('IN_ADVANCE')));
@@ -304,6 +369,7 @@ class AdvisingController extends Controller
         $meeting->end = $endTime;
         $meeting->description = $request->input('desc');
         $meeting->advisor_id = $request->input('id');
+        $meeting->conflict = false;
         $meeting->save();
 
         return ("Advising meeting saved!");
@@ -467,6 +533,25 @@ class AdvisingController extends Controller
         $blackout->delete();
 
         return ("Blackout event deleted!");
+    }
+
+    public function postResolveconflict(Request $request){
+        $this->validate($request, [
+            'meetingid' => 'required|exists:meetings,id'
+        ]);
+
+        $user = Auth::user();
+
+        $meeting = Meeting::find($request->input('meetingid'));
+
+        if(!$user->is_advisor){
+            return response()->json("Students cannot resolve conflicts", 500);
+        }
+
+        $meeting->conflict = false;
+        $meeting->save();
+
+        return ("Conflict marked as resolved!");
     }
 
 }
