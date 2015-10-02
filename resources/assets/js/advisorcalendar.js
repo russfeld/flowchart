@@ -326,6 +326,9 @@ var loadConflicts = function(){
 	  dataType: 'json'
 	})
 	.success(function(data, message, jqXHR) {
+		$(document).off('click', '.deleteConflict', deleteConflict);
+		$(document).off('click', '.editConflict', editConflict);
+		$(document).off('click', '.resolveConflict', resolveConflict);
 		if(jqXHR.status == 200){
 			$('#resolveConflictMeetings').empty();
 			$.each(data, function(index, value){
@@ -333,7 +336,8 @@ var loadConflicts = function(){
 					'class': 'meeting-conflict',
 			        'html': 	'<p>&nbsp;<button type="button" class="btn btn-danger pull-right deleteConflict" data-id='+value.id+'>Delete</button>' +
 			        			'&nbsp;<button type="button" class="btn btn-primary pull-right editConflict" data-id='+value.id+'>Edit</button> ' +
-			        			'<button type="button" class="btn btn-success pull-right resolveConflict" data-id='+value.id+'>Resolve</button>' +
+			        			'<button type="button" class="btn btn-success pull-right resolveConflict" data-id='+value.id+'>Keep Meeting</button>' +
+			        			'<span id="resolveSpin'+value.id+'" class="fa fa-cog fa-spin fa-lg pull-right hide-spin">&nbsp;</span>' +
 			        	   		'<b>'+value.title+'</b> ('+value.start+')</p><hr>'
 			    }).appendTo('#resolveConflictMeetings');
 			});
@@ -355,49 +359,61 @@ var resolveConflicts = function(){
 
 var deleteConflict = function(){
 	var caller = $(this);
+	var id = $(this).data('id');
 	var choice = confirm("Are you sure?");
 	if(choice === true){
+		$('#resolveSpin' + id).removeClass('hide-spin');
 		$.ajax({
 		  method: "POST",
 		  url: '/advising/deletemeeting',
-		  data: {meetingid: $(this).data('id')}
+		  data: {meetingid: id}
 		})
 		.success(function( message ) {
+			$('#resolveSpin' + id).addClass('hide-spin');
 			caller.parent().parent().addClass('hidden');
 		}).fail(function( jqXHR, message ){
 			alert("Unable to delete meeting: " + jqXHR.responseJSON);
+			$('#resolveSpin' + id).addClass('hide-spin');
 		});
 	}
 };
 
 var editConflict = function(){
 	var caller = $(this);
+	var id = $(this).data('id');
+	$('#resolveSpin' + id).removeClass('hide-spin');
 	$.ajax({
 	  method: 'get',
 	  url: '/advising/meeting',
-	  data: {meetingid: $(this).data('id')}
+	  data: {meetingid: id}
 	})
 	.success(function( message ) {
+		$('#resolveSpin' + id).addClass('hide-spin');
 		$('#resolveConflict').modal('hide');
 		event = JSON.parse(message);
 		event.start = moment(event.start);
 		event.end = moment(event.end);
 		showMeetingForm(event);
 	}).fail(function( jqXHR, message ){
+		$('#resolveSpin' + id).addClass('hide-spin');
 		alert("Unable to retrieve meeting: " + jqXHR.responseJSON);
 	});
 };
 
 var resolveConflict = function(){
 	var caller = $(this);
+	var id = $(this).data('id');
+	$('#resolveSpin' + id).removeClass('hide-spin');
 	$.ajax({
 	  method: 'POST',
 	  url: '/advising/resolveconflict',
-	  data: {meetingid: $(this).data('id')}
+	  data: {meetingid: id}
 	})
 	.success(function( message ) {
+		$('#resolveSpin' + id).addClass('hide-spin');
 		caller.parent().parent().addClass('hidden');
 	}).fail(function( jqXHR, message ){
 		alert("Unable to resolve: " + jqXHR.responseJSON);
+		$('#resolveSpin' + id).addClass('hide-spin');
 	});
 };

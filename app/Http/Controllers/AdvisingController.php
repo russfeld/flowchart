@@ -489,6 +489,12 @@ class AdvisingController extends Controller
         $blackout->end = Carbon::parse($request->input('bend'));
         $blackout->title = $request->input('btitle');
 
+        $collisions = Meeting::where('advisor_id', $blackout->advisor_id)->where('end', '>', $blackout->start)->where('start', '<', $blackout->end)->get();
+        foreach($collisions as $meeting){
+            $meeting->conflict = true;
+            $meeting->save();
+        }
+
         $blackout->save();
 
 

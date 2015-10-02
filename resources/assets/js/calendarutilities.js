@@ -153,6 +153,7 @@ var showMeetingForm = function(event){
 	$('#desc').val(event.desc);
 	durationOptions(event.start, event.end);
 	$('#meetingID').val(event.id);
+	$('#studentidval').val(event.student_id);
 	$('#deleteButton').show();
 	$('#createEvent').modal('show');
 };
