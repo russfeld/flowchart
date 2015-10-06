@@ -32,6 +32,11 @@
           <p>When you are ready to enroll or if you have any questions, quickly schedule an appointment with your academic advisor.</p>
           <p><a class="btn btn-default" href="{{ url('/advising') }}" role="button">Schedule an Appointment &raquo;</a></p>
         </div>
+        <div class="col-md-4">
+          <h2>Help</h2>
+          <p>Not sure how to use the new system? Click here for help!</p>
+          <p><a class="btn btn-default" href="{{ url('/help') }}" role="button">Help &raquo;</a></p>
+        </div>
       </div>
     </div>
 

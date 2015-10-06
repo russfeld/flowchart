@@ -46,3 +46,7 @@ Route::get('auth/caslogout', 'Auth\AuthController@CASLogout');
 //Route::get('/test', function() {
 //	return view('flowchart_test');
 //});
+
+Route::get('help', function(){
+	return View::make('help/index');
+});

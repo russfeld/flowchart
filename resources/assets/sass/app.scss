@@ -180,6 +180,19 @@ body {
   margin-left: 3px;
 }
 
+.img-help{
+  border: 2px dashed #512888;
+  margin: 5px;
+  margin-left: 25px;
+}
+
+.help-line{
+  border: 1px solid #512888;
+  height: 0px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
 .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
 .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
 .autocomplete-selected { background: #F0F0F0; }
