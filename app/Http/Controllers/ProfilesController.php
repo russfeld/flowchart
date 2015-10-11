@@ -26,7 +26,15 @@ class ProfilesController extends Controller
      */
     public function getIndex()
     {
-        return view('profiles/index');
+        $user = Auth::user();
+
+        if($user->is_advisor){
+            $user->load('advisor');
+            return view('profiles/advisorindex')->with('advisor', $user->advisor);
+        }else{
+            $user->load('student.advisor', 'student.department');
+            return view('profiles/index')->with('student', $user->student);
+        }
     }
 
     public function getStudentfeed(Request $request){
@@ -49,6 +57,23 @@ class ProfilesController extends Controller
     	}else{
     		return response()->json("Only advisors may access this data", 403);
     	}
+    }
+
+    public function postUpdate(Request $request){
+        $user = Auth::user();
+        if($user->is_advisor){
+
+        }else{
+            $this->validate($request, [
+                'first_name' => 'required|string',
+                'last_name' => 'required|string',
+            ]);
+            $student = $user->student;
+            $student->first_name = $request->input('first_name');
+            $student->last_name = $request->input('last_name');
+            $student->save();
+        }
+        return ("Profile updated!");
     }
 
 }

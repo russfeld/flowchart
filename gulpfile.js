@@ -47,6 +47,10 @@ elixir(function(mix) {
         'advisorcalendar.js'
     ], 'public/js/advisorcalendar.js');
 
+    mix.scripts([
+        'profiles.js'
+    ], 'public/js/profiles.js');
+
     mix.task('copyfonts');
 });
 
