@@ -15,10 +15,74 @@ var gulp = require('gulp');
 elixir(function(mix) {
     mix.sass('app.scss');
 
+    //Global CSS styles definition
+
     mix.styles([
         '../bower/fullcalendar/dist/fullcalendar.css',
         "../bower/russfeld-eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css"
     ], 'public/css/calendar.css');
+
+    //Require.js configuration & library
+
+    mix.scripts([
+        'require-config.js'
+    ], 'public/js/require-config.js');
+
+    mix.scripts([
+        '../bower/requirejs/require.js'
+    ], 'public/js/lib/require.js');
+
+    //Libraries
+
+    mix.scripts([
+        '../bower/jquery/dist/jquery.js',
+    ], 'public/js/lib/jquery.js');
+
+    mix.scripts([
+        '../bower/moment/moment.js',
+    ], 'public/js/lib/moment.js');
+
+    mix.scripts([
+        '../bower/bootstrap-sass/assets/javascripts/bootstrap.js',
+    ], 'public/js/lib/bootstrap.js');
+
+        mix.scripts([
+        '../bower/devbridge-autocomplete/dist/jquery.autocomplete.js'
+    ], 'public/js/lib/jquery.autocomplete.js');
+
+    mix.scripts([
+        '../bower/fullcalendar/dist/fullcalendar.js',
+    ], 'public/js/lib/fullcalendar.js');
+
+    mix.scripts([
+        '../bower/russfeld-eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
+    ], 'public/js/lib/bootstrap-datetimepicker.js');
+
+    //Utilities
+
+    mix.scripts([
+        'util/site.js',
+    ], 'public/js/util/site.js');
+
+    mix.scripts([
+        'util/calendar.js',
+    ], 'public/js/util/calendar.js');
+
+    //Pages
+
+    mix.scripts([
+        'pages/advisor-calendar.js',
+    ], 'public/js/advisor-calendar.js');
+
+    mix.scripts([
+        'pages/student-calendar.js',
+    ], 'public/js/student-calendar.js');
+
+    mix.scripts([
+        'pages/profiles.js',
+    ], 'public/js/profiles.js');
+
+/*
 
     mix.scripts([
     	'../bower/jquery/dist/jquery.js',
@@ -50,6 +114,8 @@ elixir(function(mix) {
     mix.scripts([
         'profiles.js'
     ], 'public/js/profiles.js');
+
+*/
 
     mix.task('copyfonts');
 });
