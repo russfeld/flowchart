@@ -39,5 +39,3 @@ require(['util/site'], function(site) {
 		});
 	};
 });
-
-//# sourceMappingURL=profiles.js.map

@@ -1,7 +1,6 @@
 @section('scripts')
     @parent
-    <script type="text/javascript" src="{{ asset('js/calendar.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/studentcalendar.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/lib/require.js') }}" data-main="/js/student-calendar"></script>
 @endsection
 
 @section('styles')
