@@ -82,6 +82,13 @@ elixir(function(mix) {
         'pages/profiles.js',
     ], 'public/js/profiles.js');
 
+    //Test Flowchart
+
+    mix.scripts([
+    	'../bower/snap.svg/dist/snap.svg.js',
+        'flowchart.js'
+    ], 'public/js/flowchart.js');
+
 /*
 
     mix.scripts([

@@ -11,42 +11,56 @@
 |
 */
 
+/*
+ * Static routes for static pages
+ * Tested in tests/RouteTest.php
+ */
 Route::get('/', function () {
-    return view('root/index');
+    return View::make('root/index');
 });
 
 Route::get('/about', function () {
-    return view('root/about');
+    return View::make('root/about');
 });
-
-
-//Route::get('courses/{category}', 'CoursesController@getCategory')->where('category', '[A-Za-z]+');
-//Route::get('courses/{slug}', 'CoursesController@getCourse')->where('slug', '[A-Za-z]+[0-9][0-9][0-9]');
-
-//Route::controller('courses', 'CoursesController');
-
-//Route::controller('flowcharts', 'FlowchartsController');
-
-Route::controller('advising', 'AdvisingController');
-
-Route::controller('profile', 'ProfilesController');
-
-
-// Authentication routes...
-Route::get('auth/login', 'Auth\AuthController@CASLogin');
-//Route::post('auth/login', 'Auth\AuthController@postLogin');
-Route::get('auth/logout', 'Auth\AuthController@Logout');
-Route::get('auth/caslogout', 'Auth\AuthController@CASLogout');
-
-// Registration routes...
-//Route::get('auth/register', 'Auth\AuthController@getRegister');
-//Route::post('auth/register', 'Auth\AuthController@postRegister');
-
-//Test Routes
-//Route::get('/test', function() {
-//	return view('flowchart_test');
-//});
 
 Route::get('help', function(){
 	return View::make('help/index');
+});
+
+/*
+ * Routes for the CoursesController
+ */
+Route::get('courses/{category}', 'CoursesController@getCategory')->where('category', '[A-Za-z]+');
+Route::get('courses/{slug}', 'CoursesController@getCourse')->where('slug', '[A-Za-z]+[0-9][0-9][0-9]');
+Route::controller('courses', 'CoursesController');
+
+/*
+ * Routes for the FlowchartsController
+ */
+Route::controller('flowcharts', 'FlowchartsController');
+
+/*
+ * Routes for the AdvisingController
+ */
+Route::controller('advising', 'AdvisingController');
+
+/*
+ * Routes for the ProfilesController
+ */
+Route::controller('profile', 'ProfilesController');
+
+
+/*
+ * Routes for Authentication
+ */
+Route::get('auth/login', 'Auth\AuthController@CASLogin');
+Route::get('auth/logout', 'Auth\AuthController@Logout');
+Route::get('auth/caslogout', 'Auth\AuthController@CASLogout');
+
+/*
+ * Test Routes for Flowchart tester
+ * Tested in tests/RouteTest.php
+ */
+Route::get('/test', function() {
+	return View::make('flowchart_test');
 });

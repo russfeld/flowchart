@@ -44,25 +44,25 @@ class ProfilesController extends Controller
 	            'query' => 'required|string',
 	        ]);
 
-            $students = Student::filterName($request->input('query'))->get();
+          $students = Student::filterName($request->input('query'))->get();
 
 	        $resource = new Collection($students, function($student) {
                 return[
                     'value' => $student->name,
                     'data' => $student->id,
-                ];	       
-	        }); 
+                ];
+	        });
 
 	    	return $this->fractal->createData($resource)->toJson();
     	}else{
-    		return response()->json("Only advisors may access this data", 403);
+    		return response()->json(trans('errors.advisors_only'), 403);
     	}
     }
 
     public function postUpdate(Request $request){
         $user = Auth::user();
         if($user->is_advisor){
-
+					return response()->json(trans('errors.unimplemented'), 400);
         }else{
             $this->validate($request, [
                 'first_name' => 'required|string',
@@ -72,8 +72,9 @@ class ProfilesController extends Controller
             $student->first_name = $request->input('first_name');
             $student->last_name = $request->input('last_name');
             $student->save();
+						return response()->json(trans('messages.profile_updated'));
         }
-        return ("Profile updated!");
+
     }
 
 }
