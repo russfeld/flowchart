@@ -1,9 +1,8 @@
 require(['util/site'], function(site) {
+
 	site.ajaxcrsf();
 
-	$('#saveProfile').bind('click', saveProfile);
-
-	var saveProfile = function(){
+	$('#saveProfile').on('click', function(){
 		$('#profileSpin').removeClass('hide-spin');
 		var data = {
 			first_name: $('#first_name').val(),
@@ -37,7 +36,8 @@ require(['util/site'], function(site) {
 			}
 			$('#profileSpin').addClass('hide-spin');
 		});
-	};
+	});
+
 });
 
 //# sourceMappingURL=profiles.js.map

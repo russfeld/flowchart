@@ -4,7 +4,7 @@
 
 @section('scripts')
     @parent
-    <script type="text/javascript" src="{{ asset('js/profiles.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/lib/require.js') }}" data-main="/js/profiles"></script>
 @endsection
 
 @section('content')

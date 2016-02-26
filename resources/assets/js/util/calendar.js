@@ -1,8 +1,8 @@
-define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datetimepicker', 'fullcalendar'], function() {
+define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datetimepicker', 'fullcalendar'], function(jquery, bootstrap, jqueryac, moment, boostrapdt, fullcalendar) {
 	var session, calendarAdvisorID, studentName;
 
 	var init = function(advisor = false){
-		
+
 		this.calendarAdvisorID = $('#calendarAdvisorID').val().trim();
 
 		if(advisor){
@@ -68,7 +68,7 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 				maxTime: '17:00:00'
 			}
 		},
-		eventSources: [ 
+		eventSources: [
 			{
 				url: '/advising/meetingfeed',
 				type: 'GET',

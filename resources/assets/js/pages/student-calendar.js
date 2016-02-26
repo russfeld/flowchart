@@ -33,6 +33,6 @@ require(['util/site', 'util/calendar'], function(site, calendar) {
 	if($(window).width() < 600){
 		calendar.calendarData.defaultView = 'agendaDay';
 	}
-	
+
 	$('#calendar').fullCalendar(calendar.calendarData);
 });
