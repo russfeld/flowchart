@@ -2,7 +2,7 @@ require(['util/site', 'util/calendar'], function(site, calendar) {
 	site.ajaxcrsf();
 
 	calendar.init(true);
-	
+
 	$('#createBlackout').on('shown.bs.modal', function () {
 	  $('#btitle').focus();
 	});
@@ -19,7 +19,7 @@ require(['util/site', 'util/calendar'], function(site, calendar) {
 			$(this).text('');
 		});
 	});
-	
+
 	$('#createEvent').on('hidden.bs.modal', loadConflicts);
 
 	$('#resolveConflict').on('hidden.bs.modal', loadConflicts);
@@ -92,7 +92,7 @@ require(['util/site', 'util/calendar'], function(site, calendar) {
 		$('#meetingID').val(-1);
 		$('#meetingOption').modal('show');
 	};
-	
+
 	if($(window).width() < 600){
 		calendar.calendarData.defaultView = 'agendaDay';
 	}
@@ -210,9 +210,9 @@ require(['util/site', 'util/calendar'], function(site, calendar) {
 
 	var saveBlackout = function(){
 		$('#createBlackoutSpin').removeClass('hide-spin');
-		var data = { 
-			bstart: moment($('#bstart').val(), 'LLL').format(), 
-			bend: moment($('#bend').val(), 'LLL').format(), 
+		var data = {
+			bstart: moment($('#bstart').val(), 'LLL').format(),
+			bend: moment($('#bend').val(), 'LLL').format(),
 			btitle: $('#btitle').val()
 		};
 		var url;
@@ -402,4 +402,3 @@ require(['util/site', 'util/calendar'], function(site, calendar) {
 
 
 });
-
