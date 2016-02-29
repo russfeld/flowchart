@@ -95,7 +95,7 @@ class AppServiceProvider extends ServiceProvider
                 $blackoutevent->save();
             }
         });
-        
+
         Meeting::created(function ($meeting) {
             $type = "created";
             AppServiceProvider::sendMail($meeting, $type);
@@ -142,29 +142,29 @@ class AppServiceProvider extends ServiceProvider
             $mail->FromName = 'CIS Advising Scheduler';
             $mail->addAddress($meeting->student->email, $meeting->student->name);     // Add a recipient
             $mail->addAddress($meeting->advisor->email, $meeting->advisor->name);               // Name is optional
-            
+
             //Convert MYSQL datetime and construct iCal start, end and issue dates
-            $meetingstart = strtotime($meeting->start);    
+            $meetingstart = strtotime($meeting->start);
             $dtstart= gmdate("Ymd\THis\Z",$meetingstart);
-            $meetingend = strtotime($meeting->end); 
+            $meetingend = strtotime($meeting->end);
             $dtend= gmdate("Ymd\THis\Z",$meetingend);
             $todaystamp = gmdate("Ymd\THis\Z");
-            
+
             //Create unique identifier
             $cal_uid = $meeting->id ."-123123123123123-@ksu.edu";
-            
+
             //Create Mime Boundry
             $mime_boundary = "----Meeting Booking----".md5(time());
-                
+
             //Create Email Headers
             $mail->ContentType = "multipart/alternative; boundary=".$mime_boundary;
             $mail->addCustomHeader("Content-class: urn:content-classes:calendarmessage");
-            
+
             //Create Email Body (Text)
             $message = "--$mime_boundary\n";
             $message .= "Content-Type: text/plain; charset=UTF-8\n";
             $message .= "Content-Transfer-Encoding: 8bit\n\n";
-            
+
             $message .= view('email.meetingtext')->with('meeting', $meeting)->with('type', $type);
             $message .= "\n";
 
@@ -172,14 +172,14 @@ class AppServiceProvider extends ServiceProvider
             $message = "--$mime_boundary\n";
             $message .= "Content-Type: text/html; charset=UTF-8\n";
             $message .= "Content-Transfer-Encoding: 8bit\n\n";
-            
+
             $message .= view('email.meeting')->with('meeting', $meeting)->with('type', $type);
             $message .= "\n";
 
             $message .= "--$mime_boundary\n";
-        
-            if($type != "removed"){    
-            //Create ICAL Content (Google rfc 2445 for details and examples of usage) 
+
+            if($type != "removed"){
+            //Create ICAL Content (Google rfc 2445 for details and examples of usage)
                 $ical =    'BEGIN:VCALENDAR
 PRODID:-//Microsoft Corporation//Outlook 11.0 MIMEDIR//EN
 VERSION:2.0
@@ -198,13 +198,13 @@ DTSTAMP:'.$todaystamp.'
 DESCRIPTION:'.$meeting->description.'
 SUMMARY:'.$meeting->title.'
 END:VEVENT
-END:VCALENDAR';   
-    
+END:VCALENDAR';
+
                 $message .= "Content-Type: text/calendar;name=\"meeting.ics\";method=REQUEST;charset=utf-8\n";
                 $message .= "Content-Transfer-Encoding: 8bit\n\n";
-                $message .= $ical; 
+                $message .= $ical;
             }else{
-                //Create ICAL Content (Google rfc 2445 for details and examples of usage) 
+                //Create ICAL Content (Google rfc 2445 for details and examples of usage)
                 $ical =    'BEGIN:VCALENDAR
 PRODID:-//Microsoft Corporation//Outlook 11.0 MIMEDIR//EN
 VERSION:2.0
@@ -223,13 +223,13 @@ DESCRIPTION:'.$meeting->description.'
 SUMMARY:'.$meeting->title.'
 STATUS:CANCELLED
 END:VEVENT
-END:VCALENDAR';   
-    
+END:VCALENDAR';
+
                 $message .= "Content-Type: text/calendar;name=\"meeting.ics\";method=CANCEL;charset=utf-8\n";
                 $message .= "Content-Transfer-Encoding: 8bit\n\n";
                 $message .= $ical;
             }
-            
+
 
 
             $mail->Subject = "Advising - " . $meeting->title;
@@ -237,9 +237,9 @@ END:VCALENDAR';
 
             if(!$mail->send()) {
                 echo 'Message could not be sent.';
-            } 
+            }
         }else{
-            echo 'Email disabled ';
+            echo 'Email disabled - ';
         }
     }
 

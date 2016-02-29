@@ -1,4 +1,4 @@
-require(['util/site', 'util/calendar'], function(site, calendar) {
+require(['util/site', 'util/calendar', 'moment'], function(site, calendar, moment) {
   	site.ajaxcrsf();
 
   	calendar.init(false);

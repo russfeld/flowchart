@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datetimepicker', 'fullcalendar'], function(jquery, bootstrap, jqueryac, moment, boostrapdt, fullcalendar) {
+define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datetimepicker', 'fullcalendar', 'util/site'], function(jquery, bootstrap, jqueryac, moment, boostrapdt, fullcalendar, site) {
 	var session, calendarAdvisorID, studentName;
 
 	var init = function(advisor = false){
@@ -116,7 +116,13 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 
 	var saveMeeting = function(){
 		$('#createEventSpin').removeClass('hide-spin');
-		var data = { start: moment($('#start').val(), "LLL").format(), end: moment($('#end').val(), "LLL").format(), title: $('#title').val(), id: calendarAdvisorID, desc: $('#desc').val() };
+		var data = {
+			start: moment($('#start').val(), "LLL").format(),
+			end: moment($('#end').val(), "LLL").format(),
+			title: $('#title').val(),
+			desc: $('#desc').val()
+		};
+		data.id = $('#calendarAdvisorID').val();
 		if($('#meetingID').val() > 0){
 			data.meetingid = $('#meetingID').val();
 		}
@@ -130,7 +136,7 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 		})
 		.success(function( message ) {
 			$('#createEvent').modal('hide');
-			displayMessage(message, "success");
+			site.displayMessage(message, "success");
 			$('#calendar').fullCalendar('unselect');
 			$('#calendar').fullCalendar('refetchEvents');
 			$('#createEventSpin').addClass('hide-spin');
@@ -163,7 +169,7 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 			})
 			.success(function( message ) {
 				$('#createEvent').modal('hide');
-				displayMessage(message, "success");
+				site.displayMessage(message, "success");
 				$('#calendar').fullCalendar('unselect');
 				$('#calendar').fullCalendar('refetchEvents');
 				$('#createEventSpin').addClass('hide-spin');
