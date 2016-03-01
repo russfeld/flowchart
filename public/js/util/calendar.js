@@ -282,7 +282,7 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 				alert("Meetings cannot last longer than 1 hour");
 				$('#calendar').fullCalendar('unselect');
 			}else{
-				session = {
+				self.session = {
 					start: start,
 					end: end
 				};
