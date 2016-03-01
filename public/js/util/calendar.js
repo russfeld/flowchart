@@ -68,7 +68,7 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 		};
 
 		//Configuration data for datepicker instance
-		var datePickerData = {
+		self.datePickerData = {
 				daysOfWeekDisabled: [0, 6],
 				format: 'LLL',
 				stepping: 20,
@@ -80,7 +80,7 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 		};
 
 		//Configuration data for datepicker instance day only
-		var datePickerDateOnly = {
+		self.datePickerDateOnly = {
 				daysOfWeekDisabled: [0, 6],
 				format: 'MM/DD/YYYY',
 				ignoreReadonly: true,
@@ -219,9 +219,9 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 			}else{
 				$('#title').val('');
 			}
-			$('#start').val(session.start.format("LLL"));
-			$('#end').val(session.end.format("LLL"));
-			durationOptions(session.start, session.end);
+			$('#start').val(self.session.start.format("LLL"));
+			$('#end').val(self.session.end.format("LLL"));
+			durationOptions(self.session.start, self.session.end);
 			$('#meetingID').val(-1);
 			$('#studentidval').val(-1);
 			$('#deleteButton').hide();
@@ -253,7 +253,7 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 		};
 
 		//Function to link the datepickers together
-		var linkDatePickers = function(elem1, elem2, duration){
+		self.linkDatePickers = function(elem1, elem2, duration){
 			$(elem1 + "_datepicker").on("dp.change", function (e) {
 				var date2 = moment($(elem2).val(), 'LLL');
 				if(e.date.isAfter(date2) || e.date.isSame(date2)){
