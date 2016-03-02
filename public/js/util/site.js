@@ -15,9 +15,28 @@ define(['jquery', 'bootstrap'], function(jquery, bootstrap) {
 		});
 	};
 
+	var clearFormErrors = function(){
+		$('.form-group').each(function (){
+			$(this).removeClass('has-error');
+			$(this).find('.help-block').text('');
+		});
+	}
+
+	var setFormErrors = function(json){
+		clearFormErrors();
+		$.each(json, function (key, value) {
+			$('#' + key).parents('.form-group').addClass('has-error');
+			$('#' + key + 'help').text(value);
+		});
+	}
+
+
   return {
     displayMessage: displayMessage,
     ajaxcrsf: ajaxcrsf,
+		clearFormErrors: clearFormErrors,
+		setFormErrors: setFormErrors,
   };
 });
+
 //# sourceMappingURL=site.js.map

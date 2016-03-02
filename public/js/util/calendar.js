@@ -161,14 +161,7 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 			}).fail(function( jqXHR, message ){
 				if (jqXHR.status == 422)
 				{
-					$('.form-group').each(function (){
-						$(this).removeClass('has-error');
-						$(this).find('.help-block').text('');
-					});
-					$.each(jqXHR.responseJSON, function (key, value) {
-						$('#' + key).parents('.form-group').addClass('has-error');
-						$('#' + key + 'help').text(value);
-					});
+					site.setFormErrors(jqXHR.responseJSON);
 				}else{
 					alert("Unable to save meeting: " + jqXHR.responseJSON);
 				}
@@ -230,13 +223,16 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 
 		//Function to reset the form
 		self.resetForm = function(){
-		    $(this).find('form')[0].reset();
-		    $(this).find('.has-error').each(function(){
+	    $(this).find('form')[0].reset();
+			/*
+	    $(this).find('.has-error').each(function(){
 				$(this).removeClass('has-error');
 			});
 			$(this).find('.help-block').each(function(){
 				$(this).text('');
 			});
+			*/
+			site.clearFormErrors();
 		};
 
 		//Function to set duration options for the meeting form

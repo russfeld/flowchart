@@ -15,23 +15,13 @@ require(['util/site'], function(site) {
 		})
 		.success(function( message ) {
 			site.displayMessage(message, "success");
-			$('.form-group').each(function (){
-				$(this).removeClass('has-error');
-				$(this).find('.help-block').text('');
-			});
+			site.clearFormErrors();
 			$('#profileSpin').addClass('hide-spin');
 			$('#profileAdvisingBtn').removeClass('hide-spin');
 		}).fail(function( jqXHR, message ){
 			if (jqXHR.status == 422)
 			{
-				$('.form-group').each(function (){
-					$(this).removeClass('has-error');
-					$(this).find('.help-block').text('');
-				});
-				$.each(jqXHR.responseJSON, function (key, value) {
-					$('#' + key).parents('.form-group').addClass('has-error');
-					$('#' + key + 'help').text(value);
-				});
+				site.setFormErrors(jqXHR.responseJSON);
 			}else{
 				alert("Unable to save profile: " + jqXHR.responseJSON);
 			}
