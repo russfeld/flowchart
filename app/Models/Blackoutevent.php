@@ -1,17 +1,17 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Blackoutevent extends Model
 {
     public function blackout(){
-    	return $this->belongsTo('App\Blackout');
+    	return $this->belongsTo('App\Models\Blackout');
     }
 
     public function advisor(){
-    	return $this->belongsTo('App\Advisor');
+    	return $this->belongsTo('App\Models\Advisor');
     }
 
     protected $dates = ['created_at', 'updated_at', 'start', 'end'];

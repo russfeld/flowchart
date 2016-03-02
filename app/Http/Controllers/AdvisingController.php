@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Department;
-use App\Meeting;
-use App\Blackoutevent;
-use App\Advisor;
-use App\Blackout;
+use App\Models\User;
+use App\Models\Department;
+use App\Models\Meeting;
+use App\Models\Blackoutevent;
+use App\Models\Advisor;
+use App\Models\Blackout;
 
 use Auth;
 use Illuminate\Http\Request;

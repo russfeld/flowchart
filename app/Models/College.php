@@ -1,12 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class College extends Model
 {
     public function categories(){
-    	return $this->hasMany('App\Category')->orderBy('category_name', 'asc');
+    	return $this->hasMany('App\Models\Category')->orderBy('category_name', 'asc');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -36,11 +36,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     // http://stackoverflow.com/questions/23910553/laravel-check-if-related-model-exists
     public function student(){
-        return $this->hasOne('App\Student');
+        return $this->hasOne('App\Models\Student');
     }
 
     public function advisor(){
-        return $this->hasOne('App\Advisor');
+        return $this->hasOne('App\Models\Advisor');
     }
 
 }

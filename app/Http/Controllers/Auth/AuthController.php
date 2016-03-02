@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use App\Models\User;
 use Auth;
 use Cas;
 use Validator;
@@ -50,5 +50,5 @@ class AuthController extends Controller
         CAS::logout();
         return redirect('/');
     }
-    
+
 }

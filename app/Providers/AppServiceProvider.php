@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use App\Blackout;
-use App\Blackoutevent;
-use App\Meeting;
+use App\Models\Blackout;
+use App\Models\Blackoutevent;
+use App\Models\Meeting;
 
 use DateTime;
 use DateInterval;

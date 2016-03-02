@@ -1,17 +1,17 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Meeting extends Model
 {
     public function advisor(){
-    	return $this->belongsTo('App\Advisor');
+    	return $this->belongsTo('App\Models\Advisor');
     }
 
     public function student(){
-    	return $this->belongsTo('App\Student');
+    	return $this->belongsTo('App\Models\Student');
     }
 
     //hidden from JSON view

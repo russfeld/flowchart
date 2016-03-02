@@ -3,10 +3,10 @@
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use App\User;
-use App\Student;
-use App\Advisor;
-use App\Department;
+use App\Models\User;
+use App\Models\Student;
+use App\Models\Advisor;
+use App\Models\Department;
 
 class ProfilesTest extends TestCase
 {
@@ -16,7 +16,7 @@ class ProfilesTest extends TestCase
 
     public function testGetIndexStudent()
     {
-        $student = factory(App\Student::class)->create();
+        $student = factory(Student::class)->create();
         $this->actingAs($student->user)
         ->visit('/profile')
         ->seeInField('first_name', $student->first_name)
@@ -29,7 +29,7 @@ class ProfilesTest extends TestCase
 
     public function testGetIndexAdvisor()
     {
-      $advisor = factory(App\Advisor::class)->create();
+      $advisor = factory(Advisor::class)->create();
       $this->actingAs($advisor->user)
       ->visit('/profile')
       ->assertResponseOk();
@@ -37,7 +37,7 @@ class ProfilesTest extends TestCase
 
     public function testGetStudentFeedStudent()
     {
-      $student = factory(App\Student::class)->create();
+      $student = factory(Student::class)->create();
       $this->actingAs($student->user)
       ->json('GET', '/profile/studentfeed')
       ->seeJson([
@@ -47,7 +47,7 @@ class ProfilesTest extends TestCase
     }
 
     public function testGetStudentFeedNoQuery(){
-      $advisor = factory(App\Advisor::class)->create();
+      $advisor = factory(Advisor::class)->create();
       $this->actingAs($advisor->user)
       ->json('GET', '/profile/studentfeed')
       ->seeJson([
@@ -58,8 +58,8 @@ class ProfilesTest extends TestCase
 
     public function testGetStudentFeedAdvisor()
     {
-      $students = factory(App\Student::class, 3)->create();
-      $advisor = factory(App\Advisor::class)->create();
+      $students = factory(Student::class, 3)->create();
+      $advisor = factory(Advisor::class)->create();
       $this->actingAs($advisor->user)
       ->json('GET', '/profile/studentfeed', ['query' => $students[0]->first_name])
       ->seeJson([
@@ -89,7 +89,7 @@ class ProfilesTest extends TestCase
 
     public function testPostUpdateStudent()
     {
-      $student = factory(App\Student::class)->create();
+      $student = factory(Student::class)->create();
       $this->actingAs($student->user)
       ->json('POST', '/profile/update', ['first_name' => "firstname", 'last_name' => "lastname"])
       ->seeJson([
@@ -100,7 +100,7 @@ class ProfilesTest extends TestCase
 
     public function testPostUpdateStudentMissingFirstName()
     {
-      $student = factory(App\Student::class)->create();
+      $student = factory(Student::class)->create();
       $this->actingAs($student->user)
       ->json('POST', '/profile/update', ['last_name' => "lastname"])
       ->seeJson([
@@ -110,7 +110,7 @@ class ProfilesTest extends TestCase
 
     public function testPostUpdateStudentMissingLastName()
     {
-      $student = factory(App\Student::class)->create();
+      $student = factory(Student::class)->create();
       $this->actingAs($student->user)
       ->json('POST', '/profile/update', ['first_name' => "firstname"])
       ->seeJson([
@@ -120,7 +120,7 @@ class ProfilesTest extends TestCase
 
     public function testPostUpdateAdvisor()
     {
-      $advisor = factory(App\Advisor::class)->create();
+      $advisor = factory(Advisor::class)->create();
       $this->actingAs($advisor->user)
       ->json('POST', '/profile/update')
       ->seeJson([

@@ -5,8 +5,8 @@ namespace App\Http\Middleware;
 use Closure;
 use Cas;
 use Auth;
-use App\User;
-use App\Student;
+use App\Models\User;
+use App\Models\Student;
 
 class CASAuthenticate
 {

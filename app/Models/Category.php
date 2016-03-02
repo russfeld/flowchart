@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     public function college(){
-    	return $this->belongsTo('App\College');
+    	return $this->belongsTo('App\Models\College');
     }
 
     public function prefixes(){
-    	return $this->hasMany('App\Prefix');
+    	return $this->hasMany('App\Models\Prefix');
     }
 }

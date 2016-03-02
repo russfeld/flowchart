@@ -1,25 +1,25 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
 {
     public function user(){
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     public function meetings(){
-    	return $this->hasMany('App\Meetings');
+    	return $this->hasMany('App\Models\Meetings');
     }
 
     public function advisor(){
-    	return $this->belongsTo('App\Advisor');
+    	return $this->belongsTo('App\Models\Advisor');
     }
 
     public function department(){
-    	return $this->belongsTo('App\Department');
+    	return $this->belongsTo('App\Models\Department');
     }
 
     public function getNameAttribute(){

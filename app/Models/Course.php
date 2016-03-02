@@ -1,21 +1,21 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
 {
     public function followers(){
-    	return $this->belongsToMany('App\Course', 'prerequisites', 'prerequisite_course_id', 'prerequisite_for_course_id');
+    	return $this->belongsToMany('App\Models\Course', 'prerequisites', 'prerequisite_course_id', 'prerequisite_for_course_id');
     }
 
     public function prerequisites(){
-    	return $this->belongsToMany('App\Course', 'prerequisites', 'prerequisite_for_course_id', 'prerequisite_course_id');
+    	return $this->belongsToMany('App\Models\Course', 'prerequisites', 'prerequisite_for_course_id', 'prerequisite_course_id');
     }
 
     public function areas(){
-    	return $this->belongsToMany('App\Area', 'kstate8', 'course_id', 'area_id');
+    	return $this->belongsToMany('App\Models\Area', 'kstate8', 'course_id', 'area_id');
     }
 
     public function getNumberStrAttribute(){

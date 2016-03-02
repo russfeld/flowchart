@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Student;
+use App\Models\User;
+use App\Models\Student;
 
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
