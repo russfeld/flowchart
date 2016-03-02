@@ -9,7 +9,8 @@
         "laravel/framework": "5.1.*",
         "league/fractal": "^0.12.0",
         "phpmailer/phpmailer": "^5.2",
-        "xavrsl/cas": "1.2.*"
+        "xavrsl/cas": "1.2.*",
+        "pusher/pusher-php-server": "~2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

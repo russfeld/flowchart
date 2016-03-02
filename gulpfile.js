@@ -58,6 +58,10 @@ elixir(function(mix) {
         '../bower/russfeld-eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
     ], 'public/js/lib/bootstrap-datetimepicker.js');
 
+    mix.scripts([
+        '../bower/pusher/dist/pusher.js',
+    ], 'public/js/lib/pusher.js');
+
     //Utilities
 
     mix.scripts([
@@ -81,6 +85,10 @@ elixir(function(mix) {
     mix.scripts([
         'pages/profiles.js',
     ], 'public/js/profiles.js');
+
+    mix.scripts([
+        'pages/groupsession.js',
+    ], 'public/js/groupsession.js');
 
     //Test Flowchart
 

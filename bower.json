@@ -24,6 +24,7 @@
     "fullcalendar": "~2.3.2",
     "russfeld-eonasdan-bootstrap-datetimepicker": "russfeld/bootstrap-datetimepicker#master",
     "moment": "~2.10.6",
-    "devbridge-autocomplete": "~1.2.21"
+    "devbridge-autocomplete": "~1.2.21",
+    "pusher": "~3.0.0"
   }
 }

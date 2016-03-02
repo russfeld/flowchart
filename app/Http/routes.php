@@ -49,6 +49,10 @@ Route::controller('advising', 'AdvisingController');
  */
 Route::controller('profile', 'ProfilesController');
 
+/*
+ * Routes for the GroupsessionController
+ */
+Route::controller('groupsession', 'GroupsessionController');
 
 /*
  * Routes for Authentication

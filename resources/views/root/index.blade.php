@@ -33,6 +33,11 @@
           <p><a class="btn btn-default" href="{{ url('/advising') }}" role="button">Schedule an Appointment &raquo;</a></p>
         </div>
         <div class="col-md-4">
+          <h2>Group Advising</h2>
+          <p>Attending a group advising session? Click here to get on the waiting list or find your place in the queue.</p>
+          <p><a class="btn btn-default" href="{{ url('/groupsession') }}" role="button">Group Advising &raquo;</a></p>
+       </div>
+        <div class="col-md-4">
           <h2>Help</h2>
           <p>Not sure how to use the new system? Click here for help!</p>
           <p><a class="btn btn-default" href="{{ url('/help') }}" role="button">Help &raquo;</a></p>
