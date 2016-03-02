@@ -28,7 +28,8 @@ class AdvisingController extends Controller
 	public function __construct()
 	{
 		$this->middleware('cas');
-        $this->fractal = new Manager();
+		$this->middleware('update_profile');
+    $this->fractal = new Manager();
 	}
 
     /**
@@ -300,7 +301,7 @@ class AdvisingController extends Controller
 
         $user = Auth::user();
 
-        //using Carbon for dates 
+        //using Carbon for dates
         //http://laravel.com/docs/5.1/eloquent-mutators#date-mutators
         //http://stackoverflow.com/questions/24824624/laravel-q-where-between-dates
         //http://carbon.nesbot.com/docs/
