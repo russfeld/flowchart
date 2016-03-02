@@ -71,6 +71,8 @@ class ProfilesController extends Controller
             $student = $user->student;
             $student->first_name = $request->input('first_name');
             $student->last_name = $request->input('last_name');
+						$user->update_profile = true;
+						$user->save();
             $student->save();
 						return response()->json(trans('messages.profile_updated'));
         }

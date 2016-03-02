@@ -20,6 +20,7 @@ require(['util/site'], function(site) {
 				$(this).find('.help-block').text('');
 			});
 			$('#profileSpin').addClass('hide-spin');
+			$('#profileAdvisingBtn').removeClass('hide-spin');
 		}).fail(function( jqXHR, message ){
 			if (jqXHR.status == 422)
 			{

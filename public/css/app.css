@@ -5114,18 +5114,18 @@ button.list-group-item-danger {
     border-bottom-color: #ddd; }
 
 .panel-primary {
-  border-color: #337ab7; }
+  border-color: #512888; }
   .panel-primary > .panel-heading {
     color: #fff;
-    background-color: #337ab7;
-    border-color: #337ab7; }
+    background-color: #512888;
+    border-color: #512888; }
     .panel-primary > .panel-heading + .panel-collapse > .panel-body {
-      border-top-color: #337ab7; }
+      border-top-color: #512888; }
     .panel-primary > .panel-heading .badge {
-      color: #337ab7;
+      color: #512888;
       background-color: #fff; }
   .panel-primary > .panel-footer + .panel-collapse > .panel-body {
-    border-bottom-color: #337ab7; }
+    border-bottom-color: #512888; }
 
 .panel-success {
   border-color: #d6e9c6; }
@@ -6421,9 +6421,9 @@ button.close {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF5F5F5', endColorstr='#FFE8E8E8', GradientType=0); }
 
 .panel-primary > .panel-heading {
-  background-image: linear-gradient(to bottom, #337ab7 0%, #2e6da4 100%);
+  background-image: linear-gradient(to bottom, #512888 0%, #452274 100%);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF337AB7', endColorstr='#FF2E6DA4', GradientType=0); }
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF512888', endColorstr='#FF452274', GradientType=0); }
 
 .panel-success > .panel-heading {
   background-image: linear-gradient(to bottom, #dff0d8 0%, #d0e9c6 100%);
