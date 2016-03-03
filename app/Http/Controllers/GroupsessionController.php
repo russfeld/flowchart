@@ -8,6 +8,9 @@ use App\Models\User;
 use App\Models\Advisor;
 use App\Models\Groupsession;
 
+use Event;
+use App\Events\GroupsessionRegister;
+
 use Auth;
 use Cas;
 
@@ -33,11 +36,22 @@ class GroupsessionController extends Controller
       $user = Auth::user();
 
       if($user->is_advisor){
+        return redirect('groupsession/list');
+      }else{
+        return view('groupsession/index');
+      }
+    }
+
+    public function getList()
+    {
+      $user = Auth::user();
+
+      if($user->is_advisor){
         $user->load('advisor');
-        return view('groupsession/index')->with('user', $user)->with('advisor', $user->advisor);
+        return view('groupsession/list')->with('user', $user)->with('advisor', $user->advisor);
       }else{
         $user->load('student');
-        return view('groupsession/index')->with('user', $user)->with('student', $user->student);
+        return view('groupsession/list')->with('user', $user)->with('student', $user->student);
       }
     }
 
@@ -48,6 +62,7 @@ class GroupsessionController extends Controller
         $groupsession = new Groupsession;
         $groupsession->student_id = $user->student->id;
         $groupsession->advisor_id = null;
+        $groupsession->status = Groupsession::$STATUS_QUEUED;
         $groupsession->save();
         Event::fire(new GroupsessionRegister($groupsession));
         return response()->json(trans('messages.groupsession_registered'));

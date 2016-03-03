@@ -1,9 +1,9 @@
 define(['jquery', 'bootstrap'], function(jquery, bootstrap) {
 	var displayMessage = function(message, type){
-		var html = '<div class="alert fade in alert-dismissable alert-' + type + '"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="h4">' + message + '</span></div>';
+		var html = '<div id="javascriptMessage" class="alert fade in alert-dismissable alert-' + type + '"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="h4">' + message + '</span></div>';
 		$('#message').append(html);
 		setTimeout(function() {
-			$(".alert").alert('close');
+			$("#javascriptMessage").alert('close');
 		}, 3000);
 	};
 

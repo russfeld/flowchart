@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('advising._message')
+
 <h3 class="top-header">Welcome {{ $user->student->first_name}}! Your currently selected advisor is:</h3>
 
 @include('advising._advisor', ['advisor' => $advisor, 'link' => false])

@@ -11,7 +11,11 @@ class GroupsessionRegister extends Event implements ShouldBroadcast
 {
     use SerializesModels;
 
-    public $id
+    public $id;
+    public $userid;
+    public $name;
+    public $advisor;
+    public $status;
 
     /**
      * Create a new event instance.
@@ -21,6 +25,14 @@ class GroupsessionRegister extends Event implements ShouldBroadcast
     public function __construct(Groupsession $gs)
     {
         $this->id = $gs->id;
+        $this->userid = $gs->student->user_id;
+        if($gs->advsior_id > 0){
+          $this->advisor = $gs->advisor->name;
+        }else{
+          $this->advisor = "";
+        }
+        $this->name = $gs->student->name;
+        $this->status = $gs->status;
     }
 
     /**
@@ -30,6 +42,6 @@ class GroupsessionRegister extends Event implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['Groupsession'];
+        return ['groupsession'];
     }
 }

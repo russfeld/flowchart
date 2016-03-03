@@ -27,6 +27,10 @@ Route::get('help', function(){
 	return View::make('help/index');
 });
 
+Route::get('help/groupsession', function(){
+	return View::make('help/groupsession');
+});
+
 /*
  * Routes for the CoursesController
  */
