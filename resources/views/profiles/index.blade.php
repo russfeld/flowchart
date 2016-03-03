@@ -32,7 +32,7 @@
   <span id="profileSpin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
   <button type="button" class="btn btn-primary" id="saveProfile">Update Profile</button>
   @if (!($student->user->update_profile))
-  <a id="profileAdvisingBtn" class="btn btn-success hide-spin" href="{{ url('/advising') }}" role="button">Advising Calendar</a>
+  <a id="profileAdvisingBtn" class="btn btn-success hide-spin" href="{{ url(isset($lastUrl) ? $lastUrl : 'advising') }}" role="button">Continue</a>
   @endif
   <br><br>
   <div class="panel panel-primary">

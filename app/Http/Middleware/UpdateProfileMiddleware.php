@@ -20,6 +20,7 @@ class UpdateProfileMiddleware
         if(Auth::check()){
           $user = Auth::user();
           if(!($user->update_profile)){
+            $request->session()->put('lastUrl', $request->path());
             return redirect('/profile');
           }
         }

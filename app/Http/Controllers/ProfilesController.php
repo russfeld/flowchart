@@ -24,7 +24,7 @@ class ProfilesController extends Controller
     /**
      * Responds to requests to GET /courses
      */
-    public function getIndex()
+    public function getIndex(Request $request)
     {
         $user = Auth::user();
 
@@ -33,7 +33,14 @@ class ProfilesController extends Controller
             return view('profiles/advisorindex')->with('advisor', $user->advisor);
         }else{
             $user->load('student.advisor', 'student.department');
-            return view('profiles/index')->with('student', $user->student);
+
+						if ($request->session()->has('lastUrl')) {
+						  return view('profiles/index')->with('student', $user->student)->with('lastUrl', $request->session()->get('lastUrl'));
+						}else{
+							return view('profiles/index')->with('student', $user->student);
+						}
+
+
         }
     }
 
@@ -74,6 +81,9 @@ class ProfilesController extends Controller
 						$user->update_profile = true;
 						$user->save();
             $student->save();
+						if ($request->session()->has('lastUrl')){
+							$request->session()->forget('lastUrl');
+						}
 						return response()->json(trans('messages.profile_updated'));
         }
 
