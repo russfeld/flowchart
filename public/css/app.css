@@ -8647,4 +8647,9 @@ body {
   display: block;
   border-bottom: 1px solid #000; }
 
+.groupsession-small {
+  margin-bottom: 5px !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important; }
+
 /*# sourceMappingURL=app.css.map */

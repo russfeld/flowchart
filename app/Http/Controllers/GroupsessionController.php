@@ -17,6 +17,10 @@ use Cas;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use League\Fractal\Manager;
+use League\Fractal\Resource\Collection;
+use App\JsonSerializer;
+
 class GroupsessionController extends Controller
 {
 
@@ -24,6 +28,7 @@ class GroupsessionController extends Controller
   	{
   		$this->middleware('cas');
   		$this->middleware('update_profile');
+      $this->fractal = new Manager();
   	}
 
     /**
@@ -53,6 +58,33 @@ class GroupsessionController extends Controller
         $user->load('student');
         return view('groupsession/list')->with('user', $user)->with('student', $user->student);
       }
+    }
+
+    public function getQueue(){
+      $groupsessions = Groupsession::all();
+
+      $resource = new Collection($groupsessions, function($gs) {
+            if($gs->advisor_id > 0){
+              return[
+                  'id' => (int)$gs->id,
+                  'userid' => (int)$gs->user_id,
+                  'name' => $gs->student->name,
+                  'advsior' => $gs->advisor->name,
+                  'status' => (int)$gs->status,
+              ];
+            }else{
+              return[
+                  'id' => (int)$gs->id,
+                  'userid' => (int)$gs->user_id,
+                  'name' => $gs->student->name,
+                  'advsior' => "",
+                  'status' => (int)$gs->status,
+              ];
+            }
+      });
+
+      $this->fractal->setSerializer(new JsonSerializer());
+	    return $this->fractal->createData($resource)->toJson();
     }
 
     public function postRegister()

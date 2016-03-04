@@ -61,6 +61,18 @@ elixir(function(mix) {
     mix.scripts([
         '../bower/pusher/dist/pusher.js',
     ], 'public/js/lib/pusher.js');
+/*
+    mix.scripts([
+        '../bower/react/react.js',
+    ], 'public/js/lib/react.js');
+*/
+    mix.scripts([
+        '../bower/react/react-with-addons.js'
+    ], 'public/js/lib/react.js')
+
+    mix.scripts([
+        '../bower/react/react-dom.js',
+    ], 'public/js/lib/react-dom.js');
 
     //Utilities
 
@@ -86,7 +98,7 @@ elixir(function(mix) {
         'pages/profiles.js',
     ], 'public/js/profiles.js');
 
-    mix.scripts([
+    mix.babel([
         'pages/groupsession.js',
     ], 'public/js/groupsession.js');
 

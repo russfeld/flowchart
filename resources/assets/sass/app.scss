@@ -130,7 +130,7 @@ body {
   font-size: 140% !important;
 }
 
-.fc-bgevent { 
+.fc-bgevent {
   opacity: .6 !important;
   filter: alpha(opacity=50) !important; /* for IE */
 }
@@ -199,3 +199,9 @@ body {
 .autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
 .autocomplete-group { padding: 2px 5px; }
 .autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+
+.groupsession-small{
+  margin-bottom: 5px !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}

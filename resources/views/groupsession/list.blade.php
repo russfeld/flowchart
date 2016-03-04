@@ -18,7 +18,7 @@
   <button id="groupRegisterBtn" type="button" class="btn btn-primary btn-block" disabled>Put me on the List! <span id="groupSpin" class="fa fa-cog fa-spin fa-lg">&nbsp;</span></button>
   <br>
   <div id="groupList">
-
+    
   </div>
 </div>
 

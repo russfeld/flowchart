@@ -1,36 +1,32 @@
-require(['util/site', 'lib/pusher'], function(site, pusher) {
+'use strict';
+
+require(['util/site', 'pusher', 'react', 'react-dom'], function (site, pusher, React, reactDOM) {
 
 	site.ajaxcrsf();
 
-	var getStatus = function(data){
-		if(data.status === 0) return "NEW";
-		if(data.status === 1) return "QUEUED";
-		if(data.status === 2) return "BECKON";
-		if(data.status === 3) return "DELAY";
-		if(data.status === 4) return "ABSENT";
-		if(data.status === 5) return "COMPLETE";
-	}
+	var getStatus = function getStatus(data) {
+		if (data === 0) return "NEW";
+		if (data === 1) return "QUEUED";
+		if (data === 2) return "BECKON";
+		if (data === 3) return "DELAY";
+		if (data === 4) return "ABSENT";
+		if (data === 5) return "COMPLETE";
+	};
 
-	var listAdd = function(data){
-		$('#groupList').append("<div class='alert alert-info' role='alert'>" + data.name + " <span class='badge'>" + getStatus(data) + "</span></div>");
-	}
-
-	$('#groupRegisterBtn').on('click', function(){
+	$('#groupRegisterBtn').on('click', function () {
 		$('#groupSpin').removeClass('hide-spin');
 		$.ajax({
-		  method: "POST",
-		  url: '/groupsession/register',
-		})
-		.success(function( message ) {
+			method: "POST",
+			url: '/groupsession/register'
+		}).success(function (message) {
 			site.displayMessage(message, "success");
 			site.clearFormErrors();
 			$('#groupRegisterBtn').attr('disabled', 'disabled');
 			$('#groupSpin').addClass('hide-spin');
-		}).fail(function( jqXHR, message ){
-			if (jqXHR.status == 422)
-			{
+		}).fail(function (jqXHR, message) {
+			if (jqXHR.status == 422) {
 				site.setFormErrors(jqXHR.responseJSON);
-			}else{
+			} else {
 				alert("Unable to register: " + jqXHR.responseJSON);
 			}
 			$('#groupSpin').addClass('hide-spin');
@@ -38,23 +34,88 @@ require(['util/site', 'lib/pusher'], function(site, pusher) {
 	});
 
 	var pusherInstance = new Pusher(pusherKey);
-	var groupSessionChannel = pusherInstance.subscribe( 'groupsession' );
+	var groupSessionChannel = pusherInstance.subscribe('groupsession');
 
-	pusherInstance.connection.bind('connected', function() {
-	  $('#groupRegisterBtn').removeAttr('disabled');
+	pusherInstance.connection.bind('connected', function () {
+		$('#groupRegisterBtn').removeAttr('disabled');
 		$('#groupSpin').addClass('hide-spin');
 	});
 
-	groupSessionChannel.bind( "App\\Events\\GroupsessionRegister", function(data){
-		listAdd(data);
-	});
-
-	Pusher.log = function(message) {
-	  if (window.console && window.console.log) {
-	    window.console.log(message);
-	  }
+	Pusher.log = function (message) {
+		if (window.console && window.console.log) {
+			window.console.log(message);
+		}
 	};
 
-});
+	var StudentRow = React.createClass({
+		displayName: 'StudentRow',
 
+		render: function render() {
+			var badgeTitle = getStatus(this.props.student.status);
+			return React.createElement(
+				'div',
+				{ className: "alert alert-info groupsession-small", role: "alert" },
+				this.props.student.name,
+				' ',
+				React.createElement(
+					'span',
+					{ className: "badge" },
+					badgeTitle
+				)
+			);
+		}
+	});
+
+	var GroupList = React.createClass({
+		displayName: 'GroupList',
+
+		getInitialState: function getInitialState() {
+			return { queue: [] };
+		},
+		componentDidMount: function componentDidMount() {
+			var self = this;
+			groupSessionChannel.bind("App\\Events\\GroupsessionRegister", function (data) {
+				var queue = self.state.queue;
+				var found = false;
+				var len = queue.length;
+				for (var i = 0; i < len; i++) {
+					if (queue[i].id === data.id) {
+						queue[i] = data;
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					queue.push(data);
+				}
+				self.setState({ queue: queue });
+			});
+			$.ajax({
+				method: "GET",
+				url: '/groupsession/queue'
+			}).success(function (message) {
+				self.setState({ queue: JSON.parse(message) });
+			}).fail(function (jqXHR, message) {
+				if (jqXHR.status == 422) {
+					site.setFormErrors(jqXHR.responseJSON);
+				} else {
+					alert("Unable to get queue: " + jqXHR.responseJSON);
+				}
+			});
+		},
+		render: function render() {
+			var divs = [];
+			this.state.queue.forEach(function (student) {
+				divs.push(React.createElement(StudentRow, { key: student.id, student: student }));
+			});
+			return React.createElement(
+				'div',
+				null,
+				divs
+			);
+		}
+	});
+
+	reactDOM.render(React.createElement(GroupList, null), document.getElementById('groupList'));
+});
 //# sourceMappingURL=groupsession.js.map
