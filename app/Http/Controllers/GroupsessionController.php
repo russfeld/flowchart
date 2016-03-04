@@ -61,15 +61,15 @@ class GroupsessionController extends Controller
     }
 
     public function getQueue(){
-      $groupsessions = Groupsession::all();
+      $groupsessions = Groupsession::where('status', '<', 3)->orderBy('status', 'desc')->orderBy('id', 'asc')->get();
 
       $resource = new Collection($groupsessions, function($gs) {
-            if($gs->advisor_id > 0){
+            if(count($gs->advisor)){
               return[
                   'id' => (int)$gs->id,
                   'userid' => (int)$gs->student->user_id,
                   'name' => $gs->student->name,
-                  'advsior' => $gs->advisor->name,
+                  'advisor' => $gs->advisor->name,
                   'status' => (int)$gs->status,
               ];
             }else{
@@ -77,7 +77,7 @@ class GroupsessionController extends Controller
                   'id' => (int)$gs->id,
                   'userid' => (int)$gs->student->user_id,
                   'name' => $gs->student->name,
-                  'advsior' => "",
+                  'advisor' => "",
                   'status' => (int)$gs->status,
               ];
             }
@@ -97,9 +97,80 @@ class GroupsessionController extends Controller
         $groupsession->status = Groupsession::$STATUS_QUEUED;
         $groupsession->save();
         Event::fire(new GroupsessionRegister($groupsession));
-        return response()->json(trans('messages.groupsession_registered'));
+        return response()->json(trans('messages.groupsession_register'));
       }else{
         return response()->json(trans('errors.students_only'), 403);
+      }
+    }
+
+    public function postTake(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+            'gid' => 'required|exists:groupsessions,id',
+        ]);
+        $groupsession = Groupsession::find($request->input('gid'));
+        $groupsession->status = Groupsession::$STATUS_BECKON;
+        $groupsession->advisor()->associate($user->advisor);
+        $groupsession->save();
+        Event::fire(new GroupsessionRegister($groupsession));
+        return response()->json(trans('messages.groupsession_take'));
+      }else{
+        return response()->json(trans('errors.advisors_only'), 403);
+      }
+    }
+
+    public function postPut(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+            'gid' => 'required|exists:groupsessions,id',
+        ]);
+        $groupsession = Groupsession::find($request->input('gid'));
+        $groupsession->status = Groupsession::$STATUS_DELAY;
+        $groupsession->save();
+        $newGroupsession = new Groupsession;
+        $newGroupsession->student_id = $groupsession->student_id;
+        $newGroupsession->advisor_id = null;
+        $newGroupsession->status = Groupsession::$STATUS_QUEUED;
+        $newGroupsession->save();
+        Event::fire(new GroupsessionRegister($newGroupsession));
+        Event::fire(new GroupsessionRegister($groupsession));
+        return response()->json(trans('messages.groupsession_put'));
+      }else{
+        return response()->json(trans('errors.advisors_only'), 403);
+      }
+    }
+
+    public function postDone(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+            'gid' => 'required|exists:groupsessions,id',
+        ]);
+        $groupsession = Groupsession::find($request->input('gid'));
+        $groupsession->status = Groupsession::$STATUS_DONE;
+        $groupsession->save();
+        Event::fire(new GroupsessionRegister($groupsession));
+        return response()->json(trans('messages.groupsession_done'));
+      }else{
+        return response()->json(trans('errors.advisors_only'), 403);
+      }
+    }
+
+    public function postDelete(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+            'gid' => 'required|exists:groupsessions,id',
+        ]);
+        $groupsession = Groupsession::find($request->input('gid'));
+        $groupsession->status = Groupsession::$STATUS_ABSENT;
+        $groupsession->save();
+        Event::fire(new GroupsessionRegister($groupsession));
+        return response()->json(trans('messages.groupsession_delete'));
+      }else{
+        return response()->json(trans('errors.advisors_only'), 403);
       }
     }
 }

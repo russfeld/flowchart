@@ -61,11 +61,11 @@ elixir(function(mix) {
     mix.scripts([
         '../bower/pusher/dist/pusher.js',
     ], 'public/js/lib/pusher.js');
-/*
+
     mix.scripts([
-        '../bower/react/react.js',
-    ], 'public/js/lib/react.js');
-*/
+        '../bower/ionsound/js/ion.sound.js'
+    ], 'public/js/lib/ionsound.js');
+
     mix.scripts([
         '../bower/react/react-with-addons.js'
     ], 'public/js/lib/react.js')
@@ -97,11 +97,11 @@ elixir(function(mix) {
     mix.scripts([
         'pages/profiles.js',
     ], 'public/js/profiles.js');
-
+/*
     mix.babel([
         'pages/groupsession.js',
     ], 'public/js/groupsession.js');
-
+*/
     //Test Flowchart
 
     mix.scripts([
@@ -118,4 +118,6 @@ gulp.task('copyfonts', function() {
    .pipe(gulp.dest('public/fonts'));
    gulp.src('resources/assets/bower/bootstrap-sass/assets/fonts/bootstrap/**/*.{ttf,woff,eot,svg,woff2}')
    .pipe(gulp.dest('public/fonts'));
+   gulp.src('resources/assets/bower/ionsound/sounds/**/*.{aac,mp3,ogg}')
+   .pipe(gulp.dest('public/sounds'));
 });

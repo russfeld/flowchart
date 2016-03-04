@@ -8679,4 +8679,7 @@ body {
   cursor: inherit;
   display: block; }
 
+.groupsession-me {
+  border: 2px solid; }
+
 /*# sourceMappingURL=app.css.map */

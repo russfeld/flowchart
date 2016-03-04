@@ -4,7 +4,8 @@ var require = {
         "jquery.autocomplete" : { "deps" : ['jquery'] },
         "fullcalendar" : { "deps" : ['jquery', 'moment'] },
         "bootstrap-datetimepicker" : { "deps" : ['jquery', 'moment', 'bootstrap'] },
-        "react-dom" : { "deps" :['react'] }
+        "react-dom" : { "deps" :['react'] },
+        "ionsound" : { "dpes" : ['jquery'] },
     },
     paths: {
         "jquery" : "lib/jquery",
@@ -15,7 +16,8 @@ var require = {
         "fullcalendar": "lib/fullcalendar",
         "react": "lib/react",
         "react-dom": "lib/react-dom",
-        "pusher": "lib/pusher"
+        "pusher": "lib/pusher",
+        "ionsound": "lib/ionsound",
     }
 };
 

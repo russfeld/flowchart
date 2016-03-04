@@ -26,7 +26,7 @@ class GroupsessionRegister extends Event implements ShouldBroadcast
     {
         $this->id = (int)$gs->id;
         $this->userid = (int)$gs->student->user_id;
-        if($gs->advsior_id > 0){
+        if(count($gs->advisor)){
           $this->advisor = $gs->advisor->name;
         }else{
           $this->advisor = "";

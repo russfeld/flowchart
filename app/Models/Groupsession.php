@@ -12,7 +12,7 @@ class Groupsession extends Model
   public static $STATUS_BECKON = 2;
   public static $STATUS_DELAY = 3;
   public static $STATUS_ABSENT = 4;
-  public static $STATUS_COMPLETE = 5;
+  public static $STATUS_DONE = 5;
 
   //http://code.htmlasks.com/laravel_5_null_foreign_key_error
   /*
@@ -25,7 +25,7 @@ class Groupsession extends Model
   }
 */
   public function advisor(){
-    return $this->belongsTo('App\Models\Advisor');
+    return $this->belongsTo('App\Models\Advisor', 'advisor_id', 'id');
   }
 
   public function student(){
