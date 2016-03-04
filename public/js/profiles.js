@@ -31,17 +31,21 @@ require(['util/site'], function(site) {
 
 	$('#saveAdvisorProfile').on('click', function(){
 		$('#profileSpin').removeClass('hide-spin');
-		var data = {
-			name: $('#name').val(),
-			email: $('#email').val(),
-			office: $('#office').val(),
-			phone: $('#phone').val(),
-			notes: $('#notes').val(),
-		};
+		var formData = new FormData($('form')[0]);
+		formData.append("name", $('#name').val());
+		formData.append("email", $('#email').val());
+		formData.append("office", $('#office').val());
+		formData.append("phone", $('#phone').val());
+		formData.append("notes", $('#notes').val());
+		formData.append("pic", $('#pic')[0].files[0]);
+
 		$.ajax({
 		  method: "POST",
 		  url: '/profile/update',
-		  data: data
+		  data: formData,
+			dataType: 'json',
+			processData: false,
+			contentType: false,
 		})
 		.success(function( message ) {
 			site.displayMessage(message, "success");
@@ -58,6 +62,27 @@ require(['util/site'], function(site) {
 			$('#profileSpin').addClass('hide-spin');
 		});
 	});
+
+	//http://www.abeautifulsite.net/whipping-file-inputs-into-shape-with-bootstrap-3/
+	$(document).on('change', '.btn-file :file', function() {
+	  var input = $(this),
+	      numFiles = input.get(0).files ? input.get(0).files.length : 1,
+	      label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+	  input.trigger('fileselect', [numFiles, label]);
+	});
+
+  $('.btn-file :file').on('fileselect', function(event, numFiles, label) {
+
+      var input = $(this).parents('.input-group').find(':text'),
+          log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+      if( input.length ) {
+          input.val(log);
+      } else {
+          if( log ) alert(log);
+      }
+
+  });
 
 });
 

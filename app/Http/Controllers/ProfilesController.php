@@ -79,6 +79,7 @@ class ProfilesController extends Controller
 								'office' => 'required|string',
 								'phone' => 'required|string',
 								'notes' => 'string',
+								'pic' => 'image',
 						]);
 						$advisor = $user->advisor;
 						$advisor->name = $request->input('name');
@@ -86,6 +87,13 @@ class ProfilesController extends Controller
 						$advisor->office = $request->input('office');
 						$advisor->phone = $request->input('phone');
 						$advisor->notes = $request->input('notes');
+						if($request->hasFile('pic')){
+							$path = storage_path() . "/app/images";
+							$extension = $request->file('pic')->getClientOriginalExtension();
+							$filename = $user->eid . '.' . $extension;
+							$request->file('pic')->move($path, $filename);
+							$advisor->pic = 'images/' . $filename;
+						}
 						$user->update_profile = true;
 						$user->save();
 						$advisor->save();

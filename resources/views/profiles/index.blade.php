@@ -33,8 +33,17 @@
     </div>
     <div class="panel-body">
     	@include('forms.text', ['field' => 'email', 'label' => 'Email Address', 'value' => $student->email, 'disabled' => 'disabled'])
-      @include('forms.text', ['field' => 'advisor', 'label' => 'Advisor', 'value' => $student->advisor->name or 'Unassigned', 'disabled' => 'disabled'])
-      @include('forms.text', ['field' => 'department', 'label' => 'Department', 'value' => $student->department->name or 'Unassigned', 'disabled' => 'disabled'])
+      @if(isset($student->advisor->name))
+        @include('forms.text', ['field' => 'advisor', 'label' => 'Advisor', 'value' => $student->advisor->name, 'disabled' => 'disabled'])
+      @else
+        @include('forms.text', ['field' => 'advisor', 'label' => 'Advisor', 'value' => 'Unassigned', 'disabled' => 'disabled'])
+      @endif
+      @if(isset($student->department->name))
+        @include('forms.text', ['field' => 'department', 'label' => 'Department', 'value' => $student->department->name, 'disabled' => 'disabled'])
+      @else
+        @include('forms.text', ['field' => 'department', 'label' => 'Department', 'value' => 'Unassigned', 'disabled' => 'disabled'])
+      @endif
+
     </div>
   </div>
 </form>

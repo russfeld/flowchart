@@ -32,6 +32,24 @@ Route::get('help/groupsession', function(){
 });
 
 /*
+ * Static route for images in storage
+ * http://stackoverflow.com/questions/30191330/laravel-5-how-to-access-image-uploaded-in-storage-within-view
+ */
+
+Route::get('images/{filename}', function ($filename)
+{
+    $path = storage_path() . '/app/images/' . $filename;
+
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+
+    return $response;
+});
+
+/*
  * Routes for the CoursesController
  */
 Route::get('courses/{category}', 'CoursesController@getCategory')->where('category', '[A-Za-z]+');

@@ -20,6 +20,7 @@
   @include('forms.text', ['field' => 'office', 'label' => 'Office Location', 'value' => $advisor->office])
   @include('forms.text', ['field' => 'phone', 'label' => 'Phone Number', 'value' => $advisor->phone])
   @include('forms.textarea', ['field' => 'notes', 'label' => 'Notes', 'value' => $advisor->notes])
+  @include('forms.image', ['field' => 'pic', 'label' => 'Image', 'value' => $advisor->pic])
   <span id="profileSpin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
   <button type="button" class="btn btn-primary" id="saveAdvisorProfile">Update Profile</button>
   @if (!($advisor->user->update_profile))
