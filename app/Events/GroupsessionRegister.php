@@ -24,15 +24,15 @@ class GroupsessionRegister extends Event implements ShouldBroadcast
      */
     public function __construct(Groupsession $gs)
     {
-        $this->id = $gs->id;
-        $this->userid = $gs->student->user_id;
+        $this->id = (int)$gs->id;
+        $this->userid = (int)$gs->student->user_id;
         if($gs->advsior_id > 0){
           $this->advisor = $gs->advisor->name;
         }else{
           $this->advisor = "";
         }
         $this->name = $gs->student->name;
-        $this->status = $gs->status;
+        $this->status = (int)$gs->status;
     }
 
     /**

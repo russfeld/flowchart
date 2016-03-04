@@ -67,7 +67,7 @@ class GroupsessionController extends Controller
             if($gs->advisor_id > 0){
               return[
                   'id' => (int)$gs->id,
-                  'userid' => (int)$gs->user_id,
+                  'userid' => (int)$gs->student->user_id,
                   'name' => $gs->student->name,
                   'advsior' => $gs->advisor->name,
                   'status' => (int)$gs->status,
@@ -75,7 +75,7 @@ class GroupsessionController extends Controller
             }else{
               return[
                   'id' => (int)$gs->id,
-                  'userid' => (int)$gs->user_id,
+                  'userid' => (int)$gs->student->user_id,
                   'name' => $gs->student->name,
                   'advsior' => "",
                   'status' => (int)$gs->status,

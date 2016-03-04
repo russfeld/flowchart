@@ -4,6 +4,9 @@ require(['util/site', 'pusher', 'react', 'react-dom'], function (site, pusher, R
 
 	site.ajaxcrsf();
 
+	var userID = parseInt($('#userID').val());
+	var isAdvisor = parseInt($('#isAdvisor').val());
+
 	var getStatus = function getStatus(data) {
 		if (data === 0) return "NEW";
 		if (data === 1) return "QUEUED";
@@ -52,17 +55,67 @@ require(['util/site', 'pusher', 'react', 'react-dom'], function (site, pusher, R
 
 		render: function render() {
 			var badgeTitle = getStatus(this.props.student.status);
-			return React.createElement(
-				'div',
-				{ className: "alert alert-info groupsession-small", role: "alert" },
-				this.props.student.name,
-				' ',
-				React.createElement(
-					'span',
-					{ className: "badge" },
-					badgeTitle
-				)
-			);
+			if (isAdvisor === 1) {
+				return React.createElement(
+					'div',
+					{ className: "alert alert-info groupsession-div", role: "alert" },
+					React.createElement(
+						'button',
+						{ className: "btn btn-danger pull-right groupsession-button del-button", 'data-id': this.props.student.id },
+						'X'
+					),
+					React.createElement(
+						'button',
+						{ className: "btn btn-primary pull-right groupsession-button done-button", 'data-id': this.props.student.id },
+						'Done'
+					),
+					React.createElement(
+						'button',
+						{ className: "btn btn-info pull-right groupsession-button put-button", 'data-id': this.props.student.id },
+						'Requeue'
+					),
+					React.createElement(
+						'button',
+						{ className: "btn btn-success pull-right groupsession-button take-button", 'data-id': this.props.student.id },
+						'Take'
+					),
+					this.props.student.name,
+					' ',
+					React.createElement(
+						'span',
+						{ className: "badge" },
+						badgeTitle
+					)
+				);
+			} else if (userID === this.props.student.userid) {
+				return React.createElement(
+					'div',
+					{ className: "alert alert-info groupsession-small", role: "alert" },
+					React.createElement(
+						'b',
+						null,
+						this.props.student.name
+					),
+					' ',
+					React.createElement(
+						'span',
+						{ className: "badge" },
+						badgeTitle
+					)
+				);
+			} else {
+				return React.createElement(
+					'div',
+					{ className: "alert alert-info groupsession-small", role: "alert" },
+					this.props.student.name,
+					' ',
+					React.createElement(
+						'span',
+						{ className: "badge" },
+						badgeTitle
+					)
+				);
+			}
 		}
 	});
 

@@ -2,6 +2,9 @@ require(['util/site', 'pusher', 'react', 'react-dom'], function(site, pusher, Re
 
 	site.ajaxcrsf();
 
+	var userID = parseInt($('#userID').val());
+	var isAdvisor = parseInt($('#isAdvisor').val());
+
 	var getStatus = function(data){
 		if(data === 0) return "NEW";
 		if(data === 1) return "QUEUED";
@@ -50,9 +53,19 @@ require(['util/site', 'pusher', 'react', 'react-dom'], function(site, pusher, Re
 	var StudentRow = React.createClass({
 		render: function(){
 			var badgeTitle = getStatus(this.props.student.status);
-			return(
-				<div className="alert alert-info groupsession-small" role="alert">{this.props.student.name} <span className="badge">{badgeTitle}</span></div>
-			);
+			if(isAdvisor === 1){
+				return(
+					<div className="alert alert-info groupsession-div" role="alert"><button className="btn btn-danger pull-right groupsession-button del-button" data-id={this.props.student.id}>X</button><button className="btn btn-primary pull-right groupsession-button done-button" data-id={this.props.student.id}>Done</button><button className="btn btn-info pull-right groupsession-button put-button" data-id={this.props.student.id}>Requeue</button><button className="btn btn-success pull-right groupsession-button take-button" data-id={this.props.student.id}>Take</button>{this.props.student.name} <span className="badge">{badgeTitle}</span></div>
+				);
+			}else if (userID === this.props.student.userid){
+				return(
+					<div className="alert alert-info groupsession-small" role="alert"><b>{this.props.student.name}</b> <span className="badge">{badgeTitle}</span></div>
+				);
+			}else{
+				return(
+					<div className="alert alert-info groupsession-small" role="alert">{this.props.student.name} <span className="badge">{badgeTitle}</span></div>
+				);
+			}
 		}
 	})
 

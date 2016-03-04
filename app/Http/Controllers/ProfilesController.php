@@ -30,7 +30,11 @@ class ProfilesController extends Controller
 
         if($user->is_advisor){
             $user->load('advisor');
-            return view('profiles/advisorindex')->with('advisor', $user->advisor);
+						if ($request->session()->has('lastUrl')) {
+						  return view('profiles/advisorindex')->with('advisor', $user->advisor)->with('lastUrl', $request->session()->get('lastUrl'));
+						}else{
+							return view('profiles/advisorindex')->with('advisor', $user->advisor);
+						}
         }else{
             $user->load('student.advisor', 'student.department');
 
@@ -69,7 +73,23 @@ class ProfilesController extends Controller
     public function postUpdate(Request $request){
         $user = Auth::user();
         if($user->is_advisor){
-					return response()->json(trans('errors.unimplemented'), 400);
+						$this->validate($request, [
+								'name' => 'required|string',
+								'email' => 'required|string|email',
+								'office' => 'required|string',
+								'phone' => 'required|string',
+								'notes' => 'string',
+						]);
+						$advisor = $user->advisor;
+						$advisor->name = $request->input('name');
+						$advisor->email = $request->input('email');
+						$advisor->office = $request->input('office');
+						$advisor->phone = $request->input('phone');
+						$advisor->notes = $request->input('notes');
+						$user->update_profile = true;
+						$user->save();
+						$advisor->save();
+						return response()->json(trans('messages.profile_updated'));
         }else{
             $this->validate($request, [
                 'first_name' => 'required|string',

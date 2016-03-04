@@ -8647,9 +8647,17 @@ body {
   display: block;
   border-bottom: 1px solid #000; }
 
-.groupsession-small {
+.groupsession-div {
   margin-bottom: 5px !important;
-  padding-top: 5px !important;
-  padding-bottom: 5px !important; }
+  padding-top: 10px !important;
+  padding-bottom: 10px !important; }
+
+.groupsession-button {
+  height: 30px !important;
+  margin-top: -5px !important;
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+  margin-left: 1px !important;
+  margin-right: 1px !important; }
 
 /*# sourceMappingURL=app.css.map */
