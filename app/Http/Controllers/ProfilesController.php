@@ -48,6 +48,15 @@ class ProfilesController extends Controller
         }
     }
 
+		public function getPic(Request $request){
+			$user = Auth::user();
+			if($user->is_advisor){
+				return response()->json($user->advisor->pic);
+			}else{
+				return response()->json(trans('errors.unimplemented'));
+			}
+		}
+
     public function getStudentfeed(Request $request){
     	$user = Auth::user();
     	if($user->is_advisor){

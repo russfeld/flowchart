@@ -37,8 +37,9 @@ require(['util/site'], function(site) {
 		formData.append("office", $('#office').val());
 		formData.append("phone", $('#phone').val());
 		formData.append("notes", $('#notes').val());
-		formData.append("pic", $('#pic')[0].files[0]);
-
+		if($('#pic').val()){
+			formData.append("pic", $('#pic')[0].files[0]);
+		}
 		$.ajax({
 		  method: "POST",
 		  url: '/profile/update',
@@ -52,6 +53,14 @@ require(['util/site'], function(site) {
 			site.clearFormErrors();
 			$('#profileSpin').addClass('hide-spin');
 			$('#profileAdvisingBtn').removeClass('hide-spin');
+			$.ajax({
+				method: "GET",
+			  url: '/profile/pic',
+			})
+			.success(function(message){
+				$('#pictext').val(message);
+				$('#picimg').attr('src', message);
+			});
 		}).fail(function( jqXHR, message ){
 			if (jqXHR.status == 422)
 			{
