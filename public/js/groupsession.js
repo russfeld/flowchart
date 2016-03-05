@@ -277,7 +277,9 @@ require(['util/site', 'pusher', 'react', 'react-dom', 'ionsound'], function (sit
 					queue.push(data);
 				}
 				checkButtons(queue);
-				checkDing(data);
+				if (data.userid === userID) {
+					checkDing(data);
+				}
 				self.setState({ queue: queue });
 			});
 			$.ajax({
