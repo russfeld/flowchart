@@ -82,6 +82,7 @@ Route::controller('groupsession', 'GroupsessionController');
 Route::get('auth/login', 'Auth\AuthController@CASLogin');
 Route::get('auth/logout', 'Auth\AuthController@Logout');
 Route::get('auth/caslogout', 'Auth\AuthController@CASLogout');
+Route::get('auth/force', 'Auth\AuthController@ForceLogin');
 
 /*
  * Test Routes for Flowchart tester

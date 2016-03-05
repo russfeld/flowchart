@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use App\Models\Student;
 use Auth;
 use Cas;
 use Validator;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
 
 class AuthController extends Controller
 {
@@ -49,6 +52,33 @@ class AuthController extends Controller
     {
         CAS::logout();
         return redirect('/');
+    }
+
+    public function ForceLogin(Request $request){
+        if(env('AUTH_TYPE') == 'force'){
+          if(!$request->has('eid')){
+            return ('eid required');
+          }
+          $user = User::where('eid', $request->input('eid'))->first();
+          if($user === null){
+              $user = new User;
+              $user->eid = $request->input('eid');
+              $user->is_advisor = false;
+              $user->save();
+
+              $student = new Student;
+              $student->user_id = $user->id;
+              $student->first_name = $user->eid;
+              $student->email = $user->eid . "@ksu.edu";
+              $student->department_id = null;
+              $student->advisor_id = null;
+              $student->save();
+          }
+          Auth::login($user);
+          return redirect('/');
+        }else{
+          abort(404);
+        }
     }
 
 }

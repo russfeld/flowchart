@@ -104,9 +104,12 @@ $release = 'release_' . date('YmdHis');
     chgrp -h www-data .env;
 
     rm -r {{ $release_dir }}/{{ $release }}/storage/logs;
+    rm -r {{ $release_dir }}/{{ $release }}/storage/app;
     cd {{ $release_dir }}/{{ $release }}/storage;
     ln -nfs {{ $data_dir }}/logs logs;
+    ln -nfs {{ $data_dir }}/app app;
     chgrp -h www-data logs;
+    chgrp -h www-data app;
 @endtask
 
 @task('update_symlinks_cis', ['on' => 'cis'])

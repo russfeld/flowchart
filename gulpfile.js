@@ -97,11 +97,11 @@ elixir(function(mix) {
     mix.scripts([
         'pages/profiles.js',
     ], 'public/js/profiles.js');
-/*
+
     mix.babel([
         'pages/groupsession.js',
     ], 'public/js/groupsession.js');
-*/
+
     //Test Flowchart
 
     mix.scripts([
