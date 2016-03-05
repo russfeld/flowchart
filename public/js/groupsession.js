@@ -92,6 +92,18 @@ require(['util/site', 'pusher', 'react', 'react-dom', 'ionsound'], function (sit
 		});
 	});
 
+	$('#groupDisableBtn').on('click', function () {
+		var choice = confirm("Are you sure?");
+		if (choice === true) {
+			var really = confirm("Seriously, this will lose all current data. Are you really sure?");
+			if (really === true) {
+				var token = $('meta[name="csrf-token"]').attr('content');
+				$('<form action="/groupsession/disable" method="POST"/>').append($('<input type="hidden" name="id" value="' + userID + '">')).append($('<input type="hidden" name="_token" value="' + token + '">')).appendTo($(document.body)) //it has to be added somewhere into the <body>
+				.submit();
+			}
+		}
+	});
+
 	var pusherInstance = new Pusher(pusherKey);
 	var groupSessionChannel = pusherInstance.subscribe('groupsession');
 
@@ -102,13 +114,12 @@ require(['util/site', 'pusher', 'react', 'react-dom', 'ionsound'], function (sit
 	/*
   * Enable for Pusher Debugging
   */
-	/*
- 	Pusher.log = function(message) {
- 	  if (window.console && window.console.log) {
- 	    window.console.log(message);
- 	  }
- 	};
- */
+
+	Pusher.log = function (message) {
+		if (window.console && window.console.log) {
+			window.console.log(message);
+		}
+	};
 
 	var StudentRow = React.createClass({
 		displayName: 'StudentRow',
@@ -294,6 +305,9 @@ require(['util/site', 'pusher', 'react', 'react-dom', 'ionsound'], function (sit
 				}
 				queue.sort(sortFunction);
 				self.setState({ queue: queue });
+			});
+			groupSessionChannel.bind("App\\Events\\GroupsessionEnd", function (data) {
+				window.location.href = "/groupsession";
 			});
 			$.ajax({
 				method: "GET",

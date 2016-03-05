@@ -31,5 +31,6 @@ class Kernel extends HttpKernel
       //  'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'update_profile' => \App\Http\Middleware\UpdateProfileMiddleware::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'groupsessiondisabled' => \App\Http\Middleware\GroupsessionDisabled::class,
     ];
 }

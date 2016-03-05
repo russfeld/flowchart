@@ -18,7 +18,9 @@
   <button id="groupRegisterBtn" type="button" class="btn btn-primary btn-block" disabled>Put me on the List! <span id="groupSpin" class="fa fa-cog fa-spin fa-lg">&nbsp;</span></button>
   <br>
 @else
-  <h3 class="top-header text-center">Group Advising Queue<span id="groupSpin" class="fa fa-cog fa-spin fa-lg">&nbsp;</span></h3>
+  <h3 class="top-header text-center">Group Advising Queue</h3>
+  <button id="groupDisableBtn" type="button" class="btn btn-danger btn-block">Disable Group Advising <span id="groupSpin" class="fa fa-cog fa-spin fa-lg">&nbsp;</span></button>
+  <br>
 @endif
   <div id="groupList">
 

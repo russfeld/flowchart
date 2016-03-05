@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "800094c751b8ec15a09acbb331698b13",
-    "content-hash": "4abc3fcff87896637e829ab33cb65382",
+    "hash": "fbe12f116c8ab9654d2b749a2e9dbc9b",
+    "content-hash": "80e13a9e2dee5a293265b31b195ac914",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -2047,6 +2047,59 @@
                 "dump"
             ],
             "time": "2016-02-12 17:39:33"
+        },
+        {
+            "name": "terbium/db-config",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/TerbiumLibs/dbConfig.git",
+                "reference": "c862add4521f199b9a68fcb7b4178b463c069c67"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/TerbiumLibs/dbConfig/zipball/c862add4521f199b9a68fcb7b4178b463c069c67",
+                "reference": "c862add4521f199b9a68fcb7b4178b463c069c67",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.1.*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "laravel/laravel": "5.1.*",
+                "mockery/mockery": "dev-master",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/migrations"
+                ],
+                "psr-0": {
+                    "Terbium\\DbConfig\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "YAAP",
+                    "email": "yaapis@gmail.com"
+                },
+                {
+                    "name": "Volodimir Kornilov",
+                    "email": "mail@terion.name"
+                }
+            ],
+            "description": "Laravel Config with DB-storage support",
+            "keywords": [
+                "configuration",
+                "laravel"
+            ],
+            "time": "2015-09-09 12:07:52"
         },
         {
             "name": "vlucas/phpdotenv",

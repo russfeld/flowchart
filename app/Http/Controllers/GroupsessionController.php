@@ -10,9 +10,11 @@ use App\Models\Groupsession;
 
 use Event;
 use App\Events\GroupsessionRegister;
+use App\Events\GroupsessionEnd;
 
 use Auth;
 use Cas;
+use DbConfig;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -28,6 +30,7 @@ class GroupsessionController extends Controller
   	{
   		$this->middleware('cas');
   		$this->middleware('update_profile');
+      $this->middleware('groupsessiondisabled', ['except' => ['getEnable']]);
       $this->fractal = new Manager();
   	}
 
@@ -172,5 +175,27 @@ class GroupsessionController extends Controller
       }else{
         return response()->json(trans('errors.advisors_only'), 403);
       }
+    }
+
+    public function getEnable(){
+      $user = Auth::user();
+      if($user->is_advisor){
+        DbConfig::store('groupsessionenabled', true);
+      }
+      return redirect('/groupsession');
+    }
+
+    public function postDisable(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor && $user->id == $request->input('id')){
+        DbConfig::store('groupsessionenabled', false);
+        $groupsessions = Groupsession::where('status', '<', 3)->get();
+        foreach($groupsessions as $gs){
+          $gs->status = 4;
+          $gs->save();
+        }
+        Event::fire(new GroupsessionEnd());
+      }
+      return redirect('/groupsession');
     }
 }
