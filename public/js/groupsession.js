@@ -56,6 +56,13 @@ require(['util/site', 'pusher', 'react', 'react-dom', 'ionsound'], function (sit
 		}
 	};
 
+	var sortFunction = function sortFunction(a, b) {
+		if (a.status == b.status) {
+			return a.id < b.id ? -1 : 1;
+		}
+		return a.status < b.status ? 1 : -1;
+	};
+
 	var getStatus = function getStatus(data) {
 		if (data.status === 0) return "NEW";
 		if (data.status === 1) return "QUEUED";
@@ -92,11 +99,16 @@ require(['util/site', 'pusher', 'react', 'react-dom', 'ionsound'], function (sit
 		$('#groupSpin').addClass('hide-spin');
 	});
 
-	Pusher.log = function (message) {
-		if (window.console && window.console.log) {
-			window.console.log(message);
-		}
-	};
+	/*
+  * Enable for Pusher Debugging
+  */
+	/*
+ 	Pusher.log = function(message) {
+ 	  if (window.console && window.console.log) {
+ 	    window.console.log(message);
+ 	  }
+ 	};
+ */
 
 	var StudentRow = React.createClass({
 		displayName: 'StudentRow',
@@ -280,6 +292,7 @@ require(['util/site', 'pusher', 'react', 'react-dom', 'ionsound'], function (sit
 				if (data.userid === userID) {
 					checkDing(data);
 				}
+				queue.sort(sortFunction);
 				self.setState({ queue: queue });
 			});
 			$.ajax({
@@ -289,6 +302,7 @@ require(['util/site', 'pusher', 'react', 'react-dom', 'ionsound'], function (sit
 				var queue = self.state.queue.concat(JSON.parse(message));
 				checkButtons(queue);
 				initialCheckDing(queue);
+				queue.sort(sortFunction);
 				self.setState({ queue: queue });
 			}).fail(function (jqXHR, message) {
 				if (jqXHR.status == 422) {
