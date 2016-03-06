@@ -88,7 +88,9 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 		};
 
 		//Function to initialize the fullcalendar instance
-		self.init = function(advisor = false){
+		self.init = function(advisor){
+
+			advisor || (advisor = false);
 
 			self.calendarAdvisorID = $('#calendarAdvisorID').val().trim();
 
