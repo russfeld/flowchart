@@ -15,10 +15,10 @@
 <h3 class="top-header">Update your user profile:</h3>
 @endif
 <form>
-  @if (!($student->user->update_profile))
-    @include('forms.text', ['field' => 'first_name', 'label' => 'First Name', 'value' => ''])
-  @else
+  @if (strlen($student->last_name) > 0)
     @include('forms.text', ['field' => 'first_name', 'label' => 'First Name', 'value' => $student->first_name])
+  @else
+    @include('forms.text', ['field' => 'first_name', 'label' => 'First Name', 'value' => ''])
   @endif
 	@include('forms.text', ['field' => 'last_name', 'label' => 'Last Name', 'value' => $student->last_name])
   <span id="profileSpin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>

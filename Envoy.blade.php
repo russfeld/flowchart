@@ -119,6 +119,8 @@ $release = 'release_' . date('YmdHis');
     ln -nfs {{ $data_dir_cis }}/.env .env;
 
     rm -r {{ $release_dir_cis }}/{{ $release }}/storage/logs;
+    rm -r {{ $release_dir_cis }}/{{ $release }}/storage/app;
     cd {{ $release_dir_cis }}/{{ $release }}/storage;
     ln -nfs {{ $data_dir_cis }}/logs logs;
+    ln -nfs {{ $data_dir_cis }}/app app;
 @endtask
