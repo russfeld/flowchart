@@ -7,4 +7,5 @@ return [
   'groupsession_put' => 'Student Requeued',
   'groupsession_done' => 'Student Marked as Done',
   'groupsession_delete' => 'Queue Entry Deleted',
+  'item_saved' => 'Item Saved',
 ];

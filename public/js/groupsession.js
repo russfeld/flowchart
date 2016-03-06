@@ -1,1 +1,344 @@
-"use strict";require(["util/site","pusher","react","react-dom","ionsound"],function(e,t,s,n,r){e.ajaxcrsf(),ion.sound({sounds:[{name:"door_bell"}],volume:1,path:"/sounds/",preload:!0});var a=parseInt($("#userID").val()),o=parseInt($("#isAdvisor").val()),u=function(){$("#groupRegisterBtn").removeAttr("disabled")},i=function(){$("#groupRegisterBtn").attr("disabled","disabled")},d=function(e){for(var t=e.length,s=!1,n=0;t>n;n++)if(e[n].userid===a){s=!0;break}s?i():u()},l=function(e){2==e.status&&ion.sound.play("door_bell")},p=function(e){for(var t=e.length,s=0;t>s;s++)if(e[s].userid===a){l(e[s]);break}},c=function(e,t){return e.status==t.status?e.id<t.id?-1:1:e.status<t.status?1:-1},g=function(e){return 0===e.status?"NEW":1===e.status?"QUEUED":2===e.status?"MEET WITH "+e.advisor:3===e.status?"DELAY":4===e.status?"ABSENT":5===e.status?"DONE":void 0};$("#groupRegisterBtn").on("click",function(){$("#groupSpin").removeClass("hide-spin"),$.ajax({method:"POST",url:"/groupsession/register"}).success(function(t){e.displayMessage(t,"success"),e.clearFormErrors(),i(),$("#groupSpin").addClass("hide-spin")}).fail(function(t,s){422==t.status?e.setFormErrors(t.responseJSON):alert("Unable to register: "+t.responseJSON),$("#groupSpin").addClass("hide-spin")})}),$("#groupDisableBtn").on("click",function(){var e=confirm("Are you sure?");if(e===!0){var t=confirm("Seriously, this will lose all current data. Are you really sure?");if(t===!0){var s=$('meta[name="csrf-token"]').attr("content");$('<form action="/groupsession/disable" method="POST"/>').append($('<input type="hidden" name="id" value="'+a+'">')).append($('<input type="hidden" name="_token" value="'+s+'">')).appendTo($(document.body)).submit()}}});var m=new Pusher(pusherKey),f=m.subscribe("groupsession");m.connection.bind("connected",function(){$("#groupSpin").addClass("hide-spin")}),Pusher.log=function(e){window.console&&window.console.log&&window.console.log(e)};var h=s.createClass({displayName:"StudentRow",takeStudent:function(t){var s=t.currentTarget.dataset.id;$.ajax({method:"POST",url:"/groupsession/take",data:{gid:s}}).success(function(t){e.displayMessage(t,"success")}).fail(function(t,s){422==t.status?e.setFormErrors(t.responseJSON):alert("Unable to take: "+t.responseJSON)})},putStudent:function(t){var s=t.currentTarget.dataset.id;$.ajax({method:"POST",url:"/groupsession/put",data:{gid:s}}).success(function(t){e.displayMessage(t,"success")}).fail(function(t,s){422==t.status?e.setFormErrors(t.responseJSON):alert("Unable to put: "+t.responseJSON)})},doneStudent:function(t){var s=t.currentTarget.dataset.id;$.ajax({method:"POST",url:"/groupsession/done",data:{gid:s}}).success(function(t){e.displayMessage(t,"success")}).fail(function(t,s){422==t.status?e.setFormErrors(t.responseJSON):alert("Unable to mark done: "+t.responseJSON)})},delStudent:function(t){var s=t.currentTarget.dataset.id;$.ajax({method:"POST",url:"/groupsession/delete",data:{gid:s}}).success(function(t){e.displayMessage(t,"success")}).fail(function(t,s){422==t.status?e.setFormErrors(t.responseJSON):alert("Unable to delete: "+t.responseJSON)})},render:function(){var e=g(this.props.student);if(1!==o){if(0==this.props.student.status||1==this.props.student.status)var t="alert alert-info groupsession-div";else if(2==this.props.student.status)var t="alert alert-success groupsession-div";if(a===this.props.student.userid){var n=s.createElement("b",null,this.props.student.name);t+=" groupsession-me"}else var n=this.props.student.name;return s.createElement("div",{className:t,role:"alert"},n," ",s.createElement("span",{className:"badge"},e))}return 0==this.props.student.status||1==this.props.student.status?s.createElement("div",{className:"alert alert-info groupsession-div",role:"alert"},s.createElement("button",{className:"btn btn-danger pull-right groupsession-button del-button","data-id":this.props.student.id,onClick:this.delStudent},"X"),s.createElement("button",{className:"btn btn-success pull-right groupsession-button take-button","data-id":this.props.student.id,onClick:this.takeStudent},"Take"),this.props.student.name," ",s.createElement("span",{className:"badge"},e)):2==this.props.student.status?s.createElement("div",{className:"alert alert-success groupsession-div",role:"alert"},s.createElement("button",{className:"btn btn-danger pull-right groupsession-button del-button","data-id":this.props.student.id,onClick:this.delStudent},"X"),s.createElement("button",{className:"btn btn-primary pull-right groupsession-button done-button","data-id":this.props.student.id,onClick:this.doneStudent},"Done"),s.createElement("button",{className:"btn btn-info pull-right groupsession-button put-button","data-id":this.props.student.id,onClick:this.putStudent},"Requeue"),this.props.student.name," ",s.createElement("span",{className:"badge"},e)):void 0}}),b=s.createClass({displayName:"GroupList",getInitialState:function(){return{queue:[]}},componentDidMount:function(){var t=this;f.bind("App\\Events\\GroupsessionRegister",function(e){for(var s=t.state.queue,n=!1,r=s.length,o=0;r>o;o++)s[o].id===e.id&&(e.status<3?s[o]=e:(s.splice(o,1),o--,r--),n=!0);n||s.push(e),d(s),e.userid===a&&l(e),s.sort(c),t.setState({queue:s})}),f.bind("App\\Events\\GroupsessionEnd",function(e){window.location.href="/groupsession"}),$.ajax({method:"GET",url:"/groupsession/queue"}).success(function(e){var s=t.state.queue.concat(JSON.parse(e));d(s),p(s),s.sort(c),t.setState({queue:s})}).fail(function(t,s){422==t.status?e.setFormErrors(t.responseJSON):alert("Unable to get queue: "+t.responseJSON)})},render:function(){var e=[];return this.state.queue.forEach(function(t){e.push(s.createElement(h,{key:t.id,student:t}))}),s.createElement("div",null,e)}});n.render(s.createElement(b,null),document.getElementById("groupList"))});
+'use strict';
+
+require(['util/site', 'pusher', 'react', 'react-dom', 'ionsound'], function (site, pusher, React, reactDOM, ionsound) {
+
+	site.ajaxcrsf();
+
+	ion.sound({
+		sounds: [{
+			name: "door_bell"
+		}],
+		volume: 1.0,
+		path: "/sounds/",
+		preload: true
+	});
+
+	var userID = parseInt($('#userID').val());
+	var isAdvisor = parseInt($('#isAdvisor').val());
+
+	var enableButton = function enableButton() {
+		$('#groupRegisterBtn').removeAttr('disabled');
+	};
+
+	var disableButton = function disableButton() {
+		$('#groupRegisterBtn').attr('disabled', 'disabled');
+	};
+
+	var checkButtons = function checkButtons(queue) {
+		var len = queue.length;
+		var foundMe = false;
+		for (var i = 0; i < len; i++) {
+			if (queue[i].userid === userID) {
+				foundMe = true;
+				break;
+			}
+		}
+		if (foundMe) {
+			disableButton();
+		} else {
+			enableButton();
+		}
+	};
+
+	var checkDing = function checkDing(person) {
+		if (person.status == 2) {
+			ion.sound.play("door_bell");
+		}
+	};
+
+	var initialCheckDing = function initialCheckDing(queue) {
+		var len = queue.length;
+		for (var i = 0; i < len; i++) {
+			if (queue[i].userid === userID) {
+				checkDing(queue[i]);
+				break;
+			}
+		}
+	};
+
+	var sortFunction = function sortFunction(a, b) {
+		if (a.status == b.status) {
+			return a.id < b.id ? -1 : 1;
+		}
+		return a.status < b.status ? 1 : -1;
+	};
+
+	var getStatus = function getStatus(data) {
+		if (data.status === 0) return "NEW";
+		if (data.status === 1) return "QUEUED";
+		if (data.status === 2) return "MEET WITH " + data.advisor;
+		if (data.status === 3) return "DELAY";
+		if (data.status === 4) return "ABSENT";
+		if (data.status === 5) return "DONE";
+	};
+
+	$('#groupRegisterBtn').on('click', function () {
+		$('#groupSpin').removeClass('hide-spin');
+		$.ajax({
+			method: "POST",
+			url: '/groupsession/register'
+		}).success(function (message) {
+			site.displayMessage(message, "success");
+			site.clearFormErrors();
+			disableButton();
+			$('#groupSpin').addClass('hide-spin');
+		}).fail(function (jqXHR, message) {
+			if (jqXHR.status == 422) {
+				site.setFormErrors(jqXHR.responseJSON);
+			} else {
+				alert("Unable to register: " + jqXHR.responseJSON);
+			}
+			$('#groupSpin').addClass('hide-spin');
+		});
+	});
+
+	$('#groupDisableBtn').on('click', function () {
+		var choice = confirm("Are you sure?");
+		if (choice === true) {
+			var really = confirm("Seriously, this will lose all current data. Are you really sure?");
+			if (really === true) {
+				var token = $('meta[name="csrf-token"]').attr('content');
+				$('<form action="/groupsession/disable" method="POST"/>').append($('<input type="hidden" name="id" value="' + userID + '">')).append($('<input type="hidden" name="_token" value="' + token + '">')).appendTo($(document.body)) //it has to be added somewhere into the <body>
+				.submit();
+			}
+		}
+	});
+
+	var pusherInstance = new Pusher(pusherKey);
+	var groupSessionChannel = pusherInstance.subscribe('groupsession');
+
+	pusherInstance.connection.bind('connected', function () {
+		$('#groupSpin').addClass('hide-spin');
+	});
+
+	/*
+  * Enable for Pusher Debugging
+  */
+
+	Pusher.log = function (message) {
+		if (window.console && window.console.log) {
+			window.console.log(message);
+		}
+	};
+
+	var StudentRow = React.createClass({
+		displayName: 'StudentRow',
+
+		takeStudent: function takeStudent(event) {
+			var gid = event.currentTarget.dataset.id;
+			$.ajax({
+				method: "POST",
+				url: '/groupsession/take',
+				data: { gid: gid }
+			}).success(function (message) {
+				site.displayMessage(message, "success");
+			}).fail(function (jqXHR, message) {
+				if (jqXHR.status == 422) {
+					site.setFormErrors(jqXHR.responseJSON);
+				} else {
+					alert("Unable to take: " + jqXHR.responseJSON);
+				}
+			});
+		},
+		putStudent: function putStudent(event) {
+			var gid = event.currentTarget.dataset.id;
+			$.ajax({
+				method: "POST",
+				url: '/groupsession/put',
+				data: { gid: gid }
+			}).success(function (message) {
+				site.displayMessage(message, "success");
+			}).fail(function (jqXHR, message) {
+				if (jqXHR.status == 422) {
+					site.setFormErrors(jqXHR.responseJSON);
+				} else {
+					alert("Unable to put: " + jqXHR.responseJSON);
+				}
+			});
+		},
+		doneStudent: function doneStudent(event) {
+			var gid = event.currentTarget.dataset.id;
+			$.ajax({
+				method: "POST",
+				url: '/groupsession/done',
+				data: { gid: gid }
+			}).success(function (message) {
+				site.displayMessage(message, "success");
+			}).fail(function (jqXHR, message) {
+				if (jqXHR.status == 422) {
+					site.setFormErrors(jqXHR.responseJSON);
+				} else {
+					alert("Unable to mark done: " + jqXHR.responseJSON);
+				}
+			});
+		},
+		delStudent: function delStudent(event) {
+			var gid = event.currentTarget.dataset.id;
+			$.ajax({
+				method: "POST",
+				url: '/groupsession/delete',
+				data: { gid: gid }
+			}).success(function (message) {
+				site.displayMessage(message, "success");
+			}).fail(function (jqXHR, message) {
+				if (jqXHR.status == 422) {
+					site.setFormErrors(jqXHR.responseJSON);
+				} else {
+					alert("Unable to delete: " + jqXHR.responseJSON);
+				}
+			});
+		},
+		render: function render() {
+			var badgeTitle = getStatus(this.props.student);
+			if (isAdvisor === 1) {
+				if (this.props.student.status == 0 || this.props.student.status == 1) {
+					return React.createElement(
+						'div',
+						{ className: "alert alert-info groupsession-div", role: "alert" },
+						React.createElement(
+							'button',
+							{ className: "btn btn-danger pull-right groupsession-button del-button", 'data-id': this.props.student.id, onClick: this.delStudent },
+							'X'
+						),
+						React.createElement(
+							'button',
+							{ className: "btn btn-success pull-right groupsession-button take-button", 'data-id': this.props.student.id, onClick: this.takeStudent },
+							'Take'
+						),
+						this.props.student.name,
+						' ',
+						React.createElement(
+							'span',
+							{ className: "badge" },
+							badgeTitle
+						)
+					);
+				} else if (this.props.student.status == 2) {
+					return React.createElement(
+						'div',
+						{ className: "alert alert-success groupsession-div", role: "alert" },
+						React.createElement(
+							'button',
+							{ className: "btn btn-danger pull-right groupsession-button del-button", 'data-id': this.props.student.id, onClick: this.delStudent },
+							'X'
+						),
+						React.createElement(
+							'button',
+							{ className: "btn btn-primary pull-right groupsession-button done-button", 'data-id': this.props.student.id, onClick: this.doneStudent },
+							'Done'
+						),
+						React.createElement(
+							'button',
+							{ className: "btn btn-info pull-right groupsession-button put-button", 'data-id': this.props.student.id, onClick: this.putStudent },
+							'Requeue'
+						),
+						this.props.student.name,
+						' ',
+						React.createElement(
+							'span',
+							{ className: "badge" },
+							badgeTitle
+						)
+					);
+				}
+			} else {
+				if (this.props.student.status == 0 || this.props.student.status == 1) {
+					var myClass = "alert alert-info groupsession-div";
+				} else if (this.props.student.status == 2) {
+					var myClass = "alert alert-success groupsession-div";
+				}
+				if (userID === this.props.student.userid) {
+					var name = React.createElement(
+						'b',
+						null,
+						this.props.student.name
+					);
+					myClass = myClass + " groupsession-me";
+				} else {
+					var name = this.props.student.name;
+				}
+				return React.createElement(
+					'div',
+					{ className: myClass, role: "alert" },
+					name,
+					' ',
+					React.createElement(
+						'span',
+						{ className: "badge" },
+						badgeTitle
+					)
+				);
+			}
+		}
+	});
+
+	var GroupList = React.createClass({
+		displayName: 'GroupList',
+
+		getInitialState: function getInitialState() {
+			return { queue: [] };
+		},
+		componentDidMount: function componentDidMount() {
+			var self = this;
+			groupSessionChannel.bind("App\\Events\\GroupsessionRegister", function (data) {
+				var queue = self.state.queue;
+				var found = false;
+				var len = queue.length;
+				for (var i = 0; i < len; i++) {
+					if (queue[i].id === data.id) {
+						if (data.status < 3) {
+							queue[i] = data;
+						} else {
+							queue.splice(i, 1);
+							i--;
+							len--;
+						}
+						found = true;
+					}
+				}
+				if (!found) {
+					queue.push(data);
+				}
+				checkButtons(queue);
+				if (data.userid === userID) {
+					checkDing(data);
+				}
+				queue.sort(sortFunction);
+				self.setState({ queue: queue });
+			});
+			groupSessionChannel.bind("App\\Events\\GroupsessionEnd", function (data) {
+				window.location.href = "/groupsession";
+			});
+			$.ajax({
+				method: "GET",
+				url: '/groupsession/queue'
+			}).success(function (message) {
+				var queue = self.state.queue.concat(JSON.parse(message));
+				checkButtons(queue);
+				initialCheckDing(queue);
+				queue.sort(sortFunction);
+				self.setState({ queue: queue });
+			}).fail(function (jqXHR, message) {
+				if (jqXHR.status == 422) {
+					site.setFormErrors(jqXHR.responseJSON);
+				} else {
+					alert("Unable to get queue: " + jqXHR.responseJSON);
+				}
+			});
+		},
+		render: function render() {
+			var divs = [];
+			this.state.queue.forEach(function (student) {
+				divs.push(React.createElement(StudentRow, { key: student.id, student: student }));
+			});
+			return React.createElement(
+				'div',
+				null,
+				divs
+			);
+		}
+	});
+
+	reactDOM.render(React.createElement(GroupList, null), document.getElementById('groupList'));
+});
+//# sourceMappingURL=groupsession.js.map

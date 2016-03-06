@@ -77,6 +77,11 @@ Route::controller('profile', 'ProfilesController');
 Route::controller('groupsession', 'GroupsessionController');
 
 /*
+ * Routes for the DashboardController
+ */
+Route::controller('admin', 'DashboardController');
+
+/*
  * Routes for Authentication
  */
 Route::get('auth/login', 'Auth\AuthController@CASLogin');

@@ -27,6 +27,9 @@
     "devbridge-autocomplete": "~1.2.21",
     "pusher": "~3.0.0",
     "react": "~0.14.7",
-    "ionsound": "~3.0.6"
+    "ionsound": "~3.0.6",
+    "admin-lte": "~2.3.2",
+    "datatables.net": "~1.10.11",
+    "datatables.net-bs": "~1.10.11"
   }
 }

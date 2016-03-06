@@ -22,6 +22,12 @@ elixir(function(mix) {
         "../bower/russfeld-eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css"
     ], 'public/css/calendar.css');
 
+    mix.styles([
+        '../bower/admin-lte/dist/css/AdminLTE.css',
+        "dashboard-skin.css",
+        "../bower/datatables.net-bs/css/dataTables.bootstrap.css",
+    ], 'public/css/dashboard.css');
+
     //Require.js configuration & library
 
     mix.scripts([
@@ -74,6 +80,17 @@ elixir(function(mix) {
         '../bower/react/react-dom.js',
     ], 'public/js/lib/react-dom.js');
 
+    mix.scripts([
+        '../bower/admin-lte/dist/js/app.js',
+    ], 'public/js/lib/adminlte.js');
+
+    mix.scripts([
+        '../bower/datatables.net/js/jquery.dataTables.js',
+    ], 'public/js/lib/datatables.js');
+
+    mix.scripts([
+        '../bower/datatables.net-bs/js/dataTables.bootstrap.js',
+    ], 'public/js/lib/datatablesbs.js');
     //Utilities
 
     mix.scripts([
@@ -101,6 +118,10 @@ elixir(function(mix) {
     mix.babel([
         'pages/groupsession.js',
     ], 'public/js/groupsession.js');
+
+    mix.scripts([
+        'pages/dashboard.js',
+    ], 'public/js/dashboard.js');
 
     //Test Flowchart
 

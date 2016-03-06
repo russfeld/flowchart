@@ -5,7 +5,10 @@ var require = {
         "fullcalendar" : { "deps" : ['jquery', 'moment'] },
         "bootstrap-datetimepicker" : { "deps" : ['jquery', 'moment', 'bootstrap'] },
         "react-dom" : { "deps" :['react'] },
-        "ionsound" : { "dpes" : ['jquery'] },
+        "ionsound" : { "deps" : ['jquery'] },
+        "adminlte" : { "deps" : ['jquery', 'bootstrap'] },
+        "datatables.net" : { "deps" : ['jquery'] },
+        "datatables.netbs" : { "deps" : ['jquery', 'datatables.net'] },
     },
     paths: {
         "jquery" : "lib/jquery",
@@ -18,5 +21,8 @@ var require = {
         "react-dom": "lib/react-dom",
         "pusher": "lib/pusher",
         "ionsound": "lib/ionsound",
+        "adminlte": "lib/adminlte",
+        "datatables.net": "lib/datatables",
+        "datatables.netbs": "lib/datatablesbs",
     }
 };

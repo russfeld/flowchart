@@ -17,6 +17,9 @@
             <li class="{{ Request::is('advising*') ? 'active' : '' }}"><a href="{{ url('/advising') }}">Advising</a></li>
             <li class="{{ Request::is('groupsession*') ? 'active' : '' }}"><a href="{{ url('/groupsession') }}">Group Advising</a></li>
             <li class="{{ Request::is('help*') ? 'active' : '' }}"><a href="{{ url('/help') }}">Help</a></li>
+            @if( Auth::check() && Auth::user()->is_advisor )
+            <li class="{{ Request::is('admin*') ? 'active' : '' }}"><a href="{{ url('/admin') }}">Admin</a></li>
+            @endif
           </ul>
         @if( Auth::check())
           <ul class="nav navbar-nav navbar-right">
