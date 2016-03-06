@@ -13,7 +13,7 @@ class MeetingConflict extends Migration
     public function up()
     {
         Schema::table('meetings', function ($table) {
-            $table->boolean('conflict');
+            $table->boolean('conflict')->default(false);
         });
     }
 

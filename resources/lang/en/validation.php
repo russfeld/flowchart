@@ -103,6 +103,10 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+      'desc' => 'description',
+      'btitle' => 'blackout title',
+      'pic' => 'image',
+    ],
 
 ];

@@ -1,6 +1,6 @@
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 bg-light-purple rounded">
 <div class="col-md-2 col-sm-2 col-lg-2 hidden-xs center-block" style="height: auto">
-	<img class="img-responsive advisor-img hidden-xs pull-right" src="{{ url('img/' . $advisor->pic) }}" alt="{{ $advisor->name . 'picture' }}">
+	<img class="img-responsive advisor-img hidden-xs pull-right" src="{{ url($advisor->pic) }}" alt="{{ $advisor->name . 'picture' }}">
 </div>
 <div class="col-md-10 col-sm-10 col-lg-10 col-xs-12">
 @if($link)

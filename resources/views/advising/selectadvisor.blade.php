@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('advising._message')
+
 <h3 class="top-header">Select an advisor <small>(click department names to expand)</small></h3>
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 @foreach($departments as $department)

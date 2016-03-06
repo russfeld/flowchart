@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Department;
-use App\Meeting;
-use App\Blackoutevent;
-use App\Advisor;
-use App\Blackout;
+use App\Models\User;
+use App\Models\Department;
+use App\Models\Meeting;
+use App\Models\Blackoutevent;
+use App\Models\Advisor;
+use App\Models\Blackout;
 
 use Auth;
 use Illuminate\Http\Request;
@@ -28,7 +28,8 @@ class AdvisingController extends Controller
 	public function __construct()
 	{
 		$this->middleware('cas');
-        $this->fractal = new Manager();
+		$this->middleware('update_profile');
+    $this->fractal = new Manager();
 	}
 
     /**
@@ -294,13 +295,13 @@ class AdvisingController extends Controller
             'start' => 'required|date',
             'end' => 'required|date|after:start',
             'title' => 'required|string',
-            'desc' => 'string',
+            'desc' => 'required|string',
             'meetingid' => 'sometimes|required|exists:meetings,id'
         ]);
 
         $user = Auth::user();
 
-        //using Carbon for dates 
+        //using Carbon for dates
         //http://laravel.com/docs/5.1/eloquent-mutators#date-mutators
         //http://stackoverflow.com/questions/24824624/laravel-q-where-between-dates
         //http://carbon.nesbot.com/docs/

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\College;
-use App\Category;
-use App\Course;
+use App\Models\College;
+use App\Models\Category;
+use App\Models\Course;
 
 class CoursesController extends Controller
 {

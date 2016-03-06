@@ -25,7 +25,7 @@ class SchedulerSeeder extends Seeder
     		'email' => 'russfeld@ksu.edu',
     		'office' => '212 Nichols Hall',
     		'phone' => '785-532-7929',
-    		'pic' => 'russfeld.png',
+    		'pic' => 'img/russfeld.png',
     		'department_id' => '1',
     		'user_id' => '2'
     	]);
@@ -36,7 +36,7 @@ class SchedulerSeeder extends Seeder
     		'email' => 'nhbean@ksu.edu',
     		'office' => '216 Nichols Hall',
     		'phone' => '785-532-7942',
-    		'pic' => 'nhbean.png',
+    		'pic' => 'img/nhbean.png',
     		'department_id' => '1',
             'user_id' => '3'
     	]);
@@ -47,7 +47,7 @@ class SchedulerSeeder extends Seeder
     		'email' => 'juliet@ksu.edu',
     		'office' => '228 Nichols Hall',
     		'phone' => '785-532-7785',
-    		'pic' => 'juliet.png',
+    		'pic' => 'img/juliet.png',
     		'department_id' => '1',
             'user_id' => '4'
     	]);
@@ -58,7 +58,7 @@ class SchedulerSeeder extends Seeder
     		'email' => 'dlang1@ksu.edu',
     		'office' => '213 Nichols Hall',
     		'phone' => '785-532-7768',
-    		'pic' => 'dlang1.png',
+    		'pic' => 'img/dlang1.png',
     		'department_id' => '1',
             'user_id' => '5'
     	]);

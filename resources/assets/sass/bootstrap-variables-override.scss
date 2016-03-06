@@ -27,6 +27,10 @@ $navbar-inverse-toggle-border-color:        darken($navbar-inverse-bg, 10%);
 $icon-font-path: "../fonts/";
 
 // Make Primary Buttons Purple
-$btn-primary-bg:                 #512888;
+$btn-primary-bg:                #512888;
 
-$link-color:           			 #512888;
+// Make Primary Panel Titles and Borders Purple
+$panel-primary-heading-bg:      #512888;
+$panel-primary-border:          #512888;
+
+$link-color:           			    #512888;

@@ -145,6 +145,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         Xavrsl\Cas\CasServiceProvider::class,
+        Terbium\DbConfig\DbConfigServiceProvider::class,
 
     ],
 
@@ -195,6 +196,7 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
         'Cas'       => Xavrsl\Cas\Facades\Cas::class,
         'Gate'      => Illuminate\Support\Facades\Gate::class,
+        'DbConfig'  => Terbium\DbConfig\Facade::class
     ],
 
 ];

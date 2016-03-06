@@ -130,7 +130,7 @@ body {
   font-size: 140% !important;
 }
 
-.fc-bgevent { 
+.fc-bgevent {
   opacity: .6 !important;
   filter: alpha(opacity=50) !important; /* for IE */
 }
@@ -199,3 +199,43 @@ body {
 .autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
 .autocomplete-group { padding: 2px 5px; }
 .autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+
+.groupsession-div{
+  margin-bottom: 5px !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.groupsession-button{
+  height: 30px !important;
+  margin-top: -5px !important;
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+  margin-left: 1px !important;
+  margin-right: 1px !important;
+}
+
+//http://www.abeautifulsite.net/whipping-file-inputs-into-shape-with-bootstrap-3/
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.groupsession-me {
+  border: 2px solid;
+}
