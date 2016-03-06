@@ -40,5 +40,11 @@ class UserTableSeeder extends Seeder
             'eid' => 'dlang1',
             'is_advisor' => true
         ]);
+
+        DB::table('users')->insert([
+            'id' => '6',
+            'eid' => 'das',
+            'is_advisor' => true
+        ]);
     }
 }
