@@ -26,9 +26,9 @@
     </ul>
     <p><b>Students who do not have a DARS report and proposed schedule will not be seen by an advisor until these steps are completed</b></p>
     @if($user->is_advisor)
-    <a class="btn btn-danger" href="/groupsession/enable">Group Advising Is Disabled - Enable?</a>
+    <a class="btn btn-danger" href="/groupsession/enable">Group Advising is Disabled - Enable?</a>
     @else
-    <a class="btn btn-danger" href="#">Group Advising Is Unavailable At This Time!</a>
+    <a class="btn btn-danger" href="#">Group Advising is Unavailable at this Time!</a>
     @endif
   </div>
 </div>

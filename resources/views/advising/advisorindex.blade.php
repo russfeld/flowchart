@@ -11,8 +11,15 @@
 
 @include('advising._advisor', ['advisor' => $advisor, 'link' => false])
 
-<h4>Click on the calendar to view meeting details or schedule meetings or blackout times</h4>
-
+<div class="col-sm-6">
+  <button id="createMeetingBtn" class="btn btn-primary btn-block">Create an Advising Meeting</button>
+</div>
+<div class="col-sm-6">
+  <button id="createBlackoutBtn" class="btn btn-primary btn-block">Create a Blackout Time</button>
+</div>
+<div class="col-sm-12">
+	<h4>You can also click on the calendar to view meeting details or schedule meetings or blackout times</h4>
+</div>
 @include('advising._advisorcalendar', ['advisor' => $advisor])
 
 <br>

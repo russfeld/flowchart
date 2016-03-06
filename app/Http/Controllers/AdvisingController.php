@@ -295,7 +295,7 @@ class AdvisingController extends Controller
             'start' => 'required|date',
             'end' => 'required|date|after:start',
             'title' => 'required|string',
-            'desc' => 'string',
+            'desc' => 'required|string',
             'meetingid' => 'sometimes|required|exists:meetings,id'
         ]);
 

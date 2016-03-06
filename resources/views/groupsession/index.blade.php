@@ -25,7 +25,7 @@
       </li>
     </ul>
     <p><b>Students who do not have a DARS report and proposed schedule will not be seen by an advisor until these steps are completed</b></p>
-    <a class="btn btn-success" href="{{ url('groupsession/list') }}">I have my DARS schedule ready</a>
+    <a class="btn btn-success" href="{{ url('groupsession/list') }}">I have my DARS and Schedule ready</a>
   </div>
 </div>
 

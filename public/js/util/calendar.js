@@ -212,9 +212,21 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 			}else{
 				$('#title').val('');
 			}
-			$('#start').val(self.session.start.format("LLL"));
-			$('#end').val(self.session.end.format("LLL"));
-			durationOptions(self.session.start, self.session.end);
+			if(self.session.start === undefined){
+				$('#start').val(moment().hour(8).minute(00).format('LLL'));
+			}else{
+				$('#start').val(self.session.start.format("LLL"));
+			}
+			if(self.session.end === undefined){
+				$('#end').val(moment().hour(8).minute(20).format('LLL'));
+			}else{
+				$('#end').val(self.session.end.format("LLL"));
+			}
+			if(self.session.start === undefined){
+				durationOptions(moment().hour(8).minute(00), moment().hour(8).minute(20));
+			}else{
+				durationOptions(self.session.start, self.session.end);
+			}
 			$('#meetingID').val(-1);
 			$('#studentidval').val(-1);
 			$('#deleteButton').hide();

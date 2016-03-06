@@ -206,8 +206,16 @@ require(['util/site', 'util/calendar', 'moment'], function(site, calendar, momen
 
 	var createBlackoutForm = function(){
 		$('#btitle').val("");
-		$('#bstart').val(calendar.session.start.format('LLL'));
-		$('#bend').val(calendar.session.end.format('LLL'));
+		if(calendar.session.start === undefined){
+			$('#bstart').val(moment().hour(8).minute(00).format('LLL'));
+		}else{
+			$('#bstart').val(calendar.session.start.format("LLL"));
+		}
+		if(calendar.session.end === undefined){
+			$('#bend').val(moment().hour(9).minute(00).format('LLL'));
+		}else{
+			$('#bend').val(calendar.session.end.format("LLL"));
+		}
 		$('#bblackoutid').val(-1);
 		$('#repeatdiv').show();
 		$('#brepeat').val(0);
@@ -384,10 +392,21 @@ require(['util/site', 'util/calendar', 'moment'], function(site, calendar, momen
 		calendar.createMeetingForm();
 	});
 
+	$('#createMeetingBtn').bind('click', function(){
+		calendar.session = {};
+		calendar.createMeetingForm();
+	});
+
 	$('#blackoutButton').bind('click', function(){
 		$('#meetingOption').modal('hide');
 		createBlackoutForm();
 	});
+
+	$('#createBlackoutBtn').bind('click', function(){
+		calendar.session = {};
+		createBlackoutForm();
+	});
+
 
 	$('#resolveButton').on('click', resolveConflicts);
 
