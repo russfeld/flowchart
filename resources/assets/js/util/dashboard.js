@@ -7,8 +7,6 @@ define(['util/site', 'adminlte', 'datatables.net', 'datatables.netbs'], function
 
     self.init = function(){
 
-      $('body').addClass('skin-purple');
-
       $('#table').DataTable({
         "pageLength": 50,
         "lengthChange": false,

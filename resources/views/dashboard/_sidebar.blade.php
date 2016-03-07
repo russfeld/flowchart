@@ -31,12 +31,16 @@
             <!-- Optionally, you can add icons to the links -->
             <li class="active"><a href="{{ url('/admin') }}"><span>Home</span></a></li>
             <!--<li><a href="#"><span>Management</span></a></li>-->
+            @if(Request::is('admin/students*') || Request::is('admin/departments*') || Request::is('admin/advisors*'))
+            <li class="treeview active">
+            @else
             <li class="treeview">
+            @endif
                 <a href="#"><span>Manage</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                    <li><a href="{{ url('/admin/students') }}">Students</a></li>
-                    <li><a href="{{ url('/admin/advisors') }}">Advisors</a></li>
-                    <li><a href="{{ url('/admin/departments') }}">Departments</a></li>
+                    <li class="{{ Request::is('admin/students*') ? 'active' : '' }}" ><a href="{{ url('/admin/students') }}">Students</a></li>
+                    <li class="{{ Request::is('admin/advisors*') ? 'active' : '' }}" ><a href="{{ url('/admin/advisors') }}">Advisors</a></li>
+                    <li class="{{ Request::is('admin/departments*') ? 'active' : '' }}" ><a href="{{ url('/admin/departments') }}">Departments</a></li>
                 </ul>
             </li>
         </ul><!-- /.sidebar-menu -->

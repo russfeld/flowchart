@@ -1,4 +1,4 @@
-@extends('layouts.nofooter')
+@extends('layouts.dashboard')
 
 @section('title', 'Profiles')
 

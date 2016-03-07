@@ -23,7 +23,8 @@ elixir(function(mix) {
     ], 'public/css/calendar.css');
 
     mix.styles([
-        '../bower/admin-lte/dist/css/AdminLTE.css',
+        //'../bower/admin-lte/dist/css/AdminLTE.css',
+        "dashboard-custom.css",
         "dashboard-skin.css",
         "../bower/datatables.net-bs/css/dataTables.bootstrap.css",
     ], 'public/css/dashboard.css');
