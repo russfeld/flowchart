@@ -159,4 +159,44 @@ class DashboardController extends Controller
         return response()->json(trans('errors.not_found'), 404);
       }
     }
+
+    public function getDepartments($id = -1){
+        $user = Auth::user();
+        if($user->is_advisor){
+          if($id < 0){
+            $departments = Department::all();
+            return view('dashboard.departments')->with('user', $user)->with('departments', $departments)->with('page_title', "Departments");
+          }else{
+            $department = Department::findOrFail($id);
+            return view('dashboard.departmentedit')->with('user', $user)->with('department', $department)->with('page_title', "Edit Department");
+          }
+        }else{
+          abort(404);
+        }
+    }
+
+    public function postDepartments($id = -1, Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        if($id < 0){
+          abort(404);
+        }else{
+          $this->validate($request, [
+              'name' => 'required|string',
+              'email' => 'required|string|email',
+              'office' => 'required|string',
+              'phone' => 'required|string',
+          ]);
+          $department = Department::findOrFail($id);
+          $department->name = $request->input('name');
+          $department->email = $request->input('email');
+          $department->office = $request->input('office');
+          $department->phone = $request->input('phone');
+          $department->save();
+          return response()->json(trans('messages.item_saved'));
+        }
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
 }

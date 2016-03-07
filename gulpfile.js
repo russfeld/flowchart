@@ -138,6 +138,10 @@ elixir(function(mix) {
         'pages/dashboard/advisoredit.js',
     ], 'public/js/dashboard_advisoredit.js');
 
+    mix.scripts([
+        'pages/dashboard/departmentedit.js',
+    ], 'public/js/dashboard_departmentedit.js');
+
 
     //Test Flowchart
 
