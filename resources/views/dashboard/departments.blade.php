@@ -2,7 +2,7 @@
 
 @section('scripts')
     @parent
-    <script type="text/javascript" src="{{ asset('js/lib/require.js') }}" data-main="/js/dashboard_index"></script>
+    <script type="text/javascript" src="{{ asset('js/lib/require.js') }}" data-main="/js/dashboard_departmentedit"></script>
 @endsection
 
 @section('dashcontent')

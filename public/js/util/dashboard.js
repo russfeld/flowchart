@@ -5,12 +5,14 @@ define(['util/site', 'adminlte', 'datatables.net', 'datatables.netbs'], function
     //anything attached to this or self will be public
     var self = this;
 
-    self.init = function(){
+    self.dataTableOptions = {
+      "pageLength": 50,
+      "lengthChange": false,
+    }
 
-      $('#table').DataTable({
-        "pageLength": 50,
-        "lengthChange": false,
-      });
+    self.init = function(options){
+      options || (options = self.dataTableOptions);
+      $('#table').DataTable(options);
     }
   };
 

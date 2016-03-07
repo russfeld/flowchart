@@ -1,7 +1,12 @@
 require(['util/site', 'util/dashboard'], function(site, dashboard) {
 
   site.ajaxcrsf();
-  dashboard.init();
+
+  var options = dashboard.dataTableOptions;
+  options.dom = '<"newbutton">frtip';
+  dashboard.init(options);
+
+  $("div.newbutton").html('<a type="button" class="btn btn-success" href="/admin/newstudent">New Student</a>');
 
   $('#save').on('click', function(){
     $('#spin').removeClass('hide-spin');
