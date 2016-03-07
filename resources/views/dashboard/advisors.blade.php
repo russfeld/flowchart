@@ -15,31 +15,38 @@
           <thead>
           <tr>
             <th>eID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Advisor</th>
+            <th>Name</th>
+            <th>Office</th>
+            <th>Email</th>
+            <th>Phone</th>
             <th>Department</th>
+            <th>Pic</th>
             <th>Actions</th>
           </tr>
           </thead>
           <tbody>
-          @foreach($students as $student)
+          @foreach($advisors as $advisor)
           <tr>
-            <td>{{ $student->user->eid }}</td>
-            <td>{{ $student->first_name }}</td>
-            <td>{{ $student->last_name }}</td>
-            <td>{{ $student->advisor->name or "Unassigned" }}</td>
-            <td>{{ $student->department->name or "Unassigned" }}</td>
-            <td><a class="btn btn-primary btn-sm" href="{{url('/admin/students/' . $student->id)}}" role="button">Edit</a></td>
+            <td>{{ $advisor->user->eid }}</td>
+            <td>{{ $advisor->name }}</td>
+            <td>{{ $advisor->office }}</td>
+            <td>{{ $advisor->email }}</td>
+            <td>{{ $advisor->phone }}</td>
+            <td>{{ $advisor->department->name or "Unassigned" }}</td>
+            <td><a href="{{ url($advisor->pic) }}">{{ $advisor->pic }}</a></td>
+            <td><a class="btn btn-primary btn-sm" href="{{url('/admin/advisors/' . $advisor->id)}}" role="button">Edit</a></td>
           </tr>
           @endforeach
           <tfoot>
           <tr>
             <th>eID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Advisor</th>
+            <th>Name</th>
+            <th>Office</th>
+            <th>Email</th>
+            <th>Phone</th>
             <th>Department</th>
+            <th>Pic</th>
+            <th>Actions</th>
           </tr>
           </tfoot>
         </table>

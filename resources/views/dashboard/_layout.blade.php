@@ -2,11 +2,6 @@
 
 @section('title', 'Profiles')
 
-@section('scripts')
-    @parent
-    <script type="text/javascript" src="{{ asset('js/lib/require.js') }}" data-main="/js/dashboard"></script>
-@endsection
-
 @section('styles')
     @parent
     <link rel="stylesheet" type="text/css" href="{{ asset('css/dashboard.css') }}">

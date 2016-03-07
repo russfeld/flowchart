@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Student;
+use App\Models\Advisor;
 
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
@@ -48,10 +49,15 @@ class ProfilesController extends Controller
         }
     }
 
-		public function getPic(Request $request){
+		public function getPic(Request $request, $id = -1){
 			$user = Auth::user();
 			if($user->is_advisor){
-				return response()->json($user->advisor->pic);
+				if($id < 0){
+					return response()->json($user->advisor->pic);
+				}else{
+					$advisor = Advisor::findOrFail($id);
+					return response()->json(url($advisor->pic));
+				}
 			}else{
 				return response()->json(trans('errors.unimplemented'));
 			}

@@ -91,6 +91,7 @@ elixir(function(mix) {
     mix.scripts([
         '../bower/datatables.net-bs/js/dataTables.bootstrap.js',
     ], 'public/js/lib/datatablesbs.js');
+
     //Utilities
 
     mix.scripts([
@@ -100,6 +101,11 @@ elixir(function(mix) {
     mix.scripts([
         'util/calendar.js',
     ], 'public/js/util/calendar.js');
+
+    mix.scripts([
+        'util/dashboard.js',
+    ], 'public/js/util/dashboard.js');
+
 
     //Pages
 
@@ -120,8 +126,17 @@ elixir(function(mix) {
     ], 'public/js/groupsession.js');
 
     mix.scripts([
-        'pages/dashboard.js',
-    ], 'public/js/dashboard.js');
+        'pages/dashboard/index.js',
+    ], 'public/js/dashboard_index.js');
+
+    mix.scripts([
+        'pages/dashboard/studentedit.js',
+    ], 'public/js/dashboard_studentedit.js');
+
+    mix.scripts([
+        'pages/dashboard/advisoredit.js',
+    ], 'public/js/dashboard_advisoredit.js');
+
 
     //Test Flowchart
 

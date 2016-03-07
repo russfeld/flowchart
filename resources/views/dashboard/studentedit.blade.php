@@ -1,5 +1,10 @@
 @extends('dashboard._layout')
 
+@section('scripts')
+    @parent
+    <script type="text/javascript" src="{{ asset('js/lib/require.js') }}" data-main="/js/dashboard_studentedit"></script>
+@endsection
+
 @section('dashcontent')
 
 <div class="row">
@@ -22,6 +27,7 @@
       <input type="hidden" id="id" value="{{$student->id}}">
       <span id="spin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
       <button type="button" class="btn btn-primary" id="save">Save</button>
+      <a type="button" class="btn btn-warning" href="{{ url('/admin/students/')}}">Cancel</a>
     </form>
   </div>
 </div>

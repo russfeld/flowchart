@@ -99,4 +99,64 @@ class DashboardController extends Controller
         return response()->json(trans('errors.not_found'), 404);
       }
     }
+
+    public function getAdvisors($id = -1){
+        $user = Auth::user();
+        if($user->is_advisor){
+          if($id < 0){
+            $advisors = Advisor::with('user', 'department')->get();
+            return view('dashboard.advisors')->with('user', $user)->with('advisors', $advisors)->with('page_title', "Advisors");
+          }else{
+            $advisor = Advisor::findOrFail($id);
+            $departments = Department::all();
+            $deptUnknown = new Department();
+            $deptUnknown->name = "Unassigned";
+            $deptUnknown->id = 0;
+            $departments->prepend($deptUnknown);
+            return view('dashboard.advisoredit')->with('user', $user)->with('advisor', $advisor)->with('page_title', "Edit Advisor")->with('departments', $departments);
+          }
+        }else{
+          abort(404);
+        }
+    }
+
+    public function postAdvisors($id = -1, Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        if($id < 0){
+          abort(404);
+        }else{
+          $this->validate($request, [
+              'name' => 'required|string',
+              'email' => 'required|string|email',
+              'office' => 'required|string',
+              'phone' => 'required|string',
+              'notes' => 'string',
+              'pic' => 'image',
+              'department' => 'sometimes|required|exists:departments,id',
+          ]);
+          $advisor = $user->advisor;
+          $advisor->name = $request->input('name');
+          $advisor->email = $request->input('email');
+          $advisor->office = $request->input('office');
+          $advisor->phone = $request->input('phone');
+          $advisor->notes = $request->input('notes');
+          if($request->hasFile('pic')){
+            $path = storage_path() . "/app/images";
+            $extension = $request->file('pic')->getClientOriginalExtension();
+            $filename = $user->eid . '.' . $extension;
+            $request->file('pic')->move($path, $filename);
+            $advisor->pic = 'images/' . $filename;
+          }
+          if($request->has('department')){
+            $department = Department::findOrFail($request->input('department'));
+            $advisor->department()->associate($department);
+          }
+          $advisor->save();
+          return response()->json(trans('messages.item_saved'));
+        }
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
 }
