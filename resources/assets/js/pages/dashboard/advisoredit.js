@@ -25,7 +25,12 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
       formData.append("department", $('#department').val());
     }
     var id = $('#id').val();
-    var url = '/admin/advisors/' + id;
+    if(id.length == 0){
+      formData.append("eid", $('#eid').val());
+      var url = '/admin/newadvisor';
+    }else{
+      var url = '/admin/advisors/' + id;
+    }
 		$.ajax({
 		  method: "POST",
 		  url: url,
@@ -35,17 +40,23 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
 			contentType: false,
 		})
 		.success(function( message ) {
-			site.displayMessage(message, "success");
-			site.clearFormErrors();
-			$('#spin').addClass('hide-spin');
-			$.ajax({
-				method: "GET",
-			  url: '/profile/pic/' + id,
-			})
-			.success(function(message){
-				$('#pictext').val(message);
-				$('#picimg').attr('src', message);
-			});
+      if(id.length == 0){
+        site.clearFormErrors();
+        $('#spin').addClass('hide-spin');
+        $(location).attr('href', message);
+      }else{
+  			site.displayMessage(message, "success");
+  			site.clearFormErrors();
+  			$('#spin').addClass('hide-spin');
+  			$.ajax({
+  				method: "GET",
+  			  url: '/profile/pic/' + id,
+  			})
+  			.success(function(message){
+  				$('#pictext').val(message);
+  				$('#picimg').attr('src', message);
+  			});
+      }
 		}).fail(function( jqXHR, message ){
 			if (jqXHR.status == 422)
 			{

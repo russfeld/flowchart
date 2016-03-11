@@ -17,16 +17,26 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
       phone: $('#phone').val(),
     };
     var id = $('#id').val();
-    var url = '/admin/departments/' + id;
+    if(id.length == 0){
+      var url = '/admin/newdepartment';
+    }else{
+      var url = '/admin/departments/' + id;
+    }
     $.ajax({
       method: "POST",
       url: url,
       data: data
     })
     .success(function( message ) {
-      site.displayMessage(message, "success");
-      site.clearFormErrors();
-      $('#spin').addClass('hide-spin');
+      if(id.length == 0){
+        site.clearFormErrors();
+        $('#spin').addClass('hide-spin');
+        $(location).attr('href', message);
+      }else{
+        site.displayMessage(message, "success");
+        site.clearFormErrors();
+        $('#spin').addClass('hide-spin');
+      }
     }).fail(function( jqXHR, message ){
       if (jqXHR.status == 422)
       {

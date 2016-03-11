@@ -13,6 +13,7 @@ use Auth;
 use App\Models\Student;
 use App\Models\Advisor;
 use App\Models\Department;
+use App\Models\User;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -67,6 +68,26 @@ class DashboardController extends Controller
         }
     }
 
+    public function getNewstudent(){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $student = new Student();
+        $departments = Department::all();
+        $deptUnknown = new Department();
+        $deptUnknown->name = "Unassigned";
+        $deptUnknown->id = 0;
+        $departments->prepend($deptUnknown);
+        $advisors = Advisor::all();
+        $advUnknown = new Advisor();
+        $advUnknown->name = "Unassigned";
+        $advUnknown->id = 0;
+        $advisors->prepend($advUnknown);
+        return view('dashboard.studentedit')->with('user', $user)->with('student', $student)->with('page_title', "New Student")->with('departments', $departments)->with('advisors', $advisors);
+      }else{
+        abort(404);
+      }
+    }
+
     public function postStudents($id = -1, Request $request){
       $user = Auth::user();
       if($user->is_advisor){
@@ -100,6 +121,42 @@ class DashboardController extends Controller
       }
     }
 
+    public function postNewstudent(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+            'eid' => 'required|string|unique:users,eid',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|email',
+            'advisor' => 'sometimes|required|exists:advisors,id',
+            'department' => 'sometimes|required|exists:departments,id',
+        ]);
+        $user2 = new User();
+        $user2->eid = $request->input('eid');
+        $user2->is_advisor = false;
+        $user2->save();
+
+        $student = new Student();
+        $student->first_name = $request->input('first_name');
+        $student->last_name = $request->input('last_name');
+        $student->email = $request->input('email');
+        if($request->has('advisor')){
+          $advisor = Advisor::findOrFail($request->input('advisor'));
+          $student->advisor()->associate($advisor);
+        }
+        if($request->has('department')){
+          $department = Department::findOrFail($request->input('department'));
+          $student->department()->associate($department);
+        }
+        $student->user()->associate($user2);
+        $student->save();
+        return response()->json(url('admin/students/' . $student->id));
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
     public function getAdvisors($id = -1){
         $user = Auth::user();
         if($user->is_advisor){
@@ -120,6 +177,21 @@ class DashboardController extends Controller
         }
     }
 
+    public function getNewadvisor(){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $advisor = new Advisor();
+        $departments = Department::all();
+        $deptUnknown = new Department();
+        $deptUnknown->name = "Unassigned";
+        $deptUnknown->id = 0;
+        $departments->prepend($deptUnknown);
+        return view('dashboard.advisoredit')->with('user', $user)->with('advisor', $advisor)->with('page_title', "New Advisor")->with('departments', $departments);
+      }else{
+        abort(404);
+      }
+    }
+
     public function postAdvisors($id = -1, Request $request){
       $user = Auth::user();
       if($user->is_advisor){
@@ -135,7 +207,7 @@ class DashboardController extends Controller
               'pic' => 'image',
               'department' => 'sometimes|required|exists:departments,id',
           ]);
-          $advisor = $user->advisor;
+          $advisor = Advisor::findOrFail($id);
           $advisor->name = $request->input('name');
           $advisor->email = $request->input('email');
           $advisor->office = $request->input('office');
@@ -160,6 +232,49 @@ class DashboardController extends Controller
       }
     }
 
+    public function postNewadvisor(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+            'eid' => 'required|string|unique:users,eid',
+            'name' => 'required|string',
+            'email' => 'required|string|email',
+            'office' => 'required|string',
+            'phone' => 'required|string',
+            'notes' => 'string',
+            'pic' => 'required|image',
+            'department' => 'sometimes|required|exists:departments,id',
+        ]);
+        $user2 = new User();
+        $user2->eid = $request->input('eid');
+        $user2->is_advisor = false;
+        $user2->save();
+
+        $advisor = new Advisor();
+        $advisor->name = $request->input('name');
+        $advisor->email = $request->input('email');
+        $advisor->office = $request->input('office');
+        $advisor->phone = $request->input('phone');
+        $advisor->notes = $request->input('notes');
+        if($request->hasFile('pic')){
+          $path = storage_path() . "/app/images";
+          $extension = $request->file('pic')->getClientOriginalExtension();
+          $filename = $user->eid . '.' . $extension;
+          $request->file('pic')->move($path, $filename);
+          $advisor->pic = 'images/' . $filename;
+        }
+        if($request->has('department')){
+          $department = Department::findOrFail($request->input('department'));
+          $advisor->department()->associate($department);
+        }
+        $advisor->user()->associate($user2);
+        $advisor->save();
+        return response()->json(url('admin/advisors/' . $advisor->id));
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
     public function getDepartments($id = -1){
         $user = Auth::user();
         if($user->is_advisor){
@@ -174,6 +289,17 @@ class DashboardController extends Controller
           abort(404);
         }
     }
+
+    public function getNewdepartment(){
+        $user = Auth::user();
+        if($user->is_advisor){
+            $department = new Department();
+            return view('dashboard.departmentedit')->with('user', $user)->with('department', $department)->with('page_title', "New Department");
+        }else{
+          abort(404);
+        }
+    }
+
 
     public function postDepartments($id = -1, Request $request){
       $user = Auth::user();
@@ -195,6 +321,27 @@ class DashboardController extends Controller
           $department->save();
           return response()->json(trans('messages.item_saved'));
         }
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+    public function postNewdepartment(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+            'name' => 'required|string',
+            'email' => 'required|string|email',
+            'office' => 'required|string',
+            'phone' => 'required|string',
+        ]);
+        $department = new Department();
+        $department->name = $request->input('name');
+        $department->email = $request->input('email');
+        $department->office = $request->input('office');
+        $department->phone = $request->input('phone');
+        $department->save();
+        return response()->json(url('admin/departments/' . $department->id));
       }else{
         return response()->json(trans('errors.not_found'), 404);
       }

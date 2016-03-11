@@ -22,16 +22,27 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
       data.department = $('#department').val();
     }
     var id = $('#id').val();
-    var url = '/admin/students/' + id;
+    if(id.length == 0){
+      data.eid = $('#eid').val();
+      var url = '/admin/newstudent';
+    }else{
+      var url = '/admin/students/' + id;
+    }
     $.ajax({
       method: "POST",
       url: url,
       data: data
     })
     .success(function( message ) {
-      site.displayMessage(message, "success");
-      site.clearFormErrors();
-      $('#spin').addClass('hide-spin');
+      if(id.length == 0){
+        site.clearFormErrors();
+        $('#spin').addClass('hide-spin');
+        $(location).attr('href', message);
+      }else{
+        site.displayMessage(message, "success");
+        site.clearFormErrors();
+        $('#spin').addClass('hide-spin');
+      }
     }).fail(function( jqXHR, message ){
       if (jqXHR.status == 422)
       {

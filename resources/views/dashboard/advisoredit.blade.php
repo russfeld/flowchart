@@ -10,7 +10,11 @@
 <div class="row">
   <div class="col-xs-12">
     <form>
-      @include('forms.text', ['field' => 'eid', 'label' => 'eID', 'value' => $advisor->user->eid, 'disabled' => 'disabled'])
+      @if (isset($advisor->user->eid))
+        @include('forms.text', ['field' => 'eid', 'label' => 'eID', 'value' => $advisor->user->eid, 'disabled' => 'disabled'])
+      @else
+        @include('forms.text', ['field' => 'eid', 'label' => 'eID', 'value' => ''])
+      @endif
       @include('forms.text', ['field' => 'name', 'label' => 'Name', 'value' => $advisor->name])
       @include('forms.text', ['field' => 'office', 'label' => 'Office', 'value' => $advisor->office])
       @include('forms.text', ['field' => 'email', 'label' => 'Email', 'value' => $advisor->email])
