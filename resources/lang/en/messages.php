@@ -8,4 +8,5 @@ return [
   'groupsession_done' => 'Student Marked as Done',
   'groupsession_delete' => 'Queue Entry Deleted',
   'item_saved' => 'Item Saved',
+  'item_deleted' => 'Item Deleted',
 ];

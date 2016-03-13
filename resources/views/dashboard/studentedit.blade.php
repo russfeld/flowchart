@@ -31,6 +31,9 @@
       <input type="hidden" id="id" value="{{$student->id}}">
       <span id="spin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
       <button type="button" class="btn btn-primary" id="save">Save</button>
+      @if (isset($student->user->eid))
+        <button type="button" class="btn btn-danger" id="delete">Delete</button>
+      @endif
       <a type="button" class="btn btn-warning" href="{{ url('/admin/students/')}}">Back</a>
     </form>
   </div>

@@ -157,6 +157,24 @@ class DashboardController extends Controller
       }
     }
 
+    public function postDeletestudent(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'id' => 'required|exists:students',
+        ]);
+        $student = Student::findOrFail($request->input('id'));
+        $user = $student->user;
+        $student->delete();
+        $user->delete();
+        $request->session()->set('message', trans('messages.item_deleted'));
+        $request->session()->set('type', 'success');
+        return response()->json(trans('messages.item_deleted'));
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
     public function getAdvisors($id = -1){
         $user = Auth::user();
         if($user->is_advisor){
@@ -275,6 +293,24 @@ class DashboardController extends Controller
       }
     }
 
+    public function postDeleteadvisor(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'id' => 'required|exists:advisors',
+        ]);
+        $advisor = Advisor::findOrFail($request->input('id'));
+        $user = $advisor->user;
+        $advisor->delete();
+        $user->delete();
+        $request->session()->set('message', trans('messages.item_deleted'));
+        $request->session()->set('type', 'success');
+        return response()->json(trans('messages.item_deleted'));
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
     public function getDepartments($id = -1){
         $user = Auth::user();
         if($user->is_advisor){
@@ -342,6 +378,22 @@ class DashboardController extends Controller
         $department->phone = $request->input('phone');
         $department->save();
         return response()->json(url('admin/departments/' . $department->id));
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+    public function postDeletedepartment(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'id' => 'required|exists:departments',
+        ]);
+        $department = Department::findOrFail($request->input('id'));
+        $department->delete();
+        $request->session()->set('message', trans('messages.item_deleted'));
+        $request->session()->set('type', 'success');
+        return response()->json(trans('messages.item_deleted'));
       }else{
         return response()->json(trans('errors.not_found'), 404);
       }

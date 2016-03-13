@@ -5,6 +5,7 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
   var options = dashboard.dataTableOptions;
   options.dom = '<"newbutton">frtip';
   dashboard.init(options);
+  site.checkMessage();
 
   $("div.newbutton").html('<a type="button" class="btn btn-success" href="/admin/newstudent">New Student</a>');
 
@@ -53,6 +54,35 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
       $('#spin').addClass('hide-spin');
     });
   });
+
+  $('#delete').on('click', function(){
+    var choice = confirm("Are you sure?");
+		if(choice === true){
+      $('#spin').removeClass('hide-spin');
+      var data = {
+        id: $('#id').val(),
+      };
+      var url = "/admin/deletestudent"
+      $.ajax({
+        method: "POST",
+        url: url,
+        data: data
+      })
+      .success(function( message ) {
+        $(location).attr('href', '/admin/students');
+      })
+      .fail(function( jqXHR, message ){
+        if (jqXHR.status == 422)
+        {
+          site.setFormErrors(jqXHR.responseJSON);
+        }else{
+          alert("Unable to delete: " + jqXHR.responseJSON);
+        }
+        $('#spin').addClass('hide-spin');
+      });
+    }
+  });
+
 });
 
 //# sourceMappingURL=dashboard_studentedit.js.map

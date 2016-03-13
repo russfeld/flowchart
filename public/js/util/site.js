@@ -30,12 +30,21 @@ define(['jquery', 'bootstrap'], function(jquery, bootstrap) {
 		});
 	}
 
+	var checkMessage = function(){
+		if($('#message_flash').length){
+			var message = $('#message_flash').val();
+			var type = $('#message_type_flash').val();
+			displayMessage(message, type);
+		}
+	}
+
 
   return {
     displayMessage: displayMessage,
     ajaxcrsf: ajaxcrsf,
 		clearFormErrors: clearFormErrors,
 		setFormErrors: setFormErrors,
+		checkMessage: checkMessage,
   };
 });
 
