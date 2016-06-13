@@ -30,6 +30,7 @@
     "ionsound": "~3.0.6",
     "admin-lte": "~2.3.2",
     "datatables.net": "~1.10.11",
-    "datatables.net-bs": "~1.10.11"
+    "datatables.net-bs": "~1.10.11",
+    "requirejs": "^2.2.0"
   }
 }
