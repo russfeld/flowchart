@@ -83,9 +83,14 @@ This will walk you through setting up the required database for the Flowchart sy
 5. Run `php artisan migrate` to migrate database tables
   1. To include seed data, use `php artisan migrate --seed`
 
-
 ### Apache Virtual Host Configuration
 
+
+### Deployment Configuration
+1. Install Envoy globally using `sudo composer global require "laravel/envoy=~1.0"`
+2. Add `export PATH=$PATH:~/.composer/vendor/bin` to `~/.bashrc` so that envoy can be found by the system
+3. Configure SSH keys on any systems that will be used for deployment. Generally it just needs the development system's public key added as an authorized key. 
+4. See `Envoy.blade.php` in the root directory of the web application for available tasks
 
 **Good References**
 - https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu-16-04
