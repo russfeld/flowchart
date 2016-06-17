@@ -194,49 +194,49 @@ require(['util/site', 'pusher', 'react', 'react-dom', 'ionsound'], function (sit
 				if (this.props.student.status == 0 || this.props.student.status == 1) {
 					return React.createElement(
 						'div',
-						{ className: "alert alert-info groupsession-div", role: "alert" },
+						{ className: 'alert alert-info groupsession-div', role: 'alert' },
 						React.createElement(
 							'button',
-							{ className: "btn btn-danger pull-right groupsession-button del-button", 'data-id': this.props.student.id, onClick: this.delStudent },
+							{ className: 'btn btn-danger pull-right groupsession-button del-button', 'data-id': this.props.student.id, onClick: this.delStudent },
 							'X'
 						),
 						React.createElement(
 							'button',
-							{ className: "btn btn-success pull-right groupsession-button take-button", 'data-id': this.props.student.id, onClick: this.takeStudent },
+							{ className: 'btn btn-success pull-right groupsession-button take-button', 'data-id': this.props.student.id, onClick: this.takeStudent },
 							'Take'
 						),
 						this.props.student.name,
 						' ',
 						React.createElement(
 							'span',
-							{ className: "badge" },
+							{ className: 'badge' },
 							badgeTitle
 						)
 					);
 				} else if (this.props.student.status == 2) {
 					return React.createElement(
 						'div',
-						{ className: "alert alert-success groupsession-div", role: "alert" },
+						{ className: 'alert alert-success groupsession-div', role: 'alert' },
 						React.createElement(
 							'button',
-							{ className: "btn btn-danger pull-right groupsession-button del-button", 'data-id': this.props.student.id, onClick: this.delStudent },
+							{ className: 'btn btn-danger pull-right groupsession-button del-button', 'data-id': this.props.student.id, onClick: this.delStudent },
 							'X'
 						),
 						React.createElement(
 							'button',
-							{ className: "btn btn-primary pull-right groupsession-button done-button", 'data-id': this.props.student.id, onClick: this.doneStudent },
+							{ className: 'btn btn-primary pull-right groupsession-button done-button', 'data-id': this.props.student.id, onClick: this.doneStudent },
 							'Done'
 						),
 						React.createElement(
 							'button',
-							{ className: "btn btn-info pull-right groupsession-button put-button", 'data-id': this.props.student.id, onClick: this.putStudent },
+							{ className: 'btn btn-info pull-right groupsession-button put-button', 'data-id': this.props.student.id, onClick: this.putStudent },
 							'Requeue'
 						),
 						this.props.student.name,
 						' ',
 						React.createElement(
 							'span',
-							{ className: "badge" },
+							{ className: 'badge' },
 							badgeTitle
 						)
 					);
@@ -259,12 +259,12 @@ require(['util/site', 'pusher', 'react', 'react-dom', 'ionsound'], function (sit
 				}
 				return React.createElement(
 					'div',
-					{ className: myClass, role: "alert" },
+					{ className: myClass, role: 'alert' },
 					name,
 					' ',
 					React.createElement(
 						'span',
-						{ className: "badge" },
+						{ className: 'badge' },
 						badgeTitle
 					)
 				);
