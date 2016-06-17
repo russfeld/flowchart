@@ -53,6 +53,7 @@ I also recommend installing these Firefox Addons for testing
   1. `git config --global user.name "John Doe"`
   2. `git config --global user.email johndoe@example.com`
   3. `git config --global core.editor nano`
+  4. `git config --global push.default simple`
 
 ## Clone Repository
 
@@ -84,12 +85,17 @@ This will walk you through setting up the required database for the Flowchart sy
   1. To include seed data, use `php artisan migrate --seed`
 
 ### Apache Virtual Host Configuration
-
+1. Copy `flowchart.conf.example` to `/etc/apache2/sites-available/flowchart.conf`
+2. Enable the site by doing `sudo a2ensite flowchart`
+3. Add `127.0.0.1  flowchart.local` to `/etc/hosts`
+4. Change the group of the folders in `storage` to `www-data`
+5. Enable the `rewrite` apache module: `sudo a2enmod rewrite`
+6. Restart the computer for things to work properly
 
 ### Deployment Configuration
 1. Install Envoy globally using `sudo composer global require "laravel/envoy=~1.0"`
 2. Add `export PATH=$PATH:~/.composer/vendor/bin` to `~/.bashrc` so that envoy can be found by the system
-3. Configure SSH keys on any systems that will be used for deployment. Generally it just needs the development system's public key added as an authorized key. 
+3. Configure SSH keys on any systems that will be used for deployment. Generally it just needs the development system's public key added as an authorized key.
 4. See `Envoy.blade.php` in the root directory of the web application for available tasks
 
 **Good References**
