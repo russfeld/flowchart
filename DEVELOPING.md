@@ -108,13 +108,13 @@ This will walk you through setting up the required database for the Flowchart sy
 - https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup
 
 **Deploying with Envoy**
-https://serversforhackers.com/video/deploying-with-envoy-cast
-https://serversforhackers.com/video/enhancing-envoy-deployment
+- https://serversforhackers.com/video/deploying-with-envoy-cast
+- https://serversforhackers.com/video/enhancing-envoy-deployment
 
 **Gulp, Bower & Elixir**
-http://laravel.com/docs/5.1/elixir
-http://laravelcoding.com/blog/laravel-5-beauty-using-bower
-https://mattstauffer.co/blog/convert-laravel-5-frontend-scaffold-to-bower
+- http://laravel.com/docs/5.1/elixir
+- http://laravelcoding.com/blog/laravel-5-beauty-using-bower
+- https://mattstauffer.co/blog/convert-laravel-5-frontend-scaffold-to-bower
 
 **Blade Templates**
-https://scotch.io/tutorials/simple-laravel-layouts-using-blade
+- https://scotch.io/tutorials/simple-laravel-layouts-using-blade

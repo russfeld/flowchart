@@ -12,7 +12,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="{{ Request::is('courses*') ? 'active' : '' }}"><a href="{{ url('/courses') }}">Courses</a></li>-->
+            <li class="{{ Request::is('courses*') ? 'active' : '' }}"><a href="{{ url('/courses') }}">Courses</a></li>
             <li class="{{ Request::is('flowcharts*') ? 'active' : '' }}"><a href="{{ url('/flowcharts') }}">Flowcharts</a></li>
             <li class="{{ Request::is('advising*') ? 'active' : '' }}"><a href="{{ url('/advising') }}">Advising</a></li>
             <li class="{{ Request::is('groupsession*') ? 'active' : '' }}"><a href="{{ url('/groupsession') }}">Group Advising</a></li>

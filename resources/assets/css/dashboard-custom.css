@@ -539,6 +539,10 @@ a:focus {
   font-size: 12px;
 }
 .sidebar-menu li > a > .fa-angle-left {
+  -webkit-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
   width: auto;
   height: auto;
   padding: 0;
