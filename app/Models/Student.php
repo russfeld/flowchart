@@ -3,11 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Student extends Model
 {
+
+    use SoftDeletes;
+
+    protected $dates = ['deleted_at'];
+
     public function user(){
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User')->withTrashed();
     }
 
     public function meetings(){
@@ -15,11 +21,11 @@ class Student extends Model
     }
 
     public function advisor(){
-    	return $this->belongsTo('App\Models\Advisor');
+    	return $this->belongsTo('App\Models\Advisor')->withTrashed();
     }
 
     public function department(){
-    	return $this->belongsTo('App\Models\Department');
+    	return $this->belongsTo('App\Models\Department')->withTrashed();
     }
 
     public function getNameAttribute(){

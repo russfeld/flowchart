@@ -3,15 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Advisor extends Model
 {
+
+    use SoftDeletes;
+
+    protected $dates = ['deleted_at'];
+
     public function user(){
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User')->withTrashed();
     }
 
     public function department(){
-        return $this->belongsTo('App\Models\Department');
+        return $this->belongsTo('App\Models\Department')->withTrashed();
     }
 
     public function meetings(){
@@ -19,7 +25,7 @@ class Advisor extends Model
     }
 
     public function students(){
-    	return $this->hasMany('App\Models\Student');
+    	return $this->hasMany('App\Models\Student')->withTrashed();
     }
 
     public function blackouts(){

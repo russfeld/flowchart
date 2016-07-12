@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Blackout extends Model
 {
     public function advisor(){
-    	return $this->belongsTo('App\Models\Advisor');
+    	return $this->belongsTo('App\Models\Advisor')->withTrashed();
     }
 
     public function events(){

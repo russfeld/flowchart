@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Meeting extends Model
 {
     public function advisor(){
-    	return $this->belongsTo('App\Models\Advisor');
+    	return $this->belongsTo('App\Models\Advisor')->withTrashed();
     }
 
     public function student(){
-    	return $this->belongsTo('App\Models\Student');
+    	return $this->belongsTo('App\Models\Student')->withTrashed();
     }
 
     //hidden from JSON view

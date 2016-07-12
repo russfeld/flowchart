@@ -25,10 +25,10 @@ class Groupsession extends Model
   }
 */
   public function advisor(){
-    return $this->belongsTo('App\Models\Advisor', 'advisor_id', 'id');
+    return $this->belongsTo('App\Models\Advisor', 'advisor_id', 'id')->withTrashed();
   }
 
   public function student(){
-    return $this->belongsTo('App\Models\Student');
+    return $this->belongsTo('App\Models\Student')->withTrashed();
   }
 }
