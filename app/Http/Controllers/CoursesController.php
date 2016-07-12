@@ -6,6 +6,8 @@ use App\Models\College;
 use App\Models\Category;
 use App\Models\Course;
 
+use App\Http\Controllers\Controller;
+
 class CoursesController extends Controller
 {
     /**
@@ -14,7 +16,6 @@ class CoursesController extends Controller
     public function getIndex()
     {
         $colleges = College::with('categories')->get();
-
         return view('courses/index')->with('colleges', $colleges);
     }
 

@@ -98,9 +98,23 @@ This will walk you through setting up the required database for the Flowchart sy
 3. Configure SSH keys on any systems that will be used for deployment. Generally it just needs the development system's public key added as an authorized key.
 4. See `Envoy.blade.php` in the root directory of the web application for available tasks
 
-**Good References**
+## References
+
+**General Development Environment**
 - https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu-16-04
 - https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-16-04
 - http://www.webupd8.org/2014/05/install-atom-text-editor-in-ubuntu-via-ppa.html
 - https://help.ubuntu.com/community/SSH/OpenSSH/Keys
 - https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup
+
+**Deploying with Envoy**
+https://serversforhackers.com/video/deploying-with-envoy-cast
+https://serversforhackers.com/video/enhancing-envoy-deployment
+
+**Gulp, Bower & Elixir**
+http://laravel.com/docs/5.1/elixir
+http://laravelcoding.com/blog/laravel-5-beauty-using-bower
+https://mattstauffer.co/blog/convert-laravel-5-frontend-scaffold-to-bower
+
+**Blade Templates**
+https://scotch.io/tutorials/simple-laravel-layouts-using-blade
