@@ -9,3 +9,8 @@ JSFiddle: http://jsfiddle.net/1u9u1nh8/4/
 See DEVELOPING.md for instructions on configuring the development environment
 
 # Todo list
+
+[] Show deleted records in dashboard?
+[] Meetings, blackouts, and GroupSessions dashboard?
+[] Courses, catalog, etc. dashboard?
+[] Dashboard widgets

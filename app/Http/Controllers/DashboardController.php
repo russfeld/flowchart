@@ -14,6 +14,8 @@ use App\Models\Student;
 use App\Models\Advisor;
 use App\Models\Department;
 use App\Models\User;
+use App\Models\Meeting;
+use App\Models\Groupsession;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -37,7 +39,11 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         if($user->is_advisor){
-          return view('dashboard.index')->with('user', $user);
+          $data["students"] = Student::count();
+          $data["advisors"] = Advisor::count();
+          $data["meetings"] = Meeting::count();
+          $data["groupsessions"] = Groupsession::count();
+          return view('dashboard.index')->with('user', $user)->with('page_title', "Advising Dashboard")->with('data', $data);
         }else{
           abort(404);
         }

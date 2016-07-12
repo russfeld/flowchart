@@ -539,6 +539,9 @@ a:focus {
   font-size: 12px;
 }
 .sidebar-menu li > a > .fa-angle-left {
+/*
+russfeld - added rotate so it is really fa-angle-right intsead :)
+*/
   -webkit-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
   -o-transform: rotate(180deg);
@@ -4916,4 +4919,12 @@ table.text-center th {
   .table-responsive > .table tr td {
     white-space: normal !important;
   }
+}
+
+/*
+russfeld - extra stuff
+*/
+a.nounderline{
+  text-decoration: none;
+  color: #
 }
