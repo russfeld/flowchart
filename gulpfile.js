@@ -119,6 +119,10 @@ elixir(function(mix) {
     ], 'public/js/student-calendar.js');
 
     mix.scripts([
+        'pages/readonly-calendar.js',
+    ], 'public/js/readonly-calendar.js');
+
+    mix.scripts([
         'pages/profiles.js',
     ], 'public/js/profiles.js');
 

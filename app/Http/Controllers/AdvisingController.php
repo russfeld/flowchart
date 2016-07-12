@@ -52,8 +52,16 @@ class AdvisingController extends Controller
         		return view('advising/studentindex')->with('user', $user)->with('advisor', $user->student->advisor);
         	}
         }else{
-            $advisor = Advisor::findOrFail($id);
+					$advisor = Advisor::findOrFail($id);
+					if($user->is_advisor){
+						if($advisor->id == $user->advisor->id){
+							return view('advising/advisorindex')->with('user', $user)->with('advisor', $user->advisor);
+						}else{
+            	return view('advising/readonlyindex')->with('user', $user)->with('advisor', $advisor);
+						}
+					}else{
             return view('advising/studentindex')->with('user', $user)->with('advisor', $advisor);
+					}
         }
     }
 

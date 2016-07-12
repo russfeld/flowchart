@@ -301,7 +301,7 @@ require(['util/site', 'util/calendar', 'moment'], function(site, calendar, momen
 	});
 
 	$('#studentid').autocomplete({
-	    serviceUrl: 'profile/studentfeed',
+	    serviceUrl: '/profile/studentfeed',
 	    ajaxSettings: {
 	    	dataType: "json"
 	    },
