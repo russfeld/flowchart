@@ -32,7 +32,11 @@
       <h4 class="panel-title">Contact the webmaster to update these items if they are incorrect</h4>
     </div>
     <div class="panel-body">
-      @include('forms.text', ['field' => 'department', 'label' => 'Department', 'value' => $advisor->department->name, 'disabled' => 'disabled'])
+      @if(isset($advisor->department->name))
+        @include('forms.text', ['field' => 'department', 'label' => 'Department', 'value' => $advisor->department->name, 'disabled' => 'disabled'])
+      @else
+        @include('forms.text', ['field' => 'department', 'label' => 'Department', 'value' => 'Unassigned', 'disabled' => 'disabled'])
+      @endif
     </div>
   </div>
 </form>

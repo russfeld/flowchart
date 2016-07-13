@@ -49,14 +49,20 @@ class DashboardController extends Controller
         }
     }
 
-    public function getStudents($id = -1){
+    public function getStudents(Request $request, $id = -1){
         $user = Auth::user();
         if($user->is_advisor){
           if($id < 0){
-            $students = Student::with('user', 'department', 'advisor')->get();
-            return view('dashboard.students')->with('user', $user)->with('students', $students)->with('page_title', "Students");
+            if($request->has('deleted')){
+              $students = Student::with('user', 'department', 'advisor')->onlyTrashed()->get();
+              return view('dashboard.students')->with('user', $user)->with('students', $students)->with('page_title', "Deleted Students");
+            }else{
+              $students = Student::with('user', 'department', 'advisor')->get();
+              $deleted = Student::onlyTrashed()->count();
+              return view('dashboard.students')->with('user', $user)->with('students', $students)->with('page_title', "Students")->with('deleted', $deleted);
+            }
           }else{
-            $student = Student::findOrFail($id);
+            $student = Student::withTrashed()->findOrFail($id);
             $departments = Department::all();
             $deptUnknown = new Department();
             $deptUnknown->name = "Unassigned";
@@ -181,14 +187,61 @@ class DashboardController extends Controller
       }
     }
 
-    public function getAdvisors($id = -1){
+    public function postForcedeletestudent(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'id' => 'required|exists:students',
+        ]);
+        $student = Student::withTrashed()->findOrFail($request->input('id'));
+        if($student->trashed()){
+          $user = $student->user;
+          $student->meetings()->forceDelete();
+          $student->forceDelete();
+          $user->forceDelete();
+          $request->session()->set('message', trans('messages.item_forcedeleted'));
+          $request->session()->set('type', 'success');
+          return response()->json(trans('messages.item_forcedeleted'));
+        }else{
+          return response()->json(trans('errors.not_trashed'), 404);
+        }
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+    public function postRestorestudent(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'id' => 'required|exists:students',
+        ]);
+        $student = Student::withTrashed()->findOrFail($request->input('id'));
+        $user = $student->user;
+        $student->restore();
+        $user->restore();
+        $request->session()->set('message', trans('messages.item_restored'));
+        $request->session()->set('type', 'success');
+        return response()->json(trans('messages.item_restored'));
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+    public function getAdvisors(Request $request, $id = -1){
         $user = Auth::user();
         if($user->is_advisor){
           if($id < 0){
-            $advisors = Advisor::with('user', 'department')->get();
-            return view('dashboard.advisors')->with('user', $user)->with('advisors', $advisors)->with('page_title', "Advisors");
+            if($request->has('deleted')){
+              $advisors = Advisor::onlyTrashed()->with('user', 'department')->get();
+              return view('dashboard.advisors')->with('user', $user)->with('advisors', $advisors)->with('page_title', " Deleted Advisors");
+            }else{
+              $advisors = Advisor::with('user', 'department')->get();
+              $deleted = Advisor::onlyTrashed()->count();
+              return view('dashboard.advisors')->with('user', $user)->with('advisors', $advisors)->with('page_title', "Advisors")->with('deleted', $deleted);
+            }
           }else{
-            $advisor = Advisor::findOrFail($id);
+            $advisor = Advisor::withTrashed()->findOrFail($id);
             $departments = Department::all();
             $deptUnknown = new Department();
             $deptUnknown->name = "Unassigned";
@@ -317,14 +370,67 @@ class DashboardController extends Controller
       }
     }
 
-    public function getDepartments($id = -1){
+    public function postForcedeleteadvisor(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'id' => 'required|exists:advisors',
+        ]);
+        $advisor = Advisor::withTrashed()->findOrFail($request->input('id'));
+        if($advisor->trashed()){
+          $advisor->meetings()->forceDelete();
+          $advisor->events()->forceDelete();
+          $advisor->blackouts()->forceDelete();
+          foreach($advisor->students()->get() as $student){
+            $student->advisor_id = null;
+            $student->save();
+          }
+          $user = $advisor->user;
+          $advisor->forceDelete();
+          $user->forceDelete();
+          $request->session()->set('message', trans('messages.item_forcedeleted'));
+          $request->session()->set('type', 'success');
+          return response()->json(trans('messages.item_forcedeleted'));
+        }else{
+          return response()->json(trans('errors.not_trashed'), 404);
+        }
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+    public function postRestoreadvisor(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'id' => 'required|exists:advisors',
+        ]);
+        $advisor = Advisor::withTrashed()->findOrFail($request->input('id'));
+        $user = $advisor->user;
+        $advisor->restore();
+        $user->restore();
+        $request->session()->set('message', trans('messages.item_restored'));
+        $request->session()->set('type', 'success');
+        return response()->json(trans('messages.item_deleted'));
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+    public function getDepartments(Request $request, $id = -1){
         $user = Auth::user();
         if($user->is_advisor){
           if($id < 0){
-            $departments = Department::all();
-            return view('dashboard.departments')->with('user', $user)->with('departments', $departments)->with('page_title', "Departments");
+            if($request->has('deleted')){
+              $departments = Department::onlyTrashed()->get();
+              return view('dashboard.departments')->with('user', $user)->with('departments', $departments)->with('page_title', "Deleted Departments");
+            }else{
+              $departments = Department::all();
+              $deleted = Department::onlyTrashed()->count();
+              return view('dashboard.departments')->with('user', $user)->with('departments', $departments)->with('page_title', "Departments")->with('deleted', $deleted);
+            }
           }else{
-            $department = Department::findOrFail($id);
+            $department = Department::withTrashed()->findOrFail($id);
             return view('dashboard.departmentedit')->with('user', $user)->with('department', $department)->with('page_title', "Edit Department");
           }
         }else{
@@ -341,7 +447,6 @@ class DashboardController extends Controller
           abort(404);
         }
     }
-
 
     public function postDepartments($id = -1, Request $request){
       $user = Auth::user();
@@ -400,6 +505,50 @@ class DashboardController extends Controller
         $request->session()->set('message', trans('messages.item_deleted'));
         $request->session()->set('type', 'success');
         return response()->json(trans('messages.item_deleted'));
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+    public function postRestoredepartment(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'id' => 'required|exists:departments',
+        ]);
+        $department = Department::withTrashed()->findOrFail($request->input('id'));
+        $department->restore();
+        $request->session()->set('message', trans('messages.item_restored'));
+        $request->session()->set('type', 'success');
+        return response()->json(trans('messages.item_restored'));
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+    public function postForcedeletedepartment(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'id' => 'required|exists:departments',
+        ]);
+        $department = Department::withTrashed()->findOrFail($request->input('id'));
+        if($department->trashed()){
+          foreach($department->students()->get() as $student){
+            $student->department_id = null;
+            $student->save();
+          }
+          foreach($department->advisors()->get() as $advisor){
+            $advisor->department_id = null;
+            $advisor->save();
+          }
+          $department->forceDelete();
+          $request->session()->set('message', trans('messages.item_forcedeleted'));
+          $request->session()->set('type', 'success');
+          return response()->json(trans('messages.item_forcedeleted'));
+        }else{
+          return response()->json(trans('errors.not_trashed'), 404);
+        }
       }else{
         return response()->json(trans('errors.not_found'), 404);
       }

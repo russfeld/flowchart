@@ -97,6 +97,62 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
     }
   });
 
+  $('#forcedelete').on('click', function(){
+    var choice = confirm("Are you sure? This will permanently remove all related records. You cannot undo this action.");
+		if(choice === true){
+      $('#spin').removeClass('hide-spin');
+      var data = {
+        id: $('#id').val(),
+      };
+      var url = "/admin/forcedeleteadvisor"
+      $.ajax({
+        method: "POST",
+        url: url,
+        data: data
+      })
+      .success(function( message ) {
+        $(location).attr('href', '/admin/advisors');
+      })
+      .fail(function( jqXHR, message ){
+        if (jqXHR.status == 422)
+        {
+          site.setFormErrors(jqXHR.responseJSON);
+        }else{
+          alert("Unable to delete: " + jqXHR.responseJSON);
+        }
+        $('#spin').addClass('hide-spin');
+      });
+    }
+  });
+
+  $('#restore').on('click', function(){
+    var choice = confirm("Are you sure?");
+		if(choice === true){
+      $('#spin').removeClass('hide-spin');
+      var data = {
+        id: $('#id').val(),
+      };
+      var url = "/admin/restoreadvisor"
+      $.ajax({
+        method: "POST",
+        url: url,
+        data: data
+      })
+      .success(function( message ) {
+        $(location).attr('href', '/admin/advisors');
+      })
+      .fail(function( jqXHR, message ){
+        if (jqXHR.status == 422)
+        {
+          site.setFormErrors(jqXHR.responseJSON);
+        }else{
+          alert("Unable to delete: " + jqXHR.responseJSON);
+        }
+        $('#spin').addClass('hide-spin');
+      });
+    }
+  });
+
   $(document).on('change', '.btn-file :file', function() {
     var input = $(this),
         numFiles = input.get(0).files ? input.get(0).files.length : 1,

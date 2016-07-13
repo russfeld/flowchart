@@ -17,7 +17,7 @@ class Student extends Model
     }
 
     public function meetings(){
-    	return $this->hasMany('App\Models\Meetings');
+    	return $this->hasMany('App\Models\Meeting');
     }
 
     public function advisor(){

@@ -17,9 +17,18 @@
       @include('forms.text', ['field' => 'phone', 'label' => 'Phone', 'value' => $department->phone])
       <input type="hidden" id="id" value="{{$department->id}}">
       <span id="spin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
-      <button type="button" class="btn btn-primary" id="save">Save</button>
-      @if(isset($department->id))
-        <button type="button" class="btn btn-danger" id="delete">Delete</button>
+      @if(!$department->trashed())
+        <button type="button" class="btn btn-primary" id="save">Save</button>
+      @endif
+      @if (isset($department->id))
+        @if ($department->trashed())
+          <button type="button" class="btn btn-danger" id="forcedelete">Force Delete</button>
+        @else
+          <button type="button" class="btn btn-danger" id="delete">Delete</button>
+        @endif
+      @endif
+      @if ($department->trashed())
+        <button type="button" class="btn btn-success" id="restore">Restore</button>
       @endif
       <a type="button" class="btn btn-warning" href="{{ url('/admin/departments/')}}">Back</a>
     </form>

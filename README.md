@@ -10,7 +10,8 @@ See DEVELOPING.md for instructions on configuring the development environment
 
 # Todo list
 
-[] Show deleted records in dashboard?
 [] Meetings, blackouts, and GroupSessions dashboard?
 [] Courses, catalog, etc. dashboard?
 [] Dashboard widgets
+[] Track meeting status (complete, no-show, cancel, etc.)
+[] Allow scheduling meetings with a non-existing student
