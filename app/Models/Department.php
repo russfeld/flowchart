@@ -12,10 +12,10 @@ class Department extends Model
     protected $dates = ['deleted_at'];
 
     public function advisors(){
-        return $this->hasMany('App\Models\Advisor')->orderBy('name')->withTrashed();
+        return $this->hasMany('App\Models\Advisor')->orderBy('name');
     }
 
     public function students(){
-        return $this->hasMany('App\Models\Student')->orderBy('last_name')->withTrashed();
+        return $this->hasMany('App\Models\Student')->orderBy('last_name');
     }
 }

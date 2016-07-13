@@ -25,7 +25,7 @@ class Advisor extends Model
     }
 
     public function students(){
-    	return $this->hasMany('App\Models\Student')->withTrashed();
+    	return $this->hasMany('App\Models\Student');
     }
 
     public function blackouts(){
