@@ -11,7 +11,8 @@
         "phpmailer/phpmailer": "^5.2",
         "xavrsl/cas": "1.2.*",
         "pusher/pusher-php-server": "~2.0",
-        "terbium/db-config": "2.*"
+        "terbium/db-config": "2.*",
+        "doctrine/dbal": "^2.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
