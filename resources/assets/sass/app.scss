@@ -144,6 +144,21 @@ body {
   cursor: pointer;
 }
 
+/*
+// not sure what to put here
+.fc-new-meeting .fc-title:after{
+  content: " \25CE";
+}
+*/
+
+.fc-attend-meeting .fc-title:after{
+  content: " \2714";
+}
+
+.fc-absent-meeting .fc-title:after{
+  content: " \2718";
+}
+
 .datepicker-disabled{
   cursor: not-allowed !important;
 }

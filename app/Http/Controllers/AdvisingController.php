@@ -119,6 +119,7 @@ class AdvisingController extends Controller
                     'end' => $meeting->end->toDateTimeString(),
                     'type' => 'm',
                     'title' => $meeting->title,
+										'className' => $meeting->statusclass,
                     'desc' => $meeting->description,
                     'studentname' => $meeting->student->name,
                     'student_id' => $meeting->student->id,
