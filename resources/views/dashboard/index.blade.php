@@ -41,6 +41,7 @@
   </div><!-- /.col -->
 
   <div class="col-md-3 col-sm-6 col-xs-12">
+    <a href="{{ url("admin/meetings")}}" class="nounderline">
     <div class="info-box">
       <!-- Apply any bg-* class to to the icon to color it -->
       <span class="info-box-icon bg-orange"><i class="fa fa-calendar-check-o"></i></span>
@@ -49,15 +50,70 @@
         <span class="info-box-number">{{ $data["meetings"] }}</span>
       </div><!-- /.info-box-content -->
     </div><!-- /.info-box -->
+    </a>
   </div><!-- /.col -->
 
   <div class="col-md-3 col-sm-6 col-xs-12">
+    <a href="{{ url("admin/groupsessions")}}" class="nounderline">
     <div class="info-box">
       <!-- Apply any bg-* class to to the icon to color it -->
       <span class="info-box-icon bg-purple"><i class="fa fa-thumbs-up"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">Groupsessions</span>
         <span class="info-box-number">{{ $data["groupsessions"] }}</span>
+      </div><!-- /.info-box-content -->
+    </div><!-- /.info-box -->
+  </div><!-- /.col -->
+  </a>
+</div><!-- /.row -->
+
+
+
+<div class="row">
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <a href="{{ url("admin/blackouts")}}" class="nounderline">
+    <div class="info-box">
+      <!-- Apply any bg-* class to to the icon to color it -->
+      <span class="info-box-icon bg-yellow"><i class="fa fa-ban"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">Blackouts</span>
+        <span class="info-box-number">{{ $data["blackouts"] }}</span>
+      </div><!-- /.info-box-content -->
+    </div><!-- /.info-box -->
+    </a>
+  </div><!-- /.col -->
+
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <a href="{{ url("admin/blackouts")}}" class="nounderline">
+    <div class="info-box">
+      <!-- Apply any bg-* class to to the icon to color it -->
+      <span class="info-box-icon bg-red"><i class="fa fa-calendar-times-o"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">Blackout Events</span>
+        <span class="info-box-number">{{ $data["blackoutevents"] }}</span>
+      </div><!-- /.info-box-content -->
+    </div><!-- /.info-box -->
+    </a>
+  </div><!-- /.col -->
+
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+      <!-- Apply any bg-* class to to the icon to color it -->
+      <span class="info-box-icon bg-aqua"><i class="fa fa-gears"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">Courses</span>
+        <span class="info-box-number">{{ $data["courses"] }}</span>
+      </div><!-- /.info-box-content -->
+    </div><!-- /.info-box -->
+  </div><!-- /.col -->
+
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+      <!-- Apply any bg-* class to to the icon to color it -->
+      <span class="info-box-icon bg-lime"><i class="fa fa-line-chart"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">Flowcharts</span>
+        <span class="info-box-number">fixme!</span>
       </div><!-- /.info-box-content -->
     </div><!-- /.info-box -->
   </div><!-- /.col -->

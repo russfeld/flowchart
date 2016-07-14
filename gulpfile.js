@@ -146,6 +146,19 @@ elixir(function(mix) {
         'pages/dashboard/departmentedit.js',
     ], 'public/js/dashboard_departmentedit.js');
 
+    mix.scripts([
+        'pages/dashboard/meetingedit.js',
+    ], 'public/js/dashboard_meetingedit.js');
+
+    mix.scripts([
+        'pages/dashboard/blackoutedit.js',
+    ], 'public/js/dashboard_blackoutedit.js');
+
+    mix.scripts([
+        'pages/dashboard/groupsessionedit.js',
+    ], 'public/js/dashboard_groupsessionedit.js');
+
+
 
     //Test Flowchart
 

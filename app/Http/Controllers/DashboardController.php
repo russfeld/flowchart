@@ -16,6 +16,9 @@ use App\Models\Department;
 use App\Models\User;
 use App\Models\Meeting;
 use App\Models\Groupsession;
+use App\Models\Blackout;
+use App\Models\Blackoutevent;
+use App\Models\Course;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -43,6 +46,10 @@ class DashboardController extends Controller
           $data["advisors"] = Advisor::count();
           $data["meetings"] = Meeting::count();
           $data["groupsessions"] = Groupsession::count();
+          $data["blackouts"] = Blackout::count();
+          $data["blackoutevents"] = Blackoutevent::count();
+          $data["courses"] = Course::count();
+          //$data["flowcharts"] = Flowchart::count();
           return view('dashboard.index')->with('user', $user)->with('page_title', "Advising Dashboard")->with('data', $data);
         }else{
           abort(404);
@@ -553,4 +560,101 @@ class DashboardController extends Controller
         return response()->json(trans('errors.not_found'), 404);
       }
     }
+
+    public function getMeetings(Request $request, $id = -1){
+        $user = Auth::user();
+        if($user->is_advisor){
+          if($id < 0){
+            $meetings = Meeting::with('student', 'advisor')->get();
+            return view('dashboard.meetings')->with('user', $user)->with('meetings', $meetings)->with('page_title', "Meetings");
+          }else{
+            $meeting = Meeting::findOrFail($id);
+            return view('dashboard.meetingedit')->with('user', $user)->with('meeting', $meeting)->with('page_title', "Edit Meeting");
+          }
+        }else{
+          abort(404);
+        }
+    }
+
+    public function postDeletemeeting(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'id' => 'required|exists:meetings',
+        ]);
+        $meeting = Meeting::findOrFail($request->input('id'));
+        $meeting->delete();
+        $request->session()->set('message', trans('messages.item_deleted'));
+        $request->session()->set('type', 'success');
+        return response()->json(trans('messages.item_deleted'), 200);
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+    public function getBlackouts(Request $request, $id = -1){
+        $user = Auth::user();
+        if($user->is_advisor){
+          if($id < 0){
+            $blackouts = Blackout::with('advisor', 'events')->get();
+            return view('dashboard.blackouts')->with('user', $user)->with('blackouts', $blackouts)->with('page_title', "Blackouts");
+          }else{
+            $blackout = Blackout::findOrFail($id);
+            $blackout->load('events', 'advisor');
+            return view('dashboard.blackoutedit')->with('user', $user)->with('blackout', $blackout)->with('page_title', "Edit Blackout");
+          }
+        }else{
+          abort(404);
+        }
+    }
+
+    public function postDeleteblackout(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'id' => 'required|exists:blackouts',
+        ]);
+        $blackout = Blackout::findOrFail($request->input('id'));
+        $blackout->delete();
+        $request->session()->set('message', trans('messages.item_deleted'));
+        $request->session()->set('type', 'success');
+        return response()->json(trans('messages.item_deleted'), 200);
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+    public function getGroupsessions(Request $request, $id = -1){
+        $user = Auth::user();
+        if($user->is_advisor){
+          if($id < 0){
+            $groupsessions = Groupsession::with('advisor', 'student')->get();
+            return view('dashboard.groupsessions')->with('user', $user)->with('groupsessions', $groupsessions)->with('page_title', "Groupsessions");
+          }else{
+            $groupsession = Groupsession::findOrFail($id);
+            $groupsession->load('student', 'advisor');
+            return view('dashboard.groupsessionedit')->with('user', $user)->with('groupsession', $groupsession)->with('page_title', "Edit Groupsession");
+          }
+        }else{
+          abort(404);
+        }
+    }
+
+    public function postDeletegroupsession(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'id' => 'required|exists:groupsessions',
+        ]);
+        $groupsession = Groupsession::findOrFail($request->input('id'));
+        $groupsession->delete();
+        $request->session()->set('message', trans('messages.item_deleted'));
+        $request->session()->set('type', 'success');
+        return response()->json(trans('messages.item_deleted'), 200);
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+
 }
