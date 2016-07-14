@@ -15,7 +15,12 @@
           <div id="studentiddiv" hidden>
             <div class="form-group">
               <label class="control-label" for="studentid">Student</label>
-              <input type="text" class="form-control" id="studentid" aria-describedby="studentidhelp" disabled>
+              <div class="input-group" aria-describedby="studentidhelp">
+                <input type="text" class="form-control" id="studentid" aria-describedby="studentidhelp" disabled>
+                <span class="input-group-btn">
+                  <button class="btn btn-success" type="button" id="newStudentButton"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                </span>
+              </div>
               <span id="studentidhelp" class="help-block"></span>
             </div>
           </div>

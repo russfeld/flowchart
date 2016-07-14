@@ -11,5 +11,3 @@ See DEVELOPING.md for instructions on configuring the development environment
 # Todo list
 
 [] Courses, catalog, etc. dashboard?
-[] Track meeting status (complete, no-show, cancel, etc.)
-[] Allow scheduling meetings with a non-existing student

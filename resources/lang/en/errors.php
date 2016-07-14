@@ -6,4 +6,5 @@ return [
   'unimplmented' => 'This action is unimplemented',
   'not_found' => 'Item not found',
   'not_trashed' => 'Cannot permanently delete item that is not trashed!',
+  'user_exists' => 'User already exists!',
 ];

@@ -132,4 +132,25 @@ class ProfilesController extends Controller
 
     }
 
+		public function postNewstudent(Request $request){
+			$user = User::where('eid', $request->input('eid'))->first();
+			if($user === null){
+				$user = new User;
+				$user->eid = $request->input('eid');
+				$user->is_advisor = false;
+				$user->save();
+
+				$student = new Student;
+				$student->user_id = $user->id;
+				$student->first_name = $user->eid;
+				$student->email = $user->eid . "@ksu.edu";
+				$student->department_id = null;
+				$student->advisor_id = null;
+				$student->save();
+				return response()->json(trans('messages.user_created'), 200);
+			}else{
+				return response()->json(trans('errors.user_exists'), 500);
+			}
+		}
+
 }

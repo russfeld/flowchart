@@ -275,6 +275,26 @@ require(['util/site', 'util/calendar', 'moment'], function(site, calendar, momen
 		});
 	};
 
+	var newStudent = function(){
+		var eid = prompt("Enter the student's eID");
+		var data = {
+			eid: eid,
+		};
+		$.ajax({
+			method: "POST",
+			url: '/profile/newstudent',
+			data: data
+		})
+		.success(function( message ) {
+				alert(message);
+		})
+		.fail(function( jqXHR, message ){
+				alert("Unable to create user: " + jqXHR.responseJSON);
+		});
+	};
+
+	$('#newStudentButton').bind('click', newStudent);
+
 	$('#createBlackout').on('shown.bs.modal', function () {
 	  $('#btitle').focus();
 	});
