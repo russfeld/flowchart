@@ -25,6 +25,7 @@
       @include('forms.text', ['field' => 'start', 'label' => 'Start', 'value' => $meeting->start, 'disabled' => 'disabled'])
       @include('forms.text', ['field' => 'end', 'label' => 'End', 'value' => $meeting->end, 'disabled' => 'disabled'])
       @include('forms.text', ['field' => 'description', 'label' => 'Description', 'value' => $meeting->description, 'disabled' => 'disabled'])
+      @include('forms.text', ['field' => 'status', 'label' => 'Status', 'value' => $meeting->statustext, 'disabled' => 'disabled'])
       <input type="hidden" id="id" value="{{$meeting->id}}">
       <span id="spin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
       <button type="button" class="btn btn-danger" id="delete">Delete</button>

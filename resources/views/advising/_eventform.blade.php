@@ -55,6 +55,17 @@
         		<input type="text" class="form-control" id="desc" aria-describedby="deschelp" >
         		<span id="deschelp" class="help-block"></span>
         	</div>
+          <div id="statusdiv" hidden>
+            <div class="form-group">
+              <label class="control-label" for="status">Status</label>
+              <select class="form-control" id="status" aria-describedby="statushelp">
+                <option value="0">New</option>
+                <option value="1">Attended</option>
+                <option value="2">Absent</option>
+              </select>
+              <span id="statushelp" class="help-block"></span>
+            </div>
+          </div>
         	<input type="hidden" id="meetingID" value="-1" />
           <input type="hidden" id="studentidval" value="-1" />
         </form>

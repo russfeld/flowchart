@@ -121,6 +121,7 @@ class AdvisingController extends Controller
                     'title' => $meeting->title,
 										'className' => $meeting->statusclass,
                     'desc' => $meeting->description,
+										'status' => $meeting->status,
                     'studentname' => $meeting->student->name,
                     'student_id' => $meeting->student->id,
                 ];
@@ -131,7 +132,8 @@ class AdvisingController extends Controller
                     'end' => $meeting->end->toDateTimeString(),
                     'type' => ($sid == $meeting->student_id) ? 's' : 'm',
                     'title' => ($sid == $meeting->student_id) ? $meeting->title : 'Advising',
-                    'desc' => ($sid == $meeting->student_id) ? $meeting->description : ''
+                    'desc' => ($sid == $meeting->student_id) ? $meeting->description : '',
+										'status' => ($sid == $meeting->student_id) ? $meeting->status : '',
                 ];
             }
         });
@@ -257,6 +259,7 @@ class AdvisingController extends Controller
                 'desc' => $meeting->description,
                 'studentname' => $meeting->student->name,
                 'student_id' => $meeting->student->id,
+								'status' => $meeting->status,
             ];
         });
 
@@ -305,7 +308,8 @@ class AdvisingController extends Controller
             'end' => 'required|date|after:start',
             'title' => 'required|string',
             'desc' => 'required|string',
-            'meetingid' => 'sometimes|required|exists:meetings,id'
+            'meetingid' => 'sometimes|required|exists:meetings,id',
+						'status' => 'sometimes|required|integer'
         ]);
 
         $user = Auth::user();
@@ -372,6 +376,7 @@ class AdvisingController extends Controller
             $meeting->student_id = $user->student->id;
         }else{
             $meeting->student_id = $request->input('studentid');
+						$meeting->status = $request->input('status');
         }
 
         $meeting->title = $request->input('title');

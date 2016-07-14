@@ -20,6 +20,7 @@
               <th>Title</th>
               <th>Start</th>
               <th>End</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -32,6 +33,7 @@
             <td>{{ $meeting->title }}</td>
             <td>{{ $meeting->start }}</td>
             <td>{{ $meeting->end }}</td>
+            <td>{{ $meeting->statustext }}</td>
             <td><a class="btn btn-primary btn-sm" href="{{url('/admin/meetings/' . $meeting->id)}}" role="button">Edit</a></td>
           </tr>
           @endforeach
@@ -43,6 +45,7 @@
               <th>Title</th>
               <th>Start</th>
               <th>End</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </tfoot>

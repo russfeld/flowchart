@@ -108,6 +108,7 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 					$('#end').prop('disabled', false);
 					$('#end_span').removeClass('datepicker-disabled');
 					$('#studentiddiv').show();
+					$('#statusdiv').show();
 
 					$('#createEvent').on('hidden.bs.modal', self.resetForm);
 				}else{
@@ -122,6 +123,7 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 					$("#end").prop('disabled', true);
 					$("#end_span").addClass('datepicker-disabled');
 					$('#studentiddiv').hide();
+					$('#statusdiv').hide();
 					$('#studentidval').val(-1);
 
 					studentName = $('#studentName').val().trim();
@@ -143,7 +145,8 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 				start: moment($('#start').val(), "LLL").format(),
 				end: moment($('#end').val(), "LLL").format(),
 				title: $('#title').val(),
-				desc: $('#desc').val()
+				desc: $('#desc').val(),
+				status: $('#status').val()
 			};
 			data.id = self.calendarAdvisorID;
 			if($('#meetingID').val() > 0){
@@ -206,6 +209,7 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 			durationOptions(event.start, event.end);
 			$('#meetingID').val(event.id);
 			$('#studentidval').val(event.student_id);
+			$('#status').val(event.status);
 			$('#deleteButton').show();
 			$('#createEvent').modal('show');
 		};
