@@ -115,6 +115,7 @@ class DashboardController extends Controller
           abort(404);
         }else{
           $this->validate($request, [
+              'eid' => 'required|string|unique:users,eid',
               'first_name' => 'required|string',
               'last_name' => 'required|string',
               'email' => 'required|email',
@@ -133,6 +134,8 @@ class DashboardController extends Controller
             $department = Department::findOrFail($request->input('department'));
             $student->department()->associate($department);
           }
+          $student->user->eid = $request->input('eid');
+          $student->user->save();
           $student->save();
           return response()->json(trans('messages.item_saved'));
         }
@@ -284,6 +287,7 @@ class DashboardController extends Controller
           abort(404);
         }else{
           $this->validate($request, [
+              'eid' => 'required|string|unique:users,eid',
               'name' => 'required|string',
               'email' => 'required|string|email',
               'office' => 'required|string',
@@ -309,6 +313,8 @@ class DashboardController extends Controller
             $department = Department::findOrFail($request->input('department'));
             $advisor->department()->associate($department);
           }
+          $advisor->user->eid = $request->input('eid');
+          $advisor->user->save();
           $advisor->save();
           return response()->json(trans('messages.item_saved'));
         }

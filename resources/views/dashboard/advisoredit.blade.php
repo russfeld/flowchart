@@ -11,7 +11,7 @@
   <div class="col-xs-12">
     <form>
       @if (isset($advisor->user->eid))
-        @include('forms.text', ['field' => 'eid', 'label' => 'eID', 'value' => $advisor->user->eid, 'disabled' => 'disabled'])
+        @include('forms.text', ['field' => 'eid', 'label' => 'eID', 'value' => $advisor->user->eid])
       @else
         @include('forms.text', ['field' => 'eid', 'label' => 'eID', 'value' => ''])
       @endif

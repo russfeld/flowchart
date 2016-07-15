@@ -27,6 +27,7 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
       data.eid = $('#eid').val();
       var url = '/admin/newstudent';
     }else{
+      data.eid = $('#eid').val();
       var url = '/admin/students/' + id;
     }
     $.ajax({

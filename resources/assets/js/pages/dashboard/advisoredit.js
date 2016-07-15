@@ -30,6 +30,7 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
       formData.append("eid", $('#eid').val());
       var url = '/admin/newadvisor';
     }else{
+      formData.append("eid", $('#eid').val());
       var url = '/admin/advisors/' + id;
     }
 		$.ajax({
