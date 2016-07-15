@@ -50,6 +50,13 @@
             </tr>
           </tfoot>
         </table>
+        @if(isset($deleted))
+          @if($deleted > 0)
+            <a class="btn btn-warning btn-md" href="{{url('/admin/meetings?deleted=1')}}" role="button">Show {{$deleted}} Deleted Records</a></td>
+          @endif
+        @else
+          <a class="btn btn-info btn-md" href="{{url('/admin/meetings')}}" role="button">Show Active Records</a></td>
+        @endif
       </div>
       <!-- /.box-body -->
     </div>

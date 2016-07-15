@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Meeting extends Model
 {
@@ -10,6 +11,8 @@ class Meeting extends Model
     public static $STATUS_NEW = 0;
     public static $STATUS_ATTENDED = 1;
     public static $STATUS_ABSENT = 2;
+
+    use SoftDeletes;
 
     public function advisor(){
     	return $this->belongsTo('App\Models\Advisor')->withTrashed();
@@ -48,6 +51,6 @@ class Meeting extends Model
 
     //hidden from JSON view
     protected $hidden = ['advisor_id', 'student_id', 'advisor', 'student', 'created_at', 'updated_at'];
-    protected $dates = ['created_at', 'updated_at', 'start', 'end'];
+    protected $dates = ['created_at', 'updated_at', 'start', 'end', 'deleted_at'];
 
 }

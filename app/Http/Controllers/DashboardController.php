@@ -565,10 +565,17 @@ class DashboardController extends Controller
         $user = Auth::user();
         if($user->is_advisor){
           if($id < 0){
-            $meetings = Meeting::with('student', 'advisor')->get();
-            return view('dashboard.meetings')->with('user', $user)->with('meetings', $meetings)->with('page_title', "Meetings");
+            if($request->has('deleted')){
+              $meetings = Meeting::with('student', 'advisor')->onlyTrashed()->get();
+              return view('dashboard.meetings')->with('user', $user)->with('meetings', $meetings)->with('page_title', "Meetings");
+            }else{
+              $deleted = Meeting::onlyTrashed()->count();
+              $meetings = Meeting::with('student', 'advisor')->get();
+              return view('dashboard.meetings')->with('user', $user)->with('meetings', $meetings)->with('page_title', "Meetings")->with('deleted', $deleted);
+            }
+
           }else{
-            $meeting = Meeting::findOrFail($id);
+            $meeting = Meeting::withTrashed()->findOrFail($id);
             return view('dashboard.meetingedit')->with('user', $user)->with('meeting', $meeting)->with('page_title', "Edit Meeting");
           }
         }else{
@@ -587,6 +594,26 @@ class DashboardController extends Controller
         $request->session()->set('message', trans('messages.item_deleted'));
         $request->session()->set('type', 'success');
         return response()->json(trans('messages.item_deleted'), 200);
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+    public function postForcedeletemeeting(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'id' => 'required|exists:meetings',
+        ]);
+        $meeting = Meeting::withTrashed()->findOrFail($request->input('id'));
+        if($meeting->trashed()){
+          $meeting->forceDelete();
+          $request->session()->set('message', trans('messages.item_forcedeleted'));
+          $request->session()->set('type', 'success');
+          return response()->json(trans('messages.item_forcedeleted'));
+        }else{
+          return response()->json(trans('errors.not_trashed'), 404);
+        }
       }else{
         return response()->json(trans('errors.not_found'), 404);
       }
