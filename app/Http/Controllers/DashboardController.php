@@ -114,15 +114,16 @@ class DashboardController extends Controller
         if($id < 0){
           abort(404);
         }else{
+          $student = Student::findOrFail($id);
           $this->validate($request, [
-              'eid' => 'required|string|unique:users,eid',
+              'eid' => 'required|string|regex:/^[A-Za-z][A-Za-z0-9]{2,19}$/|unique:users,eid,'.$student->user->id,
               'first_name' => 'required|string',
               'last_name' => 'required|string',
               'email' => 'required|email',
               'advisor' => 'sometimes|required|exists:advisors,id',
               'department' => 'sometimes|required|exists:departments,id',
           ]);
-          $student = Student::findOrFail($id);
+          
           $student->first_name = $request->input('first_name');
           $student->last_name = $request->input('last_name');
           $student->email = $request->input('email');
@@ -148,13 +149,14 @@ class DashboardController extends Controller
       $user = Auth::user();
       if($user->is_advisor){
         $this->validate($request, [
-            'eid' => 'required|string|unique:users,eid',
+            'eid' => 'required|string|regex:/^[A-Za-z][A-Za-z0-9]{2,19}$/|unique:users,eid',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'email' => 'required|email',
             'advisor' => 'sometimes|required|exists:advisors,id',
             'department' => 'sometimes|required|exists:departments,id',
         ]);
+
         $user2 = new User();
         $user2->eid = $request->input('eid');
         $user2->is_advisor = false;
@@ -286,8 +288,9 @@ class DashboardController extends Controller
         if($id < 0){
           abort(404);
         }else{
+          $advisor = Advisor::findOrFail($id);
           $this->validate($request, [
-              'eid' => 'required|string|unique:users,eid',
+              'eid' => 'required|string|regex:/^[A-Za-z][A-Za-z0-9]{2,19}$/|unique:users,eid,'.$advisor->user->id,
               'name' => 'required|string',
               'email' => 'required|string|email',
               'office' => 'required|string',
@@ -296,7 +299,7 @@ class DashboardController extends Controller
               'pic' => 'image',
               'department' => 'sometimes|required|exists:departments,id',
           ]);
-          $advisor = Advisor::findOrFail($id);
+
           $advisor->name = $request->input('name');
           $advisor->email = $request->input('email');
           $advisor->office = $request->input('office');
@@ -327,7 +330,7 @@ class DashboardController extends Controller
       $user = Auth::user();
       if($user->is_advisor){
         $this->validate($request, [
-            'eid' => 'required|string|unique:users,eid',
+            'eid' => 'required|string|regex:/^[A-Za-z][A-Za-z0-9]{2,19}$/|unique:users,eid',
             'name' => 'required|string',
             'email' => 'required|string|email',
             'office' => 'required|string',
@@ -336,6 +339,7 @@ class DashboardController extends Controller
             'pic' => 'required|image',
             'department' => 'sometimes|required|exists:departments,id',
         ]);
+
         $user2 = new User();
         $user2->eid = $request->input('eid');
         $user2->is_advisor = true;

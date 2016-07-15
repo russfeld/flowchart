@@ -289,7 +289,12 @@ require(['util/site', 'util/calendar', 'moment'], function(site, calendar, momen
 				alert(message);
 		})
 		.fail(function( jqXHR, message ){
+			if (jqXHR.status == 422)
+			{
+				alert("Unable to create user: " + jqXHR.responseJSON["eid"]);
+			}else{
 				alert("Unable to create user: " + jqXHR.responseJSON);
+			}
 		});
 	};
 
