@@ -158,7 +158,9 @@ elixir(function(mix) {
         'pages/dashboard/groupsessionedit.js',
     ], 'public/js/dashboard_groupsessionedit.js');
 
-
+    mix.scripts([
+        'pages/dashboard/settings.js',
+    ], 'public/js/dashboard_settings.js');
 
     //Test Flowchart
 

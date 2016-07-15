@@ -31,7 +31,7 @@
         <ul class="sidebar-menu">
             <li class="header">ADMIN DASHBOARD</li>
             <!-- Optionally, you can add icons to the links -->
-            <li class="active"><a href="{{ url('/admin') }}"><span>Home</span></a></li>
+            <li class="{{ Request::is('admin') ? 'active' : '' }}"><a href="{{ url('/admin') }}"><span>Home</span></a></li>
             <!--<li><a href="#"><span>Management</span></a></li>-->
             @if(Request::is('admin/students*') || Request::is('admin/departments*') || Request::is('admin/advisors*') || Request::is('admin/meetings*') || Request::is('admin/blackouts*') || Request::is('admin/groupsessions*'))
             <li class="treeview active">
@@ -48,6 +48,7 @@
                     <li class="{{ Request::is('admin/groupsessions*') ? 'active' : '' }}" ><a href="{{ url('/admin/groupsessions') }}">Groupsessions</a></li>
                 </ul>
             </li>
+            <li class="{{ Request::is('admin/settings*') ? 'active' : '' }}"><a href="{{ url('/admin/settings') }}"><span>Settings</span></a></li>
         </ul><!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->

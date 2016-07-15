@@ -9,6 +9,7 @@ use League\Fractal\Resource\Collection;
 use App\JsonSerializer;
 
 use Auth;
+use DbConfig;
 
 use App\Models\Student;
 use App\Models\Advisor;
@@ -300,7 +301,7 @@ class DashboardController extends Controller
           if($request->hasFile('pic')){
             $path = storage_path() . "/app/images";
             $extension = $request->file('pic')->getClientOriginalExtension();
-            $filename = $user->eid . '.' . $extension;
+            $filename = $advisor->user->eid . '.' . $extension;
             $request->file('pic')->move($path, $filename);
             $advisor->pic = 'images/' . $filename;
           }
@@ -331,7 +332,7 @@ class DashboardController extends Controller
         ]);
         $user2 = new User();
         $user2->eid = $request->input('eid');
-        $user2->is_advisor = false;
+        $user2->is_advisor = true;
         $user2->save();
 
         $advisor = new Advisor();
@@ -343,7 +344,7 @@ class DashboardController extends Controller
         if($request->hasFile('pic')){
           $path = storage_path() . "/app/images";
           $extension = $request->file('pic')->getClientOriginalExtension();
-          $filename = $user->eid . '.' . $extension;
+          $filename = $user2->eid . '.' . $extension;
           $request->file('pic')->move($path, $filename);
           $advisor->pic = 'images/' . $filename;
         }
@@ -360,31 +361,38 @@ class DashboardController extends Controller
     }
 
     public function postDeleteadvisor(Request $request){
-      $user = Auth::user();
-      if($user->is_advisor){
+      $auser = Auth::user();
+      if($auser->is_advisor){
         $this->validate($request, [
           'id' => 'required|exists:advisors',
         ]);
         $advisor = Advisor::findOrFail($request->input('id'));
         $user = $advisor->user;
-        $advisor->delete();
-        $user->delete();
-        $request->session()->set('message', trans('messages.item_deleted'));
-        $request->session()->set('type', 'success');
-        return response()->json(trans('messages.item_deleted'));
+        if($auser->id == $user->id){
+          return response()->json(trans('errors.own_user'), 400);
+        }else{
+          $advisor->delete();
+          $user->delete();
+          $request->session()->set('message', trans('messages.item_deleted'));
+          $request->session()->set('type', 'success');
+          return response()->json(trans('messages.item_deleted'));
+        }
       }else{
         return response()->json(trans('errors.not_found'), 404);
       }
     }
 
     public function postForcedeleteadvisor(Request $request){
-      $user = Auth::user();
-      if($user->is_advisor){
+      $auser = Auth::user();
+      if($auser->is_advisor){
         $this->validate($request, [
           'id' => 'required|exists:advisors',
         ]);
         $advisor = Advisor::withTrashed()->findOrFail($request->input('id'));
-        if($advisor->trashed()){
+        $user = $advisor->user;
+        if($auser->id == $user->id){
+          return response()->json(trans('errors.own_user'), 400);
+        }elseif($advisor->trashed()){
           $advisor->meetings()->forceDelete();
           $advisor->events()->forceDelete();
           $advisor->blackouts()->forceDelete();
@@ -392,7 +400,6 @@ class DashboardController extends Controller
             $student->advisor_id = null;
             $student->save();
           }
-          $user = $advisor->user;
           $advisor->forceDelete();
           $user->forceDelete();
           $request->session()->set('message', trans('messages.item_forcedeleted'));
@@ -683,5 +690,52 @@ class DashboardController extends Controller
       }
     }
 
+    public function getSettings(){
+      $user = Auth::user();
+      $settings = DbConfig::listDb()->get();
+      return view('dashboard.settings')->with('user', $user)->with('page_title', "Edit Settings")->with('settings', $settings);
+    }
+
+    public function postNewsetting(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'key' => 'required|string',
+        ]);
+        if(!DbConfig::has($request->input('key'))){
+          DbConfig::store($request->input('key'), false);
+          $request->session()->set('message', trans('messages.item_saved'));
+          $request->session()->set('type', 'success');
+          return response()->json(trans('messages.item_saved'), 200);
+        }else{
+          return response()->json(trans('errors.item_exists'), 400);
+        }
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+    public function postSavesetting(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'key' => 'required|string',
+        ]);
+        if(DbConfig::has($request->input('key'))){
+          if(DbConfig::get($request->input('key')) == true){
+            DbConfig::store($request->input('key'), false);
+          }else{
+            DbConfig::store($request->input('key'), true);
+          }
+          $request->session()->set('message', trans('messages.item_saved'));
+          $request->session()->set('type', 'success');
+          return response()->json(trans('messages.item_saved'), 200);
+        }else{
+          return response()->json(trans('errors.not_found'), 400);
+        }
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
 
 }
