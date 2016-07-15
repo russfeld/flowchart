@@ -327,7 +327,7 @@ require(['util/site', 'util/calendar', 'moment'], function(site, calendar, momen
 	    },
 	    onSelect: function (suggestion) {
 	        $('#studentidval').val(suggestion.data);
-	        $('#title').val($('#studentid').val());
+	        //$('#title').val($('#studentid').val());
 	    },
 	    transformResult: function(response) {
 	        return {

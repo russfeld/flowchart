@@ -98,10 +98,10 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 			if(!nobind){
 				if(advisor){
 					$('#createEvent').on('shown.bs.modal', function () {
-					  $('#studentid').focus();
+					  $('#title').focus();
 					});
 
-					$('#title').prop('disabled', true);
+					$('#title').prop('disabled', false);
 					$('#start').prop('disabled', false);
 					$('#studentid').prop('disabled', false);
 					$('#start_span').removeClass('datepicker-disabled');

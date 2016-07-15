@@ -32,11 +32,13 @@
           <p>When you are ready to enroll or if you have any questions, quickly schedule an appointment with your academic advisor.</p>
           <p><a class="btn btn-default" href="{{ url('/advising') }}" role="button">Schedule an Appointment &raquo;</a></p>
         </div>
+        @if(DbConfig::get('navbar_showgroupsession') === true)
         <div class="col-md-4">
           <h2>Group Advising</h2>
           <p>Attending a group advising session? Click here to get on the waiting list or find your place in the queue.</p>
           <p><a class="btn btn-default" href="{{ url('/groupsession') }}" role="button">Group Advising &raquo;</a></p>
        </div>
+       @endif
         <div class="col-md-4">
           <h2>Help</h2>
           <p>Not sure how to use the new system? Click here for help!</p>
