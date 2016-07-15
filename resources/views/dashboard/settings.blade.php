@@ -20,6 +20,12 @@
           <br><br>
         @endforeach
           <button class="btn btn-primary" role="button" id="newsetting">New Setting...</button>
+          <br>
+          <div class="alert alert-danger" role="alert">
+            Any new settings must be coded into the application to be used.
+            <br>
+            See app/Console/Commands/PostDeploy.php to automatically create settings upon deployment. It is done automatically by the Envoy deployment routines
+          </div>
       </div>
       <!-- /.box-body -->
     </div>

@@ -692,7 +692,7 @@ class DashboardController extends Controller
 
     public function getSettings(){
       $user = Auth::user();
-      $settings = DbConfig::listDb()->get();
+      $settings = DbConfig::listDb()->orderBy('key', 'asc')->get();
       return view('dashboard.settings')->with('user', $user)->with('page_title', "Edit Settings")->with('settings', $settings);
     }
 
