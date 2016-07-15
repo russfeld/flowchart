@@ -20,7 +20,7 @@
           <br><br>
         @endforeach
           <button class="btn btn-primary" role="button" id="newsetting">New Setting...</button>
-          <br>
+          <br><br>
           <div class="alert alert-danger" role="alert">
             Any new settings must be coded into the application to be used.
             <br>
