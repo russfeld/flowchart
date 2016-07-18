@@ -20,7 +20,7 @@
 			<img class="img-responsive img-help" src="{{ url('img/help/1login.gif') }}" alt="Click Schedule an Appointment">
 			or click the <a class="btn btn-primary" style="pointer-events: none" href="#">Advising</a> button in the top navigation menu:
 			<img class="img-responsive img-help" src="{{ url('img/help/2login.gif') }}" alt="Click Advising button"><br><br></li>
-		<li>Once you log in, you'll be shown the schedule for your assigned advisor, if any. If you wish to schedule a meeting wtih another advisor, click the <b><a href="#" style="pointer-events: none; font-size: 18px">view all available advisors</a></b> link.
+		<li>Once you log in, you'll be shown the schedule for your assigned advisor, if any. If you wish to schedule a meeting wtih another advisor, click the <a class="btn btn-primary" style="pointer-events: none" href="#">Select a Different Advisor</a> button.
 		 	<img class="img-responsive img-help" src="{{ url('img/help/3select.gif') }}" alt="View All Available Advisors"><br><br></li>
 		<li>To schedule a meeting, click on any open time on the calendar:
 			<img class="img-responsive img-help" src="{{ url('img/help/4time.gif') }}" alt="Schedule a 20 Minute Meeting">

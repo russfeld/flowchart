@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Student;
+use App\Models\Advisor;
 
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
@@ -48,10 +49,15 @@ class ProfilesController extends Controller
         }
     }
 
-		public function getPic(Request $request){
+		public function getPic(Request $request, $id = -1){
 			$user = Auth::user();
 			if($user->is_advisor){
-				return response()->json($user->advisor->pic);
+				if($id < 0){
+					return response()->json($user->advisor->pic);
+				}else{
+					$advisor = Advisor::findOrFail($id);
+					return response()->json(url($advisor->pic));
+				}
 			}else{
 				return response()->json(trans('errors.unimplemented'));
 			}
@@ -125,5 +131,34 @@ class ProfilesController extends Controller
         }
 
     }
+
+		public function postNewstudent(Request $request){
+			$user = Auth::user();
+			if($user->is_advisor){
+				$this->validate($request, [
+            'eid' => 'required|string|regex:/^[A-Za-z][A-Za-z0-9]{2,19}$/|unique:users,eid',
+        ]);
+				$user = User::where('eid', $request->input('eid'))->first();
+				if($user === null){
+					$user = new User;
+					$user->eid = $request->input('eid');
+					$user->is_advisor = false;
+					$user->save();
+
+					$student = new Student;
+					$student->user_id = $user->id;
+					$student->first_name = $user->eid;
+					$student->email = $user->eid . "@ksu.edu";
+					$student->department_id = null;
+					$student->advisor_id = null;
+					$student->save();
+					return response()->json(trans('messages.user_created'), 200);
+				}else{
+					return response()->json(trans('errors.user_exists'), 500);
+				}
+			}else{
+				return response()->json(trans('errors.advisors_only'), 403);
+			}
+		}
 
 }

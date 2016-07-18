@@ -88,49 +88,54 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 		};
 
 		//Function to initialize the fullcalendar instance
-		self.init = function(advisor){
+		self.init = function(advisor, nobind){
 
 			advisor || (advisor = false);
+			nobind || (nobind = false);
 
 			self.calendarAdvisorID = $('#calendarAdvisorID').val().trim();
 
-			if(advisor){
-				$('#createEvent').on('shown.bs.modal', function () {
-				  $('#studentid').focus();
-				});
+			if(!nobind){
+				if(advisor){
+					$('#createEvent').on('shown.bs.modal', function () {
+					  $('#title').focus();
+					});
 
-				$('#title').prop('disabled', true);
-				$('#start').prop('disabled', false);
-				$('#studentid').prop('disabled', false);
-				$('#start_span').removeClass('datepicker-disabled');
-				$('#end').prop('disabled', false);
-				$('#end_span').removeClass('datepicker-disabled');
-				$('#studentiddiv').show();
+					$('#title').prop('disabled', false);
+					$('#start').prop('disabled', false);
+					$('#studentid').prop('disabled', false);
+					$('#start_span').removeClass('datepicker-disabled');
+					$('#end').prop('disabled', false);
+					$('#end_span').removeClass('datepicker-disabled');
+					$('#studentiddiv').show();
+					$('#statusdiv').show();
 
-				$('#createEvent').on('hidden.bs.modal', self.resetForm);
-			}else{
-				$('#createEvent').on('shown.bs.modal', function () {
-				  $('#desc').focus();
-				});
+					$('#createEvent').on('hidden.bs.modal', self.resetForm);
+				}else{
+					$('#createEvent').on('shown.bs.modal', function () {
+					  $('#desc').focus();
+					});
 
-				$('#title').prop('disabled', true);
-				$("#start").prop('disabled', true);
-				$('#studentid').prop('disabled', true);
-				$("#start_span").addClass('datepicker-disabled');
-				$("#end").prop('disabled', true);
-				$("#end_span").addClass('datepicker-disabled');
-				$('#studentiddiv').hide();
-				$('#studentidval').val(-1);
+					$('#title').prop('disabled', true);
+					$("#start").prop('disabled', true);
+					$('#studentid').prop('disabled', true);
+					$("#start_span").addClass('datepicker-disabled');
+					$("#end").prop('disabled', true);
+					$("#end_span").addClass('datepicker-disabled');
+					$('#studentiddiv').hide();
+					$('#statusdiv').hide();
+					$('#studentidval').val(-1);
 
-				studentName = $('#studentName').val().trim();
+					studentName = $('#studentName').val().trim();
 
-				$('.modal').on('hidden.bs.modal', self.resetForm);
+					$('.modal').on('hidden.bs.modal', self.resetForm);
+				}
+
+
+				$('#saveButton').bind('click', saveMeeting);
+				$('#deleteButton').bind('click', deleteMeeting);
+				$('#duration').on('change', changeDuration);
 			}
-
-
-			$('#saveButton').bind('click', saveMeeting);
-			$('#deleteButton').bind('click', deleteMeeting);
-			$('#duration').on('change', changeDuration);
 		}
 
 		//AJAX function to save a meeting
@@ -140,7 +145,8 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 				start: moment($('#start').val(), "LLL").format(),
 				end: moment($('#end').val(), "LLL").format(),
 				title: $('#title').val(),
-				desc: $('#desc').val()
+				desc: $('#desc').val(),
+				status: $('#status').val()
 			};
 			data.id = self.calendarAdvisorID;
 			if($('#meetingID').val() > 0){
@@ -203,6 +209,7 @@ define(['jquery', 'bootstrap', 'jquery.autocomplete', 'moment', 'bootstrap-datet
 			durationOptions(event.start, event.end);
 			$('#meetingID').val(event.id);
 			$('#studentidval').val(event.student_id);
+			$('#status').val(event.status);
 			$('#deleteButton').show();
 			$('#createEvent').modal('show');
 		};

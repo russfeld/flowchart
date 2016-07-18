@@ -28,7 +28,7 @@
     @if($user->is_advisor)
     <a class="btn btn-danger" href="/groupsession/enable">Group Advising is Disabled - Enable?</a>
     @else
-    <a class="btn btn-danger" href="#">Group Advising is Unavailable at this Time!</a>
+    <a class="btn btn-danger" href="#" disabled="disabled">Group Advising is Unavailable at this Time!</a>
     @endif
   </div>
 </div>

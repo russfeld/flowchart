@@ -9,10 +9,11 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
-    use Authenticatable, Authorizable, CanResetPassword;
+    use Authenticatable, Authorizable, CanResetPassword, SoftDeletes;
 
     /**
      * The database table used by the model.
@@ -34,13 +35,15 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
 
+     protected $dates = ['deleted_at'];
+
     // http://stackoverflow.com/questions/23910553/laravel-check-if-related-model-exists
     public function student(){
-        return $this->hasOne('App\Models\Student');
+        return $this->hasOne('App\Models\Student')->withTrashed();
     }
 
     public function advisor(){
-        return $this->hasOne('App\Models\Advisor');
+        return $this->hasOne('App\Models\Advisor')->withTrashed();
     }
 
 }

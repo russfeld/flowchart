@@ -52,8 +52,16 @@ class AdvisingController extends Controller
         		return view('advising/studentindex')->with('user', $user)->with('advisor', $user->student->advisor);
         	}
         }else{
-            $advisor = Advisor::findOrFail($id);
+					$advisor = Advisor::findOrFail($id);
+					if($user->is_advisor){
+						if($advisor->id == $user->advisor->id){
+							return view('advising/advisorindex')->with('user', $user)->with('advisor', $user->advisor);
+						}else{
+            	return view('advising/readonlyindex')->with('user', $user)->with('advisor', $advisor);
+						}
+					}else{
             return view('advising/studentindex')->with('user', $user)->with('advisor', $advisor);
+					}
         }
     }
 
@@ -111,7 +119,9 @@ class AdvisingController extends Controller
                     'end' => $meeting->end->toDateTimeString(),
                     'type' => 'm',
                     'title' => $meeting->title,
+										'className' => $meeting->statusclass,
                     'desc' => $meeting->description,
+										'status' => $meeting->status,
                     'studentname' => $meeting->student->name,
                     'student_id' => $meeting->student->id,
                 ];
@@ -122,7 +132,8 @@ class AdvisingController extends Controller
                     'end' => $meeting->end->toDateTimeString(),
                     'type' => ($sid == $meeting->student_id) ? 's' : 'm',
                     'title' => ($sid == $meeting->student_id) ? $meeting->title : 'Advising',
-                    'desc' => ($sid == $meeting->student_id) ? $meeting->description : ''
+                    'desc' => ($sid == $meeting->student_id) ? $meeting->description : '',
+										'status' => ($sid == $meeting->student_id) ? $meeting->status : '',
                 ];
             }
         });
@@ -248,6 +259,7 @@ class AdvisingController extends Controller
                 'desc' => $meeting->description,
                 'studentname' => $meeting->student->name,
                 'student_id' => $meeting->student->id,
+								'status' => $meeting->status,
             ];
         });
 
@@ -296,7 +308,8 @@ class AdvisingController extends Controller
             'end' => 'required|date|after:start',
             'title' => 'required|string',
             'desc' => 'required|string',
-            'meetingid' => 'sometimes|required|exists:meetings,id'
+            'meetingid' => 'sometimes|required|exists:meetings,id',
+						'status' => 'sometimes|required|integer'
         ]);
 
         $user = Auth::user();
@@ -363,6 +376,7 @@ class AdvisingController extends Controller
             $meeting->student_id = $user->student->id;
         }else{
             $meeting->student_id = $request->input('studentid');
+						$meeting->status = $request->input('status');
         }
 
         $meeting->title = $request->input('title');

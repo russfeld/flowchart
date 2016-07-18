@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.js"],"names":[],"mappings":"AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA","file":"dashboard_index.js","sourcesContent":["require(['util/site', 'util/dashboard'], function(site, dashboard) {\n\n  site.ajaxcrsf();\n  dashboard.init();\n  site.checkMessage();\n\n});\n"],"sourceRoot":"/source/"}

@@ -239,7 +239,7 @@ END:VCALENDAR';
                 echo 'Message could not be sent.';
             }
         }else{
-            echo 'Email disabled - ';
+            //echo 'Email disabled - ';
         }
     }
 

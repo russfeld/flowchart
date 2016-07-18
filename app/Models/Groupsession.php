@@ -25,10 +25,29 @@ class Groupsession extends Model
   }
 */
   public function advisor(){
-    return $this->belongsTo('App\Models\Advisor', 'advisor_id', 'id');
+    return $this->belongsTo('App\Models\Advisor', 'advisor_id', 'id')->withTrashed();
   }
 
   public function student(){
-    return $this->belongsTo('App\Models\Student');
+    return $this->belongsTo('App\Models\Student')->withTrashed();
+  }
+
+  public function getStatustextAttribute(){
+    switch($this->status){
+      case Groupsession::$STATUS_NEW:
+        return "New";
+      case Groupsession::$STATUS_QUEUED:
+        return "Queued";
+      case Groupsession::$STATUS_BECKON:
+        return "Beckon";
+      case Groupsession::$STATUS_DELAY:
+        return "Delayed";
+      case Groupsession::$STATUS_ABSENT:
+        return "Absent";
+      case Groupsession::$STATUS_DONE:
+        return "Done";
+      default:
+        return "Unknown Status: " . $this->status;
+    }
   }
 }

@@ -62,5 +62,6 @@ class SchedulerSeeder extends Seeder
     		'department_id' => '1',
             'user_id' => '5'
     	]);
+
     }
 }

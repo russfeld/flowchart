@@ -275,6 +275,31 @@ require(['util/site', 'util/calendar', 'moment'], function(site, calendar, momen
 		});
 	};
 
+	var newStudent = function(){
+		var eid = prompt("Enter the student's eID");
+		var data = {
+			eid: eid,
+		};
+		$.ajax({
+			method: "POST",
+			url: '/profile/newstudent',
+			data: data
+		})
+		.success(function( message ) {
+				alert(message);
+		})
+		.fail(function( jqXHR, message ){
+			if (jqXHR.status == 422)
+			{
+				alert("Unable to create user: " + jqXHR.responseJSON["eid"]);
+			}else{
+				alert("Unable to create user: " + jqXHR.responseJSON);
+			}
+		});
+	};
+
+	$('#newStudentButton').bind('click', newStudent);
+
 	$('#createBlackout').on('shown.bs.modal', function () {
 	  $('#btitle').focus();
 	});
@@ -301,13 +326,13 @@ require(['util/site', 'util/calendar', 'moment'], function(site, calendar, momen
 	});
 
 	$('#studentid').autocomplete({
-	    serviceUrl: 'profile/studentfeed',
+	    serviceUrl: '/profile/studentfeed',
 	    ajaxSettings: {
 	    	dataType: "json"
 	    },
 	    onSelect: function (suggestion) {
 	        $('#studentidval').val(suggestion.data);
-	        $('#title').val($('#studentid').val());
+	        //$('#title').val($('#studentid').val());
 	    },
 	    transformResult: function(response) {
 	        return {

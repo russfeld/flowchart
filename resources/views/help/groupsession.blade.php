@@ -32,7 +32,7 @@
 
   <p>If you have additional questions or are unable to make ANY of the listed group advising times, then you may schedule an individual appointment with your advisor. However, these individual times will be limited.</p>
 
-	<a href=" {{ url('groupsession') }}" class="btn btn-primary">Check in here</a>
+	<a href=" {{ url('groupsession') }}" class="btn btn-primary">Check in Here</a>
 	<hr class="help-line">
 </div>
 

@@ -7,6 +7,7 @@
 	<h3><a href="{{ url('advising/index/' . $advisor->id)}}">{{ $advisor->name }}</a> <small>{{ $advisor->department->name }}</small></h3>
 @else
 	<h3>{{ $advisor->name }} <small>{{ $advisor->department->name }}</small></h3>
+	<a href="{{ url('advising/select') }}" class="btn btn-primary pull-right">Select a Different Advisor</a>
 @endif
 	<p><a href="mailto:{{ $advisor->email }}">{{ $advisor->email }}</a></p>
 	<p><b>Office: </b>{{ $advisor->office }}<br>

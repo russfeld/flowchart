@@ -1,1 +1,442 @@
-require(["util/site","util/calendar","moment"],function(e,t,a){e.ajaxcrsf(),t.init(!0);var i=function(){$.ajax({method:"GET",url:"/advising/conflicts",dataType:"json"}).success(function(e,t,a){$(document).off("click",".deleteConflict",o),$(document).off("click",".editConflict",r),$(document).off("click",".resolveConflict",c),200==a.status?($("#resolveConflictMeetings").empty(),$.each(e,function(e,t){$("<div/>",{"class":"meeting-conflict",html:'<p>&nbsp;<button type="button" class="btn btn-danger pull-right deleteConflict" data-id='+t.id+'>Delete</button>&nbsp;<button type="button" class="btn btn-primary pull-right editConflict" data-id='+t.id+'>Edit</button> <button type="button" class="btn btn-success pull-right resolveConflict" data-id='+t.id+'>Keep Meeting</button><span id="resolveSpin'+t.id+'" class="fa fa-cog fa-spin fa-lg pull-right hide-spin">&nbsp;</span><b>'+t.title+"</b> ("+t.start+")</p><hr>"}).appendTo("#resolveConflictMeetings")}),$(document).on("click",".deleteConflict",o),$(document).on("click",".editConflict",r),$(document).on("click",".resolveConflict",c),$("#conflictingMeetings").removeClass("hidden")):204==a.status&&$("#conflictingMeetings").addClass("hidden")}).fail(function(e,t){alert("Unable to retrieve conflicting meetings: "+e.responseJSON)})},n=function(){$("#createBlackoutSpin").removeClass("hide-spin");var t,n={bstart:a($("#bstart").val(),"LLL").format(),bend:a($("#bend").val(),"LLL").format(),btitle:$("#btitle").val()};$("#bblackouteventid").val()>0?(t="/advising/createblackoutevent",n.bblackouteventid=$("#bblackouteventid").val()):(t="/advising/createblackout",$("#bblackoutid").val()>0&&(n.bblackoutid=$("#bblackoutid").val()),n.brepeat=$("#brepeat").val(),1==$("#brepeat").val()&&(n.brepeatevery=$("#brepeatdaily").val(),n.brepeatuntil=a($("#brepeatuntil").val(),"MM/DD/YYYY").format()),2==$("#brepeat").val()&&(n.brepeatevery=$("#brepeatweekly").val(),n.brepeatweekdaysm=$("#brepeatweekdays1").prop("checked"),n.brepeatweekdayst=$("#brepeatweekdays2").prop("checked"),n.brepeatweekdaysw=$("#brepeatweekdays3").prop("checked"),n.brepeatweekdaysu=$("#brepeatweekdays4").prop("checked"),n.brepeatweekdaysf=$("#brepeatweekdays5").prop("checked"),n.brepeatuntil=a($("#brepeatuntil").val(),"MM/DD/YYYY").format())),$.ajax({method:"POST",url:t,data:n}).success(function(t){$("#createBlackout").modal("hide"),e.displayMessage(t,"success"),$("#calendar").fullCalendar("unselect"),$("#calendar").fullCalendar("refetchEvents"),$("#createBlackoutSpin").addClass("hide-spin"),i()}).fail(function(t,a){422==t.status?e.setFormErrors(t.responseJSON):alert("Unable to save blackout: "+t.responseJSON),$("#createBlackoutSpin").addClass("hide-spin")})},l=function(){var t=confirm("Are you sure?");if(t===!0){$("#createBlackoutSpin").removeClass("hide-spin");var a,n;$("#bblackouteventid").val()>0?(a="/advising/deleteblackoutevent",n={bblackouteventid:$("#bblackouteventid").val()}):(a="/advising/deleteblackout",n={bblackoutid:$("#bblackoutid").val()}),$.ajax({method:"POST",url:a,data:n}).success(function(t){$("#createBlackout").modal("hide"),e.displayMessage(t,"success"),$("#calendar").fullCalendar("unselect"),$("#calendar").fullCalendar("refetchEvents"),$("#createBlackoutSpin").addClass("hide-spin"),i()}).fail(function(e,t){alert("Unable to delete blackout: "+e.responseJSON),$("#createBlackoutSpin").addClass("hide-spin")})}},d=function(){0==$(this).val()?($("#repeatdailydiv").hide(),$("#repeatweeklydiv").hide(),$("#repeatuntildiv").hide()):1==$(this).val()?($("#repeatdailydiv").show(),$("#repeatweeklydiv").hide(),$("#repeatuntildiv").show()):2==$(this).val()&&($("#repeatdailydiv").hide(),$("#repeatweeklydiv").show(),$("#repeatuntildiv").show())},s=function(){$("#resolveConflict").modal("show")},o=function(){var e=$(this),t=$(this).data("id"),a=confirm("Are you sure?");a===!0&&($("#resolveSpin"+t).removeClass("hide-spin"),$.ajax({method:"POST",url:"/advising/deletemeeting",data:{meetingid:t}}).success(function(a){$("#resolveSpin"+t).addClass("hide-spin"),e.parent().parent().addClass("hidden")}).fail(function(e,a){alert("Unable to delete meeting: "+e.responseJSON),$("#resolveSpin"+t).addClass("hide-spin")}))},r=function(){var e=($(this),$(this).data("id"));$("#resolveSpin"+e).removeClass("hide-spin"),$.ajax({method:"get",url:"/advising/meeting",data:{meetingid:e}}).success(function(i){$("#resolveSpin"+e).addClass("hide-spin"),$("#resolveConflict").modal("hide"),event=JSON.parse(i),event.start=a(event.start),event.end=a(event.end),t.showMeetingForm(event)}).fail(function(t,a){$("#resolveSpin"+e).addClass("hide-spin"),alert("Unable to retrieve meeting: "+t.responseJSON)})},c=function(){var e=$(this),t=$(this).data("id");$("#resolveSpin"+t).removeClass("hide-spin"),$.ajax({method:"POST",url:"/advising/resolveconflict",data:{meetingid:t}}).success(function(a){$("#resolveSpin"+t).addClass("hide-spin"),e.parent().parent().addClass("hidden")}).fail(function(e,a){alert("Unable to resolve: "+e.responseJSON),$("#resolveSpin"+t).addClass("hide-spin")})},u=function(){$("#btitle").val(""),$("#bstart").val(void 0===t.session.start?a().hour(8).minute(0).format("LLL"):t.session.start.format("LLL")),$("#bend").val(void 0===t.session.end?a().hour(9).minute(0).format("LLL"):t.session.end.format("LLL")),$("#bblackoutid").val(-1),$("#repeatdiv").show(),$("#brepeat").val(0),$("#brepeat").trigger("change"),$("#deleteBlackoutButton").hide(),$("#createBlackout").modal("show")},p=function(){$("#blackoutOption").modal("hide"),$("#btitle").val(t.session.event.title),$("#bstart").val(t.session.event.start.format("LLL")),$("#bend").val(t.session.event.end.format("LLL")),$("#repeatdiv").hide(),$("#repeatdailydiv").hide(),$("#repeatweeklydiv").hide(),$("#repeatuntildiv").hide(),$("#bblackoutid").val(t.session.event.blackout_id),$("#bblackouteventid").val(t.session.event.id),$("#deleteBlackoutButton").show(),$("#createBlackout").modal("show")},v=function(){$("#blackoutOption").modal("hide"),$.ajax({method:"GET",url:"/advising/blackout",data:{id:t.session.event.blackout_id},dataType:"json"}).success(function(e){$("#btitle").val(e.title),$("#bstart").val(a(e.start,"YYYY-MM-DD HH:mm:ss").format("LLL")),$("#bend").val(a(e.end,"YYYY-MM-DD HH:mm:ss").format("LLL")),$("#bblackoutid").val(e.id),$("#bblackouteventid").val(-1),$("#repeatdiv").show(),$("#brepeat").val(e.repeat_type),$("#brepeat").trigger("change"),1==e.repeat_type?($("#brepeatdaily").val(e.repeat_every),$("#brepeatuntil").val(a(e.repeat_until,"YYYY-MM-DD HH:mm:ss").format("MM/DD/YYYY"))):2==e.repeat_type&&($("#brepeatweekly").val(e.repeat_every),$("#brepeatweekdays1").prop("checked",e.repeat_detail.indexOf("1")>=0),$("#brepeatweekdays2").prop("checked",e.repeat_detail.indexOf("2")>=0),$("#brepeatweekdays3").prop("checked",e.repeat_detail.indexOf("3")>=0),$("#brepeatweekdays4").prop("checked",e.repeat_detail.indexOf("4")>=0),$("#brepeatweekdays5").prop("checked",e.repeat_detail.indexOf("5")>=0),$("#brepeatuntil").val(a(e.repeat_until,"YYYY-MM-DD HH:mm:ss").format("MM/DD/YYYY"))),$("#deleteBlackoutButton").show(),$("#createBlackout").modal("show")}).fail(function(e,t){alert("Unable to retrieve blackout series: "+e.responseJSON)})};$("#createBlackout").on("shown.bs.modal",function(){$("#btitle").focus()}),$("#createBlackout").on("hidden.bs.modal",function(){$("#repeatdailydiv").hide(),$("#repeatweeklydiv").hide(),$("#repeatuntildiv").hide(),$(this).find("form")[0].reset(),$(this).find(".has-error").each(function(){$(this).removeClass("has-error")}),$(this).find(".help-block").each(function(){$(this).text("")})}),$("#createEvent").on("hidden.bs.modal",i),$("#resolveConflict").on("hidden.bs.modal",i),$("#resolveConflict").on("hidden.bs.modal",function(){$("#calendar").fullCalendar("refetchEvents")}),$("#studentid").autocomplete({serviceUrl:"profile/studentfeed",ajaxSettings:{dataType:"json"},onSelect:function(e){$("#studentidval").val(e.data),$("#title").val($("#studentid").val())},transformResult:function(e){return{suggestions:$.map(e.data,function(e){return{value:e.value,data:e.data}})}}}),$("#start_datepicker").datetimepicker(t.datePickerData),$("#end_datepicker").datetimepicker(t.datePickerData),t.linkDatePickers("#start","#end","#duration"),$("#bstart_datepicker").datetimepicker(t.datePickerData),$("#bend_datepicker").datetimepicker(t.datePickerData),t.linkDatePickers("#bstart","#bend","#bduration"),$("#brepeatuntil_datepicker").datetimepicker(t.datePickerDateOnly),t.calendarData.eventSources[0].data={id:t.calendarAdvisorID},t.calendarData.eventSources[1].data={id:t.calendarAdvisorID},t.calendarData.eventRender=function(e,t){t.addClass("fc-clickable")},t.calendarData.eventClick=function(e,a,i){"m"==e.type?($("#studentid").val(e.studentname),$("#studentidval").val(e.student_id),t.showMeetingForm(e)):"b"==e.type&&(t.session={event:e},"0"==e.repeat?v():$("#blackoutOption").modal("show"))},t.calendarData.select=function(e,a){t.session={start:e,end:a},$("#bblackoutid").val(-1),$("#bblackouteventid").val(-1),$("#meetingID").val(-1),$("#meetingOption").modal("show")},$(window).width()<600&&(t.calendarData.defaultView="agendaDay"),$("#calendar").fullCalendar(t.calendarData),$("#brepeat").change(d),$("#saveBlackoutButton").bind("click",n),$("#deleteBlackoutButton").bind("click",l),$("#blackoutSeries").bind("click",function(){$("#blackoutOption").modal("hide"),v()}),$("#blackoutOccurrence").bind("click",function(){$("#blackoutOption").modal("hide"),p()}),$("#advisingButton").bind("click",function(){$("#meetingOption").modal("hide"),t.createMeetingForm()}),$("#createMeetingBtn").bind("click",function(){t.session={},t.createMeetingForm()}),$("#blackoutButton").bind("click",function(){$("#meetingOption").modal("hide"),u()}),$("#createBlackoutBtn").bind("click",function(){t.session={},u()}),$("#resolveButton").on("click",s),i()});
+require(['util/site', 'util/calendar', 'moment'], function(site, calendar, moment) {
+	site.ajaxcrsf();
+
+	calendar.init(true);
+
+	var loadConflicts = function(){
+		$.ajax({
+			method: "GET",
+			url: '/advising/conflicts',
+			dataType: 'json'
+		})
+		.success(function(data, message, jqXHR) {
+			$(document).off('click', '.deleteConflict', deleteConflict);
+			$(document).off('click', '.editConflict', editConflict);
+			$(document).off('click', '.resolveConflict', resolveConflict);
+			if(jqXHR.status == 200){
+				$('#resolveConflictMeetings').empty();
+				$.each(data, function(index, value){
+					$('<div/>', {
+						'class': 'meeting-conflict',
+								'html': 	'<p>&nbsp;<button type="button" class="btn btn-danger pull-right deleteConflict" data-id='+value.id+'>Delete</button>' +
+											'&nbsp;<button type="button" class="btn btn-primary pull-right editConflict" data-id='+value.id+'>Edit</button> ' +
+											'<button type="button" class="btn btn-success pull-right resolveConflict" data-id='+value.id+'>Keep Meeting</button>' +
+											'<span id="resolveSpin'+value.id+'" class="fa fa-cog fa-spin fa-lg pull-right hide-spin">&nbsp;</span>' +
+												'<b>'+value.title+'</b> ('+value.start+')</p><hr>'
+						}).appendTo('#resolveConflictMeetings');
+				});
+				$(document).on('click', '.deleteConflict', deleteConflict);
+				$(document).on('click', '.editConflict', editConflict);
+				$(document).on('click', '.resolveConflict', resolveConflict);
+				$('#conflictingMeetings').removeClass('hidden');
+			}else if (jqXHR.status == 204){
+				$('#conflictingMeetings').addClass('hidden');
+			}
+		}).fail(function( jqXHR, message ){
+			alert("Unable to retrieve conflicting meetings: " + jqXHR.responseJSON);
+		});
+	}
+
+	var saveBlackout = function(){
+		$('#createBlackoutSpin').removeClass('hide-spin');
+		var data = {
+			bstart: moment($('#bstart').val(), 'LLL').format(),
+			bend: moment($('#bend').val(), 'LLL').format(),
+			btitle: $('#btitle').val()
+		};
+		var url;
+
+		if($('#bblackouteventid').val() > 0){
+			url = '/advising/createblackoutevent';
+			data.bblackouteventid = $('#bblackouteventid').val();
+		}else{
+			url = '/advising/createblackout';
+			if($('#bblackoutid').val() > 0){
+				data.bblackoutid = $('#bblackoutid').val();
+			}
+			data.brepeat = $('#brepeat').val();
+			if($('#brepeat').val() == 1){
+				data.brepeatevery= $('#brepeatdaily').val();
+				data.brepeatuntil = moment($('#brepeatuntil').val(), "MM/DD/YYYY").format();
+			}
+			if($('#brepeat').val() == 2){
+				data.brepeatevery = $('#brepeatweekly').val();
+				data.brepeatweekdaysm = $('#brepeatweekdays1').prop('checked');
+				data.brepeatweekdayst = $('#brepeatweekdays2').prop('checked');
+				data.brepeatweekdaysw = $('#brepeatweekdays3').prop('checked');
+				data.brepeatweekdaysu = $('#brepeatweekdays4').prop('checked');
+				data.brepeatweekdaysf = $('#brepeatweekdays5').prop('checked');
+				data.brepeatuntil = moment($('#brepeatuntil').val(), "MM/DD/YYYY").format();
+			}
+		}
+		$.ajax({
+			method: "POST",
+			url: url,
+			data: data
+		})
+		.success(function( message ) {
+			$('#createBlackout').modal('hide');
+			site.displayMessage(message, 'success');
+			$('#calendar').fullCalendar('unselect');
+			$('#calendar').fullCalendar('refetchEvents');
+			$('#createBlackoutSpin').addClass('hide-spin');
+			loadConflicts();
+		}).fail(function( jqXHR, message ){
+			if (jqXHR.status == 422)
+			{
+				site.setFormErrors(jqXHR.responseJSON);
+			}else{
+				alert("Unable to save blackout: " + jqXHR.responseJSON);
+			}
+			$('#createBlackoutSpin').addClass('hide-spin');
+		});
+	};
+
+	var deleteBlackout = function(){
+		var choice = confirm("Are you sure?");
+		if(choice === true){
+			$('#createBlackoutSpin').removeClass('hide-spin');
+			var url, data;
+			if($('#bblackouteventid').val() > 0){
+				url = '/advising/deleteblackoutevent';
+				data = { bblackouteventid: $('#bblackouteventid').val() };
+			}else{
+				url = '/advising/deleteblackout';
+				data = { bblackoutid: $('#bblackoutid').val() };
+			}
+			$.ajax({
+				method: 'POST',
+				url: url,
+				data: data
+			})
+			.success(function( message ) {
+				$('#createBlackout').modal('hide');
+				site.displayMessage(message, 'success');
+				$('#calendar').fullCalendar('unselect');
+				$('#calendar').fullCalendar('refetchEvents');
+				$('#createBlackoutSpin').addClass('hide-spin');
+				loadConflicts();
+			}).fail(function( jqXHR, message ){
+				alert("Unable to delete blackout: " + jqXHR.responseJSON);
+				$('#createBlackoutSpin').addClass('hide-spin');
+			});
+		}
+	};
+
+	var repeatChange = function(){
+		if($(this).val() == 0){
+			$('#repeatdailydiv').hide();
+			$('#repeatweeklydiv').hide();
+			$('#repeatuntildiv').hide();
+		}else if($(this).val() == 1){
+			$('#repeatdailydiv').show();
+			$('#repeatweeklydiv').hide();
+			$('#repeatuntildiv').show();
+		}else if($(this).val() == 2){
+			$('#repeatdailydiv').hide();
+			$('#repeatweeklydiv').show();
+			$('#repeatuntildiv').show();
+		}
+	};
+
+	var resolveConflicts = function(){
+		$('#resolveConflict').modal('show');
+	};
+
+	var deleteConflict = function(){
+		var caller = $(this);
+		var id = $(this).data('id');
+		var choice = confirm("Are you sure?");
+		if(choice === true){
+			$('#resolveSpin' + id).removeClass('hide-spin');
+			$.ajax({
+			  method: "POST",
+			  url: '/advising/deletemeeting',
+			  data: {meetingid: id}
+			})
+			.success(function( message ) {
+				$('#resolveSpin' + id).addClass('hide-spin');
+				caller.parent().parent().addClass('hidden');
+			}).fail(function( jqXHR, message ){
+				alert("Unable to delete meeting: " + jqXHR.responseJSON);
+				$('#resolveSpin' + id).addClass('hide-spin');
+			});
+		}
+	};
+
+	var editConflict = function(){
+		var caller = $(this);
+		var id = $(this).data('id');
+		$('#resolveSpin' + id).removeClass('hide-spin');
+		$.ajax({
+		  method: 'get',
+		  url: '/advising/meeting',
+		  data: {meetingid: id}
+		})
+		.success(function( message ) {
+			$('#resolveSpin' + id).addClass('hide-spin');
+			$('#resolveConflict').modal('hide');
+			event = JSON.parse(message);
+			event.start = moment(event.start);
+			event.end = moment(event.end);
+			calendar.showMeetingForm(event);
+		}).fail(function( jqXHR, message ){
+			$('#resolveSpin' + id).addClass('hide-spin');
+			alert("Unable to retrieve meeting: " + jqXHR.responseJSON);
+		});
+	};
+
+	var resolveConflict = function(){
+		var caller = $(this);
+		var id = $(this).data('id');
+		$('#resolveSpin' + id).removeClass('hide-spin');
+		$.ajax({
+		  method: 'POST',
+		  url: '/advising/resolveconflict',
+		  data: {meetingid: id}
+		})
+		.success(function( message ) {
+			$('#resolveSpin' + id).addClass('hide-spin');
+			caller.parent().parent().addClass('hidden');
+		}).fail(function( jqXHR, message ){
+			alert("Unable to resolve: " + jqXHR.responseJSON);
+			$('#resolveSpin' + id).addClass('hide-spin');
+		});
+	};
+
+	var createBlackoutForm = function(){
+		$('#btitle').val("");
+		if(calendar.session.start === undefined){
+			$('#bstart').val(moment().hour(8).minute(00).format('LLL'));
+		}else{
+			$('#bstart').val(calendar.session.start.format("LLL"));
+		}
+		if(calendar.session.end === undefined){
+			$('#bend').val(moment().hour(9).minute(00).format('LLL'));
+		}else{
+			$('#bend').val(calendar.session.end.format("LLL"));
+		}
+		$('#bblackoutid').val(-1);
+		$('#repeatdiv').show();
+		$('#brepeat').val(0);
+		$('#brepeat').trigger('change');
+		$('#deleteBlackoutButton').hide();
+		$('#createBlackout').modal('show');
+	};
+
+	var blackoutOccurrence = function(){
+		$('#blackoutOption').modal('hide');
+		$('#btitle').val(calendar.session.event.title);
+		$('#bstart').val(calendar.session.event.start.format("LLL"));
+		$('#bend').val(calendar.session.event.end.format("LLL"));
+		$('#repeatdiv').hide();
+		$('#repeatdailydiv').hide();
+		$('#repeatweeklydiv').hide();
+		$('#repeatuntildiv').hide();
+		$('#bblackoutid').val(calendar.session.event.blackout_id);
+		$('#bblackouteventid').val(calendar.session.event.id);
+		$('#deleteBlackoutButton').show();
+		$('#createBlackout').modal('show');
+	};
+
+	var blackoutSeries = function(){
+		$('#blackoutOption').modal('hide');
+		$.ajax({
+			method: "GET",
+			url: '/advising/blackout',
+			data: {id: calendar.session.event.blackout_id},
+			dataType: 'json'
+		})
+		.success(function( series ) {
+			$('#btitle').val(series.title)
+			$('#bstart').val(moment(series.start, 'YYYY-MM-DD HH:mm:ss').format('LLL'));
+			$('#bend').val(moment(series.end, 'YYYY-MM-DD HH:mm:ss').format('LLL'));
+			$('#bblackoutid').val(series.id);
+			$('#bblackouteventid').val(-1);
+			$('#repeatdiv').show();
+			$('#brepeat').val(series.repeat_type);
+			$('#brepeat').trigger('change');
+			if(series.repeat_type == 1){
+				$('#brepeatdaily').val(series.repeat_every);
+				$('#brepeatuntil').val(moment(series.repeat_until, 'YYYY-MM-DD HH:mm:ss').format('MM/DD/YYYY'));
+			}else if (series.repeat_type == 2){
+				$('#brepeatweekly').val(series.repeat_every);
+				$('#brepeatweekdays1').prop('checked', (series.repeat_detail.indexOf("1") >= 0));
+				$('#brepeatweekdays2').prop('checked', (series.repeat_detail.indexOf("2") >= 0));
+				$('#brepeatweekdays3').prop('checked', (series.repeat_detail.indexOf("3") >= 0));
+				$('#brepeatweekdays4').prop('checked', (series.repeat_detail.indexOf("4") >= 0));
+				$('#brepeatweekdays5').prop('checked', (series.repeat_detail.indexOf("5") >= 0));
+				$('#brepeatuntil').val(moment(series.repeat_until, 'YYYY-MM-DD HH:mm:ss').format('MM/DD/YYYY'));
+			}
+			$('#deleteBlackoutButton').show();
+			$('#createBlackout').modal('show');
+		}).fail(function( jqXHR, message ){
+			alert("Unable to retrieve blackout series: " + jqXHR.responseJSON);
+		});
+	};
+
+	var newStudent = function(){
+		var eid = prompt("Enter the student's eID");
+		var data = {
+			eid: eid,
+		};
+		$.ajax({
+			method: "POST",
+			url: '/profile/newstudent',
+			data: data
+		})
+		.success(function( message ) {
+				alert(message);
+		})
+		.fail(function( jqXHR, message ){
+			if (jqXHR.status == 422)
+			{
+				alert("Unable to create user: " + jqXHR.responseJSON["eid"]);
+			}else{
+				alert("Unable to create user: " + jqXHR.responseJSON);
+			}
+		});
+	};
+
+	$('#newStudentButton').bind('click', newStudent);
+
+	$('#createBlackout').on('shown.bs.modal', function () {
+	  $('#btitle').focus();
+	});
+
+	$('#createBlackout').on('hidden.bs.modal', function(){
+		$('#repeatdailydiv').hide();
+		$('#repeatweeklydiv').hide();
+		$('#repeatuntildiv').hide();
+		$(this).find('form')[0].reset();
+	    $(this).find('.has-error').each(function(){
+			$(this).removeClass('has-error');
+		});
+		$(this).find('.help-block').each(function(){
+			$(this).text('');
+		});
+	});
+
+	$('#createEvent').on('hidden.bs.modal', loadConflicts);
+
+	$('#resolveConflict').on('hidden.bs.modal', loadConflicts);
+
+	$('#resolveConflict').on('hidden.bs.modal', function(){
+		$('#calendar').fullCalendar('refetchEvents');
+	});
+
+	$('#studentid').autocomplete({
+	    serviceUrl: '/profile/studentfeed',
+	    ajaxSettings: {
+	    	dataType: "json"
+	    },
+	    onSelect: function (suggestion) {
+	        $('#studentidval').val(suggestion.data);
+	        //$('#title').val($('#studentid').val());
+	    },
+	    transformResult: function(response) {
+	        return {
+	            suggestions: $.map(response.data, function(dataItem) {
+	                return { value: dataItem.value, data: dataItem.data };
+	            })
+	        };
+	    }
+	});
+
+	$('#start_datepicker').datetimepicker(calendar.datePickerData);
+
+  $('#end_datepicker').datetimepicker(calendar.datePickerData);
+
+ 	calendar.linkDatePickers('#start', '#end', '#duration');
+
+ 	$('#bstart_datepicker').datetimepicker(calendar.datePickerData);
+
+  $('#bend_datepicker').datetimepicker(calendar.datePickerData);
+
+ 	calendar.linkDatePickers('#bstart', '#bend', '#bduration');
+
+ 	$('#brepeatuntil_datepicker').datetimepicker(calendar.datePickerDateOnly);
+
+	// page is now ready, initialize the calendar...
+	calendar.calendarData.eventSources[0].data = {id: calendar.calendarAdvisorID};
+	calendar.calendarData.eventSources[1].data = {id: calendar.calendarAdvisorID};
+	calendar.calendarData.eventRender = function(event, element){
+		element.addClass("fc-clickable");
+	};
+	calendar.calendarData.eventClick = function(event, element, view){
+		if(event.type == 'm'){
+			$('#studentid').val(event.studentname);
+			$('#studentidval').val(event.student_id);
+			calendar.showMeetingForm(event);
+		}else if (event.type == 'b'){
+			calendar.session = {
+				event: event
+			};
+			if(event.repeat == '0'){
+				blackoutSeries();
+			}else{
+				$('#blackoutOption').modal('show');
+			}
+		}
+	};
+	calendar.calendarData.select = function(start, end) {
+		calendar.session = {
+			start: start,
+			end: end
+		};
+		$('#bblackoutid').val(-1);
+		$('#bblackouteventid').val(-1);
+		$('#meetingID').val(-1);
+		$('#meetingOption').modal('show');
+	};
+
+	if($(window).width() < 600){
+		calendar.calendarData.defaultView = 'agendaDay';
+	}
+
+	$('#calendar').fullCalendar(calendar.calendarData);
+
+	$('#brepeat').change(repeatChange);
+
+	$('#saveBlackoutButton').bind('click', saveBlackout);
+
+	$('#deleteBlackoutButton').bind('click', deleteBlackout);
+
+	$('#blackoutSeries').bind('click', function(){
+		$('#blackoutOption').modal('hide');
+		blackoutSeries();
+	});
+
+	$('#blackoutOccurrence').bind('click', function(){
+		$('#blackoutOption').modal('hide');
+		blackoutOccurrence();
+	});
+
+	$('#advisingButton').bind('click', function(){
+		$('#meetingOption').modal('hide');
+		calendar.createMeetingForm();
+	});
+
+	$('#createMeetingBtn').bind('click', function(){
+		calendar.session = {};
+		calendar.createMeetingForm();
+	});
+
+	$('#blackoutButton').bind('click', function(){
+		$('#meetingOption').modal('hide');
+		createBlackoutForm();
+	});
+
+	$('#createBlackoutBtn').bind('click', function(){
+		calendar.session = {};
+		createBlackoutForm();
+	});
+
+
+	$('#resolveButton').on('click', resolveConflicts);
+
+	loadConflicts();
+
+});
+
+//# sourceMappingURL=advisor-calendar.js.map

@@ -67,6 +67,7 @@ $release = 'release_' . date('YmdHis');
     cd {{ $release_dir }}/{{ $release }};
     php artisan down
     php artisan migrate:refresh --seed --force
+    php artisan deploy:post
     php artisan up
 @endtask
 
@@ -74,6 +75,7 @@ $release = 'release_' . date('YmdHis');
     cd {{ $release_dir_cis }}/{{ $release }};
     php artisan down
     php artisan migrate
+    php artisan deploy:post
     php artisan up
 @endtask
 

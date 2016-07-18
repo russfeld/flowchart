@@ -22,6 +22,13 @@ elixir(function(mix) {
         "../bower/russfeld-eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css"
     ], 'public/css/calendar.css');
 
+    mix.styles([
+        //'../bower/admin-lte/dist/css/AdminLTE.css',
+        "dashboard-custom.css",
+        "dashboard-skin.css",
+        "../bower/datatables.net-bs/css/dataTables.bootstrap.css",
+    ], 'public/css/dashboard.css');
+
     //Require.js configuration & library
 
     mix.scripts([
@@ -74,6 +81,18 @@ elixir(function(mix) {
         '../bower/react/react-dom.js',
     ], 'public/js/lib/react-dom.js');
 
+    mix.scripts([
+        '../bower/admin-lte/dist/js/app.js',
+    ], 'public/js/lib/adminlte.js');
+
+    mix.scripts([
+        '../bower/datatables.net/js/jquery.dataTables.js',
+    ], 'public/js/lib/datatables.js');
+
+    mix.scripts([
+        '../bower/datatables.net-bs/js/dataTables.bootstrap.js',
+    ], 'public/js/lib/datatablesbs.js');
+
     //Utilities
 
     mix.scripts([
@@ -83,6 +102,11 @@ elixir(function(mix) {
     mix.scripts([
         'util/calendar.js',
     ], 'public/js/util/calendar.js');
+
+    mix.scripts([
+        'util/dashboard.js',
+    ], 'public/js/util/dashboard.js');
+
 
     //Pages
 
@@ -95,12 +119,48 @@ elixir(function(mix) {
     ], 'public/js/student-calendar.js');
 
     mix.scripts([
+        'pages/readonly-calendar.js',
+    ], 'public/js/readonly-calendar.js');
+
+    mix.scripts([
         'pages/profiles.js',
     ], 'public/js/profiles.js');
 
     mix.babel([
         'pages/groupsession.js',
     ], 'public/js/groupsession.js');
+
+    mix.scripts([
+        'pages/dashboard/index.js',
+    ], 'public/js/dashboard_index.js');
+
+    mix.scripts([
+        'pages/dashboard/studentedit.js',
+    ], 'public/js/dashboard_studentedit.js');
+
+    mix.scripts([
+        'pages/dashboard/advisoredit.js',
+    ], 'public/js/dashboard_advisoredit.js');
+
+    mix.scripts([
+        'pages/dashboard/departmentedit.js',
+    ], 'public/js/dashboard_departmentedit.js');
+
+    mix.scripts([
+        'pages/dashboard/meetingedit.js',
+    ], 'public/js/dashboard_meetingedit.js');
+
+    mix.scripts([
+        'pages/dashboard/blackoutedit.js',
+    ], 'public/js/dashboard_blackoutedit.js');
+
+    mix.scripts([
+        'pages/dashboard/groupsessionedit.js',
+    ], 'public/js/dashboard_groupsessionedit.js');
+
+    mix.scripts([
+        'pages/dashboard/settings.js',
+    ], 'public/js/dashboard_settings.js');
 
     //Test Flowchart
 

@@ -12,11 +12,20 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <!--<li class="{{ Request::is('courses*') ? 'active' : '' }}"><a href="{{ url('/courses') }}">Courses</a></li>-->
-            <!--<li class="{{ Request::is('flowcharts*') ? 'active' : '' }}"><a href="{{ url('/flowcharts') }}">Flowcharts</a></li>-->
+            @if(DbConfig::get('navbar_showcourses') === true)
+              <li class="{{ Request::is('courses*') ? 'active' : '' }}"><a href="{{ url('/courses') }}">Courses</a></li>
+            @endif
+            @if(DbConfig::get('navbar_showflowcharts') === true)
+              <li class="{{ Request::is('flowcharts*') ? 'active' : '' }}"><a href="{{ url('/flowcharts') }}">Flowcharts</a></li>
+            @endif
             <li class="{{ Request::is('advising*') ? 'active' : '' }}"><a href="{{ url('/advising') }}">Advising</a></li>
-            <li class="{{ Request::is('groupsession*') ? 'active' : '' }}"><a href="{{ url('/groupsession') }}">Group Advising</a></li>
+            @if(DbConfig::get('navbar_showgroupsession') === true)
+              <li class="{{ Request::is('groupsession*') ? 'active' : '' }}"><a href="{{ url('/groupsession') }}">Group Advising</a></li>
+            @endif
             <li class="{{ Request::is('help*') ? 'active' : '' }}"><a href="{{ url('/help') }}">Help</a></li>
+            @if( Auth::check() && Auth::user()->is_advisor )
+            <li class="{{ Request::is('admin*') ? 'active' : '' }}"><a href="{{ url('/admin') }}">Admin</a></li>
+            @endif
           </ul>
         @if( Auth::check())
           <ul class="nav navbar-nav navbar-right">
