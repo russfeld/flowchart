@@ -98,6 +98,9 @@ This will walk you through setting up the required database for the Flowchart sy
 3. Configure SSH keys on any systems that will be used for deployment. Generally it just needs the development system's public key added as an authorized key.
 4. See `Envoy.blade.php` in the root directory of the web application for available tasks
 
+## Unit Testing
+Some very minor unit tests are available. To run the, execute `./vendor/bin/phpunit` in the main directory. Currently Laravel 5.1 only supports an older version of phpunit, so using the one in the vendor folder is best
+
 ## References
 
 **General Development Environment**

@@ -63,15 +63,5 @@ class SchedulerSeeder extends Seeder
             'user_id' => '5'
     	]);
 
-      DB::table('advisors')->insert([
-        	'id' => '5',
-    		'name' => 'David Schmidt',
-    		'email' => 'das@ksu.edu',
-    		'office' => '234 Nichols Hall',
-    		'phone' => '785-532-7912',
-    		'pic' => 'img/das.png',
-    		'department_id' => '1',
-            'user_id' => '6'
-    	]);
     }
 }
