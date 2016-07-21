@@ -105,8 +105,11 @@ return [
 
     'attributes' => [
       'desc' => 'description',
-      'btitle' => 'blackout title',
+      'btitle' => 'title',
       'pic' => 'image',
+      'bstart' => 'start',
+      'bend' => 'end',
+      'brepeatuntil' => 'repeat until date'
     ],
 
 ];
