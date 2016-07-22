@@ -10,7 +10,6 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
   $("div.newbutton").html('<a type="button" class="btn btn-success" href="/admin/newdepartment">New Department</a>');
 
   $('#save').on('click', function(){
-    $('#spin').removeClass('hide-spin');
     var data = {
       name: $('#name').val(),
       email: $('#email').val(),
@@ -23,114 +22,34 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
     }else{
       var url = '/admin/departments/' + id;
     }
-    $.ajax({
-      method: "POST",
-      url: url,
-      data: data
-    })
-    .success(function( message ) {
-      if(id.length == 0){
-        site.clearFormErrors();
-        $('#spin').addClass('hide-spin');
-        $(location).attr('href', message);
-      }else{
-        site.displayMessage(message, "success");
-        site.clearFormErrors();
-        $('#spin').addClass('hide-spin');
-      }
-    }).fail(function( jqXHR, message ){
-      if (jqXHR.status == 422)
-      {
-        site.setFormErrors(jqXHR.responseJSON);
-      }else{
-        alert("Unable to save: " + jqXHR.responseJSON);
-      }
-      $('#spin').addClass('hide-spin');
-    });
+    dashboard.ajaxsave(data, url, id);
   });
 
   $('#delete').on('click', function(){
-    var choice = confirm("Are you sure?");
-		if(choice === true){
-      $('#spin').removeClass('hide-spin');
-      var data = {
-        id: $('#id').val(),
-      };
-      var url = "/admin/deletedepartment"
-      $.ajax({
-        method: "POST",
-        url: url,
-        data: data
-      })
-      .success(function( message ) {
-        $(location).attr('href', '/admin/departments');
-      })
-      .fail(function( jqXHR, message ){
-        if (jqXHR.status == 422)
-        {
-          site.setFormErrors(jqXHR.responseJSON);
-        }else{
-          alert("Unable to delete: " + jqXHR.responseJSON);
-        }
-        $('#spin').addClass('hide-spin');
-      });
-    }
+    var url = "/admin/deletedepartment";
+    var retUrl = "/admin/departments";
+    var data = {
+      id: $('#id').val(),
+    };
+    dashboard.ajaxdelete(data, url, retUrl, true);
   });
 
   $('#forcedelete').on('click', function(){
-    var choice = confirm("Are you sure? This will permanently remove all related records. You cannot undo this action.");
-		if(choice === true){
-      $('#spin').removeClass('hide-spin');
-      var data = {
-        id: $('#id').val(),
-      };
-      var url = "/admin/forcedeletedepartment"
-      $.ajax({
-        method: "POST",
-        url: url,
-        data: data
-      })
-      .success(function( message ) {
-        $(location).attr('href', '/admin/departments');
-      })
-      .fail(function( jqXHR, message ){
-        if (jqXHR.status == 422)
-        {
-          site.setFormErrors(jqXHR.responseJSON);
-        }else{
-          alert("Unable to delete: " + jqXHR.responseJSON);
-        }
-        $('#spin').addClass('hide-spin');
-      });
-    }
+    var url = "/admin/forcedeletedepartment";
+    var retUrl = "/admin/departments";
+    var data = {
+      id: $('#id').val(),
+    };
+    dashboard.ajaxdelete(data, url, retUrl);
   });
 
   $('#restore').on('click', function(){
-    var choice = confirm("Are you sure?");
-		if(choice === true){
-      $('#spin').removeClass('hide-spin');
-      var data = {
-        id: $('#id').val(),
-      };
-      var url = "/admin/restoredepartment"
-      $.ajax({
-        method: "POST",
-        url: url,
-        data: data
-      })
-      .success(function( message ) {
-        $(location).attr('href', '/admin/departments');
-      })
-      .fail(function( jqXHR, message ){
-        if (jqXHR.status == 422)
-        {
-          site.setFormErrors(jqXHR.responseJSON);
-        }else{
-          alert("Unable to delete: " + jqXHR.responseJSON);
-        }
-        $('#spin').addClass('hide-spin');
-      });
-    }
+    var url = "/admin/restoredepartment";
+    var retUrl = "/admin/departments";
+    var data = {
+      id: $('#id').val(),
+    };
+    dashboard.ajaxrestore(data, url, retUrl);
   });
 
 });

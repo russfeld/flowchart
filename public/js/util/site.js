@@ -26,7 +26,7 @@ define(['jquery', 'bootstrap'], function(jquery, bootstrap) {
 		clearFormErrors();
 		$.each(json, function (key, value) {
 			$('#' + key).parents('.form-group').addClass('has-error');
-			$('#' + key + 'help').text(value);
+			$('#' + key + 'help').text(value.join(' '));
 		});
 	}
 

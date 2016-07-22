@@ -20,6 +20,11 @@ use App\Models\Groupsession;
 use App\Models\Blackout;
 use App\Models\Blackoutevent;
 use App\Models\Course;
+use App\Models\Degreeprogram;
+use App\Models\Plan;
+use App\Models\Degreerequirement;
+use App\Models\Degreerequiredcourse;
+use App\Models\Degreeelectivecourse;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -123,7 +128,7 @@ class DashboardController extends Controller
               'advisor' => 'sometimes|required|exists:advisors,id',
               'department' => 'sometimes|required|exists:departments,id',
           ]);
-          
+
           $student->first_name = $request->input('first_name');
           $student->last_name = $request->input('last_name');
           $student->email = $request->input('email');
@@ -747,5 +752,210 @@ class DashboardController extends Controller
         return response()->json(trans('errors.not_found'), 404);
       }
     }
+
+    public function getDegreeprograms(Request $request, $id = -1){
+        $user = Auth::user();
+        if($user->is_advisor){
+          if($id < 0){
+            if($request->has('deleted')){
+              $degreeprograms = Degreeprogram::with('department')->onlyTrashed()->get();
+              return view('dashboard.degreeprograms')->with('user', $user)->with('degreeprograms', $degreeprograms)->with('page_title', "Deleted Degree Programs");
+            }else{
+              $degreeprograms = Degreeprogram::with('department')->get();
+              $deleted = Degreeprogram::onlyTrashed()->count();
+              return view('dashboard.degreeprograms')->with('user', $user)->with('degreeprograms', $degreeprograms)->with('page_title', "Degree Programs")->with('deleted', $deleted);
+            }
+          }else{
+            $degreeprogram = Degreeprogram::withTrashed()->findOrFail($id);
+            $departments = Department::all();
+            $deptUnknown = new Department();
+            $deptUnknown->name = "Unassigned";
+            $deptUnknown->id = 0;
+            $departments->prepend($deptUnknown);
+            $semesters = collect([
+              (object)['id' => 0, 'name' => 'Unassigned'],
+              (object)['id' => 1, 'name' => 'Spring'],
+              (object)['id' => 2, 'name' => 'Summer'],
+              (object)['id' => 3, 'name' => 'Fall'],
+            ]);
+            return view('dashboard.degreeprogramedit')->with('user', $user)->with('degreeprogram', $degreeprogram)->with('page_title', "Edit Degree Program")->with('departments', $departments)->with('semesters', $semesters);
+          }
+        }else{
+          abort(404);
+        }
+    }
+
+    public function getNewdegreeprogram(){
+        $user = Auth::user();
+        if($user->is_advisor){
+            $degreeprogram = new DegreeProgram();
+            $departments = Department::all();
+            $deptUnknown = new Department();
+            $deptUnknown->name = "Unassigned";
+            $deptUnknown->id = 0;
+            $departments->prepend($deptUnknown);
+            $semesters = collect([
+              (object)['id' => 0, 'name' => 'Unassigned'],
+              (object)['id' => 1, 'name' => 'Spring'],
+              (object)['id' => 2, 'name' => 'Summer'],
+              (object)['id' => 3, 'name' => 'Fall'],
+            ]);
+            return view('dashboard.degreeprogramedit')->with('user', $user)->with('degreeprogram', $degreeprogram)->with('page_title', "New Degree Program")->with('departments', $departments)->with('semesters', $semesters);
+        }else{
+          abort(404);
+        }
+    }
+
+    public function postDegreeprograms($id = -1, Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        if($id < 0){
+          abort(404);
+        }else{
+          $data = $request->all();
+          $degreeprogram = Degreeprogram::findOrFail($id);
+          if($degreeprogram->validate($data)){
+            $degreeprogram->fill($data);
+            $degreeprogram->save();
+            return response()->json(trans('messages.item_saved'));
+          }else{
+            return response()->json($degreeprogram->errors(), 422);
+          }
+        }
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+    public function postNewdegreeprogram(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $data = $request->all();
+        $degreeprogram = new Degreeprogram();
+        if($degreeprogram->validate($data)){
+          $degreeprogram->fill($data);
+          $degreeprogram->save();
+          return response()->json(url('admin/degreeprograms/' . $degreeprogram->id));
+        }else{
+          return response()->json($degreeprogram->errors(), 422);
+        }
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+    public function postDeletedegreeprogram(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'id' => 'required|exists:degreeprograms',
+        ]);
+        $degreeprogram = Degreeprogram::findOrFail($request->input('id'));
+        $degreeprogram->delete();
+        $request->session()->set('message', trans('messages.item_deleted'));
+        $request->session()->set('type', 'success');
+        return response()->json(trans('messages.item_deleted'));
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+    public function postRestoredegreeprogram(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'id' => 'required|exists:degreeprograms',
+        ]);
+        $degreeprogram = Degreeprogram::withTrashed()->findOrFail($request->input('id'));
+        $degreeprogram->restore();
+        $request->session()->set('message', trans('messages.item_restored'));
+        $request->session()->set('type', 'success');
+        return response()->json(trans('messages.item_restored'));
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+    public function postForcedeletedegreeprogram(Request $request){
+      $user = Auth::user();
+      if($user->is_advisor){
+        $this->validate($request, [
+          'id' => 'required|exists:degreeprograms',
+        ]);
+        $degreeprogram = Degreeprogram::withTrashed()->findOrFail($request->input('id'));
+        if($degreeprogram->trashed()){
+          foreach($degreeprogram->requirements()->get() as $requirement){
+            $requirement->requireable()->delete();
+            $requirement->delete();
+          }
+          foreach($degreeprogram->plans()->get() as $plan){
+            $plan->degreeprogram_id = null;
+            $plan->save();
+          }
+          $degreeprogram->forceDelete();
+          $request->session()->set('message', trans('messages.item_forcedeleted'));
+          $request->session()->set('type', 'success');
+          return response()->json(trans('messages.item_forcedeleted'));
+        }else{
+          return response()->json(trans('errors.not_trashed'), 404);
+        }
+      }else{
+        return response()->json(trans('errors.not_found'), 404);
+      }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function getPlans(Request $request, $id = -1){
+        $user = Auth::user();
+        if($user->is_advisor){
+          if($id < 0){
+            if($request->has('deleted')){
+              $plans = Plan::with('program', 'student')->onlyTrashed()->get();
+              return view('dashboard.plans')->with('user', $user)->with('plans', $plans)->with('page_title', "Deleted Plans");
+            }else{
+              $plans = Plan::with('program', 'student')->get();
+              $deleted = Plan::onlyTrashed()->count();
+              return view('dashboard.plans')->with('user', $user)->with('plans', $plans)->with('page_title', "Plans")->with('deleted', $deleted);
+            }
+          }else{
+            $plan = Plan::withTrashed()->findOrFail($id);
+            return view('dashboard.planedit')->with('user', $user)->with('plan', $paln)->with('page_title', "Edit Plan");
+          }
+        }else{
+          abort(404);
+        }
+    }
+
+
+
 
 }

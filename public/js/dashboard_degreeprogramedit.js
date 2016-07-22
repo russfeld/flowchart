@@ -7,27 +7,31 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
   dashboard.init(options);
   site.checkMessage();
 
-  $("div.newbutton").html('<a type="button" class="btn btn-success" href="/admin/newdepartment">New Department</a>');
+  $("div.newbutton").html('<a type="button" class="btn btn-success" href="/admin/newdegreeprogram">New Degree Program</a>');
 
   $('#save').on('click', function(){
     var data = {
       name: $('#name').val(),
-      email: $('#email').val(),
-      office: $('#office').val(),
-      phone: $('#phone').val(),
+      abbreviation: $('#abbreviation').val(),
+      description: $('#description').val(),
+      effective_year: $('#effective_year').val(),
+      effective_semester: $('#effective_semester').val(),
     };
+    if($('#department_id').val() > 0){
+      data.department_id = $('#department_id').val();
+    }
     var id = $('#id').val();
     if(id.length == 0){
-      var url = '/admin/newdepartment';
+      var url = '/admin/newdegreeprogram';
     }else{
-      var url = '/admin/departments/' + id;
+      var url = '/admin/degreeprograms/' + id;
     }
     dashboard.ajaxsave(data, url, id);
   });
 
   $('#delete').on('click', function(){
-    var url = "/admin/deletedepartment";
-    var retUrl = "/admin/departments";
+    var url = "/admin/deletedegreeprogram";
+    var retUrl = "/admin/degreeprograms";
     var data = {
       id: $('#id').val(),
     };
@@ -35,8 +39,8 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
   });
 
   $('#forcedelete').on('click', function(){
-    var url = "/admin/forcedeletedepartment";
-    var retUrl = "/admin/departments";
+    var url = "/admin/forcedeletedegreeprogram";
+    var retUrl = "/admin/degreeprograms";
     var data = {
       id: $('#id').val(),
     };
@@ -44,8 +48,8 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
   });
 
   $('#restore').on('click', function(){
-    var url = "/admin/restoredepartment";
-    var retUrl = "/admin/departments";
+    var url = "/admin/restoredegreeprogram";
+    var retUrl = "/admin/degreeprograms";
     var data = {
       id: $('#id').val(),
     };
@@ -54,4 +58,4 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
 
 });
 
-//# sourceMappingURL=dashboard_departmentedit.js.map
+//# sourceMappingURL=dashboard_degreeprogramedit.js.map

@@ -7,34 +7,31 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
   dashboard.init(options);
   site.checkMessage();
 
-  $("div.newbutton").html('<a type="button" class="btn btn-success" href="/admin/newstudent">New Student</a>');
+  $("div.newbutton").html('<a type="button" class="btn btn-success" href="/admin/newdegreeprogram">New Degree Program</a>');
 
   $('#save').on('click', function(){
     var data = {
-      first_name: $('#first_name').val(),
-      last_name: $('#last_name').val(),
-      email: $('#email').val(),
+      name: $('#name').val(),
+      abbreviation: $('#abbreviation').val(),
+      description: $('#description').val(),
+      effective_year: $('#effective_year').val(),
+      effective_semester: $('#effective_semester').val(),
     };
-    if($('#advisor').val() > 0){
-      data.advisor = $('#advisor').val();
-    }
-    if($('#department').val() > 0){
-      data.department = $('#department').val();
+    if($('#department_id').val() > 0){
+      data.department_id = $('#department_id').val();
     }
     var id = $('#id').val();
     if(id.length == 0){
-      data.eid = $('#eid').val();
-      var url = '/admin/newstudent';
+      var url = '/admin/newdegreeprogram';
     }else{
-      data.eid = $('#eid').val();
-      var url = '/admin/students/' + id;
+      var url = '/admin/degreeprograms/' + id;
     }
     dashboard.ajaxsave(data, url, id);
   });
 
   $('#delete').on('click', function(){
-    var url = "/admin/deletestudent";
-    var retUrl = "/admin/students";
+    var url = "/admin/deletedegreeprogram";
+    var retUrl = "/admin/degreeprograms";
     var data = {
       id: $('#id').val(),
     };
@@ -42,8 +39,8 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
   });
 
   $('#forcedelete').on('click', function(){
-    var url = "/admin/forcedeletestudent";
-    var retUrl = "/admin/students";
+    var url = "/admin/forcedeletedegreeprogram";
+    var retUrl = "/admin/degreeprograms";
     var data = {
       id: $('#id').val(),
     };
@@ -51,8 +48,8 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
   });
 
   $('#restore').on('click', function(){
-    var url = "/admin/restorestudent";
-    var retUrl = "/admin/students";
+    var url = "/admin/restoredegreeprogram";
+    var retUrl = "/admin/degreeprograms";
     var data = {
       id: $('#id').val(),
     };
@@ -60,5 +57,3 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
   });
 
 });
-
-//# sourceMappingURL=dashboard_studentedit.js.map

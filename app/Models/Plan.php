@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Plan extends Model
 {
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+
+    use SoftDeletes;
 
     public function student(){
     	return $this->belongsTo('App\Models\Student')->withTrashed();

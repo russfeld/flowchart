@@ -14,10 +14,11 @@ class DegreePrograms extends Migration
     {
       Schema::create('degreeprograms', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('title');
+          $table->string('name');
           $table->longText('description');
           $table->string('abbreviation', 10);
-          $table->smallInteger('effective_semester')->unsigned();
+          $table->tinyInteger('effective_semester')->unsigned()->default(0);
+          $table->smallInteger('effective_year')->unsigned();
           $table->integer('department_id')->unsigned();
           $table->foreign('department_id')->references('id')->on('departments');
           $table->timestamps();
@@ -69,8 +70,10 @@ class DegreePrograms extends Migration
 
       Schema::create('plans', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('title');
+          $table->string('name');
           $table->longText('description');
+          $table->tinyInteger('start_semester')->unsigned()->default(0);
+          $table->smallInteger('start_year')->unsigned();
           $table->integer('degreeprogram_id')->unsigned();
           $table->integer('student_id')->unsigned();
           $table->foreign('degreeprogram_id')->references('id')->on('degreeprograms');
@@ -109,7 +112,8 @@ class DegreePrograms extends Migration
           $table->increments('id');
           $table->string('title', 15);
           $table->integer('coursenumber')->unsigned();
-          $table->smallInteger('semester')->unsigned();
+          $table->tinyInteger('semester')->unsigned()->default(0);
+          $table->smallInteger('year')->unsigned();
           $table->string('basis', 5);
           $table->string('grade', 2);
           $table->tinyInteger('credits')->unsigned();
@@ -133,7 +137,8 @@ class DegreePrograms extends Migration
           $table->string('title', 15);
           $table->string('grade', 2);
           $table->tinyInteger('credits')->unsigned();
-          $table->smallInteger('semester')->unsigned();
+          $table->tinyInteger('semester')->unsigned()->default(0);
+          $table->smallInteger('year')->unsigned();
           $table->integer('student_id')->unsigned();
           $table->integer('course_id')->unsigned()->nullable();
           $table->integer('completedcourse_id')->unsigned()->nullable();

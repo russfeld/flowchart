@@ -13,9 +13,9 @@ class SchedulerSeeder extends Seeder
     {
         DB::table('departments')->insert([
         	'id' => '1',
-    		'name' => 'Computing and Information Sciences',
+    		'name' => 'Computer Science',
     		'phone' => '785-532-6350',
-    		'email' => 'cisoffic@ksu.edu',
+    		'email' => 'csoffice@ksu.edu',
     		'office' => '234 Nichols Hall'
     	]);
 
