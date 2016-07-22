@@ -25,6 +25,8 @@ use App\Models\Plan;
 use App\Models\Degreerequirement;
 use App\Models\Degreerequiredcourse;
 use App\Models\Degreeelectivecourse;
+use App\Models\Completedcourse;
+use App\Models\Transfercourse;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -55,7 +57,11 @@ class DashboardController extends Controller
           $data["blackouts"] = Blackout::count();
           $data["blackoutevents"] = Blackoutevent::count();
           $data["courses"] = Course::count();
-          //$data["flowcharts"] = Flowchart::count();
+          $data["plans"] = Plan::count();
+          $data["degreeprograms"] = Degreeprogram::count();
+          $data["degreerequirements"] = Degreerequirement::count();
+          $data["completedcourses"] = Completedcourse::count();
+          $data["transfercourses"] = Transfercourse::count();
           return view('dashboard.index')->with('user', $user)->with('page_title', "Advising Dashboard")->with('data', $data);
         }else{
           abort(404);
@@ -571,6 +577,10 @@ class DashboardController extends Controller
             $advisor->department_id = null;
             $advisor->save();
           }
+          foreach($department->programs()->get() as $program){
+            $program->department_id = null;
+            $program->save();
+          }
           $department->forceDelete();
           $request->session()->set('message', trans('messages.item_forcedeleted'));
           $request->session()->set('type', 'success');
@@ -903,36 +913,6 @@ class DashboardController extends Controller
         return response()->json(trans('errors.not_found'), 404);
       }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public function getPlans(Request $request, $id = -1){
         $user = Auth::user();

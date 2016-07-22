@@ -19,7 +19,7 @@ class DegreePrograms extends Migration
           $table->string('abbreviation', 10);
           $table->tinyInteger('effective_semester')->unsigned()->default(0);
           $table->smallInteger('effective_year')->unsigned();
-          $table->integer('department_id')->unsigned();
+          $table->integer('department_id')->unsigned()->nullable();
           $table->foreign('department_id')->references('id')->on('departments');
           $table->timestamps();
           $table->softDeletes();
