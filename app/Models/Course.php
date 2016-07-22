@@ -26,4 +26,6 @@ class Course extends Model
     	return $this->prefix . ' ' . $this->numberStr . ' - ' . $this->title;
     }
 
+    protected $dates = ['created_at', 'updated_at'];
+
 }

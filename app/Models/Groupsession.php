@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Groupsession extends Model
 {
 
+  protected $dates = ['created_at', 'updated_at'];
+
   public static $STATUS_NEW = 0;
   public static $STATUS_QUEUED = 1;
   public static $STATUS_BECKON = 2;

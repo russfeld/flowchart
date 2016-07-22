@@ -10,7 +10,7 @@ class Student extends Model
 
     use SoftDeletes;
 
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at', 'created_at', 'updated_at'];
 
     public function user(){
         return $this->belongsTo('App\Models\User')->withTrashed();
@@ -26,6 +26,18 @@ class Student extends Model
 
     public function department(){
     	return $this->belongsTo('App\Models\Department')->withTrashed();
+    }
+
+    public function plans(){
+      return $this->hasMany('App\Models\Plan');
+    }
+
+    public function completedcourses(){
+      return $this->hasMany('App\Models\Completedcourse');
+    }
+
+    public function transfercourses(){
+      return $this->hasMany('App\Models\Transfercourse');
     }
 
     public function getNameAttribute(){

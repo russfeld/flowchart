@@ -35,7 +35,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
 
-     protected $dates = ['deleted_at'];
+     protected $dates = ['deleted_at', 'created_at', 'updated_at'];
 
     // http://stackoverflow.com/questions/23910553/laravel-check-if-related-model-exists
     public function student(){

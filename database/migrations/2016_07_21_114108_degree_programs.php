@@ -31,7 +31,7 @@ class DegreePrograms extends Migration
           $table->tinyInteger('semester')->unsigned();
           $table->tinyInteger('ordering')->unsigned();
           $table->tinyInteger('credits')->unsigned();
-          $table->morphs('requirement');
+          $table->morphs('requireable');
           $table->foreign('degreeprogram_id')->references('id')->on('degreeprograms');
           $table->timestamps();
       });
@@ -86,7 +86,7 @@ class DegreePrograms extends Migration
           $table->tinyInteger('semester')->unsigned();
           $table->tinyInteger('ordering')->unsigned();
           $table->tinyInteger('credits')->unsigned();
-          $table->morphs('requirement');
+          $table->morphs('requireable');
           $table->foreign('plan_id')->references('id')->on('plans');
           $table->timestamps();
       });
@@ -115,8 +115,10 @@ class DegreePrograms extends Migration
           $table->tinyInteger('credits')->unsigned();
           $table->integer('student_id')->unsigned();
           $table->integer('course_id')->unsigned()->nullable();
+          $table->integer('planrequirement_id')->unsigned()->nullable();
           $table->foreign('student_id')->references('id')->on('students');
           //$table->foreign('course_id')->references('id')->on('courses')
+          //$table->foreign('planrequirement_id')->references('id')->on('planrequirements');
           $table->timestamps();
       });
 
@@ -134,18 +136,11 @@ class DegreePrograms extends Migration
           $table->smallInteger('semester')->unsigned();
           $table->integer('student_id')->unsigned();
           $table->integer('course_id')->unsigned()->nullable();
+          $table->integer('completedcourse_id')->unsigned()->nullable();
           $table->foreign('student_id')->references('id')->on('students');
           //$table->foreign('course_id')->references('id')->on('courses')
+          //$table->foreign('completedcourse_id')->references('id')->on('completedcourses')
           $table->timestamps();
-      });
-
-      Schema::create('darsmaps', function (Blueprint $table) {
-        $table->increments('id');
-        $table->integer('planrequirement_id')->unsigned();
-        $table->integer('completedcourses_id')->unsigned();
-        $table->foreign('planrequirement_id')->references('id')->on('planrequirements');
-        $table->foreign('completedcourses_id')->references('id')->on('completedcourses');
-        $table->timestamps();
       });
 
       Schema::table('students', function ($table) {
@@ -168,7 +163,6 @@ class DegreePrograms extends Migration
             $table->dropColumn('ksis_id');
         });
 
-        Schema::drop('darsmaps');
         Schema::drop('transfercourses');
         Schema::drop('completedcourses');
         Schema::drop('planelectivecourses');
