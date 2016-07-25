@@ -7,10 +7,10 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="{{ url($user->advisor->pic) }}" class="img-circle" alt="User Image" />
+                <img src="{{ url(Auth::user()->advisor->pic) }}" class="img-circle" alt="User Image" />
             </div>
             <div class="pull-left info">
-                <p>{{ $user->advisor->name}}</p>
+                <p>{{ Auth::user()->advisor->name}}</p>
             </div>
         </div>
 

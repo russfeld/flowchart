@@ -5,12 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Student extends Model
+class Student extends Validatable
 {
 
     use SoftDeletes;
 
     protected $dates = ['deleted_at', 'created_at', 'updated_at'];
+
+    protected $rules = array(
+          'first_name' => 'required|string',
+          'last_name' => 'required|string',
+          'email' => 'required|email',
+          'advisor_id' => 'sometimes|required|exists:advisors,id',
+          'department_id' => 'sometimes|required|exists:departments,id',
+    );
+
+    protected $fillable = ['first_name', 'last_name', 'email', 'advisor_id', 'department_id'];
+
 
     public function user(){
         return $this->belongsTo('App\Models\User')->withTrashed();

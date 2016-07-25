@@ -10,4 +10,4 @@ See DEVELOPING.md for instructions on configuring the development environment
 
 # Todo list
 
-[] Courses, catalog, etc. dashboard?
+[] Finish refactoring validation code into models!

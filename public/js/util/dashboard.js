@@ -43,7 +43,7 @@ define(['util/site', 'adminlte', 'datatables.net', 'datatables.netbs'], function
       });
     }
 
-    self.ajaxobjectsave = function (formData, url){
+    self.ajaxobjectsave = function (formData, url, id){
       $('#spin').removeClass('hide-spin');
       $.ajax({
         method: "POST",

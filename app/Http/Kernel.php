@@ -32,5 +32,6 @@ class Kernel extends HttpKernel
         'update_profile' => \App\Http\Middleware\UpdateProfileMiddleware::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'groupsessiondisabled' => \App\Http\Middleware\GroupsessionDisabled::class,
+        'advisors_only' => \App\Http\Middleware\AdvisorsOnly::class,
     ];
 }

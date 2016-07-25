@@ -20,9 +20,9 @@
       @include('forms.text', ['field' => 'email', 'label' => 'Email', 'value' => $advisor->email])
       @include('forms.text', ['field' => 'phone', 'label' => 'Phone', 'value' => $advisor->phone])
       @if(count($advisor->department))
-        @include('forms.select', ['field' => 'department', 'label' => 'Department', 'value' => $advisor->department->id, 'options' => $departments])
+        @include('forms.select', ['field' => 'department_id', 'label' => 'Department', 'value' => $advisor->department->id, 'options' => $departments])
       @else
-        @include('forms.select', ['field' => 'department', 'label' => 'Department', 'value' => 0, 'options' => $departments])
+        @include('forms.select', ['field' => 'department_id', 'label' => 'Department', 'value' => 0, 'options' => $departments])
       @endif
       @include('forms.textarea', ['field' => 'notes', 'label' => 'Notes', 'value' => $advisor->notes])
       @include('forms.image', ['field' => 'pic', 'label' => 'Image', 'value' => $advisor->pic])

@@ -15,18 +15,17 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
       last_name: $('#last_name').val(),
       email: $('#email').val(),
     };
-    if($('#advisor').val() > 0){
-      data.advisor = $('#advisor').val();
+    if($('#advisor_id').val() > 0){
+      data.advisor_id = $('#advisor_id').val();
     }
-    if($('#department').val() > 0){
-      data.department = $('#department').val();
+    if($('#department_id').val() > 0){
+      data.department_id = $('#department_id').val();
     }
     var id = $('#id').val();
+    data.eid = $('#eid').val();
     if(id.length == 0){
-      data.eid = $('#eid').val();
       var url = '/admin/newstudent';
     }else{
-      data.eid = $('#eid').val();
       var url = '/admin/students/' + id;
     }
     dashboard.ajaxsave(data, url, id);

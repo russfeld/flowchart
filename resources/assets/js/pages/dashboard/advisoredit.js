@@ -20,8 +20,8 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
 		if($('#pic').val()){
 			formData.append("pic", $('#pic')[0].files[0]);
 		}
-    if($('#department').val() > 0){
-      formData.append("department", $('#department').val());
+    if($('#department_id').val() > 0){
+      formData.append("department_id", $('#department_id').val());
     }
     var id = $('#id').val();
     if(id.length == 0){
