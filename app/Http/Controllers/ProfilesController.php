@@ -86,75 +86,51 @@ class ProfilesController extends Controller
     }
 
     public function postUpdate(Request $request){
-        $user = Auth::user();
-        if($user->is_advisor){
-						$this->validate($request, [
-								'name' => 'required|string',
-								'email' => 'required|string|email',
-								'office' => 'required|string',
-								'phone' => 'required|string',
-								'notes' => 'string',
-								'pic' => 'image',
-						]);
-						$advisor = $user->advisor;
-						$advisor->name = $request->input('name');
-						$advisor->email = $request->input('email');
-						$advisor->office = $request->input('office');
-						$advisor->phone = $request->input('phone');
-						$advisor->notes = $request->input('notes');
-						if($request->hasFile('pic')){
-							$path = storage_path() . "/app/images";
-							$extension = $request->file('pic')->getClientOriginalExtension();
-							$filename = $user->eid . '.' . $extension;
-							$request->file('pic')->move($path, $filename);
-							$advisor->pic = 'images/' . $filename;
-						}
-						$user->update_profile = true;
-						$user->save();
-						$advisor->save();
-						return response()->json(trans('messages.profile_updated'));
+      $user = Auth::user();
+      if($user->is_advisor){
+				$data = $request->all();
+				$advisor = $user->advisor;
+				if($advisor->validate($data)){
+					$advisor->fill($data);
+					if($request->hasFile('pic')){
+						$advisor->savePic($request->file('pic'));
+					}
+					$user->update_profile = true;
+					$user->save();
+					$advisor->save();
+					return response()->json(trans('messages.profile_updated'));
+				}else{
+					return response()->json($advisor->errors(), 422);
+				}
+      }else{
+				$data = $request->all();
+				$student = $user->student;
+        if($student->validate($data)){
+          $student->fill($data);
+					$user->update_profile = true;
+					$user->save();
+          $student->save();
+          return response()->json(trans('messages.profile_updated'));
         }else{
-            $this->validate($request, [
-                'first_name' => 'required|string',
-                'last_name' => 'required|string',
-            ]);
-            $student = $user->student;
-            $student->first_name = $request->input('first_name');
-            $student->last_name = $request->input('last_name');
-						$user->update_profile = true;
-						$user->save();
-            $student->save();
-						if ($request->session()->has('lastUrl')){
-							$request->session()->forget('lastUrl');
-						}
-						return response()->json(trans('messages.profile_updated'));
+          return response()->json($student->errors(), 422);
         }
-
+      }
     }
 
 		public function postNewstudent(Request $request){
 			$user = Auth::user();
 			if($user->is_advisor){
-				$this->validate($request, [
-            'eid' => 'required|string|regex:/^[A-Za-z][A-Za-z0-9]{2,19}$/|unique:users,eid',
-        ]);
-				$user = User::where('eid', $request->input('eid'))->first();
-				if($user === null){
-					$user = new User;
-					$user->eid = $request->input('eid');
+				$data = $request->all();
+				$user = new User();
+	      if($user->validate($data)){
+					$user->fill($data);
 					$user->is_advisor = false;
 					$user->save();
-
-					$student = new Student;
-					$student->user_id = $user->id;
-					$student->first_name = $user->eid;
-					$student->email = $user->eid . "@ksu.edu";
-					$student->department_id = null;
-					$student->advisor_id = null;
+					$student = Student::buildFromUser($user);
 					$student->save();
 					return response()->json(trans('messages.user_created'), 200);
 				}else{
-					return response()->json(trans('errors.user_exists'), 500);
+					return response()->json($user->errors(), 422);
 				}
 			}else{
 				return response()->json(trans('errors.advisors_only'), 403);

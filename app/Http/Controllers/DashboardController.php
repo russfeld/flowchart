@@ -280,6 +280,7 @@ class DashboardController extends Controller
       ]);
       $advisor = Advisor::findOrFail($request->input('id'));
       $user = $advisor->user;
+      $auser = Auth::user();
       if($auser->id == $user->id){
         return response()->json(trans('errors.own_user'), 400);
       }else{
@@ -297,6 +298,7 @@ class DashboardController extends Controller
       ]);
       $advisor = Advisor::withTrashed()->findOrFail($request->input('id'));
       $user = $advisor->user;
+      $auser = Auth::user();
       if($auser->id == $user->id){
         return response()->json(trans('errors.own_user'), 400);
       }elseif($advisor->trashed()){

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\User;
 
 class Student extends Validatable
 {
@@ -15,10 +16,20 @@ class Student extends Validatable
     protected $rules = array(
           'first_name' => 'required|string',
           'last_name' => 'required|string',
-          'email' => 'required|email',
+          'email' => 'sometimes|required|email',
           'advisor_id' => 'sometimes|required|exists:advisors,id',
           'department_id' => 'sometimes|required|exists:departments,id',
     );
+
+    public static function buildFromUser(User $user){
+      $student = new Student();
+      $student->user_id = $user->id;
+      $student->first_name = $user->eid;
+      $student->email = $user->eid . "@ksu.edu";
+      $student->department_id = null;
+      $student->advisor_id = null;
+      return $student;
+    }
 
     protected $fillable = ['first_name', 'last_name', 'email', 'advisor_id', 'department_id'];
 

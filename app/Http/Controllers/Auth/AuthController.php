@@ -61,18 +61,17 @@ class AuthController extends Controller
           }
           $user = User::where('eid', $request->input('eid'))->first();
           if($user === null){
-              $user = new User;
-              $user->eid = $request->input('eid');
+            $user = new User();
+            $data = $request->all();
+            if($user->validate($data)){
+              $user->fill($data);
               $user->is_advisor = false;
               $user->save();
-
-              $student = new Student;
-              $student->user_id = $user->id;
-              $student->first_name = $user->eid;
-              $student->email = $user->eid . "@ksu.edu";
-              $student->department_id = null;
-              $student->advisor_id = null;
+              $student = Student::buildFromUser($user);
               $student->save();
+            }else{
+              return $user->errors()->all();
+            }
           }
           Auth::login($user);
           return redirect('/');
