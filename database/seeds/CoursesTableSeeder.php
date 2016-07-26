@@ -26,7 +26,7 @@ class CoursesTableSeeder extends Seeder
 	            'grad' => $child->grad == 'true' ? true : false,
 	            'prefix' => $child->prefix,
 	            'number' => $child->number,
-	            'slug' => $child->prefix . str_pad($child->number, 3, '0'),
+	            'slug' => $child->prefix . str_pad($child->number, 3, '0', STR_PAD_LEFT),
 	            'title' => $child->title,
 	            'description' => $child->description,
 	            'min_hours' => $child->minHours,
