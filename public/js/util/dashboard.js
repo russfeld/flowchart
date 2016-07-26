@@ -1,4 +1,4 @@
-define(['util/site', 'adminlte', 'datatables.net', 'datatables.netbs'], function(site, adminlte, datatables, datatablesbs) {
+define(['util/site', 'adminlte', 'datatables.net', 'datatables.netbs', 'jquery.autocomplete'], function(site, adminlte, datatables, datatablesbs, autocomplete) {
 
   function dashboardModule() {
     //self-referential variable
@@ -135,6 +135,27 @@ define(['util/site', 'adminlte', 'datatables.net', 'datatables.netbs'], function
           $('#spin').addClass('hide-spin');
         });
       }
+    }
+
+    self.ajaxautocomplete = function(id, url){
+      $('#' + id + 'auto').autocomplete({
+    	    serviceUrl: url,
+    	    ajaxSettings: {
+    	    	dataType: "json"
+    	    },
+          minChars: 3,
+    	    onSelect: function (suggestion) {
+    	        $('#' + id).val(suggestion.data);
+              $('#' + id + 'text').html("Selected: (" + suggestion.data + ") " + suggestion.value);
+    	    },
+    	    transformResult: function(response) {
+    	        return {
+    	            suggestions: $.map(response.data, function(dataItem) {
+    	                return { value: dataItem.value, data: dataItem.data };
+    	            })
+    	        };
+    	    }
+    	});
     }
   };
 

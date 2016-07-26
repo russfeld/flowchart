@@ -19,13 +19,24 @@ class Course extends Model
     }
 
     public function getNumberStrAttribute(){
-    	return str_pad($this->number, 3, '0');
+    	return str_pad($this->number, 3, '0', STR_PAD_LEFT);
     }
 
     public function getFullTitleAttribute(){
     	return $this->prefix . ' ' . $this->numberStr . ' - ' . $this->title;
     }
 
+    public function getNameAttribute(){
+      return $this->title;
+    }
+
     protected $dates = ['created_at', 'updated_at'];
+
+    public function scopeFilterName($query, $name)
+    {
+            $filter = str_replace('"', "", $name);
+            $queryStr = "concat(courses.prefix, \" \", lpad(courses.number, 3, 0), \" \",  courses.title) LIKE \"%" . $filter . "%\"";
+            return $query->whereRaw($queryStr);
+    }
 
 }

@@ -110,7 +110,7 @@ class DegreePrograms extends Migration
 
       Schema::create('completedcourses', function (Blueprint $table) {
           $table->increments('id');
-          $table->string('title', 15);
+          $table->string('name', 15);
           $table->integer('coursenumber')->unsigned();
           $table->tinyInteger('semester')->unsigned()->default(0);
           $table->smallInteger('year')->unsigned();
@@ -134,7 +134,7 @@ class DegreePrograms extends Migration
           $table->string('incoming_semester');
           $table->tinyInteger('incoming_credits')->unsigned();
           $table->string('incoming_grade', 2);
-          $table->string('title', 15);
+          $table->string('name', 15);
           $table->string('grade', 2);
           $table->tinyInteger('credits')->unsigned();
           $table->tinyInteger('semester')->unsigned()->default(0);

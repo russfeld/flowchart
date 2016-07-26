@@ -52,8 +52,8 @@ Route::get('images/{filename}', function ($filename)
 /*
  * Routes for the CoursesController
  */
-Route::get('courses/{category}', 'CoursesController@getCategory')->where('category', '[A-Za-z]+');
-Route::get('courses/{slug}', 'CoursesController@getCourse')->where('slug', '[A-Za-z]+[0-9][0-9][0-9]');
+//Route::get('courses/{category}', 'CoursesController@getCategory')->where('category', '[A-Za-z]+');
+//Route::get('courses/{slug}', 'CoursesController@getCourse')->where('slug', '[A-Za-z]+[0-9][0-9][0-9]');
 Route::controller('courses', 'CoursesController');
 
 /*

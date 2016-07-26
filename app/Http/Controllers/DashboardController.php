@@ -672,16 +672,174 @@ class DashboardController extends Controller
     public function getPlans(Request $request, $id = -1){
       if($id < 0){
         if($request->has('deleted')){
-          $plans = Plan::with('program', 'student')->onlyTrashed()->get();
+          $plans = Plan::with('degreeprogram', 'student')->onlyTrashed()->get();
           return view('dashboard.plans')->with('plans', $plans)->with('page_title', "Deleted Plans");
         }else{
-          $plans = Plan::with('program', 'student')->get();
+          $plans = Plan::with('degreeprogram', 'student')->get();
           $deleted = Plan::onlyTrashed()->count();
           return view('dashboard.plans')->with('plans', $plans)->with('page_title', "Plans")->with('deleted', $deleted);
         }
       }else{
         $plan = Plan::withTrashed()->findOrFail($id);
-        return view('dashboard.planedit')->with('plan', $paln)->with('page_title', "Edit Plan");
+        $degreeprograms = Degreeprogram::all();
+        $semesters = collect([
+          (object)['id' => 0, 'name' => 'Unassigned'],
+          (object)['id' => 1, 'name' => 'Spring'],
+          (object)['id' => 2, 'name' => 'Summer'],
+          (object)['id' => 3, 'name' => 'Fall'],
+        ]);
+        return view('dashboard.planedit')->with('plan', $plan)->with('page_title', "Edit Plan")->with('semesters', $semesters)->with('degreeprograms', $degreeprograms);
       }
+    }
+
+    public function getNewplan(){
+        $plan = new Plan();
+        $degreeprograms = Degreeprogram::all();
+        $degreeprogramUnknown = new Degreeprogram();
+        $degreeprogramUnknown->name = "Unassigned";
+        $degreeprogramUnknown->id = 0;
+        $degreeprograms->prepend($degreeprogramUnknown);
+        $semesters = collect([
+          (object)['id' => 0, 'name' => 'Unassigned'],
+          (object)['id' => 1, 'name' => 'Spring'],
+          (object)['id' => 2, 'name' => 'Summer'],
+          (object)['id' => 3, 'name' => 'Fall'],
+        ]);
+        return view('dashboard.planedit')->with('plan', $plan)->with('page_title', "New Plan")->with('semesters', $semesters)->with('degreeprograms', $degreeprograms);
+    }
+
+    public function postPlans($id = -1, Request $request){
+      if($id < 0){
+        abort(404);
+      }else{
+        $data = $request->all();
+        $plan = Plan::findOrFail($id);
+        if($plan->validate($data)){
+          $plan->fill($data);
+          $plan->save();
+          return response()->json(trans('messages.item_saved'));
+        }else{
+          return response()->json($plan->errors(), 422);
+        }
+      }
+    }
+
+    public function postNewplan(Request $request){
+      $data = $request->all();
+      $plan = new Plan();
+      if($plan->validate($data)){
+        $plan->fill($data);
+        $plan->save();
+        return response()->json(url('admin/plans/' . $plan->id));
+      }else{
+        return response()->json($plan->errors(), 422);
+      }
+    }
+
+    public function postDeleteplan(Request $request){
+      $this->validate($request, [
+        'id' => 'required|exists:plans',
+      ]);
+      $plan = Plan::findOrFail($request->input('id'));
+      $plan->delete();
+      $request->session()->set('message', trans('messages.item_deleted'));
+      $request->session()->set('type', 'success');
+      return response()->json(trans('messages.item_deleted'));
+    }
+
+    public function postRestoreplan(Request $request){
+      $this->validate($request, [
+        'id' => 'required|exists:plans',
+      ]);
+      $plan = Plan::withTrashed()->findOrFail($request->input('id'));
+      $plan->restore();
+      $request->session()->set('message', trans('messages.item_restored'));
+      $request->session()->set('type', 'success');
+      return response()->json(trans('messages.item_restored'));
+    }
+
+    public function postForcedeleteplan(Request $request){
+      $this->validate($request, [
+        'id' => 'required|exists:plans',
+      ]);
+      $plan = Plan::withTrashed()->findOrFail($request->input('id'));
+      if($plan->trashed()){
+        foreach($plan->requirements()->get() as $requirement){
+          $requirement->requireable()->delete();
+          $requirement->delete();
+        }
+        $plan->forceDelete();
+        $request->session()->set('message', trans('messages.item_forcedeleted'));
+        $request->session()->set('type', 'success');
+        return response()->json(trans('messages.item_forcedeleted'));
+      }else{
+        return response()->json(trans('errors.not_trashed'), 404);
+      }
+    }
+
+    public function getCompletedcourses(Request $request, $id = -1){
+      if($id < 0){
+        $completedcourses = Completedcourse::with('course', 'student', 'requirement')->get();
+        return view('dashboard.completedcourses')->with('completedcourses', $completedcourses)->with('page_title', "Completed Courses");
+      }else{
+        $completedcourse = Completedcourse::findOrFail($id);
+        $semesters = collect([
+          (object)['id' => 0, 'name' => 'Unassigned'],
+          (object)['id' => 1, 'name' => 'Spring'],
+          (object)['id' => 2, 'name' => 'Summer'],
+          (object)['id' => 3, 'name' => 'Fall'],
+        ]);
+        return view('dashboard.completedcourseedit')->with('completedcourse', $completedcourse)->with('page_title', "Edit Completed Course")->with('semesters', $semesters);
+      }
+    }
+
+    public function getNewcompletedcourse(){
+        $completedcourse = new Completedcourse();
+        $semesters = collect([
+          (object)['id' => 0, 'name' => 'Unassigned'],
+          (object)['id' => 1, 'name' => 'Spring'],
+          (object)['id' => 2, 'name' => 'Summer'],
+          (object)['id' => 3, 'name' => 'Fall'],
+        ]);
+        return view('dashboard.completedcourseedit')->with('completedcourse', $completedcourse)->with('page_title', "New Completed Course")->with('semesters', $semesters);
+    }
+
+    public function postCompletedcourses($id = -1, Request $request){
+      if($id < 0){
+        abort(404);
+      }else{
+        $data = $request->all();
+        $completedcourse = Completedcourse::findOrFail($id);
+        if($completedcourse->validate($data)){
+          $completedcourse->fill($data);
+          $completedcourse->save();
+          return response()->json(trans('messages.item_saved'));
+        }else{
+          return response()->json($completedcourse->errors(), 422);
+        }
+      }
+    }
+
+    public function postNewcompletedcourse(Request $request){
+      $data = $request->all();
+      $completedcourse = new Completedcourse();
+      if($completedcourse->validate($data)){
+        $completedcourse->fill($data);
+        $completedcourse->save();
+        return response()->json(url('admin/completedcourses/' . $completedcourse->id));
+      }else{
+        return response()->json($completedcourse->errors(), 422);
+      }
+    }
+
+    public function postDeletecompletedcourse(Request $request){
+      $this->validate($request, [
+        'id' => 'required|exists:completedcourses',
+      ]);
+      $completedcourse = Completedcourse::findOrFail($request->input('id'));
+      $completedcourse->delete();
+      $request->session()->set('message', trans('messages.item_deleted'));
+      $request->session()->set('type', 'success');
+      return response()->json(trans('messages.item_deleted'));
     }
 }
