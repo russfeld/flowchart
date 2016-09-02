@@ -426,6 +426,15 @@ class AdvisingController extends Controller
             'brepeatuntil' => 'sometimes|required|date|after:bstart|required_if:brepeat,2|required_if:brepeat,1'
         ]);
 
+				$startTime = Carbon::parse($request->input('bstart'));
+				$endTime = Carbon::parse($request->input('bend'));
+				if(!($startTime->isSameDay($endTime))){
+					  $error = array(
+							'bend' => array("Blackouts must begin and end on the same date"),
+						);
+						return response()->json($error, 422);
+				}
+
         $user = Auth::user();
 
         if($request->has('bblackoutid')){
@@ -483,6 +492,15 @@ class AdvisingController extends Controller
             'btitle' => 'required|string',
             'bblackouteventid' => 'sometimes|required|exists:blackoutevents,id'
         ]);
+
+				$startTime = Carbon::parse($request->input('bstart'));
+				$endTime = Carbon::parse($request->input('bend'));
+				if(!($startTime->isSameDay($endTime))){
+					  $error = array(
+							'bend' => array("Blackouts must begin and end on the same date"),
+						);
+						return response()->json($error, 422);
+				}
 
         $user = Auth::user();
 
