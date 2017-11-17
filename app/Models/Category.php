@@ -13,4 +13,6 @@ class Category extends Model
     public function prefixes(){
     	return $this->hasMany('App\Models\Prefix');
     }
+
+    protected $dates = ['created_at', 'updated_at'];
 }

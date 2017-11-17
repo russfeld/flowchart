@@ -159,6 +159,18 @@ elixir(function(mix) {
     ], 'public/js/dashboard_groupsessionedit.js');
 
     mix.scripts([
+        'pages/dashboard/degreeprogramedit.js',
+    ], 'public/js/dashboard_degreeprogramedit.js');
+
+    mix.scripts([
+        'pages/dashboard/planedit.js',
+    ], 'public/js/dashboard_planedit.js');
+
+    mix.scripts([
+        'pages/dashboard/completedcourseedit.js',
+    ], 'public/js/dashboard_completedcourseedit.js');
+
+    mix.scripts([
         'pages/dashboard/settings.js',
     ], 'public/js/dashboard_settings.js');
 

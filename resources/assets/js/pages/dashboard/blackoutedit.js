@@ -10,31 +10,12 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
   //$("div.newbutton").html('<a type="button" class="btn btn-success" href="/admin/newstudent">New Student</a>');
 
   $('#delete').on('click', function(){
-    var choice = confirm("Are you sure? You cannot undo this action.");
-		if(choice === true){
-      $('#spin').removeClass('hide-spin');
-      var data = {
-        id: $('#id').val(),
-      };
-      var url = "/admin/deleteblackout"
-      $.ajax({
-        method: "POST",
-        url: url,
-        data: data
-      })
-      .success(function( message ) {
-        $(location).attr('href', '/admin/blackouts');
-      })
-      .fail(function( jqXHR, message ){
-        if (jqXHR.status == 422)
-        {
-          site.setFormErrors(jqXHR.responseJSON);
-        }else{
-          alert("Unable to delete: " + jqXHR.responseJSON);
-        }
-        $('#spin').addClass('hide-spin');
-      });
-    }
+    var url = "/admin/deleteblackout";
+    var retUrl = "/admin/blackouts";
+    var data = {
+      id: $('#id').val(),
+    };
+    dashboard.ajaxdelete(data, url, retUrl);
   });
 
 });

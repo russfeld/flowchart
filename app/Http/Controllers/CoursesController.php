@@ -6,10 +6,22 @@ use App\Models\College;
 use App\Models\Category;
 use App\Models\Course;
 
+use League\Fractal\Manager;
+use League\Fractal\Resource\Collection;
+use App\JsonSerializer;
+
+use Illuminate\Http\Request;
+
 use App\Http\Controllers\Controller;
 
 class CoursesController extends Controller
 {
+
+    public function __construct()
+    {
+          $this->fractal = new Manager();
+    }
+
     /**
      * Responds to requests to GET /courses
      */
@@ -39,6 +51,24 @@ class CoursesController extends Controller
         $courses = Course::where('slug', $slug)->with('prerequisites', 'followers', 'areas')->get();
 
         return view('courses/detail')->with('courses', $courses)->with('slug', $slug);
+    }
+
+    public function getCoursefeed(Request $request){
+    	$this->validate($request, [
+            'query' => 'required|string',
+        ]);
+
+        $courses = Course::filterName($request->input('query'))->get();
+
+        $resource = new Collection($courses, function($course) {
+              return[
+                  'value' => $course->fullTitle,
+                  'data' => $course->id,
+              ];
+        });
+
+    	return $this->fractal->createData($resource)->toJson();
+
     }
 
 }

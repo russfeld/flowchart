@@ -8,7 +8,7 @@
 
 <ul>
 @foreach($courses as $course)
-	<li><a href="{{ url('courses/' . $course->slug) }}">{{ $course->fullTitle }}</a></li>
+	<li><a href="{{ url('courses/course/' . $course->slug) }}">{{ $course->fullTitle }}</a></li>
 @endforeach
 </ul>
 

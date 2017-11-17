@@ -1290,7 +1290,10 @@ russfeld - added rotate so it is really fa-angle-right intsead :)
 .input-group .input-group-addon {
   border-radius: 0;
   border-color: #d2d6de;
+  /* russfeld
   background-color: #fff;
+  */
+  background-color: #eeeeee
 }
 /* button groups */
 .btn-group-vertical .btn.btn-flat:first-of-type,

@@ -1,1 +1,32 @@
-require(["util/site","util/dashboard"],function(e,i){e.ajaxcrsf();var n=i.dataTableOptions;n.dom='<"newbutton">frtip',i.init(n),e.checkMessage(),$("#delete").on("click",function(){var i=confirm("Are you sure?");if(i===!0){$("#spin").removeClass("hide-spin");var n={id:$("#id").val()},s="/admin/deletemeeting";$.ajax({method:"POST",url:s,data:n}).success(function(e){$(location).attr("href","/admin/meetings")}).fail(function(i,n){422==i.status?e.setFormErrors(i.responseJSON):alert("Unable to delete: "+i.responseJSON),$("#spin").addClass("hide-spin")})}}),$("#forcedelete").on("click",function(){var i=confirm("Are you sure? This will permanently remove this record. You cannot undo this action.");if(i===!0){$("#spin").removeClass("hide-spin");var n={id:$("#id").val()},s="/admin/forcedeletemeeting";$.ajax({method:"POST",url:s,data:n}).success(function(e){$(location).attr("href","/admin/meetings")}).fail(function(i,n){422==i.status?e.setFormErrors(i.responseJSON):alert("Unable to delete: "+i.responseJSON),$("#spin").addClass("hide-spin")})}})});
+require(['util/site', 'util/dashboard'], function(site, dashboard) {
+
+  site.ajaxcrsf();
+
+  var options = dashboard.dataTableOptions;
+  options.dom = '<"newbutton">frtip';
+  dashboard.init(options);
+  site.checkMessage();
+
+  //$("div.newbutton").html('<a type="button" class="btn btn-success" href="/admin/newstudent">New Student</a>');
+
+  $('#delete').on('click', function(){
+    var url = "/admin/deletemeeting";
+    var retUrl = "/admin/meetings";
+    var data = {
+      id: $('#id').val(),
+    };
+    dashboard.ajaxdelete(data, url, retUrl, true);
+  });
+
+  $('#forcedelete').on('click', function(){
+    var url = "/admin/forcedeletemeeting";
+    var retUrl = "/admin/meetings";
+    var data = {
+      id: $('#id').val(),
+    };
+    dashboard.ajaxdelete(data, url, retUrl);
+  });
+
+});
+
+//# sourceMappingURL=dashboard_meetingedit.js.map

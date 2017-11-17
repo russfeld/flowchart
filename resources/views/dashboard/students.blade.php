@@ -40,6 +40,7 @@
             <th>Last Name</th>
             <th>Advisor</th>
             <th>Department</th>
+            <th>Actions</th>
           </tr>
           </tfoot>
         </table>

@@ -108,12 +108,66 @@
   </div><!-- /.col -->
 
   <div class="col-md-3 col-sm-6 col-xs-12">
+    <a href="{{ url("admin/plans")}}" class="nounderline">
     <div class="info-box">
       <!-- Apply any bg-* class to to the icon to color it -->
       <span class="info-box-icon bg-lime"><i class="fa fa-line-chart"></i></span>
       <div class="info-box-content">
-        <span class="info-box-text">Flowcharts</span>
-        <span class="info-box-number">fixme!</span>
+        <span class="info-box-text">Plans</span>
+        <span class="info-box-number">{{ $data["plans"] }}</span>
+      </div><!-- /.info-box-content -->
+    </div><!-- /.info-box -->
+    </a>
+  </div><!-- /.col -->
+</div><!-- /.row -->
+
+
+
+<div class="row">
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <a href="{{ url("admin/degreeprograms")}}" class="nounderline">
+    <div class="info-box">
+      <!-- Apply any bg-* class to to the icon to color it -->
+      <span class="info-box-icon bg-teal"><i class="fa fa-certificate"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">Degree Programs</span>
+        <span class="info-box-number">{{ $data["degreeprograms"] }}</span>
+      </div><!-- /.info-box-content -->
+    </div><!-- /.info-box -->
+    </a>
+  </div><!-- /.col -->
+
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <a href="{{ url("admin/degreeprograms")}}" class="nounderline">
+    <div class="info-box">
+      <!-- Apply any bg-* class to to the icon to color it -->
+      <span class="info-box-icon bg-light-blue"><i class="fa fa-book"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">Requirements</span>
+        <span class="info-box-number">{{ $data["degreerequirements"] }}</span>
+      </div><!-- /.info-box-content -->
+    </div><!-- /.info-box -->
+    </a>
+  </div><!-- /.col -->
+
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+      <!-- Apply any bg-* class to to the icon to color it -->
+      <span class="info-box-icon bg-olive"><i class="fa fa-check"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">Completed Courses</span>
+        <span class="info-box-number">{{ $data["completedcourses"] }}</span>
+      </div><!-- /.info-box-content -->
+    </div><!-- /.info-box -->
+  </div><!-- /.col -->
+
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+      <!-- Apply any bg-* class to to the icon to color it -->
+      <span class="info-box-icon bg-fuchsia"><i class="fa fa-arrows-h"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">Transfer Courses</span>
+        <span class="info-box-number">{{ $data["transfercourses"] }}</span>
       </div><!-- /.info-box-content -->
     </div><!-- /.info-box -->
   </div><!-- /.col -->

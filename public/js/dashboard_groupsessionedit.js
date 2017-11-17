@@ -1,1 +1,23 @@
-require(["util/site","util/dashboard"],function(e,s){e.ajaxcrsf();var i=s.dataTableOptions;i.dom='<"newbutton">frtip',s.init(i),e.checkMessage(),$("#delete").on("click",function(){var s=confirm("Are you sure? You cannot undo this action.");if(s===!0){$("#spin").removeClass("hide-spin");var i={id:$("#id").val()},n="/admin/deletegroupsession";$.ajax({method:"POST",url:n,data:i}).success(function(e){$(location).attr("href","/admin/groupsessions")}).fail(function(s,i){422==s.status?e.setFormErrors(s.responseJSON):alert("Unable to delete: "+s.responseJSON),$("#spin").addClass("hide-spin")})}})});
+require(['util/site', 'util/dashboard'], function(site, dashboard) {
+
+  site.ajaxcrsf();
+
+  var options = dashboard.dataTableOptions;
+  options.dom = '<"newbutton">frtip';
+  dashboard.init(options);
+  site.checkMessage();
+
+  //$("div.newbutton").html('<a type="button" class="btn btn-success" href="/admin/newstudent">New Student</a>');
+
+  $('#delete').on('click', function(){
+    var url = "/admin/deletegroupsession";
+    var retUrl = "/admin/groupsessions";
+    var data = {
+      id: $('#id').val(),
+    };
+    dashboard.ajaxdelete(data, url, retUrl);
+  });
+
+});
+
+//# sourceMappingURL=dashboard_groupsessionedit.js.map

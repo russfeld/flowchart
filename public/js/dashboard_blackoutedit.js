@@ -1,1 +1,23 @@
-require(["util/site","util/dashboard"],function(e,a){e.ajaxcrsf();var t=a.dataTableOptions;t.dom='<"newbutton">frtip',a.init(t),e.checkMessage(),$("#delete").on("click",function(){var a=confirm("Are you sure? You cannot undo this action.");if(a===!0){$("#spin").removeClass("hide-spin");var t={id:$("#id").val()},i="/admin/deleteblackout";$.ajax({method:"POST",url:i,data:t}).success(function(e){$(location).attr("href","/admin/blackouts")}).fail(function(a,t){422==a.status?e.setFormErrors(a.responseJSON):alert("Unable to delete: "+a.responseJSON),$("#spin").addClass("hide-spin")})}})});
+require(['util/site', 'util/dashboard'], function(site, dashboard) {
+
+  site.ajaxcrsf();
+
+  var options = dashboard.dataTableOptions;
+  options.dom = '<"newbutton">frtip';
+  dashboard.init(options);
+  site.checkMessage();
+
+  //$("div.newbutton").html('<a type="button" class="btn btn-success" href="/admin/newstudent">New Student</a>');
+
+  $('#delete').on('click', function(){
+    var url = "/admin/deleteblackout";
+    var retUrl = "/admin/blackouts";
+    var data = {
+      id: $('#id').val(),
+    };
+    dashboard.ajaxdelete(data, url, retUrl);
+  });
+
+});
+
+//# sourceMappingURL=dashboard_blackoutedit.js.map

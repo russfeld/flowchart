@@ -9,10 +9,10 @@
 
 	<ul>
 	@foreach($college->categories as $category)
-		<li><a href="{{ url('courses/' . $category->url) }}">{{ $category->category_name }}</a></li>
+		<li><a href="{{ url('courses/category/' . $category->url) }}">{{ $category->category_name }}</a></li>
 	@endforeach
 	</ul>
-	
+
 @endforeach
 
 @endsection

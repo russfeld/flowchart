@@ -12,4 +12,4 @@
 @show
 
 <!-- favicon -->
-<link href="favicon.ico" rel="shortcut icon">
+<link href="/favicon.ico" rel="shortcut icon">
