@@ -15,6 +15,7 @@ return [
 
     'debug' => env('APP_DEBUG', false),
     'env' => env('APP_ENV', 'production'),
+    'name' => 'K-State Engineering Flowcharts',
 
     /*
     |--------------------------------------------------------------------------
@@ -137,6 +138,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Illuminate\Notifications\NotificationServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -145,6 +147,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
+        App\Providers\BroadcastServiceProvider::class,
         Xavrsl\Cas\CasServiceProvider::class,
         Terbium\DbConfig\DbConfigServiceProvider::class,
 
@@ -197,7 +200,8 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
         'Cas'       => Xavrsl\Cas\Facades\Cas::class,
         'Gate'      => Illuminate\Support\Facades\Gate::class,
-        'DbConfig'  => Terbium\DbConfig\Facade::class
+        'DbConfig'  => Terbium\DbConfig\Facade::class,
+        'Notification' => Illuminate\Support\Facade\Notification::class,
     ],
 
 ];
