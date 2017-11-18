@@ -26,7 +26,7 @@ class CourseSchedules extends Migration
 
       Schema::create('course_schedule', function (Blueprint $table) {
           $table->increments('id');
-          $table->tinyint('session');
+          $table->tinyInteger('session');
           $table->integer('course_id')->unsigned()->nullable();
           $table->string('section');
           $table->integer('class_number');
@@ -40,7 +40,7 @@ class CourseSchedules extends Migration
           $table->boolean('wednesday');
           $table->boolean('thursday');
           $table->boolean('friday');
-          $table->tinyint('credits');
+          $table->tinyInteger('credits');
           $table->string('basis');
           $table->string('component');
           $table->foreign('course_id')->references('id')->on('courses');
@@ -57,7 +57,7 @@ class CourseSchedules extends Migration
     {
         Schema::table('colleges', function ($table) {
           $table->dropColumn('college_abbr');
-        }
+        });
 
         Schema::drop('course_schedule');
         Schema::drop('terms');
