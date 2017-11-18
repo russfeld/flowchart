@@ -22,7 +22,7 @@ class CourseSchedules extends Migration
         $table->string('description');
         $table->string('abbreviation');
         $table->timestamps();
-      }
+      });
 
       Schema::create('course_schedule', function (Blueprint $table) {
           $table->increments('id');
@@ -55,10 +55,11 @@ class CourseSchedules extends Migration
      */
     public function down()
     {
-        Schema::table('students', function ($table) {
+        Schema::table('colleges', function ($table) {
           $table->dropColumn('college_abbr');
         }
 
         Schema::drop('course_schedule');
+        Schema::drop('terms');
     }
 }
