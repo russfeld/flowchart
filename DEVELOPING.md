@@ -13,7 +13,6 @@ Install the following Ubuntu packages and all dependencies:
 
 1. `apache2`
 2. `mysql-server`
-  - ~~Run the `sudo mysql_secure_installation` command to secure the MySQL server a bit~~ This currently breaks the `phpmyadmin` installation; hopefully will be fixed in a future update.
 3. `php libapache2-mod-php php-mcrypt php-mysql`
 4. `phpmyadmin php-mbstring php-gettext`
   - Make sure you press `spacebar` to select `apache2` when asked which webserver to configure automatically. A red box does not mean it is selected; it must have an asterisk in the box. This part is usually confusing.
@@ -42,8 +41,7 @@ These are packages I use personally for development. They are not required but r
 ### Firefox Addons
 I also recommend installing these Firefox Addons for testing
 
-1. `firebug`
-2. `NoScript`
+1. `NoScript`
 
 ### Configure git
 
@@ -65,7 +63,6 @@ I also recommend installing these Firefox Addons for testing
   1. `composer install`
   2. `bower install`
   3. `npm install`
-    1. `node-sass` apparently needs rebuilt after install. Run `npm rebuild node-sass` to do this.
   4. `gulp`
     - This should recompile all CSS, JS, and asset files into the public folder. If this doesn't work, there are probably errors that must be addressed.
 
@@ -93,7 +90,7 @@ This will walk you through setting up the required database for the Flowchart sy
 6. Restart the computer for things to work properly
 
 ### Deployment Configuration
-1. Install Envoy globally using `sudo composer global require "laravel/envoy=~1.0"`
+1. Install Envoy globally using `composer global require "laravel/envoy=~1.0"`
 2. Add `export PATH=$PATH:~/.composer/vendor/bin` to `~/.bashrc` so that envoy can be found by the system
 3. Configure SSH keys on any systems that will be used for deployment. Generally it just needs the development system's public key added as an authorized key.
 4. See `Envoy.blade.php` in the root directory of the web application for available tasks

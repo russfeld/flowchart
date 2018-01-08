@@ -1,15 +1,15 @@
-/*! DataTables 1.10.13
- * ©2008-2016 SpryMedia Ltd - datatables.net/license
+/*! DataTables 1.10.16
+ * ©2008-2017 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     DataTables
  * @description Paginate, search and order HTML tables
- * @version     1.10.13
+ * @version     1.10.16
  * @file        jquery.dataTables.js
  * @author      SpryMedia Ltd
  * @contact     www.datatables.net
- * @copyright   Copyright 2008-2016 SpryMedia Ltd.
+ * @copyright   Copyright 2008-2017 SpryMedia Ltd.
  *
  * This source file is free software, available under the following license:
  *   MIT license - http://datatables.net/license
@@ -1023,8 +1023,7 @@
 				[ "iCookieDuration", "iStateDuration" ], // backwards compat
 				[ "oSearch", "oPreviousSearch" ],
 				[ "aoSearchCols", "aoPreSearchCols" ],
-				[ "iDisplayLength", "_iDisplayLength" ],
-				[ "bJQueryUI", "bJUI" ]
+				[ "iDisplayLength", "_iDisplayLength" ]
 			] );
 			_fnMap( oSettings.oScroll, oInit, [
 				[ "sScrollX", "sX" ],
@@ -1054,31 +1053,7 @@
 			
 			var oClasses = oSettings.oClasses;
 			
-			// @todo Remove in 1.11
-			if ( oInit.bJQueryUI )
-			{
-				/* Use the JUI classes object for display. You could clone the oStdClasses object if
-				 * you want to have multiple tables with multiple independent classes
-				 */
-				$.extend( oClasses, DataTable.ext.oJUIClasses, oInit.oClasses );
-			
-				if ( oInit.sDom === defaults.sDom && defaults.sDom === "lfrtip" )
-				{
-					/* Set the DOM to use a layout suitable for jQuery UI's theming */
-					oSettings.sDom = '<"H"lfr>t<"F"ip>';
-				}
-			
-				if ( ! oSettings.renderer ) {
-					oSettings.renderer = 'jqueryui';
-				}
-				else if ( $.isPlainObject( oSettings.renderer ) && ! oSettings.renderer.header ) {
-					oSettings.renderer.header = 'jqueryui';
-				}
-			}
-			else
-			{
-				$.extend( oClasses, DataTable.ext.classes, oInit.oClasses );
-			}
+			$.extend( oClasses, DataTable.ext.classes, oInit.oClasses );
 			$this.addClass( oClasses.sTable );
 			
 			
@@ -1541,6 +1516,35 @@
 	
 	
 	/**
+	 * Determine if all values in the array are unique. This means we can short
+	 * cut the _unique method at the cost of a single loop. A sorted array is used
+	 * to easily check the values.
+	 *
+	 * @param  {array} src Source array
+	 * @return {boolean} true if all unique, false otherwise
+	 * @ignore
+	 */
+	var _areAllUnique = function ( src ) {
+		if ( src.length < 2 ) {
+			return true;
+		}
+	
+		var sorted = src.slice().sort();
+		var last = sorted[0];
+	
+		for ( var i=1, ien=sorted.length ; i<ien ; i++ ) {
+			if ( sorted[i] === last ) {
+				return false;
+			}
+	
+			last = sorted[i];
+		}
+	
+		return true;
+	};
+	
+	
+	/**
 	 * Find the unique elements in a source array.
 	 *
 	 * @param  {array} src Source array
@@ -1549,6 +1553,10 @@
 	 */
 	var _unique = function ( src )
 	{
+		if ( _areAllUnique( src ) ) {
+			return src.slice();
+		}
+	
 		// A faster unique method is to use object keys to identify used values,
 		// but this doesn't work with arrays or objects, which we must also
 		// consider. See jsperf.com/compare-array-unique-versions/4 for more
@@ -1822,7 +1830,7 @@
 	
 		// orderData can be given as an integer
 		var dataSort = init.aDataSort;
-		if ( dataSort && ! $.isArray( dataSort ) ) {
+		if ( typeof dataSort === 'number' && ! $.isArray( dataSort ) ) {
 			init.aDataSort = [ dataSort ];
 		}
 	}
@@ -2023,6 +2031,9 @@
 			if ( oOptions.className && ! oOptions.sClass )
 			{
 				oOptions.sClass = oOptions.className;
+			}
+			if ( oOptions.sClass ) {
+				th.addClass( oOptions.sClass );
 			}
 	
 			$.extend( oCol, oOptions );
@@ -4798,7 +4809,12 @@
 		} );
 	
 		for ( var i=0, ien=lengths.length ; i<ien ; i++ ) {
-			select[0][ i ] = new Option( language[i], lengths[i] );
+			select[0][ i ] = new Option(
+				typeof language[i] === 'number' ?
+					settings.fnFormatNumber( language[i] ) :
+					language[i],
+				lengths[i]
+			);
 		}
 	
 		var div = $('<div><label/></div>').addClass( classes.sLength );
@@ -6311,7 +6327,7 @@
 	
 			// Allow custom and plug-in manipulation functions to alter the saved data set and
 			// cancelling of loading by returning false
-			var abStateLoad = _fnCallbackFire( settings, 'aoStateLoadParams', 'stateLoadParams', [settings, state] );
+			var abStateLoad = _fnCallbackFire( settings, 'aoStateLoadParams', 'stateLoadParams', [settings, s] );
 			if ( $.inArray( false, abStateLoad ) !== -1 ) {
 				callback();
 				return;
@@ -6331,7 +6347,7 @@
 			}
 	
 			// Store the saved state so it might be accessed at any time
-			settings.oLoadedState = $.extend( true, {}, state );
+			settings.oLoadedState = $.extend( true, {}, s );
 	
 			// Restore key features - todo - for 1.11 this needs to be done by
 			// subscribed events
@@ -6360,7 +6376,7 @@
 			}
 	
 			// Columns
-			// 
+			//
 			if ( s.columns ) {
 				for ( i=0, ien=s.columns.length ; i<ien ; i++ ) {
 					var col = s.columns[i];
@@ -6377,7 +6393,7 @@
 				}
 			}
 	
-			_fnCallbackFire( settings, 'aoStateLoaded', 'stateLoaded', [settings, state] );
+			_fnCallbackFire( settings, 'aoStateLoaded', 'stateLoaded', [settings, s] );
 			callback();
 		}
 	
@@ -7107,6 +7123,11 @@
 	
 	
 		shift:   __arrayProto.shift,
+	
+	
+		slice: function () {
+			return new _Api( this.context, this );
+		},
 	
 	
 		sort:    __arrayProto.sort, // ? name - order?
@@ -8014,6 +8035,11 @@
 			_fnDeleteIndex( settings.aiDisplayMaster, row );
 			_fnDeleteIndex( settings.aiDisplay, row );
 			_fnDeleteIndex( that[ thatIdx ], row, false ); // maintain local indexes
+	
+			// For server-side processing tables - subtract the deleted row from the count
+			if ( settings._iRecordsDisplay > 0 ) {
+				settings._iRecordsDisplay--;
+			}
 	
 			// Check for an 'overflow' they case for displaying the table
 			_fnLengthOverflow( settings );
@@ -9289,15 +9315,6 @@
 				classes.sSortableAsc+' '+classes.sSortableDesc+' '+classes.sSortableNone
 			);
 	
-			if ( settings.bJUI ) {
-				$('th span.'+classes.sSortIcon+ ', td span.'+classes.sSortIcon, thead).detach();
-				$('th, td', thead).each( function () {
-					var wrapper = $('div.'+classes.sSortJUIWrapper, this);
-					$(this).append( wrapper.contents() );
-					wrapper.detach();
-				} );
-			}
-	
 			// Add the TR elements back into the table in their original order
 			jqTbody.children().detach();
 			jqTbody.append( rows );
@@ -9395,7 +9412,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.10.13";
+	DataTable.version = "1.10.16";
 
 	/**
 	 * Private data store, containing all of the settings objects that are
@@ -10322,26 +10339,6 @@
 		 *    } );
 		 */
 		"bInfo": true,
-	
-	
-		/**
-		 * Enable jQuery UI ThemeRoller support (required as ThemeRoller requires some
-		 * slightly different and additional mark-up from what DataTables has
-		 * traditionally used).
-		 *  @type boolean
-		 *  @default false
-		 *
-		 *  @dtopt Features
-		 *  @name DataTable.defaults.jQueryUI
-		 *
-		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
-		 *        "jQueryUI": true
-		 *      } );
-		 *    } );
-		 */
-		"bJQueryUI": false,
 	
 	
 		/**
@@ -13625,14 +13622,6 @@
 		"_iRecordsDisplay": 0,
 	
 		/**
-		 * Flag to indicate if jQuery UI marking and classes should be used.
-		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.defaults}.
-		 *  @type boolean
-		 */
-		"bJUI": null,
-	
-		/**
 		 * The classes to use for the table
 		 *  @type object
 		 *  @default {}
@@ -14407,59 +14396,6 @@
 		"sJUIHeader": "",
 		"sJUIFooter": ""
 	} );
-	
-	
-	(function() {
-	
-	// Reused strings for better compression. Closure compiler appears to have a
-	// weird edge case where it is trying to expand strings rather than use the
-	// variable version. This results in about 200 bytes being added, for very
-	// little preference benefit since it this run on script load only.
-	var _empty = '';
-	_empty = '';
-	
-	var _stateDefault = _empty + 'ui-state-default';
-	var _sortIcon     = _empty + 'css_right ui-icon ui-icon-';
-	var _headerFooter = _empty + 'fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix';
-	
-	$.extend( DataTable.ext.oJUIClasses, DataTable.ext.classes, {
-		/* Full numbers paging buttons */
-		"sPageButton":         "fg-button ui-button "+_stateDefault,
-		"sPageButtonActive":   "ui-state-disabled",
-		"sPageButtonDisabled": "ui-state-disabled",
-	
-		/* Features */
-		"sPaging": "dataTables_paginate fg-buttonset ui-buttonset fg-buttonset-multi "+
-			"ui-buttonset-multi paging_", /* Note that the type is postfixed */
-	
-		/* Sorting */
-		"sSortAsc":            _stateDefault+" sorting_asc",
-		"sSortDesc":           _stateDefault+" sorting_desc",
-		"sSortable":           _stateDefault+" sorting",
-		"sSortableAsc":        _stateDefault+" sorting_asc_disabled",
-		"sSortableDesc":       _stateDefault+" sorting_desc_disabled",
-		"sSortableNone":       _stateDefault+" sorting_disabled",
-		"sSortJUIAsc":         _sortIcon+"triangle-1-n",
-		"sSortJUIDesc":        _sortIcon+"triangle-1-s",
-		"sSortJUI":            _sortIcon+"carat-2-n-s",
-		"sSortJUIAscAllowed":  _sortIcon+"carat-1-n",
-		"sSortJUIDescAllowed": _sortIcon+"carat-1-s",
-		"sSortJUIWrapper":     "DataTables_sort_wrapper",
-		"sSortIcon":           "DataTables_sort_icon",
-	
-		/* Scrolling */
-		"sScrollHead": "dataTables_scrollHead "+_stateDefault,
-		"sScrollFoot": "dataTables_scrollFoot "+_stateDefault,
-	
-		/* Misc */
-		"sHeaderTH":  _stateDefault,
-		"sFooterTH":  _stateDefault,
-		"sJUIHeader": _headerFooter+" ui-corner-tl ui-corner-tr",
-		"sJUIFooter": _headerFooter+" ui-corner-bl ui-corner-br"
-	} );
-	
-	}());
-	
 	
 	
 	var extPagination = DataTable.ext.pager;
