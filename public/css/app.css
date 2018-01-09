@@ -8412,4 +8412,7 @@ body {
 .newbutton {
   float: left; }
 
+.panel-primary .panel-heading a {
+  color: #FF9C19; }
+
 /*# sourceMappingURL=app.css.map */

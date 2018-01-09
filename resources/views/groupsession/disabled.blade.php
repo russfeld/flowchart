@@ -12,8 +12,12 @@
 
 <p>If you have additional questions or are unable to make ANY of the listed group advising times, then you may schedule an individual appointment with your advisor. However, these individual times will be limited.</p>
 
+@include('editable.textarea', ['field' => $edit_header])
+
 <div class="panel panel-primary">
-  <div class="panel-heading">Make sure you have the following available, either on paper or electronically, <b>before</b> you check in:</div>
+  <div class="panel-heading">Make sure you have the following available, either on paper or electronically, <b>before</b> you check in:
+    @include('editable.textarea', ['field' => $edit_panelhead])
+  </div>
   <div class="panel-body">
     <ul>
       <li>A copy of your DARS report (<a href="http://www.k-state.edu/ksis/help/students/stuViewDARS.html">Instructions</a>)</li>
@@ -25,6 +29,9 @@
       </li>
     </ul>
     <p><b>Students who do not have a DARS report and proposed schedule will not be seen by an advisor until these steps are completed</b></p>
+
+    @include('editable.textarea', ['field' => $edit_panel])
+
     @if($user->is_advisor)
     <a class="btn btn-danger" href="/groupsession/enable">Group Advising is Disabled - Enable?</a>
     @else
@@ -32,7 +39,5 @@
     @endif
   </div>
 </div>
-
-
 
 @endsection

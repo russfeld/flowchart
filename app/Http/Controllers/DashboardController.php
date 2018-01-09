@@ -157,8 +157,8 @@ class DashboardController extends Controller
       $user = $student->user;
       $student->delete();
       $user->delete();
-      $request->session()->set('message', trans('messages.item_deleted'));
-      $request->session()->set('type', 'success');
+      $request->session()->put('message', trans('messages.item_deleted'));
+      $request->session()->put('type', 'success');
       return response()->json(trans('messages.item_deleted'));
     }
 
@@ -172,8 +172,8 @@ class DashboardController extends Controller
         $student->meetings()->forceDelete();
         $student->forceDelete();
         $user->forceDelete();
-        $request->session()->set('message', trans('messages.item_forcedeleted'));
-        $request->session()->set('type', 'success');
+        $request->session()->put('message', trans('messages.item_forcedeleted'));
+        $request->session()->put('type', 'success');
         return response()->json(trans('messages.item_forcedeleted'));
       }else{
         return response()->json(trans('errors.not_trashed'), 404);
@@ -188,8 +188,8 @@ class DashboardController extends Controller
       $user = $student->user;
       $student->restore();
       $user->restore();
-      $request->session()->set('message', trans('messages.item_restored'));
-      $request->session()->set('type', 'success');
+      $request->session()->put('message', trans('messages.item_restored'));
+      $request->session()->put('type', 'success');
       return response()->json(trans('messages.item_restored'));
     }
 
@@ -286,8 +286,8 @@ class DashboardController extends Controller
       }else{
         $advisor->delete();
         $user->delete();
-        $request->session()->set('message', trans('messages.item_deleted'));
-        $request->session()->set('type', 'success');
+        $request->session()->put('message', trans('messages.item_deleted'));
+        $request->session()->put('type', 'success');
         return response()->json(trans('messages.item_deleted'));
       }
     }
@@ -311,8 +311,8 @@ class DashboardController extends Controller
         }
         $advisor->forceDelete();
         $user->forceDelete();
-        $request->session()->set('message', trans('messages.item_forcedeleted'));
-        $request->session()->set('type', 'success');
+        $request->session()->put('message', trans('messages.item_forcedeleted'));
+        $request->session()->put('type', 'success');
         return response()->json(trans('messages.item_forcedeleted'));
       }else{
         return response()->json(trans('errors.not_trashed'), 404);
@@ -327,8 +327,8 @@ class DashboardController extends Controller
       $user = $advisor->user;
       $advisor->restore();
       $user->restore();
-      $request->session()->set('message', trans('messages.item_restored'));
-      $request->session()->set('type', 'success');
+      $request->session()->put('message', trans('messages.item_restored'));
+      $request->session()->put('type', 'success');
       return response()->json(trans('messages.item_deleted'));
     }
 
@@ -387,8 +387,8 @@ class DashboardController extends Controller
       ]);
       $department = Department::findOrFail($request->input('id'));
       $department->delete();
-      $request->session()->set('message', trans('messages.item_deleted'));
-      $request->session()->set('type', 'success');
+      $request->session()->put('message', trans('messages.item_deleted'));
+      $request->session()->put('type', 'success');
       return response()->json(trans('messages.item_deleted'));
     }
 
@@ -398,8 +398,8 @@ class DashboardController extends Controller
       ]);
       $department = Department::withTrashed()->findOrFail($request->input('id'));
       $department->restore();
-      $request->session()->set('message', trans('messages.item_restored'));
-      $request->session()->set('type', 'success');
+      $request->session()->put('message', trans('messages.item_restored'));
+      $request->session()->put('type', 'success');
       return response()->json(trans('messages.item_restored'));
     }
 
@@ -422,8 +422,8 @@ class DashboardController extends Controller
           $program->save();
         }
         $department->forceDelete();
-        $request->session()->set('message', trans('messages.item_forcedeleted'));
-        $request->session()->set('type', 'success');
+        $request->session()->put('message', trans('messages.item_forcedeleted'));
+        $request->session()->put('type', 'success');
         return response()->json(trans('messages.item_forcedeleted'));
       }else{
         return response()->json(trans('errors.not_trashed'), 404);
@@ -452,8 +452,8 @@ class DashboardController extends Controller
       ]);
       $meeting = Meeting::findOrFail($request->input('id'));
       $meeting->delete();
-      $request->session()->set('message', trans('messages.item_deleted'));
-      $request->session()->set('type', 'success');
+      $request->session()->put('message', trans('messages.item_deleted'));
+      $request->session()->put('type', 'success');
       return response()->json(trans('messages.item_deleted'), 200);
     }
 
@@ -464,8 +464,8 @@ class DashboardController extends Controller
       $meeting = Meeting::withTrashed()->findOrFail($request->input('id'));
       if($meeting->trashed()){
         $meeting->forceDelete();
-        $request->session()->set('message', trans('messages.item_forcedeleted'));
-        $request->session()->set('type', 'success');
+        $request->session()->put('message', trans('messages.item_forcedeleted'));
+        $request->session()->put('type', 'success');
         return response()->json(trans('messages.item_forcedeleted'));
       }else{
         return response()->json(trans('errors.not_trashed'), 404);
@@ -489,8 +489,8 @@ class DashboardController extends Controller
       ]);
       $blackout = Blackout::findOrFail($request->input('id'));
       $blackout->delete();
-      $request->session()->set('message', trans('messages.item_deleted'));
-      $request->session()->set('type', 'success');
+      $request->session()->put('message', trans('messages.item_deleted'));
+      $request->session()->put('type', 'success');
       return response()->json(trans('messages.item_deleted'), 200);
     }
 
@@ -511,8 +511,8 @@ class DashboardController extends Controller
       ]);
       $groupsession = Groupsession::findOrFail($request->input('id'));
       $groupsession->delete();
-      $request->session()->set('message', trans('messages.item_deleted'));
-      $request->session()->set('type', 'success');
+      $request->session()->put('message', trans('messages.item_deleted'));
+      $request->session()->put('type', 'success');
       return response()->json(trans('messages.item_deleted'), 200);
     }
 
@@ -527,8 +527,8 @@ class DashboardController extends Controller
       ]);
       if(!DbConfig::has($request->input('key'))){
         DbConfig::store($request->input('key'), false);
-        $request->session()->set('message', trans('messages.item_saved'));
-        $request->session()->set('type', 'success');
+        $request->session()->put('message', trans('messages.item_saved'));
+        $request->session()->put('type', 'success');
         return response()->json(trans('messages.item_saved'), 200);
       }else{
         return response()->json(trans('errors.item_exists'), 400);
@@ -545,8 +545,8 @@ class DashboardController extends Controller
         }else{
           DbConfig::store($request->input('key'), true);
         }
-        $request->session()->set('message', trans('messages.item_saved'));
-        $request->session()->set('type', 'success');
+        $request->session()->put('message', trans('messages.item_saved'));
+        $request->session()->put('type', 'success');
         return response()->json(trans('messages.item_saved'), 200);
       }else{
         return response()->json(trans('errors.not_found'), 400);
@@ -630,8 +630,8 @@ class DashboardController extends Controller
       ]);
       $degreeprogram = Degreeprogram::findOrFail($request->input('id'));
       $degreeprogram->delete();
-      $request->session()->set('message', trans('messages.item_deleted'));
-      $request->session()->set('type', 'success');
+      $request->session()->put('message', trans('messages.item_deleted'));
+      $request->session()->put('type', 'success');
       return response()->json(trans('messages.item_deleted'));
     }
 
@@ -641,8 +641,8 @@ class DashboardController extends Controller
       ]);
       $degreeprogram = Degreeprogram::withTrashed()->findOrFail($request->input('id'));
       $degreeprogram->restore();
-      $request->session()->set('message', trans('messages.item_restored'));
-      $request->session()->set('type', 'success');
+      $request->session()->put('message', trans('messages.item_restored'));
+      $request->session()->put('type', 'success');
       return response()->json(trans('messages.item_restored'));
     }
 
@@ -661,8 +661,8 @@ class DashboardController extends Controller
           $plan->save();
         }
         $degreeprogram->forceDelete();
-        $request->session()->set('message', trans('messages.item_forcedeleted'));
-        $request->session()->set('type', 'success');
+        $request->session()->put('message', trans('messages.item_forcedeleted'));
+        $request->session()->put('type', 'success');
         return response()->json(trans('messages.item_forcedeleted'));
       }else{
         return response()->json(trans('errors.not_trashed'), 404);
@@ -742,8 +742,8 @@ class DashboardController extends Controller
       ]);
       $plan = Plan::findOrFail($request->input('id'));
       $plan->delete();
-      $request->session()->set('message', trans('messages.item_deleted'));
-      $request->session()->set('type', 'success');
+      $request->session()->put('message', trans('messages.item_deleted'));
+      $request->session()->put('type', 'success');
       return response()->json(trans('messages.item_deleted'));
     }
 
@@ -753,8 +753,8 @@ class DashboardController extends Controller
       ]);
       $plan = Plan::withTrashed()->findOrFail($request->input('id'));
       $plan->restore();
-      $request->session()->set('message', trans('messages.item_restored'));
-      $request->session()->set('type', 'success');
+      $request->session()->put('message', trans('messages.item_restored'));
+      $request->session()->put('type', 'success');
       return response()->json(trans('messages.item_restored'));
     }
 
@@ -769,8 +769,8 @@ class DashboardController extends Controller
           $requirement->delete();
         }
         $plan->forceDelete();
-        $request->session()->set('message', trans('messages.item_forcedeleted'));
-        $request->session()->set('type', 'success');
+        $request->session()->put('message', trans('messages.item_forcedeleted'));
+        $request->session()->put('type', 'success');
         return response()->json(trans('messages.item_forcedeleted'));
       }else{
         return response()->json(trans('errors.not_trashed'), 404);
@@ -838,8 +838,8 @@ class DashboardController extends Controller
       ]);
       $completedcourse = Completedcourse::findOrFail($request->input('id'));
       $completedcourse->delete();
-      $request->session()->set('message', trans('messages.item_deleted'));
-      $request->session()->set('type', 'success');
+      $request->session()->put('message', trans('messages.item_deleted'));
+      $request->session()->put('type', 'success');
       return response()->json(trans('messages.item_deleted'));
     }
 }

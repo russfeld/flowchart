@@ -29,6 +29,11 @@ elixir(function(mix) {
         "../bower/datatables.net-bs/css/dataTables.bootstrap.css",
     ], 'public/css/dashboard.css');
 
+    mix.styles([
+        "../bower/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css",
+        "../bower/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.css",
+    ], 'public/css/bootstrap-editable.css');
+
     //Require.js configuration & library
 
     mix.scripts([
@@ -53,7 +58,7 @@ elixir(function(mix) {
         '../bower/bootstrap-sass/assets/javascripts/bootstrap.js',
     ], 'public/js/lib/bootstrap.js');
 
-        mix.scripts([
+    mix.scripts([
         '../bower/devbridge-autocomplete/dist/jquery.autocomplete.js'
     ], 'public/js/lib/jquery.autocomplete.js');
 
@@ -92,6 +97,11 @@ elixir(function(mix) {
     mix.scripts([
         '../bower/datatables.net-bs/js/dataTables.bootstrap.js',
     ], 'public/js/lib/datatablesbs.js');
+
+    mix.scripts([
+        '../bower/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.js',
+        '../bower/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.all.js',
+    ], 'public/js/lib/bootstrap-editable.js');
 
     //Utilities
 

@@ -150,7 +150,7 @@ return [
         App\Providers\BroadcastServiceProvider::class,
         Xavrsl\Cas\CasServiceProvider::class,
         Terbium\DbConfig\DbConfigServiceProvider::class,
-
+        App\Providers\ComposerServiceProvider::class,
     ],
 
     /*
