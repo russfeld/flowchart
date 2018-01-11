@@ -24,6 +24,6 @@ class GroupsessionDisabled
           return $next($request);
         }
       }
-      return view('groupsession.disabled')->with('user', Auth::user());
+      return redirect()->action('GroupsessionController@getIndex');
     }
 }

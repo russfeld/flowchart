@@ -27,10 +27,6 @@ Route::get('help', function(){
 	return View::make('help/index');
 });
 
-Route::get('help/groupsession', function(){
-	return View::make('help/groupsession');
-});
-
 /*
  * Static route for images in storage
  * http://stackoverflow.com/questions/30191330/laravel-5-how-to-access-image-uploaded-in-storage-within-view
@@ -172,6 +168,8 @@ Route::get('auth/login', 'Auth\AuthController@CASLogin');
 Route::get('auth/logout', 'Auth\AuthController@Logout');
 Route::get('auth/caslogout', 'Auth\AuthController@CASLogout');
 Route::get('auth/force', 'Auth\AuthController@ForceLogin');
+
+Route::post('editable/save/{id?}', 'EditableController@postSave');
 
 /*
  * Test Routes for Flowchart tester

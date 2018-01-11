@@ -9,7 +9,7 @@ var require = {
         "adminlte" : { "deps" : ['jquery', 'bootstrap'] },
         "datatables.net" : { "deps" : ['jquery'] },
         "datatables.netbs" : { "deps" : ['jquery', 'datatables.net'] },
-        "bootstrap-editable" : { "deps" : ['jquery', 'bootstrap'] },
+        "summernote" : { "deps" : ['jquery', 'bootstrap'] },
     },
     paths: {
         "jquery" : "lib/jquery",
@@ -25,6 +25,6 @@ var require = {
         "adminlte": "lib/adminlte",
         "datatables.net": "lib/datatables",
         "datatables.netbs": "lib/datatablesbs",
-        "bootstrap-editable": "lib/bootstrap-editable",
+        "summernote": "lib/summernote",
     }
 };

@@ -22,13 +22,14 @@ Install the following Ubuntu packages and all dependencies:
   2. To install globally (recommended), run `sudo mv composer.phar /usr/local/bin/composer`
 7. `php-curl`
 8. `nodejs npm`
-  1. Because Ubuntu uses the `nodejs` executable name instead of `node`, I always alias it to `node` by running `sudo ln -s /usr/bin/nodejs /usr/bin/node`. Otherwise, tools such as Bower will not work properly.
+  1. Make sure you get the latest versions. The Ubuntu repositories tend to be woefully out of date. I used this guide: https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-16-04
+  2. Because Ubuntu uses the `nodejs` executable name instead of `node`, I always alias it to `node` by running `sudo ln -s /usr/bin/nodejs /usr/bin/node`.
 
 ### Node.js Packages
-You will also need to install the following Node.js packages using `sudo npm install -g <package>`
+~~You will also need to install the following Node.js packages using `sudo npm install -g <package>`~~ Shouldn't need this step anymore?
 
-1. `bower`
-2. `gulp`
+1. ~~`bower`~~
+2. ~~`gulp`~~
 
 ### Optional Packages
 These are packages I use personally for development. They are not required but recommended:
@@ -61,9 +62,9 @@ I also recommend installing these Firefox Addons for testing
 
 1. Go into the `~/flowchart` directory and run the following commands
   1. `composer install`
-  2. `bower install`
+  2. ~~`bower install`~~
   3. `npm install`
-  4. `gulp`
+  4. `npm run dev`
     - This should recompile all CSS, JS, and asset files into the public folder. If this doesn't work, there are probably errors that must be addressed.
 
 ### App & Database Setup

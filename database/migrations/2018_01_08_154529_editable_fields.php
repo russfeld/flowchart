@@ -15,7 +15,8 @@ class EditableFields extends Migration
     {
       Schema::create('editables', function (Blueprint $table) {
         $table->increments('id');
-        $table->string('page');
+        $table->string('controller');
+        $table->string('action');
         $table->string('key');
         $table->integer('version')->unsigned()->default(0);
         $table->longText('contents');

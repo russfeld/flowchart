@@ -14,10 +14,17 @@ class ComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-      // Using class based composers...
+      //ADD EDITABLE COMPONENTS TO App/Console/Commands/PostDeploy TO AUTO-POPULATE!
       View::composer(
-          ['groupsession.disabled', 'groupsession.index'], 'App\Http\ViewComposers\GroupSessionComposer'
+          ['groupsession.index'], 'App\Http\ViewComposers\EditableComposer'
       );
+
+      View::composer(
+          ['includes.scripts'], 'App\Http\ViewComposers\JavascriptComposer'
+      );
+
+
+
 
     }
 

@@ -30,7 +30,7 @@ class GroupsessionController extends Controller
   	{
   		$this->middleware('cas');
   		$this->middleware('update_profile');
-      $this->middleware('groupsessiondisabled', ['except' => ['getEnable']]);
+      $this->middleware('groupsessiondisabled', ['except' => ['getEnable', 'getIndex']]);
       $this->fractal = new Manager();
   	}
 
@@ -43,10 +43,12 @@ class GroupsessionController extends Controller
     {
       $user = Auth::user();
 
-      if($user->is_advisor){
+      $enabled = DbConfig::get('groupsessionenabled');
+
+      if($user->is_advisor && $enabled){
         return redirect('groupsession/list');
       }else{
-        return view('groupsession/index');
+        return view('groupsession/index')->with('user', $user)->with('enabled', $enabled);
       }
     }
 

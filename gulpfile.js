@@ -30,9 +30,8 @@ elixir(function(mix) {
     ], 'public/css/dashboard.css');
 
     mix.styles([
-        "../bower/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css",
-        "../bower/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.css",
-    ], 'public/css/bootstrap-editable.css');
+        "../bower/summernote/dist/summernote.css",
+    ], 'public/css/summernote.css');
 
     //Require.js configuration & library
 
@@ -99,9 +98,8 @@ elixir(function(mix) {
     ], 'public/js/lib/datatablesbs.js');
 
     mix.scripts([
-        '../bower/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.js',
-        '../bower/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.all.js',
-    ], 'public/js/lib/bootstrap-editable.js');
+        '../bower/summernote/dist/summernote.js',
+    ], 'public/js/lib/summernote.js');
 
     //Utilities
 
@@ -116,6 +114,10 @@ elixir(function(mix) {
     mix.scripts([
         'util/dashboard.js',
     ], 'public/js/util/dashboard.js');
+
+    mix.scripts([
+        'util/editable.js',
+    ], 'public/js/util/editable.js');
 
 
     //Pages
@@ -184,6 +186,10 @@ elixir(function(mix) {
         'pages/dashboard/settings.js',
     ], 'public/js/dashboard_settings.js');
 
+    mix.scripts([
+        'pages/groupsessionindex.js',
+    ], 'public/js/groupsessionindex.js');
+
     //Test Flowchart
 
     mix.scripts([
@@ -202,4 +208,6 @@ gulp.task('copyfonts', function() {
    .pipe(gulp.dest('public/fonts'));
    gulp.src('resources/assets/bower/ionsound/sounds/**/*.{aac,mp3,ogg}')
    .pipe(gulp.dest('public/sounds'));
+   gulp.src('resources/assets/bower/summernote/dist/font/**/*.{ttf,woff,eot}')
+   .pipe(gulp.dest('public/font'));
 });

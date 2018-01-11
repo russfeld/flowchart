@@ -1,8 +1,10 @@
+// Change some default Bootstrap variables
 @import "bootstrap-variables-override";
-@import "../bower/bootstrap-sass/assets/stylesheets/bootstrap";
-@import "../bower/bootstrap-sass/assets/stylesheets/bootstrap/theme";
-@import "bootstrap-custom-items";
-@import "../bower/fontawesome/scss/font-awesome";
+// Bootstrap-sass
+@import "../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/theme";
+// Font Awesome
+@import "../../../node_modules/font-awesome/scss/font-awesome.scss";
 @import "flowchart.scss";
 
 html {
@@ -261,4 +263,9 @@ body {
 
 .panel-primary .panel-heading a{
   color: #FF9C19;
+}
+
+.editable-save{
+  margin-top: -20px;
+  margin-bottom: 20px;
 }

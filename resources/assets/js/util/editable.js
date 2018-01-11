@@ -1,42 +1,73 @@
-define(['util/site', 'bootstrap-editable'], function(site, editable) {
+exports.init = function(){
+  require('codemirror');
+  require('codemirror/lib/codemirror.css');
+  require('codemirror/mode/xml/xml.js');
+  require('codemirror/theme/blackboard.css');
+  require('codemirror/theme/monokai.css');
+  require('summernote');
+  require('summernote/dist/summernote.css');
 
-  function editableModule() {
-    //self-referential variable
-    //anything attached to this or self will be public
-    var self = this;
+/*
+  var SaveButton = function (context) {
+    var ui = $.summernote.ui;
 
-    self.init = function(){
+    // create button
+    var button = ui.button({
+      contents: '<i class="fa fa-floppy-o"/>',
+      className: 'note-btn-green',
+      tooltip: 'Save',
+      click: function () {
+        console.log("save clicked");
+      }
+    });
 
-    }
+    return button.render();   // return button as jquery object
+  }
+*/
 
-    self.ajaxsave = function(data, url, id){
-      $('#spin').removeClass('hide-spin');
-      $.ajax({
-        method: "POST",
-        url: url,
-        data: data
-      })
-      .success(function( message ) {
-        if(id.length == 0){
-          site.clearFormErrors();
-          $('#spin').addClass('hide-spin');
-          $(location).attr('href', message);
-        }else{
-          site.displayMessage(message, "success");
-          site.clearFormErrors();
-          $('#spin').addClass('hide-spin');
-        }
-      }).fail(function( jqXHR, message ){
-        if (jqXHR.status == 422)
-        {
-          site.setFormErrors(jqXHR.responseJSON);
-        }else{
-          alert("Unable to save: " + jqXHR.responseJSON);
-        }
-        $('#spin').addClass('hide-spin');
+  $('.editable-link').each(function(){
+    $(this).click(function(e){
+      e.stopPropagation();
+      e.preventDefault();
+      var id = $(this).data('id');
+      $('#editablebutton-' + id).addClass('hidden');
+      $('#editablesave-' + id).removeClass('hidden');
+      $('#editable-' + id).summernote({
+        focus: true,
+        toolbar: [
+          // [groupName, [list of button]]
+          ['style', ['style', 'bold', 'italic', 'underline', 'clear']],
+          ['font', ['strikethrough', 'superscript', 'subscript', 'link']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['misc', ['fullscreen', 'codeview', 'help']],
+        ],
+        tabsize: 2,
+        codemirror: {
+          mode: 'text/html',
+          htmlMode: true,
+          lineNumbers: true,
+          theme: 'monokai'
+        },
       });
-    }
-  };
+    });
+  });
 
-  return new editableModule();
-});
+  $('.editable-save').each(function(){
+    $(this).click(function(e){
+      e.stopPropagation();
+      e.preventDefault();
+      var id = $(this).data('id');
+      $('#editablespin-' + id).removeClass('hide-spin');
+      var htmlString = $('#editable-' + id).summernote('code');
+      window.axios.post('/editable/save/' + id, {
+        contents: htmlString
+      })
+      .then(function(response){
+        location.reload(true);
+      })
+      .catch(function(error){
+        console.log(error);
+      });
+    });
+  });
+};
