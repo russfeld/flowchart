@@ -10,7 +10,10 @@
 	<h4>This calendar is read-only!</h4>
 </div>
 
-@include('advising._readonlycalendar', ['advisor' => $advisor])
+<div id="calendar">
+</div>
+
+<input type="hidden" id="calendarAdvisorID" value="{{ $advisor->id }}" />
 
 <br>
 @endsection

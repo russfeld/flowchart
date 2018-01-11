@@ -54,15 +54,12 @@ mix.styles([
     "resources/assets/bower/datatables.net-bs/css/dataTables.bootstrap.css",
 ], 'public/css/dashboard.css');
 
-mix.styles([
-    "../bower/summernote/dist/summernote.css",
-], 'public/css/summernote.css');
 */
 
 //Global Javascript Stuff
 
 mix.js('resources/assets/js/app.js', 'public/js')
-    .extract(['jquery', 'bootstrap', 'lodash', 'axios'])
+    .extract(['jquery', 'bootstrap', 'lodash', 'axios', 'summernote', 'codemirror', 'fullcalendar', 'jquery-autocomplete', 'moment', 'eonasdan-bootstrap-datetimepicker-russfeld'])
     .sourceMaps();
 
 if (mix.inProduction()) {

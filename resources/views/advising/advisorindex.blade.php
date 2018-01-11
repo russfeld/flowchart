@@ -20,7 +20,15 @@
 <div class="col-sm-12">
 	<h4>You can also click on the calendar to view meeting details or schedule meetings or blackout times</h4>
 </div>
-@include('advising._advisorcalendar', ['advisor' => $advisor])
+
+@include('advising._blackoutform')
+
+@include('advising._eventform')
+
+<div id="calendar">
+</div>
+
+<input type="hidden" id="calendarAdvisorID" value="{{ $advisor->id }}" />
 
 <br>
 @endsection

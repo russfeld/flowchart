@@ -21,6 +21,8 @@ class EditableController extends Controller
           $editable->fill($data);
           $editable->user_id = $user->id;
           $editable->save();
+          $request->session()->put('message', trans('messages.item_saved'));
+          $request->session()->put('type', 'success');
           return response()->json(trans('messages.item_saved'));
         }else{
           return response()->json($editable->errors(), 422);

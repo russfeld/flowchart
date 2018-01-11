@@ -236,10 +236,10 @@ END:VCALENDAR';
             $mail->Body = $message;
 
             if(!$mail->send()) {
-                echo 'Message could not be sent.';
+                echo 'Message could not be sent. ';
             }
         }else{
-            //echo 'Email disabled - ';
+            echo 'Email Disabled. ';
         }
     }
 

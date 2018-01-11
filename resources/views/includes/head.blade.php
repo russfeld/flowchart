@@ -8,7 +8,7 @@
 
 <!-- CSS Files -->
 @section('styles')
-<link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
 @show
 
 <!-- favicon -->

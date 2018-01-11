@@ -12,7 +12,12 @@
 
 <h4>Click an open time below to schedule a meeting</h4>
 
-@include('advising._studentcalendar', ['advisor' => $advisor])
-<input type="hidden" id="studentName" value="{{ $user->student->name }}" />
+@include('advising._eventform')
+
+<div id="calendar">
+</div>
+
+<input type="hidden" id="calendarAdvisorID" value="{{ $advisor->id }}" />
+<input type="hidden" id="calendarStudentName" value="{{ $user->student->name }}" />
 <br>
 @endsection

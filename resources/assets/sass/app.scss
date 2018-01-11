@@ -1,11 +1,25 @@
 // Change some default Bootstrap variables
 @import "bootstrap-variables-override";
+
 // Bootstrap-sass
 @import "../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 @import "../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/theme";
+
 // Font Awesome
 @import "../../../node_modules/font-awesome/scss/font-awesome.scss";
 @import "flowchart.scss";
+
+// Editables
+@import "../../../node_modules/summernote/dist/summernote.css";
+@import "../../../node_modules/codemirror/lib/codemirror.css";
+@import "../../../node_modules/codemirror/theme/blackboard.css";
+@import "../../../node_modules/codemirror/theme/monokai.css";
+
+// Fullcalendar
+@import "../../../node_modules/fullcalendar/dist/fullcalendar.css";
+
+// Datetimepicker
+@import "../../../node_modules/eonasdan-bootstrap-datetimepicker-russfeld/build/css/bootstrap-datetimepicker.css";
 
 html {
   position: relative;
@@ -265,7 +279,13 @@ body {
   color: #FF9C19;
 }
 
+//Adjust buttons on editable elements up 20px to account for margin of editbox
 .editable-save{
+  margin-top: -20px;
+  margin-bottom: 20px;
+}
+
+.editable-cancel{
   margin-top: -20px;
   margin-bottom: 20px;
 }
