@@ -19,8 +19,8 @@ var App = {
 		AdvisingController: {
 			//advising/index
 			getIndex: function() {
-				var studentcalendar = require('./pages/studentcalendar');
-				studentcalendar.init();
+				var calendar = require('./pages/calendar');
+				calendar.init();
 			}
 		},
 
@@ -31,7 +31,20 @@ var App = {
         var editable = require('./util/editable');
 				editable.init();
       },
+			getList: function() {
+				//var groupsession = require('./pages/groupsession');
+				//groupsession.init();
+			},
 		},
+
+		//Profiles Controller for routes at /profile
+		ProfilesController: {
+			//profile/index
+			getIndex: function() {
+				var profile = require('./pages/profile');
+				profile.init();
+			}
+		}
 	},
 
 	//Function that is called by the page at load. Defined in resources/views/includes/scripts.blade.php

@@ -19,7 +19,7 @@
 @if($enabled)
 <a class="btn btn-success" href="{{ url('groupsession/list') }}">I have my DARS and Schedule ready</a>
 @else
-<a class="btn btn-danger hidden" href="#" disabled="disabled">Group Advising is Unavailable at this Time!</a>
+<a class="btn btn-danger" href="#" disabled="disabled">Group Advising is Unavailable at this Time!</a>
 @endif
 @endif
 

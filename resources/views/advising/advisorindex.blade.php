@@ -2,6 +2,14 @@
 
 @section('title', 'Advising - Manage Appointments')
 
+@section('scripts')
+    <script type="text/javascript">
+      window.advisor = true;
+      window.nobind = false;
+    </script>
+    @parent
+@endsection
+
 @section('content')
 
 <div id="conflictingMeetings" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 div-danger rounded hidden">

@@ -2,6 +2,14 @@
 
 @section('title', 'Advising - Schedule an Appointment')
 
+@section('scripts')
+    <script type="text/javascript">
+      window.advisor = false;
+      window.nobind = false;
+    </script>
+    @parent
+@endsection
+
 @section('content')
 
 @include('advising._message')

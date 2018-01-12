@@ -102,7 +102,11 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Meeting::updated(function ($meeting) {
-            if(!(count($meeting->getDirty()) == 3 && $meeting->isDirty("conflict") && $meeting->isDirty("updated_at") && $meeting->isDirty("status"))){
+            $count = count($meeting->getDirty());
+            if($meeting->isDirty("conflict")) $count = $count - 1;
+            if($meeting->isDirty("updated_at")) $count = $count - 1;
+            if($meeting->isDirty("status")) $count = $count - 1;
+            if($count > 0){
                 $type = "updated";
                 AppServiceProvider::sendMail($meeting, $type);
             }

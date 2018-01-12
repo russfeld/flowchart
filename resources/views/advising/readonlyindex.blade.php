@@ -2,6 +2,14 @@
 
 @section('title', 'Advising - View Advisor Calendar')
 
+@section('scripts')
+    <script type="text/javascript">
+      window.advisor = true;
+      window.nobind = true;
+    </script>
+    @parent
+@endsection
+
 @section('content')
 
 @include('advising._advisor', ['advisor' => $advisor, 'link' => false])

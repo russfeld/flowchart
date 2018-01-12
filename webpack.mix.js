@@ -42,10 +42,6 @@ mix.setPublicPath('public')
 mix.sass('resources/assets/sass/app.scss', 'public/css');
 
 /*
-mix.styles([
-    'resources/assets/bower/fullcalendar/dist/fullcalendar.css',
-    'resources/assets/bower/russfeld-eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
-], 'public/css/calendar.css');
 
 mix.styles([
     //'../bower/admin-lte/dist/css/AdminLTE.css',
@@ -58,8 +54,8 @@ mix.styles([
 
 //Global Javascript Stuff
 
-mix.js('resources/assets/js/app.js', 'public/js')
-    .extract(['jquery', 'bootstrap', 'lodash', 'axios', 'summernote', 'codemirror', 'fullcalendar', 'jquery-autocomplete', 'moment', 'eonasdan-bootstrap-datetimepicker-russfeld'])
+mix.react('resources/assets/js/app.js', 'public/js')
+    .extract(['jquery', 'bootstrap', 'lodash', 'axios', 'summernote', 'codemirror', 'fullcalendar', 'devbridge-autocomplete', 'moment', 'eonasdan-bootstrap-datetimepicker-russfeld'])
     .sourceMaps();
 
 if (mix.inProduction()) {

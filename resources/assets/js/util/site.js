@@ -54,3 +54,26 @@ exports.checkMessage = function(){
 		exports.displayMessage(message, type);
 	}
 }
+
+/**
+ * Function to handle errors from AJAX
+ *
+ * @param message - the message to display to the user
+ * @param element - the jQuery identifier of the element
+ * @param error - the Axios error received
+ */
+exports.handleError = function(message, element, error){
+	if(error.response){
+		//If response is 422, errors were provided
+		if(error.response.status == 422){
+			exports.setFormErrors(error.response.data);
+		}else{
+			alert("Unable to " + message + ": " + error.response.data);
+		}
+	}
+
+	//hide spinning icon
+	if(element.length > 0){
+		$(element + 'Spin').addClass('hide-spin');
+	}
+}

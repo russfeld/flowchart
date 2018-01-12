@@ -3,11 +3,10 @@
 @section('title', 'Advising - Schedule an Appointment')
 
 @section('scripts')
-    @parent
     <script>
       var pusherKey = "{{ env('PUSHER_KEY') }}";
     </script>
-    <script type="text/javascript" src="{{ asset('js/lib/require.js') }}" data-main="/js/groupsession"></script>
+    @parent
 @endsection
 
 @section('content')
