@@ -32,8 +32,8 @@ var App = {
 				editable.init();
       },
 			getList: function() {
-				//var groupsession = require('./pages/groupsession');
-				//groupsession.init();
+				var groupsession = require('./pages/groupsession');
+				groupsession.init();
 			},
 		},
 

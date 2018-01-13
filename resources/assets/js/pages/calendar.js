@@ -1,8 +1,8 @@
 //load required JS libraries
 require('fullcalendar');
 require('devbridge-autocomplete');
-moment = require('moment');
-site = require('../util/site');
+var moment = require('moment');
+var site = require('../util/site');
 require('eonasdan-bootstrap-datetimepicker-russfeld');
 
 //Session for storing data between forms

@@ -1,4 +1,4 @@
-site = require('../util/site');
+var site = require('../util/site');
 
 exports.init = function(){
 

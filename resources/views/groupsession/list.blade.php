@@ -3,8 +3,8 @@
 @section('title', 'Advising - Schedule an Appointment')
 
 @section('scripts')
-    <script>
-      var pusherKey = "{{ env('PUSHER_KEY') }}";
+    <script type="text/javascript">
+      window.pusherKey = "{{ env('PUSHER_KEY') }}";
     </script>
     @parent
 @endsection
@@ -22,7 +22,26 @@
   <br>
 @endif
   <div id="groupList">
-
+    <template v-if="advisor">
+      <template v-for="student in queue">
+        <div class="alert groupsession-div" v-bind:class="getClass(student)" role="alert">
+          <template v-if="student.status == 2">
+            <button class="btn btn-danger pull-right groupsession-button del-button" v-bind:data-id="student.id" v-on:click="delStudent">X</button>
+            <button class="btn btn-primary pull-right groupsession-button done-button" v-bind:data-id="student.id" v-on:click="doneStudent">Done</button>
+            <button class="btn btn-info pull-right groupsession-button put-button" v-bind:data-id="student.id" v-on:click="putStudent">Requeue</button>
+          </template>
+          <template v-else>
+            <button class="btn btn-danger pull-right groupsession-button del-button" v-bind:data-id="student.id" v-on:click="delStudent">X</button>
+            <button class="btn btn-success pull-right groupsession-button take-button" v-bind:data-id="student.id" v-on:click="takeStudent">Take</button>
+          </template>
+          @{{ student.name }}
+          <span class="badge"> @{{ student | statustext }}</span>
+        </div>
+      </template>
+    </template>
+    <template v-else>
+      <div v-for="student in queue" class="alert groupsession-div" v-bind:class="getClass(student)"  role="alert">@{{ student.name }} <span class="badge"> @{{ student | statustext }}</span></div>
+    </template
   </div>
 </div>
 

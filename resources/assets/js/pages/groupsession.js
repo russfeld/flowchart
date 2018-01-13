@@ -1,6 +1,9 @@
-site = require('../util/site');
-require('pusher-js');
-ion = require('ion-sound');
+window.Vue = require('vue');
+var site = require('../util/site');
+//var Echo = require('laravel-echo');
+require('ion-sound');
+
+//window.Pusher = require('pusher-js');
 
 /**
  * Groupsession init function
@@ -25,64 +28,130 @@ exports.init = function(){
 	var isAdvisor = parseInt($('#isAdvisor').val());
 
 	//register button click
-	$('#groupRegisterBtn').on('click', function(){
-		$('#groupSpin').removeClass('hide-spin');
-
-		var url = '/groupsession/register';
-		window.axios.post(url, {})
-			.then(function(response){
-				site.displayMessage(response.data, "success");
-				disableButton();
-				$('#groupSpin').addClass('hide-spin');
-			})
-			.catch(function(error){
-				site.handleError('register', '#group', error);
-			});
-	});
+	$('#groupRegisterBtn').on('click', groupRegisterBtn);
 
 	//disable button click
-	$('#groupDisableBtn').on('click', function(){
-		var choice = confirm("Are you sure?");
-		if(choice === true){
-			var really = confirm("Seriously, this will lose all current data. Are you really sure?");
-			if(really === true){
-				//this is a bit hacky, but it works
-				var token = $('meta[name="csrf-token"]').attr('content');
-				$('<form action="/groupsession/disable" method="POST"/>')
-	        .append($('<input type="hidden" name="id" value="' + userID + '">'))
-					.append($('<input type="hidden" name="_token" value="' + token + '">'))
-	        .appendTo($(document.body)) //it has to be added somewhere into the <body>
-	        .submit();
-			}
-		}
-	});
+	$('#groupDisableBtn').on('click', groupDisableBtn);
 
-	//load pusher
-	var pusherInstance = new Pusher(pusherKey);
-	var groupSessionChannel = pusherInstance.subscribe( 'groupsession' );
+	//render Vue App
+	window.vm = new Vue({
+		el: '#groupList',
+		data: {
+			queue: [],
+			advisor: parseInt($('#isAdvisor').val()) == 1,
+			userID: parseInt($('#userID').val()),
+		},
+		methods: {
+			getClass: function(s){
+				return{
+					'alert-info': s.status == 0 || s.status == 1,
+					'alert-success': s.status == 2,
+					'groupsession-me': s.userid == this.userID,
+				};
+			},
+			//function to take a student from the list
+			takeStudent: function(event){
+				var data = { gid: event.currentTarget.dataset.id };
+				var url = '/groupsession/take'
+				ajaxPost(url, data, 'take');
+			},
 
-	//connect using pusher
-	pusherInstance.connection.bind('connected', function() {
+			//function to put a student back at the end of the list
+			putStudent: function(event){
+				var data = { gid: event.currentTarget.dataset.id };
+				var url = '/groupsession/put'
+				ajaxPost(url, data, 'put');
+			},
 
-		//when connected, disable the spinner
-		$('#groupSpin').addClass('hide-spin');
-	});
+			// function to mark a student done on the list
+			doneStudent: function(event){
+				var data = { gid: event.currentTarget.dataset.id };
+				var url = '/groupsession/done'
+				ajaxPost(url, data, 'mark done');
+			},
 
-	//enable for pusher debugging
-  console.log("Pusher logging enabled!");
-	Pusher.log = function(message) {
-	  if (window.console && window.console.log) {
-	    window.console.log(message);
-	  }
-	};
+			//function to delete a student from the list
+			delStudent: function(event){
+				var data = { gid: event.currentTarget.dataset.id };
+				var url = '/groupsession/delete'
+				ajaxPost(url, data, 'delete');
+			},
+		},
+	})
 
-	//render REACT DOM elements
-	reactDOM.render(
-		<GroupList />,
-		document.getElementById('groupList')
-	);
+	window.axios.get('/groupsession/queue')
+		.then(function(response){
+			vm.queue = vm.queue.concat(response.data);
+			checkButtons(vm.queue);
+			initialCheckDing(vm.queue);
+			vm.queue.sort(sortFunction);
+		})
+		.catch(function(error){
+			site.handleError('get queue', '', error);
+		});
 
 };
+
+
+/**
+ * Vue filter for status text
+ *
+ * @param data - the student to render
+ */
+Vue.filter('statustext', function(data){
+	if(data.status === 0) return "NEW";
+	if(data.status === 1) return "QUEUED";
+	if(data.status === 2) return "MEET WITH " + data.advisor;
+	if(data.status === 3) return "DELAY";
+	if(data.status === 4) return "ABSENT";
+	if(data.status === 5) return "DONE";
+});
+
+/**
+ * Vue component for displaying a student row
+ */
+Vue.component('student-row', {
+	props: ['student'],
+	template: '<div class="alert alert-info groupsession-div" role="alert">{{ student.name }} <span class="badge"> {{ student | statustext }}</span></div>',
+
+});
+
+/**
+ * Function for clicking on the register button
+ */
+var groupRegisterBtn = function(){
+	$('#groupSpin').removeClass('hide-spin');
+
+	var url = '/groupsession/register';
+	window.axios.post(url, {})
+		.then(function(response){
+			site.displayMessage(response.data, "success");
+			disableButton();
+			$('#groupSpin').addClass('hide-spin');
+		})
+		.catch(function(error){
+			site.handleError('register', '#group', error);
+		});
+};
+
+/**
+ * Function for advisors to disable groupsession
+ */
+var groupDisableBtn = function(){
+	var choice = confirm("Are you sure?");
+	if(choice === true){
+		var really = confirm("Seriously, this will lose all current data. Are you really sure?");
+		if(really === true){
+			//this is a bit hacky, but it works
+			var token = $('meta[name="csrf-token"]').attr('content');
+			$('<form action="/groupsession/disable" method="POST"/>')
+				.append($('<input type="hidden" name="id" value="' + userID + '">'))
+				.append($('<input type="hidden" name="_token" value="' + token + '">'))
+				.appendTo($(document.body)) //it has to be added somewhere into the <body>
+				.submit();
+		}
+	}
+}
 
 /**
  * Function to enable registration button
@@ -161,20 +230,7 @@ var sortFunction = function(a, b){
 	return (a.status < b.status ? 1 : -1);
 }
 
-/**
- * Function to translate status messages to text
- *
- * @param data - data item to translate
- * @return - text status message
- */
-var getStatus = function(data){
-	if(data.status === 0) return "NEW";
-	if(data.status === 1) return "QUEUED";
-	if(data.status === 2) return "MEET WITH " + data.advisor;
-	if(data.status === 3) return "DELAY";
-	if(data.status === 4) return "ABSENT";
-	if(data.status === 5) return "DONE";
-}
+
 
 /**
  * Function for making AJAX POST requests
@@ -191,170 +247,4 @@ var ajaxPost = function(url, data, action){
 		.catch(function(error){
 			site.handleError(action, '', error);
 		});
-}
-
-/**
- * React class for rendering a single student row
- *
- * see https://toddmotto.com/react-create-class-versus-component/ for updates
- */
-//var StudentRow = React.createClass({
-
-class StudentRow extends React.Component {
-
-	//constructor function
-	constructor(props) {
-    super(props);
-  }
-
-	//function to take a student from the list
-	takeStudent: function(event){
-		var data = { gid: event.currentTarget.dataset.id };
-		var url = '/groupsession/take'
-		ajaxPost(url, data, 'take');
-	},
-
-	//function to put a student back at the end of the list
-	putStudent: function(event){
-		var data = { gid: event.currentTarget.dataset.id };
-		var url = '/groupsession/put'
-		ajaxPost(url, data, 'put');
-	},
-
-	// function to mark a student done on the list
-	doneStudent: function(event){
-		var data = { gid: event.currentTarget.dataset.id };
-		var url = '/groupsession/done'
-		ajaxPost(url, data, 'mark done');
-	},
-
-	//function to delete a student from the list
-	delStudent: function(event){
-		var data = { gid: event.currentTarget.dataset.id };
-		var url = '/groupsession/delete'
-		ajaxPost(url, data, 'delete');
-	},
-
-	//function to render the item on the screen
-	render: function(){
-		var badgeTitle = getStatus(this.props.student);
-
-		//if the user is an advisor, render extra buttons
-		if(isAdvisor === 1){
-			if(this.props.student.status == 0 || this.props.student.status == 1){
-				return(
-					<div className="alert alert-info groupsession-div" role="alert"><button className="btn btn-danger pull-right groupsession-button del-button" data-id={this.props.student.id} onClick={this.delStudent}>X</button><button className="btn btn-success pull-right groupsession-button take-button" data-id={this.props.student.id} onClick={this.takeStudent}>Take</button>{this.props.student.name} <span className="badge">{badgeTitle}</span></div>
-				);
-			}else if(this.props.student.status == 2){
-				return(
-					<div className="alert alert-success groupsession-div" role="alert"><button className="btn btn-danger pull-right groupsession-button del-button" data-id={this.props.student.id} onClick={this.delStudent}>X</button><button className="btn btn-primary pull-right groupsession-button done-button" data-id={this.props.student.id} onClick={this.doneStudent}>Done</button><button className="btn btn-info pull-right groupsession-button put-button" data-id={this.props.student.id} onClick={this.putStudent}>Requeue</button>{this.props.student.name} <span className="badge">{badgeTitle}</span></div>
-				);
-			}
-
-		//if user is not an advisor, render normal view
-		}else{
-			if(this.props.student.status == 0 || this.props.student.status == 1){
-				var myClass = "alert alert-info groupsession-div";
-			}else if (this.props.student.status == 2){
-				var myClass = "alert alert-success groupsession-div";
-			}
-			if (userID === this.props.student.userid){
-				var name = <b>{this.props.student.name}</b>;
-				myClass = myClass + " groupsession-me";
-			}else{
-				var name = this.props.student.name;
-			}
-			return(
-				<div className={myClass} role="alert">{name} <span className="badge">{badgeTitle}</span></div>
-			);
-		}
-	},
-});
-
-/**
- * React class to render the entire group list
- */
-var GroupList = React.createClass({
-
-	//initial state - empty the queue
-	getInitialState: function(){
-		return {queue: []};
-	},
-
-	//on successful load, connect to the pusher queue
-	componentDidMount: function(){
-		var self = this;
-
-		//bind to pusher
-		groupSessionChannel.bind( "App\\Events\\GroupsessionRegister", function(data){
-			var queue = self.state.queue;
-			var found = false;
-			var len = queue.length;
-
-			//update the queue based on response
-			for(var i = 0; i < len; i++){
-				if(queue[i].id === data.id){
-					if(data.status < 3){
-						queue[i] = data;
-					}else{
-						queue.splice(i, 1);
-						i--;
-						len--;
-					}
-					found = true;
-				}
-			}
-
-			//if element not found on current queue, push it on to the queue
-			if(!found){
-				queue.push(data);
-			}
-
-			//check to see if current user is on queue before enabling button
-			checkButtons(queue);
-
-			//if current user is found, check for status update to play sound
-			if(data.userid === userID){
-				checkDing(data);
-			}
-
-			//sort the queue correctly
-			queue.sort(sortFunction);
-
-			//update react state
-			self.setState({queue: queue});
-		});
-
-		//bind to the channel for groupsession ending
-		groupSessionChannel.bind( "App\\Events\\GroupsessionEnd", function(data){
-			//if groupsessions end, force all browsers to reload the URL
-			window.location.href = "/groupsession";
-		});
-
-		//use AJAX to get initial queue
-		window.axios.get('/groupsession/queue')
-			.then(function(response){
-				var queue = self.state.queue.concat(response.data);
-				checkButtons(queue);
-				initialCheckDing(queue);
-				queue.sort(sortFunction);
-				self.setState({queue: queue});
-			})
-			.catch(function(error){
-				site.handleError('get queue', '', error);
-			});
-
-	},
-
-	//function to render the grouplist
-	render: function(){
-		var divs = [];
-		this.state.queue.forEach(function(student){
-			divs.push(<StudentRow key={student.id} student={student} />);
-		});
-		return (
-			<div>{divs}</div>
-		);
-	}
-
-});
+};

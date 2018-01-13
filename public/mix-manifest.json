@@ -2,5 +2,8 @@
     "/js/vendor.js": "/js/vendor.js",
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
-    "/js/manifest.js": "/js/manifest.js"
+    "/js/manifest.js": "/js/manifest.js",
+    "/sounds/door_bell.aac": "/sounds/door_bell.aac",
+    "/sounds/door_bell.mp3": "/sounds/door_bell.mp3",
+    "/sounds/door_bell.ogg": "/sounds/door_bell.ogg"
 }
