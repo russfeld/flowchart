@@ -15,35 +15,18 @@
  * Static routes for static pages
  * Tested in tests/RouteTest.php
  */
-Route::get('/', function () {
-    return View::make('root/index');
-});
+Route::get('/', 'RootRouteController@getIndex');
+Route::get('/about', 'RootRouteController@getAbout');
+Route::get('/help', 'RootRouteController@getHelp');
+Route::get('/test', 'RootRouteController@getTest');
 
-Route::get('/about', function () {
-    return View::make('root/about');
-});
-
-Route::get('help', function(){
-	return View::make('help/index');
-});
 
 /*
  * Static route for images in storage
  * http://stackoverflow.com/questions/30191330/laravel-5-how-to-access-image-uploaded-in-storage-within-view
  */
 
-Route::get('images/{filename}', function ($filename)
-{
-    $path = storage_path() . '/app/images/' . $filename;
-
-    $file = File::get($path);
-    $type = File::mimeType($path);
-
-    $response = Response::make($file, 200);
-    $response->header("Content-Type", $type);
-
-    return $response;
-});
+Route::get('images/{filename}', 'RootRouteController@getImage');
 
 /*
  * Routes for the CoursesController
@@ -170,11 +153,3 @@ Route::get('auth/caslogout', 'Auth\AuthController@CASLogout');
 Route::get('auth/force', 'Auth\AuthController@ForceLogin');
 
 Route::post('editable/save/{id?}', 'EditableController@postSave');
-
-/*
- * Test Routes for Flowchart tester
- * Tested in tests/RouteTest.php
- */
-Route::get('/test', function() {
-	return View::make('flowchart_test');
-});

@@ -76,6 +76,7 @@ class GroupsessionController extends Controller
                   'name' => $gs->student->name,
                   'advisor' => $gs->advisor->name,
                   'status' => (int)$gs->status,
+                  'online' => 0,
               ];
             }else{
               return[
@@ -84,6 +85,7 @@ class GroupsessionController extends Controller
                   'name' => $gs->student->name,
                   'advisor' => "",
                   'status' => (int)$gs->status,
+                  'online' => 0,
               ];
             }
       });

@@ -162,7 +162,7 @@ class AdvisingController extends Controller
             $startd = new DateTime($start);
             $meeting->start = $startd->format('Y-m-d H:i:s');
             $endd = new DateTime();
-            $endd->add(new DateInterval(env('IN_ADVANCE')));
+            $endd->add(new DateInterval(config('app.in_advance')));
             $meeting->end = $endd->format('Y-m-d H:59:59');
             $meeting->id = 0;
             $meeting->title = '';
@@ -299,7 +299,7 @@ class AdvisingController extends Controller
 
     public function postCreatemeeting(Request $request){
         $endd = new DateTime();
-        $endd->add(new DateInterval(env('IN_ADVANCE')));
+        $endd->add(new DateInterval(config('app.in_advance')));
         $end = $endd->format('Y-m-d H:59:59');
 
         $this->validate($request, [

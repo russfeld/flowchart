@@ -1,4 +1,4 @@
-@servers(['web' => 'root@104.131.121.114', 'cis' => 'russfeld@cislinux.cis.ksu.edu'])
+@servers(['web' => 'root@104.131.121.114', 'cis' => 'russfeld@cslinux.cs.ksu.edu'])
 
 <?php
 $repo = 'git@github.com:russfeld/flowchart.git';
@@ -51,16 +51,22 @@ $release = 'release_' . date('YmdHis');
 
 @task('configure_project', ['on' => 'web'])
     cd {{ $release_dir }}/{{ $release }};
-    composer install --prefer-dist --no-scripts --no-dev;
+    composer install --prefer-dist --no-scripts --no-dev --optimize-autoloader;
     php artisan clear-compiled --env=production;
     php artisan optimize --env=production;
+    php artisan view:clear
+    php artisan config:cache;
+    php artisan route:cache;
 @endtask
 
 @task('configure_project_cis', ['on' => 'cis'])
     cd {{ $release_dir_cis }}/{{ $release }};
-    /home/r/russfeld/bin/composer install --prefer-dist --no-scripts --no-dev;
+    /home/r/russfeld/bin/composer install --prefer-dist --no-scripts --no-dev --optimize-autoloader;
     php artisan clear-compiled --env=production;
     php artisan optimize --env=production;
+    php artisan view:clear
+    php artisan config:cache;
+    php artisan route:cache;
 @endtask
 
 @task('database_setup', ['on' => 'web'])

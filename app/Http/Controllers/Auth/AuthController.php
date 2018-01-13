@@ -55,7 +55,7 @@ class AuthController extends Controller
     }
 
     public function ForceLogin(Request $request){
-        if(env('AUTH_TYPE') == 'force'){
+        if(config('app.auth_type') == 'force'){
           if(!$request->has('eid')){
             return ('eid required');
           }

@@ -119,7 +119,7 @@ class AppServiceProvider extends ServiceProvider
     }
 
     public static function sendMail($meeting, $type){
-        if(env('SEND_EMAIL') == 'true'){
+        if(config('app.send_email') == 'true'){
             $start = new DateTime($meeting->start);
             $end = new DateTime($meeting->end);
 
@@ -128,22 +128,22 @@ class AppServiceProvider extends ServiceProvider
             //$mail->SMTPDebug = 3;                               // Enable verbose debug output
 
             $mail->isSMTP();                                      // Set mailer to use SMTP
-            $mail->Host = env('MAIL_HOST', 'smtp.mailgun.org');  // Specify main and backup SMTP servers
-            if(env('MAIL_ENCRYPTION') !== null){
+            $mail->Host = config('mail.host');  // Specify main and backup SMTP servers
+            if(config('mail.encryption') !== null){
                 $mail->SMTPAuth = true;                               // Enable SMTP authentication
-                $mail->Username = env('MAIL_USERNAME');                 // SMTP username
-                $mail->Password = env('MAIL_PASSWORD');                           // SMTP password
-                $mail->SMTPSecure = env('MAIL_ENCRYPTION', 'tls');                            // Enable TLS encryption, `ssl` also accepted
+                $mail->Username = config('mail.username');                 // SMTP username
+                $mail->Password = config('mail.password');                           // SMTP password
+                $mail->SMTPSecure = config('mail.encryption');                            // Enable TLS encryption, `ssl` also accepted
             }else{
                 //$mail->SMTPDebug = 2;
                 //$mail->Debugoutput = 'html';
                 $mail->SMTPAuth = false;
                 $mail->SMTPAutoTLS = false;
             }
-            $mail->Port = env('MAIL_PORT', 587);                                    // TCP port to connect to
+            $mail->Port = config('mail.port');                                    // TCP port to connect to
 
-            $mail->From = 'noreply@cis.ksu.edu';
-            $mail->FromName = 'CIS Advising Scheduler';
+            $mail->From = 'noreply@cs.ksu.edu';
+            $mail->FromName = 'CS Advising Scheduler';
             $mail->addAddress($meeting->student->email, $meeting->student->name);     // Add a recipient
             $mail->addAddress($meeting->advisor->email, $meeting->advisor->name);               // Name is optional
 
@@ -189,7 +189,7 @@ PRODID:-//Microsoft Corporation//Outlook 11.0 MIMEDIR//EN
 VERSION:2.0
 METHOD:REQUEST
 BEGIN:VEVENT
-ORGANIZER;CN=Engineering Advising:MAILTO:noreply@cis.ksu.edu
+ORGANIZER;CN=Engineering Advising:MAILTO:noreply@cs.ksu.edu
 ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN='.$meeting->advisor->email.':MAILTO:'.$meeting->advisor->email.'
 ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN='.$meeting->student->email.':MAILTO:'.$meeting->student->email.'
 DTSTART:'.$dtstart.'
@@ -214,7 +214,7 @@ PRODID:-//Microsoft Corporation//Outlook 11.0 MIMEDIR//EN
 VERSION:2.0
 METHOD:CANCEL
 BEGIN:VEVENT
-ORGANIZER;CN=Engineering Advising:MAILTO:noreply@cis.ksu.edu
+ORGANIZER;CN=Engineering Advising:MAILTO:noreply@cs.ksu.edu
 ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN='.$meeting->advisor->email.':MAILTO:'.$meeting->advisor->email.'
 DTSTART:'.$dtstart.'
 DTEND:'.$dtend.'

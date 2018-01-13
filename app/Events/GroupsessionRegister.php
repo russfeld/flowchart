@@ -6,7 +6,7 @@ use App\Models\Groupsession;
 use App\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\PresenceChannel;
 
 class GroupsessionRegister extends Event implements ShouldBroadcast
 {
@@ -17,6 +17,7 @@ class GroupsessionRegister extends Event implements ShouldBroadcast
     public $name;
     public $advisor;
     public $status;
+    public $online;
 
     /**
      * Create a new event instance.
@@ -34,6 +35,7 @@ class GroupsessionRegister extends Event implements ShouldBroadcast
         }
         $this->name = $gs->student->name;
         $this->status = (int)$gs->status;
+        $this->online = 0;
     }
 
     /**
@@ -43,6 +45,6 @@ class GroupsessionRegister extends Event implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('groupsession');
+        return new PresenceChannel('presence');
     }
 }

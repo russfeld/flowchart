@@ -39,13 +39,16 @@ exports.init = function(){
 			queue: [],
 			advisor: parseInt($('#isAdvisor').val()) == 1,
 			userID: parseInt($('#userID').val()),
+			online: [],
 		},
 		methods: {
+			//Function to get CSS classes for a student object
 			getClass: function(s){
 				return{
 					'alert-info': s.status == 0 || s.status == 1,
 					'alert-success': s.status == 2,
 					'groupsession-me': s.userid == this.userID,
+					'groupsession-offline': $.inArray(s.userid, this.online) == -1,
 				};
 			},
 			//function to take a student from the list
@@ -78,37 +81,105 @@ exports.init = function(){
 		},
 	})
 
-	window.axios.get('/groupsession/queue')
-		.then(function(response){
-			vm.queue = vm.queue.concat(response.data);
-			checkButtons(vm.queue);
-			initialCheckDing(vm.queue);
-			vm.queue.sort(sortFunction);
-		})
-		.catch(function(error){
-			site.handleError('get queue', '', error);
-		});
 
+	//Enable Pusher logging
+	if(window.env == "local" || window.env == "staging"){
+		console.log("Pusher logging enabled!");
+		Pusher.logToConsole = true;
+	}
+
+	//Load the Echo instance on the window
 	window.Echo = new Echo({
 		broadcaster: 'pusher',
 		key: window.pusherKey,
 		cluster: window.pusherCluster,
 	});
 
+	//Bind to the connected action on Pusher (called when connected)
 	window.Echo.connector.pusher.connection.bind('connected', function(){
 		//when connected, disable the spinner
 		$('#groupSpin').addClass('hide-spin');
+
+		//Load the initial student queue via AJAX
+		window.axios.get('/groupsession/queue')
+			.then(function(response){
+				window.vm.queue = window.vm.queue.concat(response.data);
+				checkButtons(window.vm.queue);
+				initialCheckDing(window.vm.queue);
+				window.vm.queue.sort(sortFunction);
+			})
+			.catch(function(error){
+				site.handleError('get queue', '', error);
+			});
 	})
 
+	//Connect to the groupsession channel
+	/*
 	window.Echo.channel('groupsession')
-		.listen('GroupsessionRegister', (e) => {
-			console.log(e.id);
-		})
+		.listen('GroupsessionRegister', (data) => {
 
+		});
+ */
+
+	//Connect to the groupsessionend channel
 	window.Echo.channel('groupsessionend')
 		.listen('GroupsessionEnd', (e) => {
-		console.log(e.id);
+
+			//if ending, redirect back to home page
+			window.location.href = "/groupsession";
 	});
+
+	window.Echo.join('presence')
+		.here((users) => {
+			var len = users.length;
+			for(var i = 0; i < len; i++){
+				window.vm.online.push(users[i].id);
+			}
+		})
+		.joining((user) => {
+			window.vm.online.push(user.id);
+		})
+		.leaving((user) => {
+			window.vm.online.splice( $.inArray(user.id, window.vm.online), 1);
+		})
+		.listen('GroupsessionRegister', (data) => {
+			var queue = window.vm.queue;
+			var found = false;
+			var len = queue.length;
+
+			//update the queue based on response
+			for(var i = 0; i < len; i++){
+				if(queue[i].id === data.id){
+					if(data.status < 3){
+						queue[i] = data;
+					}else{
+						queue.splice(i, 1);
+						i--;
+						len--;
+					}
+					found = true;
+				}
+			}
+
+			//if element not found on current queue, push it on to the queue
+			if(!found){
+				queue.push(data);
+			}
+
+			//check to see if current user is on queue before enabling button
+			checkButtons(queue);
+
+			//if current user is found, check for status update to play sound
+			if(data.userid === userID){
+				checkDing(data);
+			}
+
+			//sort the queue correctly
+			queue.sort(sortFunction);
+
+			//update Vue state, might be unnecessary
+			window.vm.queue = queue;
+		});
 
 };
 
@@ -125,15 +196,6 @@ Vue.filter('statustext', function(data){
 	if(data.status === 3) return "DELAY";
 	if(data.status === 4) return "ABSENT";
 	if(data.status === 5) return "DONE";
-});
-
-/**
- * Vue component for displaying a student row
- */
-Vue.component('student-row', {
-	props: ['student'],
-	template: '<div class="alert alert-info groupsession-div" role="alert">{{ student.name }} <span class="badge"> {{ student | statustext }}</span></div>',
-
 });
 
 /**
