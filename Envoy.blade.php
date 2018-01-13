@@ -53,20 +53,16 @@ $release = 'release_' . date('YmdHis');
     cd {{ $release_dir }}/{{ $release }};
     composer install --prefer-dist --no-scripts --no-dev --optimize-autoloader;
     php artisan clear-compiled --env=production;
-    php artisan optimize --env=production;
     php artisan view:clear
-    php artisan config:cache;
-    php artisan route:cache;
+    php artisan config:clear
 @endtask
 
 @task('configure_project_cis', ['on' => 'cis'])
     cd {{ $release_dir_cis }}/{{ $release }};
     /home/r/russfeld/bin/composer install --prefer-dist --no-scripts --no-dev --optimize-autoloader;
     php artisan clear-compiled --env=production;
-    php artisan optimize --env=production;
     php artisan view:clear
-    php artisan config:cache;
-    php artisan route:cache;
+    php artisan config:clear;
 @endtask
 
 @task('database_setup', ['on' => 'web'])
@@ -74,6 +70,9 @@ $release = 'release_' . date('YmdHis');
     php artisan down
     php artisan migrate:refresh --seed --force
     php artisan deploy:post
+    php artisan optimize --env=production;
+    php artisan config:cache;
+    php artisan route:cache;
     php artisan up
 @endtask
 
@@ -82,13 +81,15 @@ $release = 'release_' . date('YmdHis');
     php artisan down
     php artisan migrate
     php artisan deploy:post
+    php artisan optimize --env=production;
+    php artisan config:cache;
+    php artisan route:cache;
     php artisan up
 @endtask
 
 @task('configure_dev')
-	sudo npm install
-	bower update
-	gulp --production
+	npm install
+	npm run dev
 @endtask
 
 @task('update_permissions', ['on' => 'web'])
