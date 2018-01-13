@@ -17,7 +17,7 @@
         "league/fractal": "^0.12.0",
         "phpmailer/phpmailer": "^5.2",
         "xavrsl/cas": "1.2.*",
-        "pusher/pusher-php-server": "~2.0",
+        "pusher/pusher-php-server": "~2.6",
         "terbium/db-config": "dev-laravel54",
         "doctrine/dbal": "^2.5",
         "themsaid/laravel-routes-publisher": "^1.0"

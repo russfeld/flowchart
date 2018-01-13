@@ -5,6 +5,7 @@ namespace App\Events;
 use App\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Broadcasting\Channel;
 
 class GroupsessionEnd extends Event implements ShouldBroadcast
 {
@@ -29,6 +30,6 @@ class GroupsessionEnd extends Event implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['groupsession'];
+        return new Channel('groupsessionend');
     }
 }

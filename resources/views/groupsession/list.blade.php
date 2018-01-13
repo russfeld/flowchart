@@ -5,6 +5,7 @@
 @section('scripts')
     <script type="text/javascript">
       window.pusherKey = "{{ env('PUSHER_KEY') }}";
+      window.pusherCluster = "{{ env('PUSHER_CLUSTER') }}";
     </script>
     @parent
 @endsection

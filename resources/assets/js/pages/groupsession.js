@@ -1,9 +1,9 @@
 window.Vue = require('vue');
 var site = require('../util/site');
-//var Echo = require('laravel-echo');
+var Echo = require('laravel-echo');
 require('ion-sound');
 
-//window.Pusher = require('pusher-js');
+window.Pusher = require('pusher-js');
 
 /**
  * Groupsession init function
@@ -24,8 +24,7 @@ exports.init = function(){
 	});
 
 	//get userID and isAdvisor variables
-	var userID = parseInt($('#userID').val());
-	var isAdvisor = parseInt($('#isAdvisor').val());
+	window.userID = parseInt($('#userID').val());
 
 	//register button click
 	$('#groupRegisterBtn').on('click', groupRegisterBtn);
@@ -90,6 +89,27 @@ exports.init = function(){
 			site.handleError('get queue', '', error);
 		});
 
+	window.Echo = new Echo({
+		broadcaster: 'pusher',
+		key: window.pusherKey,
+		cluster: window.pusherCluster,
+	});
+
+	window.Echo.connector.pusher.connection.bind('connected', function(){
+		//when connected, disable the spinner
+		$('#groupSpin').addClass('hide-spin');
+	})
+
+	window.Echo.channel('groupsession')
+		.listen('GroupsessionRegister', (e) => {
+			console.log(e.id);
+		})
+
+	window.Echo.channel('groupsessionend')
+		.listen('GroupsessionEnd', (e) => {
+		console.log(e.id);
+	});
+
 };
 
 
@@ -145,7 +165,7 @@ var groupDisableBtn = function(){
 			//this is a bit hacky, but it works
 			var token = $('meta[name="csrf-token"]').attr('content');
 			$('<form action="/groupsession/disable" method="POST"/>')
-				.append($('<input type="hidden" name="id" value="' + userID + '">'))
+				.append($('<input type="hidden" name="id" value="' + window.userID + '">'))
 				.append($('<input type="hidden" name="_token" value="' + token + '">'))
 				.appendTo($(document.body)) //it has to be added somewhere into the <body>
 				.submit();
@@ -176,7 +196,7 @@ var checkButtons = function(queue){
 
 	//iterate through users on list, looking for current user
 	for(var i = 0; i < len; i++){
-		if(queue[i].userid === userID){
+		if(queue[i].userid === window.userID){
 			foundMe = true;
 			break;
 		}
@@ -209,7 +229,7 @@ var checkDing = function(person){
 var initialCheckDing = function(queue){
 	var len = queue.length;
 	for(var i = 0; i < len; i++){
-		if(queue[i].userid === userID){
+		if(queue[i].userid === window.userID){
 			checkDing(queue[i]);
 			break;
 		}

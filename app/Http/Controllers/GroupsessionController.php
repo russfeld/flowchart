@@ -101,7 +101,7 @@ class GroupsessionController extends Controller
         $groupsession->advisor_id = null;
         $groupsession->status = Groupsession::$STATUS_QUEUED;
         $groupsession->save();
-        Event::fire(new GroupsessionRegister($groupsession));
+        event(new GroupsessionRegister($groupsession));
         return response()->json(trans('messages.groupsession_register'));
       }else{
         return response()->json(trans('errors.students_only'), 403);
@@ -118,7 +118,7 @@ class GroupsessionController extends Controller
         $groupsession->status = Groupsession::$STATUS_BECKON;
         $groupsession->advisor()->associate($user->advisor);
         $groupsession->save();
-        Event::fire(new GroupsessionRegister($groupsession));
+        event(new GroupsessionRegister($groupsession));
         return response()->json(trans('messages.groupsession_take'));
       }else{
         return response()->json(trans('errors.advisors_only'), 403);
@@ -139,8 +139,8 @@ class GroupsessionController extends Controller
         $newGroupsession->advisor_id = null;
         $newGroupsession->status = Groupsession::$STATUS_QUEUED;
         $newGroupsession->save();
-        Event::fire(new GroupsessionRegister($newGroupsession));
-        Event::fire(new GroupsessionRegister($groupsession));
+        event(new GroupsessionRegister($newGroupsession));
+        event(new GroupsessionRegister($groupsession));
         return response()->json(trans('messages.groupsession_put'));
       }else{
         return response()->json(trans('errors.advisors_only'), 403);
@@ -156,7 +156,7 @@ class GroupsessionController extends Controller
         $groupsession = Groupsession::find($request->input('gid'));
         $groupsession->status = Groupsession::$STATUS_DONE;
         $groupsession->save();
-        Event::fire(new GroupsessionRegister($groupsession));
+        event(new GroupsessionRegister($groupsession));
         return response()->json(trans('messages.groupsession_done'));
       }else{
         return response()->json(trans('errors.advisors_only'), 403);
@@ -172,7 +172,7 @@ class GroupsessionController extends Controller
         $groupsession = Groupsession::find($request->input('gid'));
         $groupsession->status = Groupsession::$STATUS_ABSENT;
         $groupsession->save();
-        Event::fire(new GroupsessionRegister($groupsession));
+        event(new GroupsessionRegister($groupsession));
         return response()->json(trans('messages.groupsession_delete'));
       }else{
         return response()->json(trans('errors.advisors_only'), 403);
@@ -196,7 +196,7 @@ class GroupsessionController extends Controller
           $gs->status = 4;
           $gs->save();
         }
-        Event::fire(new GroupsessionEnd());
+        event(new GroupsessionEnd());
       }
       return redirect('/groupsession');
     }

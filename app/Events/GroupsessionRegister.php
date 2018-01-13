@@ -6,6 +6,7 @@ use App\Models\Groupsession;
 use App\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Broadcasting\Channel;
 
 class GroupsessionRegister extends Event implements ShouldBroadcast
 {
@@ -42,6 +43,6 @@ class GroupsessionRegister extends Event implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['groupsession'];
+        return new Channel('groupsession');
     }
 }
