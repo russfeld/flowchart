@@ -1,163 +1,144 @@
-define(['util/site', 'adminlte', 'datatables.net', 'datatables.netbs', 'jquery.autocomplete'], function(site, adminlte, datatables, datatablesbs, autocomplete) {
+//load required libraries
+var site = require('../util/site');
+require('admin-lte');
+require('datatables.net');
+require('datatables.net-bs');
+require('devbridge-autocomplete');
 
-  function dashboardModule() {
-    //self-referential variable
-    //anything attached to this or self will be public
-    var self = this;
+//options for datatables
+exports.dataTableOptions = {
+  "pageLength": 50,
+  "lengthChange": false,
+}
 
-    self.dataTableOptions = {
-      "pageLength": 50,
-      "lengthChange": false,
-    }
+/**
+ * Initialization function
+ * must be called explicitly on all datatables pages
+ *
+ * @param options - custom datatables options
+ */
+exports.init = function(options){
+  options || (options = exports.dataTableOptions);
+  $('#table').DataTable(options);
+  site.checkMessage();
+}
 
-    self.init = function(options){
-      options || (options = self.dataTableOptions);
-      $('#table').DataTable(options);
-    }
-
-    self.ajaxsave = function(data, url, id){
-      $('#spin').removeClass('hide-spin');
-      $.ajax({
-        method: "POST",
-        url: url,
-        data: data
-      })
-      .success(function( message ) {
-        if(id.length == 0){
-          site.clearFormErrors();
-          $('#spin').addClass('hide-spin');
-          $(location).attr('href', message);
-        }else{
-          site.displayMessage(message, "success");
-          site.clearFormErrors();
-          $('#spin').addClass('hide-spin');
-        }
-      }).fail(function( jqXHR, message ){
-        if (jqXHR.status == 422)
-        {
-          site.setFormErrors(jqXHR.responseJSON);
-        }else{
-          alert("Unable to save: " + jqXHR.responseJSON);
-        }
-        $('#spin').addClass('hide-spin');
-      });
-    }
-
-    self.ajaxobjectsave = function (formData, url, id){
-      $('#spin').removeClass('hide-spin');
-      $.ajax({
-        method: "POST",
-        url: url,
-        data: formData,
-      	dataType: 'json',
-      	processData: false,
-      	contentType: false,
-      })
-      .success(function( message ) {
-        if(id.length == 0){
-          site.clearFormErrors();
-          $('#spin').addClass('hide-spin');
-          $(location).attr('href', message);
-        }else{
-      		site.displayMessage(message, "success");
-      		site.clearFormErrors();
-      		$('#spin').addClass('hide-spin');
-      		$.ajax({
-      			method: "GET",
-      		  url: '/profile/pic/' + id,
-      		})
-      		.success(function(message){
-      			$('#pictext').val(message);
-      			$('#picimg').attr('src', message);
-      		});
-        }
-      }).fail(function( jqXHR, message ){
-      	if (jqXHR.status == 422)
-      	{
-      		site.setFormErrors(jqXHR.responseJSON);
-      	}else{
-      		alert("Unable to save: " + jqXHR.responseJSON);
-      	}
-      	$('#spin').addClass('hide-spin');
-      });
-    }
-
-    self.ajaxdelete = function (data, url, retUrl, soft = false){
-      if(soft){
-        var choice = confirm("Are you sure?");
+/**
+ * Function save via AJAX
+ *
+ * @param data - the data to save
+ * @param url - the url to send data to
+ * @param id - the id of the item to be save-dev
+ * @param loadpicture - true to reload a profile picture
+ */
+exports.ajaxsave = function(data, url, id, loadpicture){
+  loadpicture || (loadpicture = false);
+  $('#spin').removeClass('hide-spin');
+  window.axios.post(url, data)
+    .then(function(message){
+      site.clearFormErrors();
+      $('#spin').addClass('hide-spin');
+      if(id.length == 0){
+        $(location).attr('href', message);
       }else{
-        var choice = confirm("Are you sure? This will permanently remove all related records. You cannot undo this action.");
+        site.displayMessage(message, "success");
+        if(loadpicture) exports.loadpicture(id);
       }
-  		if(choice === true){
-        $('#spin').removeClass('hide-spin');
-        $.ajax({
-          method: "POST",
-          url: url,
-          data: data
-        })
-        .success(function( message ) {
-          $(location).attr('href', retUrl);
-        })
-        .fail(function( jqXHR, message ){
-          if (jqXHR.status == 422)
-          {
-            site.setFormErrors(jqXHR.responseJSON);
-          }else{
-            alert("Unable to delete: " + jqXHR.responseJSON);
-          }
-          $('#spin').addClass('hide-spin');
-        });
-      }
-    }
+    })
+    .catch(function(error){
+      site.handleError('save', '#', error)
+    });
+}
 
-    self.ajaxrestore = function(data, url, retUrl){
-      var choice = confirm("Are you sure?");
-  		if(choice === true){
-        $('#spin').removeClass('hide-spin');
-        var data = {
-          id: $('#id').val(),
-        };
-        $.ajax({
-          method: "POST",
-          url: url,
-          data: data
-        })
-        .success(function( message ) {
-          $(location).attr('href', retUrl);
-        })
-        .fail(function( jqXHR, message ){
-          if (jqXHR.status == 422)
-          {
-            site.setFormErrors(jqXHR.responseJSON);
-          }else{
-            alert("Unable to restore: " + jqXHR.responseJSON);
-          }
-          $('#spin').addClass('hide-spin');
-        });
-      }
-    }
+/**
+ * Function to load a picture via AJAX
+ *
+ * @param id - the user ID of the picture to reload
+ */
+exports.loadpicture = function(id){
+  window.axios.get('/profile/pic' + id)
+    .then(function(response){
+      $('#pictext').val(response.data);
+      $('#picimg').attr('src', response.data);
+    })
+    .catch(function(error){
+      site.handleError('retrieve picture', '', error);
+    })
+}
 
-    self.ajaxautocomplete = function(id, url){
-      $('#' + id + 'auto').autocomplete({
-    	    serviceUrl: url,
-    	    ajaxSettings: {
-    	    	dataType: "json"
-    	    },
-          minChars: 3,
-    	    onSelect: function (suggestion) {
-    	        $('#' + id).val(suggestion.data);
-              $('#' + id + 'text').html("Selected: (" + suggestion.data + ") " + suggestion.value);
-    	    },
-    	    transformResult: function(response) {
-    	        return {
-    	            suggestions: $.map(response.data, function(dataItem) {
-    	                return { value: dataItem.value, data: dataItem.data };
-    	            })
-    	        };
-    	    }
-    	});
-    }
-  };
+/**
+ * Function to delete an item
+ *
+ * @param data - the data containing the item to delete
+ * @param url - the URL to send the data to
+ * @param retUrl - the URL to return to after delete
+ * @param soft - boolean if this is a soft delete or not
+ */
+exports.ajaxdelete = function (data, url, retUrl, soft = false){
+  if(soft){
+    var choice = confirm("Are you sure?");
+  }else{
+    var choice = confirm("Are you sure? This will permanently remove all related records. You cannot undo this action.");
+  }
+	if(choice === true){
+    $('#spin').removeClass('hide-spin');
+    window.axios.post(url, data)
+      .then(function(message){
+        $(location).attr('href', retUrl);
+      })
+      .catch(function(error){
+        site.handleError('delete', '#', error)
+      });
+  }
+}
 
-  return new dashboardModule();
-});
+/**
+ * Function to restore a soft-deleted item
+ *
+ * @param data - the item to be restored
+ * @param url - the URL to send that information to
+ * @param retUrl - the URL to return to
+ */
+exports.ajaxrestore = function(data, url, retUrl){
+  var choice = confirm("Are you sure?");
+	if(choice === true){
+    $('#spin').removeClass('hide-spin');
+    var data = {
+      id: $('#id').val(),
+    };
+    window.axios.post(url, data)
+      .then(function(message){
+        $(location).attr('href', retUrl);
+      })
+      .catch(function(error){
+        site.handleError('restore', '#', error)
+      });
+  }
+}
+
+/**
+ * Function to autocomplete a field
+ *
+ * @param id - the ID of the field
+ * @param url - the URL to request data from
+ */
+exports.ajaxautocomplete = function(id, url){
+  $('#' + id + 'auto').autocomplete({
+	    serviceUrl: url,
+	    ajaxSettings: {
+	    	dataType: "json"
+	    },
+      minChars: 3,
+	    onSelect: function (suggestion) {
+	        $('#' + id).val(suggestion.data);
+          $('#' + id + 'text').html("Selected: (" + suggestion.data + ") " + suggestion.value);
+	    },
+	    transformResult: function(response) {
+	        return {
+	            suggestions: $.map(response.data, function(dataItem) {
+	                return { value: dataItem.value, data: dataItem.data };
+	            })
+	        };
+	    }
+	});
+}

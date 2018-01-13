@@ -366,7 +366,7 @@ var resetCalendar = function(element, response){
 	//refresh the calendar
 	$('#calendar').fullCalendar('unselect');
 	$('#calendar').fullCalendar('refetchEvents');
-	$(element + 'Spin').addClass('hide-spin');
+	$(element + 'spin').addClass('hide-spin');
 
 	if(window.advisor){
 		loadConflicts();
@@ -409,7 +409,7 @@ var ajaxDelete = function(url, data, element, action, noReset, noChoice){
 	if(choice === true){
 
 		//if confirmed, show spinning icon
-		$(element + 'Spin').removeClass('hide-spin');
+		$(element + 'spin').removeClass('hide-spin');
 
 		//make AJAX request to delete
 		window.axios.post(url, data)
@@ -417,7 +417,7 @@ var ajaxDelete = function(url, data, element, action, noReset, noChoice){
 				if(noReset){
 					//hide parent element - TODO TESTME
 					//caller.parent().parent().addClass('hidden');
-					$(element + 'Spin').addClass('hide-spin');
+					$(element + 'spin').addClass('hide-spin');
 					$(element).addClass('hidden');
 				}else{
 					resetCalendar(element, response);
@@ -435,7 +435,7 @@ var ajaxDelete = function(url, data, element, action, noReset, noChoice){
 var saveMeeting = function(){
 
 	//Show the spinning status icon while working
-	$('#createEventSpin').removeClass('hide-spin');
+	$('#createEventspin').removeClass('hide-spin');
 
 	//build the data object and URL
 	var data = {
@@ -658,7 +658,7 @@ var loadConflicts = function(){
 						'html': 	'<p>&nbsp;<button type="button" class="btn btn-danger pull-right deleteConflict" data-id='+value.id+'>Delete</button>' +
 									'&nbsp;<button type="button" class="btn btn-primary pull-right editConflict" data-id='+value.id+'>Edit</button> ' +
 									'<button type="button" class="btn btn-success pull-right resolveConflict" data-id='+value.id+'>Keep Meeting</button>' +
-									'<span id="resolve'+value.id+'Spin" class="fa fa-cog fa-spin fa-lg pull-right hide-spin">&nbsp;</span>' +
+									'<span id="resolve'+value.id+'spin" class="fa fa-cog fa-spin fa-lg pull-right hide-spin">&nbsp;</span>' +
 										'<b>'+value.title+'</b> ('+value.start+')</p><hr>'
 						}).appendTo('#resolveConflictMeetings');
 				});
@@ -700,7 +700,7 @@ var loadConflicts = function(){
 									'html': 	'<p>&nbsp;<button type="button" class="btn btn-danger pull-right deleteConflict" data-id='+value.id+'>Delete</button>' +
 												'&nbsp;<button type="button" class="btn btn-primary pull-right editConflict" data-id='+value.id+'>Edit</button> ' +
 												'<button type="button" class="btn btn-success pull-right resolveConflict" data-id='+value.id+'>Keep Meeting</button>' +
-												'<span id="resolveSpin'+value.id+'" class="fa fa-cog fa-spin fa-lg pull-right hide-spin">&nbsp;</span>' +
+												'<span id="resolvespin'+value.id+'" class="fa fa-cog fa-spin fa-lg pull-right hide-spin">&nbsp;</span>' +
 													'<b>'+value.title+'</b> ('+value.start+')</p><hr>'
 							}).appendTo('#resolveConflictMeetings');
 					});
@@ -723,7 +723,7 @@ var loadConflicts = function(){
 var saveBlackout = function(){
 
 	//Show the spinning status icon while working
-	$('#createBlackoutSpin').removeClass('hide-spin');
+	$('#createBlackoutspin').removeClass('hide-spin');
 
 	//build the data object and url;
 	var data = {
@@ -835,14 +835,14 @@ var editConflict = function(){
 	var url = '/advising/meeting';
 
 	//show spinner to load meeting
-	$('#resolve'+ id + 'Spin').removeClass('hide-spin');
+	$('#resolve'+ id + 'spin').removeClass('hide-spin');
 
 	//load meeting and display form
 	window.axios.get(url, {
 			params: data
 		})
 		.then(function(response){
-			$('#resolve'+ id + 'Spin').addClass('hide-spin');
+			$('#resolve'+ id + 'spin').addClass('hide-spin');
 			$('#resolveConflict').modal('hide');
 			event = response.data;
 			event.start = moment(event.start);

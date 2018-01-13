@@ -13,13 +13,6 @@ const { mix } = require('laravel-mix');
  |
  */
 
-//Example in default file
-
-/*
-mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
-*/
-
 //https://github.com/JeffreyWay/laravel-mix/blob/master/docs/quick-webpack-configuration.md
 //fixes https://www.fixtheerror.com/bootstrap-errors/fix-bootstrap-error-jquery-is-not-defined-238223
 mix.webpackConfig(webpack => {
@@ -41,21 +34,18 @@ mix.setPublicPath('public')
 
 mix.sass('resources/assets/sass/app.scss', 'public/css');
 
-/*
-
 mix.styles([
-    //'../bower/admin-lte/dist/css/AdminLTE.css',
+    //'node_modules/admin-lte/dist/css/AdminLTE.css',
     "resources/assets/css/dashboard-custom.css",
     "resources/assets/css/dashboard-skin.css",
-    "resources/assets/bower/datatables.net-bs/css/dataTables.bootstrap.css",
+    "node_modules/datatables.net-bs/css/dataTables.bootstrap.css",
 ], 'public/css/dashboard.css');
 
-*/
 
 //Global Javascript Stuff
 
 mix.js('resources/assets/js/app.js', 'public/js')
-    .extract(['jquery', 'bootstrap', 'lodash', 'axios', 'summernote', 'codemirror', 'fullcalendar', 'devbridge-autocomplete', 'moment', 'eonasdan-bootstrap-datetimepicker-russfeld', 'vue', 'pusher-js', 'ion-sound', 'laravel-echo'])
+    .extract(['jquery', 'bootstrap', 'lodash', 'axios', 'summernote', 'codemirror', 'fullcalendar', 'devbridge-autocomplete', 'moment', 'eonasdan-bootstrap-datetimepicker-russfeld', 'vue', 'pusher-js', 'ion-sound', 'laravel-echo', 'admin-lte', 'datatables.net', 'datatables.net-bs'])
     .sourceMaps();
 
 mix.copy('node_modules/ion-sound/sounds/door_bell*', 'public/sounds');

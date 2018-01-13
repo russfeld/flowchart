@@ -31,6 +31,7 @@ var App = {
         var editable = require('./util/editable');
 				editable.init();
       },
+			//groupsesion/list
 			getList: function() {
 				var groupsession = require('./pages/groupsession');
 				groupsession.init();
@@ -44,6 +45,20 @@ var App = {
 				var profile = require('./pages/profile');
 				profile.init();
 			}
+		},
+
+		//Dashboard Controller for routes at /admin-lte
+		DashboardController: {
+			//admin/index
+			getIndex: function() {
+				var dashboard = require('./util/dashboard');
+				dashboard.init();
+			},
+			//admin/settings
+			getSettings: function() {
+				var settings = require('./pages/dashboard/settings');
+				settings.init();
+			},
 		}
 	},
 

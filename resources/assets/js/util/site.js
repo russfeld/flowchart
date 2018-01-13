@@ -74,6 +74,6 @@ exports.handleError = function(message, element, error){
 
 	//hide spinning icon
 	if(element.length > 0){
-		$(element + 'Spin').addClass('hide-spin');
+		$(element + 'spin').addClass('hide-spin');
 	}
 }

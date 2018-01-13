@@ -1,10 +1,5 @@
 @extends('dashboard._layout')
 
-@section('scripts')
-    @parent
-    <script type="text/javascript" src="{{ asset('js/lib/require.js') }}" data-main="/js/dashboard_index"></script>
-@endsection
-
 @section('dashcontent')
 
 <div class="alert alert-success" role="alert">

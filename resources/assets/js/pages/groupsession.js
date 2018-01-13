@@ -98,7 +98,7 @@ exports.init = function(){
 	//Bind to the connected action on Pusher (called when connected)
 	window.Echo.connector.pusher.connection.bind('connected', function(){
 		//when connected, disable the spinner
-		$('#groupSpin').addClass('hide-spin');
+		$('#groupspin').addClass('hide-spin');
 
 		//Load the initial student queue via AJAX
 		window.axios.get('/groupsession/queue')
@@ -202,14 +202,14 @@ Vue.filter('statustext', function(data){
  * Function for clicking on the register button
  */
 var groupRegisterBtn = function(){
-	$('#groupSpin').removeClass('hide-spin');
+	$('#groupspin').removeClass('hide-spin');
 
 	var url = '/groupsession/register';
 	window.axios.post(url, {})
 		.then(function(response){
 			site.displayMessage(response.data, "success");
 			disableButton();
-			$('#groupSpin').addClass('hide-spin');
+			$('#groupspin').addClass('hide-spin');
 		})
 		.catch(function(error){
 			site.handleError('register', '#group', error);

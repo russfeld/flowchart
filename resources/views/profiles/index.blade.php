@@ -16,7 +16,7 @@
     @include('forms.text', ['field' => 'first_name', 'label' => 'First Name', 'value' => ''])
   @endif
 	@include('forms.text', ['field' => 'last_name', 'label' => 'Last Name', 'value' => $student->last_name])
-  <span id="profileSpin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
+  <span id="profilespin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
   <button type="button" class="btn btn-primary" id="saveProfile">Update Profile</button>
   @if (!($student->user->update_profile))
   <a id="profileAdvisingBtn" class="btn btn-success hide-spin" href="{{ url(isset($lastUrl) ? $lastUrl : 'advising') }}" role="button">Continue</a>

@@ -41,7 +41,7 @@
                 <option value="1">Daily</option>
                 <option value="2">Weekly</option>
               </select>
-              <span id="brepeathelp" class="help-block"></span>  
+              <span id="brepeathelp" class="help-block"></span>
             </div>
           </div>
           <div id="repeatdailydiv" hidden>
@@ -52,7 +52,7 @@
                     <option value="{{ $i }}">{{ $i }}</option>
                 @endfor
               </select>
-              <span id="brepeatdailyhelp" class="help-block"></span>  
+              <span id="brepeatdailyhelp" class="help-block"></span>
             </div>
           </div>
           <div id="repeatweeklydiv" hidden>
@@ -63,7 +63,7 @@
                     <option value="{{ $i }}">{{ $i }}</option>
                 @endfor
               </select>
-              <span id="brepeatweeklyhelp" class="help-block"></span>  
+              <span id="brepeatweeklyhelp" class="help-block"></span>
             </div>
             <div class="form-group">
               <label class="control-label" for="brepeatweekdays">On these days of the week</label><br>
@@ -82,7 +82,7 @@
                 <label class="checkbox-inline">
                   <input type="checkbox" id="brepeatweekdays5" value="5"> F
                 </label>
-              <span id="brepeatweekdayshelp" class="help-block"></span>  
+              <span id="brepeatweekdayshelp" class="help-block"></span>
             </div>
           </div>
           <div id="repeatuntildiv" hidden>
@@ -102,7 +102,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <span id="createBlackoutSpin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
+        <span id="createBlackoutspin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
       	<button type="button" class="btn btn-danger" id="deleteBlackoutButton">Delete</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" id="saveBlackoutButton">Save</button>
@@ -140,4 +140,3 @@
     </div>
   </div>
 </div>
-

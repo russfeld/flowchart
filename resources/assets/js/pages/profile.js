@@ -6,7 +6,7 @@ exports.init = function(){
 	$('#saveProfile').on('click', function(){
 
 		//show spinning icon
-		$('#profileSpin').removeClass('hide-spin');
+		$('#profilespin').removeClass('hide-spin');
 
 		//build data and URL
 		var data = {
@@ -20,7 +20,7 @@ exports.init = function(){
 			.then(function(response){
 				site.displayMessage(response.data, "success");
 				site.clearFormErrors();
-				$('#profileSpin').addClass('hide-spin');
+				$('#profilespin').addClass('hide-spin');
 				$('#profileAdvisingBtn').removeClass('hide-spin');
 			})
 			.catch(function(error){
@@ -32,7 +32,7 @@ exports.init = function(){
 	$('#saveAdvisorProfile').on('click', function(){
 
 		//show spinning icon
-		$('#profileSpin').removeClass('hide-spin');
+		$('#profilespin').removeClass('hide-spin');
 
 		//build data and URL
 		//TODO TESTME
@@ -51,7 +51,7 @@ exports.init = function(){
 			.then(function(response){
 				site.displayMessage(response.data, "success");
 				site.clearFormErrors();
-				$('#profileSpin').addClass('hide-spin');
+				$('#profilespin').addClass('hide-spin');
 				$('#profileAdvisingBtn').removeClass('hide-spin');
 				window.axios.get('/profile/pic')
 					.then(function(response){

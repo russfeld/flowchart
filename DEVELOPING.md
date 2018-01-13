@@ -2,7 +2,7 @@
 
 NPM has a bug! Whenever you install a new package, it will remove old packages that it thinks it did not install. So far this only affects the custom bootstrap datepicker used in this project. So, if it doesn't work, after updating/adding NPM packages, you'll need to do:
 
-npm install https://github.com/russfeld/bootstrap-datetimepicker.git
+npm install https://github.com/russfeld/bootstrap-datetimepicker.git --save-dev
 
 Stupid, right?
 See https://github.com/npm/npm/issues/17379

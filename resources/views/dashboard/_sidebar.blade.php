@@ -28,7 +28,7 @@
         <!-- /.search form -->
 
         <!-- Sidebar Menu -->
-        <ul class="sidebar-menu">
+        <ul class="sidebar-menu" data-widget="tree">
             <li class="header">ADMIN DASHBOARD</li>
             <!-- Optionally, you can add icons to the links -->
             <li class="{{ Request::is('admin') ? 'active' : '' }}"><a href="{{ url('/admin') }}"><span>Home</span></a></li>

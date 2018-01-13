@@ -1,48 +1,42 @@
-require(['util/site', 'util/dashboard'], function(site, dashboard) {
+var dashboard = require('../../util/dashboard');
+var site = require('../../util/site');
 
-  site.ajaxcrsf();
-
+exports.init = function(){
+  //load custom button on the dom
   var options = dashboard.dataTableOptions;
   options.dom = '<"newbutton">frtip';
-  dashboard.init(options);
-  site.checkMessage();
+  dashboard.init();
 
-  //$("div.newbutton").html('<a type="button" class="btn btn-success" href="/admin/newstudent">New Student</a>');
-
+  //bind settings buttons
   $('.settingsbutton').on('click', function(){
     var data = {
       key: $(this).attr('id'),
     };
     var url = '/admin/savesetting';
-    $.ajax({
-      method: "POST",
-      url: url,
-      data: data
-    })
-    .success(function( message ) {
-      $(location).attr('href', '/admin/settings');
-    }).fail(function( jqXHR, message ){
-      alert("Unable to save: " + jqXHR.responseJSON);
-    });
+
+    window.axios.post(url, data)
+      .then(function(message){
+        $(location).attr('href', '/admin/settings');
+      })
+      .catch(function(error){
+        site.handleError('save', '', error);
+      });
   });
 
+  //bind new setting button
   $('#newsetting').on('click', function(){
     var choice = prompt("Enter a name for the new setting:");
     var data = {
       key: choice,
     };
     var url = "/admin/newsetting"
-    $.ajax({
-      method: "POST",
-      url: url,
-      data: data
-    })
-    .success(function( message ) {
-      $(location).attr('href', '/admin/settings');
-    })
-    .fail(function( jqXHR, message ){
-      alert("Unable to create setting: " + jqXHR.responseJSON);
-    });
-  });
 
-});
+    window.axios.post(url, data)
+      .then(function(message){
+        $(location).attr('href', '/admin/settings');
+      })
+      .catch(function(error){
+        site.handleError('create', '', error)
+      });
+  });
+}

@@ -1,12 +1,13 @@
 {
-    "/js/vendor.js": "/js/vendor.js?id=cd8f041468378a7cbfc6",
-    "/js/vendor.js.map": "/js/vendor.js.map?id=60a29fd17f7653de3790",
-    "/js/app.js": "/js/app.js?id=b691f628a09a41932de0",
+    "/js/vendor.js": "/js/vendor.js?id=251d53252de4e07fe8ac",
+    "/js/vendor.js.map": "/js/vendor.js.map?id=43f95ebc87e7837bf3c9",
+    "/js/app.js": "/js/app.js?id=e801a66c31838ba13593",
     "/css/app.css": "/css/app.css?id=afc5afacc511ae912eab",
-    "/js/app.js.map": "/js/app.js.map?id=5c002c877dab1add8d27",
+    "/js/app.js.map": "/js/app.js.map?id=57876c6844ea027b84a9",
     "/css/app.css.map": "/css/app.css.map?id=f352604bb67dd54eb30d",
     "/js/manifest.js": "/js/manifest.js?id=31db8a7296336c5e59a1",
     "/js/manifest.js.map": "/js/manifest.js.map?id=e58350b3ec99f5872536",
+    "/css/dashboard.css": "/css/dashboard.css?id=fb72aac6f14a98fbf8a6",
     "/sounds/door_bell.aac": "/sounds/door_bell.aac?id=4d79003914d4a43b7571",
     "/sounds/door_bell.mp3": "/sounds/door_bell.mp3?id=45d9194fe271b6965579",
     "/sounds/door_bell.ogg": "/sounds/door_bell.ogg?id=def4186540bc2ec1f719"
