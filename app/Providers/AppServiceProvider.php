@@ -106,6 +106,7 @@ class AppServiceProvider extends ServiceProvider
             if($meeting->isDirty("conflict")) $count = $count - 1;
             if($meeting->isDirty("updated_at")) $count = $count - 1;
             if($meeting->isDirty("status")) $count = $count - 1;
+            if($meeting->isDirty("sequence")) $count = $count - 1;
             if($count > 0){
                 $type = "updated";
                 AppServiceProvider::sendMail($meeting, $type);
