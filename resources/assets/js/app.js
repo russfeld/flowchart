@@ -59,6 +59,81 @@ var App = {
 				var settings = require('./pages/dashboard/settings');
 				settings.init();
 			},
+			//admin/students
+			getStudents: function() {
+				var studentedit = require('./pages/dashboard/studentedit');
+				studentedit.init();
+			},
+			//admin/newstudent
+			getNewstudent: function() {
+				var studentedit = require('./pages/dashboard/studentedit');
+				studentedit.init();
+			},
+			//admin/advisors
+			getAdvisors: function() {
+				var advisoredit = require('./pages/dashboard/advisoredit');
+				advisoredit.init();
+			},
+			//admin/newadvisor
+			getNewadvisor: function() {
+				var advisoredit = require('./pages/dashboard/advisoredit');
+				advisoredit.init();
+			},
+			//admin/departments
+			getDepartments: function() {
+				var departmentedit = require('./pages/dashboard/departmentedit');
+				departmentedit.init();
+			},
+			//admin/newdepartment
+			getNewdepartment: function() {
+				var departmentedit = require('./pages/dashboard/departmentedit');
+				departmentedit.init();
+			},
+			//admin/meetings
+			getMeetings: function() {
+				var meetingedit = require('./pages/dashboard/meetingedit');
+				meetingedit.init();
+			},
+			//admin/blackouts
+			getBlackouts: function() {
+				var blackoutedit = require('./pages/dashboard/blackoutedit');
+				blackoutedit.init();
+			},
+			//admin/groupsessions
+			getGroupsessions: function() {
+				var groupsessionedit = require('./pages/dashboard/groupsessionedit');
+				groupsessionedit.init();
+			},
+			//admin/degreeprograms
+			getDegreeprograms: function() {
+				var degreeprogramedit = require('./pages/dashboard/degreeprogramedit');
+				degreeprogramedit.init();
+			},
+			//admin/newdegreeprogream
+			getNewdegreeprogram: function() {
+				var degreeprogramedit = require('./pages/dashboard/degreeprogramedit');
+				degreeprogramedit.init();
+			},
+			//admin/plans
+			getPlans: function() {
+				var planedit = require('./pages/dashboard/planedit');
+				planedit.init();
+			},
+			//admin/newplan
+			getNewplan: function() {
+				var planedit = require('./pages/dashboard/planedit');
+				planedit.init();
+			},
+			//admin/completedcourses
+			getCompletedcourses: function() {
+				var completedcourseedit = require('./pages/dashboard/completedcourseedit');
+				completedcourseedit.init();
+			},
+			//admin/newcompletedcourse
+			getNewcompletedcourse: function() {
+				var completedcourseedit = require('./pages/dashboard/completedcourseedit');
+				completedcourseedit.init();
+			},
 		}
 	},
 

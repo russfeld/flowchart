@@ -216,6 +216,7 @@ class DashboardController extends Controller
 
     public function getNewadvisor(){
       $advisor = new Advisor();
+      $advisor->pic = "";
       $departments = Department::all();
       $deptUnknown = new Department();
       $deptUnknown->name = "Unassigned";

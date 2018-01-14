@@ -35,13 +35,13 @@ exports.ajaxsave = function(data, url, id, loadpicture){
   loadpicture || (loadpicture = false);
   $('#spin').removeClass('hide-spin');
   window.axios.post(url, data)
-    .then(function(message){
+    .then(function(response){
       site.clearFormErrors();
       $('#spin').addClass('hide-spin');
       if(id.length == 0){
-        $(location).attr('href', message);
+        $(location).attr('href', response.data);
       }else{
-        site.displayMessage(message, "success");
+        site.displayMessage(response.data, "success");
         if(loadpicture) exports.loadpicture(id);
       }
     })
@@ -56,7 +56,7 @@ exports.ajaxsave = function(data, url, id, loadpicture){
  * @param id - the user ID of the picture to reload
  */
 exports.loadpicture = function(id){
-  window.axios.get('/profile/pic' + id)
+  window.axios.get('/profile/pic/' + id)
     .then(function(response){
       $('#pictext').val(response.data);
       $('#picimg').attr('src', response.data);
@@ -83,7 +83,7 @@ exports.ajaxdelete = function (data, url, retUrl, soft = false){
 	if(choice === true){
     $('#spin').removeClass('hide-spin');
     window.axios.post(url, data)
-      .then(function(message){
+      .then(function(response){
         $(location).attr('href', retUrl);
       })
       .catch(function(error){
@@ -107,7 +107,7 @@ exports.ajaxrestore = function(data, url, retUrl){
       id: $('#id').val(),
     };
     window.axios.post(url, data)
-      .then(function(message){
+      .then(function(response){
         $(location).attr('href', retUrl);
       })
       .catch(function(error){

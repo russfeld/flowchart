@@ -1,11 +1,9 @@
-require(['util/site', 'util/dashboard'], function(site, dashboard) {
+var dashboard = require('../../util/dashboard');
 
-  site.ajaxcrsf();
-
+exports.init = function(){
   var options = dashboard.dataTableOptions;
   options.dom = '<"newbutton">frtip';
   dashboard.init(options);
-  site.checkMessage();
 
   $("div.newbutton").html('<a type="button" class="btn btn-success" href="/admin/newadvisor">New Advisor</a>');
 
@@ -31,7 +29,7 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
       formData.append("eid", $('#eid').val());
       var url = '/admin/advisors/' + id;
     }
-		dashboard.ajaxobjectsave(formData, url, id);
+		dashboard.ajaxsave(formData, url, id, true);
   });
 
   $('#delete').on('click', function(){
@@ -81,4 +79,4 @@ require(['util/site', 'util/dashboard'], function(site, dashboard) {
 
   });
 
-});
+}
