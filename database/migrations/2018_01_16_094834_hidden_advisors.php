@@ -13,7 +13,9 @@ class HiddenAdvisors extends Migration
      */
     public function up()
     {
-        //
+      Schema::table('advisors', function ($table) {
+          $table->boolean('hidden')->default(false);
+      });
     }
 
     /**
@@ -23,6 +25,8 @@ class HiddenAdvisors extends Migration
      */
     public function down()
     {
-        //
+      Schema::table('advisors', function ($table) {
+          $table->dropColumn('hidden');
+      });
     }
 }

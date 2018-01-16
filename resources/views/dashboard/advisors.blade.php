@@ -15,6 +15,7 @@
             <th>Email</th>
             <th>Phone</th>
             <th>Department</th>
+            <th>Hidden</th>
             <th>Pic</th>
             <th>Actions</th>
           </tr>
@@ -28,6 +29,7 @@
             <td>{{ $advisor->email }}</td>
             <td>{{ $advisor->phone }}</td>
             <td>{{ $advisor->department->name or "Unassigned" }}</td>
+            <td>{{ $advisor->hidden ? "Hidden" : "" }}</td>
             <td><a href="{{ url($advisor->pic) }}">{{ $advisor->pic }}</a></td>
             <td><a class="btn btn-primary btn-sm" href="{{url('/admin/advisors/' . $advisor->id)}}" role="button">Edit</a></td>
           </tr>
@@ -40,6 +42,7 @@
             <th>Email</th>
             <th>Phone</th>
             <th>Department</th>
+            <th>Hidden</th>
             <th>Pic</th>
             <th>Actions</th>
           </tr>

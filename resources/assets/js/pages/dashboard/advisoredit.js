@@ -15,6 +15,7 @@ exports.init = function(){
 		formData.append("office", $('#office').val());
 		formData.append("phone", $('#phone').val());
 		formData.append("notes", $('#notes').val());
+    formData.append("hidden", $('#hidden').is(':checked') ? 1 : 0);
 		if($('#pic').val()){
 			formData.append("pic", $('#pic')[0].files[0]);
 		}

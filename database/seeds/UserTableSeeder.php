@@ -18,6 +18,12 @@ class UserTableSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
+            'id' => '6',
+            'eid' => 'hidden-advisor',
+            'is_advisor' => true
+        ]);
+
+        DB::table('users')->insert([
             'id' => '2',
             'eid' => 'russfeld',
             'is_advisor' => true
@@ -41,10 +47,6 @@ class UserTableSeeder extends Seeder
             'is_advisor' => true
         ]);
 
-        DB::table('users')->insert([
-            'id' => '6',
-            'eid' => 'das',
-            'is_advisor' => true
-        ]);
+
     }
 }

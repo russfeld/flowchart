@@ -63,5 +63,17 @@ class SchedulerSeeder extends Seeder
             'user_id' => '5'
     	]);
 
+      DB::table('advisors')->insert([
+        	'id' => '5',
+    		'name' => 'Hidden Advisor',
+    		'email' => 'hidden-advisor@ksu.edu',
+    		'office' => '213 Nichols Hall',
+    		'phone' => '785-532-7768',
+    		'pic' => 'img/russfeld.png',
+    		'department_id' => '1',
+        'hidden' => '1',
+            'user_id' => '6'
+    	]);
+
     }
 }

@@ -42,12 +42,19 @@ class AdvisingController extends Controller
         if($id < 0){
         	//currently authenticated user is an advisor
         	if($user->is_advisor){
-        		$user->load('advisor.department');
-        		return view('advising/advisorindex')->with('user', $user)->with('advisor', $user->advisor);
+						//if user is not hidden, show their calendar
+						if(!$user->advisor->hidden){
+	        		$user->load('advisor.department');
+	        		return view('advising/advisorindex')->with('user', $user)->with('advisor', $user->advisor);
+
+						//if not, show the selector
+						}else{
+							return redirect('advising/select');
+						}
         	}else{
-                if($user->student->advisor === null){
-                    return redirect('advising/select');
-                }
+            if($user->student->advisor === null){
+              return redirect('advising/select');
+            }
         		$user->load('student.advisor.department');
         		return view('advising/studentindex')->with('user', $user)->with('advisor', $user->student->advisor);
         	}
@@ -84,7 +91,9 @@ class AdvisingController extends Controller
 	    	Department::findOrFail($dept);
 	    }
 
-		$departments = Department::with('advisors')->get();
+		$departments = Department::with(['advisors' => function($query) {
+			$query->where('hidden', false);
+		}])->get();
 
 		return view('advising/selectadvisor')->with('departments', $departments)->with('dept', $dept);
     }

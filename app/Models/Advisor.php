@@ -21,9 +21,10 @@ class Advisor extends Validatable
       'notes' => 'string',
       'pic' => 'image',
       'department_id' => 'sometimes|required|exists:departments,id',
+      'hidden' => 'sometimes|required|boolean',
     );
 
-    protected $fillable = ['name', 'email', 'office', 'phone', 'notes', 'department_id'];
+    protected $fillable = ['name', 'email', 'office', 'phone', 'notes', 'department_id', 'hidden'];
 
     public function savePic(UploadedFile $file){
       $path = storage_path() . "/app/images";

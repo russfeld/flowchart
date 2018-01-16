@@ -20,6 +20,7 @@
         @include('forms.select', ['field' => 'department_id', 'label' => 'Department', 'value' => 0, 'options' => $departments])
       @endif
       @include('forms.textarea', ['field' => 'notes', 'label' => 'Notes', 'value' => $advisor->notes])
+      @include('forms.checkbox', ['field' => 'hidden', 'label' => 'Hidden', 'value' => $advisor->hidden])
       @include('forms.image', ['field' => 'pic', 'label' => 'Image', 'value' => $advisor->pic])
       <input type="hidden" id="id" value="{{$advisor->id}}">
       <span id="spin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
