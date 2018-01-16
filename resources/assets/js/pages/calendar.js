@@ -248,8 +248,11 @@ exports.init = function(){
 			});
 
 			$('#advisingButton').bind('click', function(){
+				$('#meetingOption').off('hidden.bs.modal');
+				$('#meetingOption').on('hidden.bs.modal', function (e) {
+					createMeetingForm();
+				});
 				$('#meetingOption').modal('hide');
-				createMeetingForm();
 			});
 
 			$('#createMeetingBtn').bind('click', function(){
@@ -258,8 +261,11 @@ exports.init = function(){
 			});
 
 			$('#blackoutButton').bind('click', function(){
+				$('#meetingOption').off('hidden.bs.modal');
+				$('#meetingOption').on('hidden.bs.modal', function (e) {
+					createBlackoutForm();
+				});
 				$('#meetingOption').modal('hide');
-				createBlackoutForm();
 			});
 
 			$('#createBlackoutBtn').bind('click', function(){
@@ -681,40 +687,6 @@ var loadConflicts = function(){
 		.catch(function(error){
 			alert("Unable to retrieve conflicting meetings: " + error.response.data);
 		});
-
-		/*
-			$.ajax({
-				method: "GET",
-				url: '/advising/conflicts',
-				dataType: 'json'
-			})
-			.success(function(data, message, jqXHR) {
-				$(document).off('click', '.deleteConflict', deleteConflict);
-				$(document).off('click', '.editConflict', editConflict);
-				$(document).off('click', '.resolveConflict', resolveConflict);
-				if(jqXHR.status == 200){
-					$('#resolveConflictMeetings').empty();
-					$.each(data, function(index, value){
-						$('<div/>', {
-							'class': 'meeting-conflict',
-									'html': 	'<p>&nbsp;<button type="button" class="btn btn-danger pull-right deleteConflict" data-id='+value.id+'>Delete</button>' +
-												'&nbsp;<button type="button" class="btn btn-primary pull-right editConflict" data-id='+value.id+'>Edit</button> ' +
-												'<button type="button" class="btn btn-success pull-right resolveConflict" data-id='+value.id+'>Keep Meeting</button>' +
-												'<span id="resolvespin'+value.id+'" class="fa fa-cog fa-spin fa-lg pull-right hide-spin">&nbsp;</span>' +
-													'<b>'+value.title+'</b> ('+value.start+')</p><hr>'
-							}).appendTo('#resolveConflictMeetings');
-					});
-					$(document).on('click', '.deleteConflict', deleteConflict);
-					$(document).on('click', '.editConflict', editConflict);
-					$(document).on('click', '.resolveConflict', resolveConflict);
-					$('#conflictingMeetings').removeClass('hidden');
-				}else if (jqXHR.status == 204){
-					$('#conflictingMeetings').addClass('hidden');
-				}
-			}).fail(function( jqXHR, message ){
-				alert("Unable to retrieve conflicting meetings: " + jqXHR.responseJSON);
-			});
-		*/
 }
 
 /**
