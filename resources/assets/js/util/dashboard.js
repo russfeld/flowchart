@@ -21,6 +21,10 @@ exports.init = function(options){
   options || (options = exports.dataTableOptions);
   $('#table').DataTable(options);
   site.checkMessage();
+
+  $('#adminlte-togglemenu').on('click', function(){
+    $('body').toggleClass('sidebar-open');
+  });
 }
 
 /**

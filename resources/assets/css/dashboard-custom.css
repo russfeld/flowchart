@@ -438,7 +438,10 @@ a:focus {
 }
 @media (max-width: 767px) {
   .main-sidebar {
+/* russfeld
+unnecessary for the template I use
     padding-top: 100px;
+*/
   }
 }
 @media (max-width: 767px) {

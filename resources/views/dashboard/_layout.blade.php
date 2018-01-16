@@ -9,15 +9,22 @@
 
 @section('content')
 
-@include('dashboard._sidebar');
+@include('dashboard._sidebar')
 
 <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
+                <button class="btn btn-primary visible-xs-inline" id="adminlte-togglemenu" role="button">
+                  <i class="fa fa-bars" aria-hidden="true"></i>
+                  <span class="sr-only">Toggle navigation</span>
+                </button>
+
                 {{ $page_title or "Page Title" }}
                 <small>{{ $page_description or null }}</small>
+                <!-- Sidebar toggle button-->
+
             </h1>
             <!-- You can dynamically generate breadcrumbs here -->
 
