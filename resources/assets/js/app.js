@@ -9,9 +9,18 @@ var App = {
 	// Controller-action methods
 	actions: {
 		//Index for directly created views with no explicit controller
-		index: {
-			index: function() {
-				//no default javascripts on home pages?
+		RootRouteController: {
+			getIndex: function() {
+				var editable = require('./util/editable');
+				editable.init();
+				var site = require('./util/site');
+				site.checkMessage();
+			},
+			getAbout: function() {
+				var editable = require('./util/editable');
+				editable.init();
+				var site = require('./util/site');
+				site.checkMessage();
 			},
     },
 
