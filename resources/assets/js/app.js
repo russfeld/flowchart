@@ -30,6 +30,8 @@ var App = {
       getIndex: function() {
         var editable = require('./util/editable');
 				editable.init();
+				var site = require('./util/site');
+				site.checkMessage();
       },
 			//groupsesion/list
 			getList: function() {

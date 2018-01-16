@@ -12,6 +12,8 @@
 
 @section('content')
 
+@include('advising._message')
+
 @include('advising._advisor', ['advisor' => $advisor, 'link' => false])
 
 <div class="col-sm-12">

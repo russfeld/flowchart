@@ -12,6 +12,8 @@
 
 @section('content')
 
+@include('advising._message')
+
 <div id="conflictingMeetings" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 div-danger rounded hidden">
 	<span>You have meetings that conflict with scheduled blackouts. <button type="button" class="btn btn-primary" id="resolveButton">Resolve</button></span>
 </div>

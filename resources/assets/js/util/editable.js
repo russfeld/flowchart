@@ -8,10 +8,6 @@ exports.init = function(){
   require('codemirror');
   require('codemirror/mode/xml/xml.js');
   require('summernote');
-  site = require('./site');
-
-  //Check for messages in the session (usually from a previous successful save)
-  site.checkMessage();
 
   //Register click handlers for [edit] links
   $('.editable-link').each(function(){

@@ -4,13 +4,7 @@
 
 @section('content')
 
-    <div class="jumbotron">
-      <div class="container">
-        <h1>Engineering Advising</h1>
-        <p>Welcome to the new K-State Engineering Advising System. This is your one-stop-shop to find classes, view your flowcharts and degree progress, schedule advising appointments, and more! Check out the sections below to get started.</p>
-        <p><a class="btn btn-primary btn-lg" href="{{ url('/about') }}" role="button">Learn more &raquo;</a></p>
-      </div>
-    </div>
+    @include('editable.textarea', ['field' => $editables['header']])
 
     <div class="container">
       <!-- Example row of columns -->
@@ -28,21 +22,15 @@
        </div>
      -->
         <div class="col-md-4">
-          <h2>Advising</h2>
-          <p>When you are ready to enroll or if you have any questions, quickly schedule an appointment with your academic advisor.</p>
-          <p><a class="btn btn-default" href="{{ url('/advising') }}" role="button">Schedule an Appointment &raquo;</a></p>
+          @include('editable.textarea', ['field' => $editables['advising']])
         </div>
         @if(DbConfig::get('navbar_showgroupsession') === true)
+          <div class="col-md-4">
+            @include('editable.textarea', ['field' => $editables['groupsession']])
+          </div>
+        @endif
         <div class="col-md-4">
-          <h2>Group Advising</h2>
-          <p>Attending a group advising session? Click here to get on the waiting list or find your place in the queue.</p>
-          <p><a class="btn btn-default" href="{{ url('/groupsession') }}" role="button">Group Advising &raquo;</a></p>
-       </div>
-       @endif
-        <div class="col-md-4">
-          <h2>Help</h2>
-          <p>Not sure how to use the new system? Click here for help!</p>
-          <p><a class="btn btn-default" href="{{ url('/help') }}" role="button">Help &raquo;</a></p>
+          @include('editable.textarea', ['field' => $editables['help']])
         </div>
       </div>
     </div>

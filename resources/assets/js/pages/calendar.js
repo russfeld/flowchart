@@ -4,6 +4,7 @@ require('devbridge-autocomplete');
 var moment = require('moment');
 var site = require('../util/site');
 require('eonasdan-bootstrap-datetimepicker-russfeld');
+var editable = require('../util/editable');
 
 //Session for storing data between forms
 exports.calendarSession = {};
@@ -97,6 +98,9 @@ exports.init = function(){
 
 	//Check for messages in the session from a previous action
 	site.checkMessage();
+
+	//initalize editable elements
+	editable.init();
 
 	//tweak parameters
 	window.advisor || (window.advisor = false);
