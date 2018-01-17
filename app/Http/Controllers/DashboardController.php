@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
+use League\Fractal\Resource\Item;
 use App\JsonSerializer;
 
 use Auth;
@@ -560,6 +561,48 @@ class DashboardController extends Controller
       }else{
         $degreeprogram = Degreeprogram::withTrashed()->with('requirements')->findOrFail($id);
         return view('dashboard.degreeprogramdetail')->with('degreeprogram', $degreeprogram)->with('page_title', "Degree Program Details");
+      }
+    }
+
+    public function getDegreeprogramRequirements(Request $request, $id = -1){
+      if($id < 0){
+        abort(404);
+      }else{
+        $degreeprogram = Degreeprogram::withTrashed()->with('requirements')->findOrFail($id);
+
+        $resource = new Collection($degreeprogram->requirements, function($requirement) {
+            return[
+                'id' => $requirement->id,
+                'notes' => $requirement->notes,
+                'semester' => $requirement->semester,
+                'ordering' => $requirement->ordering,
+                'credits' => $requirement->credits,
+            ];
+        });
+
+        $this->fractal->setSerializer(new JsonSerializer());
+    	  return $this->fractal->createData($resource)->toJson();
+      }
+    }
+
+    public function getDegreerequirement(Request $request, $id = -1){
+      if($id < 0){
+        abort(404);
+      }else{
+        $degreerequirement = Degreerequirement::findOrFail($id);
+
+        $resource = new Item($degreerequirement, function($requirement) {
+            return[
+                'id' => $requirement->id,
+                'notes' => $requirement->notes,
+                'semester' => $requirement->semester,
+                'ordering' => $requirement->ordering,
+                'credits' => $requirement->credits,
+            ];
+        });
+
+        $this->fractal->setSerializer(new JsonSerializer());
+    	  return $this->fractal->createData($resource)->toJson();
       }
     }
 

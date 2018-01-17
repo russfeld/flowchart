@@ -70,6 +70,7 @@ exports.ajaxmodalsave = function(data, url, element){
       $('#spin').addClass('hide-spin');
       $(element).modal('hide');
       resetForm();
+      $('#table').DataTable().ajax.reload();
       site.displayMessage(response.data, "success");
     })
     .catch(function(error){
@@ -174,6 +175,10 @@ exports.ajaxautocomplete = function(id, url){
  * Function to reset the form on this page
  */
 var resetForm = function(){
-  $(this).find('form')[0].reset();
+  $(':input','#form')
+    .not(':button, :submit, :reset, :hidden, :disabled')
+    .val('')
+    .removeAttr('checked')
+    .removeAttr('selected');
 	site.clearFormErrors();
 };

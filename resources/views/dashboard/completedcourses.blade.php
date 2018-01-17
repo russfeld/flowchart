@@ -34,6 +34,7 @@
             <td><a class="btn btn-primary btn-sm" href="{{url('/admin/completedcourses/' . $completedcourse->id)}}" role="button">Edit</a></td>
           </tr>
           @endforeach
+          </tbody>
           <tfoot>
             <tr>
               <th>ID</th>

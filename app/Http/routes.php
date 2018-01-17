@@ -127,6 +127,8 @@ Route::post('admin/savesetting', 'DashboardController@postSavesetting');
 Route::get('admin/degreeprograms', 'DashboardController@getDegreeprograms');
 Route::get('admin/degreeprograms/{id?}', 'DashboardController@getDegreeprogramDetail');
 Route::post('admin/newdegreerequirement/', 'DashboardController@postNewdegreerequirement');
+Route::get('admin/degreeprogramrequirements/{id?}', 'DashboardController@getDegreeprogramRequirements');
+Route::get('admin/degreerequirement/{id?}', 'DashboardController@getDegreerequirement');
 Route::post('admin/degreerequirement/{id?}', 'DashboardController@postDegreerequirement');
 Route::get('admin/degreeprograms/{id?}/edit', 'DashboardController@getDegreeprograms');
 Route::get('admin/newdegreeprogram', 'DashboardController@getNewdegreeprogram');

@@ -6,11 +6,10 @@
         <h4 class="modal-title" id="createEventLabel">Degree Requirement Details</h4>
       </div>
       <div class="modal-body">
-        <form>
-          @include('forms.hidden', ['field' => 'degreeprogram_id', 'label' => 'Degree Program', 'value' => $degreeprogram->id, 'displayvalue' => $degreeprogram->name, 'disabled' => 'disabled'])
+        <form id="form">
+          @include('forms.hidden', ['field' => 'degreeprogram_id', 'label' => 'Degree Program', 'value' => $degreeprogram->id, 'displayvalue' => $degreeprogram->name, 'disabled' => 'disabled="disabled"'])
           @include('forms.text', ['field' => 'id', 'label' => 'ID', 'value' => '', 'disabled' => 'disabled'])
           @include('forms.text', ['field' => 'notes', 'label' => 'Notes', 'value' => ''])
-          <input type="hidden" id="degreerequirementid" value="" />
         </form>
       </div>
       <div class="modal-footer">

@@ -19,16 +19,8 @@
           </tr>
           </thead>
           <tbody>
-          @foreach($degreeprogram->requirements as $requirement)
-          <tr>
-            <td>{{ $requirement->id }}</td>
-            <td>{{ $requirement->notes }}</td>
-            <td>{{ $requirement->semester }}</td>
-            <td>{{ $requirement->ordering }}</td>
-            <td>{{ $requirement->credits }}</td>
-            <td><a class="btn btn-primary btn-sm edit" href="#" data-id="{{ $requirement->id }}" role="button">Edit</a></td>
-          </tr>
-          @endforeach
+            <!-- AJAX FILL -->
+          </tbody>
           <tfoot>
             <tr>
               <th>ID</th>
