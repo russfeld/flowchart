@@ -65,11 +65,9 @@ var App = {
 				var dashboard = require('./util/dashboard');
 				dashboard.init();
 			},
-			//admin/settings
-			getSettings: function() {
-				var settings = require('./pages/dashboard/settings');
-				settings.init();
-			},
+		},
+
+		StudentsController: {
 			//admin/students
 			getStudents: function() {
 				var studentedit = require('./pages/dashboard/studentedit');
@@ -80,6 +78,9 @@ var App = {
 				var studentedit = require('./pages/dashboard/studentedit');
 				studentedit.init();
 			},
+		},
+
+		AdvisorsController: {
 			//admin/advisors
 			getAdvisors: function() {
 				var advisoredit = require('./pages/dashboard/advisoredit');
@@ -90,6 +91,9 @@ var App = {
 				var advisoredit = require('./pages/dashboard/advisoredit');
 				advisoredit.init();
 			},
+		},
+
+		DepartmentsController: {
 			//admin/departments
 			getDepartments: function() {
 				var departmentedit = require('./pages/dashboard/departmentedit');
@@ -100,21 +104,41 @@ var App = {
 				var departmentedit = require('./pages/dashboard/departmentedit');
 				departmentedit.init();
 			},
+		},
+
+		MeetingsController: {
 			//admin/meetings
 			getMeetings: function() {
 				var meetingedit = require('./pages/dashboard/meetingedit');
 				meetingedit.init();
 			},
+		},
+
+		BlackoutsController: {
 			//admin/blackouts
 			getBlackouts: function() {
 				var blackoutedit = require('./pages/dashboard/blackoutedit');
 				blackoutedit.init();
 			},
+		},
+
+		GroupsessionsController: {
 			//admin/groupsessions
 			getGroupsessions: function() {
 				var groupsessionedit = require('./pages/dashboard/groupsessionedit');
 				groupsessionedit.init();
 			},
+		},
+
+		SettingsController: {
+			//admin/settings
+			getSettings: function() {
+				var settings = require('./pages/dashboard/settings');
+				settings.init();
+			},
+		},
+
+		DegreeprogramsController: {
 			//admin/degreeprograms
 			getDegreeprograms: function() {
 				var degreeprogramedit = require('./pages/dashboard/degreeprogramedit');
@@ -130,6 +154,9 @@ var App = {
 				var degreeprogramedit = require('./pages/dashboard/degreeprogramedit');
 				degreeprogramedit.init();
 			},
+		},
+
+		PlansController: {
 			//admin/plans
 			getPlans: function() {
 				var planedit = require('./pages/dashboard/planedit');
@@ -140,6 +167,9 @@ var App = {
 				var planedit = require('./pages/dashboard/planedit');
 				planedit.init();
 			},
+		},
+
+		CompletedcoursesController: {
 			//admin/completedcourses
 			getCompletedcourses: function() {
 				var completedcourseedit = require('./pages/dashboard/completedcourseedit');
@@ -150,7 +180,8 @@ var App = {
 				var completedcourseedit = require('./pages/dashboard/completedcourseedit');
 				completedcourseedit.init();
 			},
-		}
+		},
+
 	},
 
 	//Function that is called by the page at load. Defined in resources/views/includes/scripts.blade.php

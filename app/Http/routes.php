@@ -92,63 +92,78 @@ Route::post('groupsession/disable', 'GroupsessionController@postDisable');
  * Routes for the DashboardController
  */
 //Route::controller('admin', 'DashboardController');
-Route::get('admin/', 'DashboardController@getIndex');
-Route::get('admin/students/{id?}', 'DashboardController@getStudents');
-Route::get('admin/newstudent', 'DashboardController@getNewstudent');
-Route::post('admin/students/{id?}', 'DashboardController@postStudents');
-Route::post('admin/newstudent', 'DashboardController@postNewstudent');
-Route::post('admin/deletestudent', 'DashboardController@postDeletestudent');
-Route::post('admin/forcedeletestudent', 'DashboardController@postForcedeletestudent');
-Route::post('admin/restorestudent', 'DashboardController@postRestorestudent');
-Route::get('admin/advisors/{id?}', 'DashboardController@getAdvisors');
-Route::get('admin/newadvisor', 'DashboardController@getNewadvisor');
-Route::post('admin/advisors/{id?}', 'DashboardController@postAdvisors');
-Route::post('admin/newadvisor', 'DashboardController@postNewadvisor');
-Route::post('admin/deleteadvisor', 'DashboardController@postDeleteadvisor');
-Route::post('admin/forcedeleteadvisor', 'DashboardController@postForcedeleteadvisor');
-Route::post('admin/restoreadvisor', 'DashboardController@postRestoreadvisor');
-Route::get('admin/departments/{id?}', 'DashboardController@getDepartments');
-Route::get('admin/newdepartment', 'DashboardController@getNewdepartment');
-Route::post('admin/departments/{id?}', 'DashboardController@postDepartments');
-Route::post('admin/newdepartment', 'DashboardController@postNewdepartment');
-Route::post('admin/deletedepartment', 'DashboardController@postDeletedepartment');
-Route::post('admin/restoredepartment', 'DashboardController@postRestoredepartment');
-Route::post('admin/forcedeletedepartment', 'DashboardController@postForcedeletedepartment');
-Route::get('admin/meetings/{id?}', 'DashboardController@getMeetings');
-Route::post('admin/deletemeeting', 'DashboardController@postDeletemeeting');
-Route::post('admin/forcedeletemeeting', 'DashboardController@postForcedeletemeeting');
-Route::get('admin/blackouts/{id?}', 'DashboardController@getBlackouts');
-Route::post('admin/deleteblackout', 'DashboardController@postDeleteblackout');
-Route::get('admin/groupsessions/{id?}', 'DashboardController@getGroupsessions');
-Route::post('admin/deletegroupsession', 'DashboardController@postDeletegroupsession');
-Route::get('admin/settings', 'DashboardController@getSettings');
-Route::post('admin/newsetting', 'DashboardController@postNewsetting');
-Route::post('admin/savesetting', 'DashboardController@postSavesetting');
-Route::get('admin/degreeprograms', 'DashboardController@getDegreeprograms');
-Route::get('admin/degreeprograms/{id?}', 'DashboardController@getDegreeprogramDetail');
-Route::post('admin/newdegreerequirement/', 'DashboardController@postNewdegreerequirement');
-Route::get('admin/degreeprogramrequirements/{id?}', 'DashboardController@getDegreeprogramRequirements');
-Route::get('admin/degreerequirement/{id?}', 'DashboardController@getDegreerequirement');
-Route::post('admin/degreerequirement/{id?}', 'DashboardController@postDegreerequirement');
-Route::get('admin/degreeprograms/{id?}/edit', 'DashboardController@getDegreeprograms');
-Route::get('admin/newdegreeprogram', 'DashboardController@getNewdegreeprogram');
-Route::post('admin/degreeprograms/{id?}', 'DashboardController@postDegreeprograms');
-Route::post('admin/newdegreeprogram', 'DashboardController@postNewdegreeprogram');
-Route::post('admin/deletedegreeprogram', 'DashboardController@postDeletedegreeprogram');
-Route::post('admin/restoredegreeprogram', 'DashboardController@postRestoredegreeprogram');
-Route::post('admin/forcedeletedegreeprogram', 'DashboardController@postForcedeletedegreeprogram');
-Route::get('admin/plans/{id?}', 'DashboardController@getPlans');
-Route::get('admin/newplan', 'DashboardController@getNewplan');
-Route::post('admin/plans/{id?}', 'DashboardController@postPlans');
-Route::post('admin/newplan', 'DashboardController@postNewplan');
-Route::post('admin/deleteplan', 'DashboardController@postDeleteplan');
-Route::post('admin/restoreplan', 'DashboardController@postRestoreplan');
-Route::post('admin/forcedeleteplan', 'DashboardController@postForcedeleteplan');
-Route::get('admin/completedcourses/{id?}', 'DashboardController@getCompletedcourses');
-Route::get('admin/newcompletedcourse', 'DashboardController@getNewcompletedcourse');
-Route::post('admin/completedcourses/{id?}', 'DashboardController@postCompletedcourses');
-Route::post('admin/newcompletedcourse', 'DashboardController@postNewcompletedcourse');
-Route::post('admin/deletecompletedcourse', 'DashboardController@postDeletecompletedcourse');
+Route::get('admin/', 'Dashboard\DashboardController@getIndex');
+
+Route::get('admin/students/{id?}', 'Dashboard\StudentsController@getStudents');
+Route::get('admin/newstudent', 'Dashboard\StudentsController@getNewstudent');
+Route::post('admin/students/{id?}', 'Dashboard\StudentsController@postStudents');
+Route::post('admin/newstudent', 'Dashboard\StudentsController@postNewstudent');
+Route::post('admin/deletestudent', 'Dashboard\StudentsController@postDeletestudent');
+Route::post('admin/forcedeletestudent', 'Dashboard\StudentsController@postForcedeletestudent');
+Route::post('admin/restorestudent', 'Dashboard\StudentsController@postRestorestudent');
+
+Route::get('admin/advisors/{id?}', 'Dashboard\AdvisorsController@getAdvisors');
+Route::get('admin/newadvisor', 'Dashboard\AdvisorsController@getNewadvisor');
+Route::post('admin/advisors/{id?}', 'Dashboard\AdvisorsController@postAdvisors');
+Route::post('admin/newadvisor', 'Dashboard\AdvisorsController@postNewadvisor');
+Route::post('admin/deleteadvisor', 'Dashboard\AdvisorsController@postDeleteadvisor');
+Route::post('admin/forcedeleteadvisor', 'Dashboard\AdvisorsController@postForcedeleteadvisor');
+Route::post('admin/restoreadvisor', 'Dashboard\AdvisorsController@postRestoreadvisor');
+
+Route::get('admin/departments/{id?}', 'Dashboard\DepartmentsController@getDepartments');
+Route::get('admin/newdepartment', 'Dashboard\DepartmentsController@getNewdepartment');
+Route::post('admin/departments/{id?}', 'Dashboard\DepartmentsController@postDepartments');
+Route::post('admin/newdepartment', 'Dashboard\DepartmentsController@postNewdepartment');
+Route::post('admin/deletedepartment', 'Dashboard\DepartmentsController@postDeletedepartment');
+Route::post('admin/restoredepartment', 'Dashboard\DepartmentsController@postRestoredepartment');
+Route::post('admin/forcedeletedepartment', 'Dashboard\DepartmentsController@postForcedeletedepartment');
+
+Route::get('admin/meetings/{id?}', 'Dashboard\MeetingsController@getMeetings');
+Route::post('admin/deletemeeting', 'Dashboard\MeetingsController@postDeletemeeting');
+Route::post('admin/forcedeletemeeting', 'Dashboard\MeetingsController@postForcedeletemeeting');
+
+Route::get('admin/blackouts/{id?}', 'Dashboard\BlackoutsController@getBlackouts');
+Route::post('admin/deleteblackout', 'Dashboard\BlackoutsController@postDeleteblackout');
+
+
+Route::get('admin/groupsessions/{id?}', 'Dashboard\GroupsessionsController@getGroupsessions');
+Route::post('admin/deletegroupsession', 'Dashboard\GroupsessionsController@postDeletegroupsession');
+
+
+Route::get('admin/settings', 'Dashboard\SettingsController@getSettings');
+Route::post('admin/newsetting', 'Dashboard\SettingsController@postNewsetting');
+Route::post('admin/savesetting', 'Dashboard\SettingsController@postSavesetting');
+
+Route::get('admin/degreeprograms', 'Dashboard\DegreeprogramsController@getDegreeprograms');
+Route::get('admin/degreeprograms/{id?}', 'Dashboard\DegreeprogramsController@getDegreeprogramDetail');
+Route::get('admin/degreeprograms/{id?}/edit', 'Dashboard\DegreeprogramsController@getDegreeprograms');
+Route::get('admin/newdegreeprogram', 'Dashboard\DegreeprogramsController@getNewdegreeprogram');
+Route::post('admin/degreeprograms/{id?}', 'Dashboard\DegreeprogramsController@postDegreeprograms');
+Route::post('admin/newdegreeprogram', 'Dashboard\DegreeprogramsController@postNewdegreeprogram');
+Route::post('admin/deletedegreeprogram', 'Dashboard\DegreeprogramsController@postDeletedegreeprogram');
+Route::post('admin/restoredegreeprogram', 'Dashboard\DegreeprogramsController@postRestoredegreeprogram');
+Route::post('admin/forcedeletedegreeprogram', 'Dashboard\DegreeprogramsController@postForcedeletedegreeprogram');
+
+Route::post('admin/newdegreerequirement/', 'Dashboard\DegreerequirementsController@postNewdegreerequirement');
+Route::get('admin/degreeprogramrequirements/{id?}', 'Dashboard\DegreerequirementsController@getDegreerequirementsForProgram');
+Route::get('admin/degreerequirement/{id?}', 'Dashboard\DegreerequirementsController@getDegreerequirement');
+Route::post('admin/degreerequirement/{id?}', 'Dashboard\DegreerequirementsController@postDegreerequirement');
+
+
+Route::get('admin/plans/{id?}', 'Dashboard\PlansController@getPlans');
+Route::get('admin/newplan', 'Dashboard\PlansController@getNewplan');
+Route::post('admin/plans/{id?}', 'Dashboard\PlansController@postPlans');
+Route::post('admin/newplan', 'Dashboard\PlansController@postNewplan');
+Route::post('admin/deleteplan', 'Dashboard\PlansController@postDeleteplan');
+Route::post('admin/restoreplan', 'Dashboard\PlansController@postRestoreplan');
+Route::post('admin/forcedeleteplan', 'Dashboard\PlansController@postForcedeleteplan');
+
+
+Route::get('admin/completedcourses/{id?}', 'Dashboard\CompletedcoursesController@getCompletedcourses');
+Route::get('admin/newcompletedcourse', 'Dashboard\CompletedcoursesController@getNewcompletedcourse');
+Route::post('admin/completedcourses/{id?}', 'Dashboard\CompletedcoursesController@postCompletedcourses');
+Route::post('admin/newcompletedcourse', 'Dashboard\CompletedcoursesController@postNewcompletedcourse');
+Route::post('admin/deletecompletedcourse', 'Dashboard\CompletedcoursesController@postDeletecompletedcourse');
 
 /*
  * Routes for ElectivelistsController
