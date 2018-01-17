@@ -11,10 +11,11 @@
           <thead>
           <tr>
             <th>ID</th>
-            <th>Notes</th>
+            <th>Name</th>
+            <th>Credits</th>
             <th>Semester</th>
             <th>Ordering</th>
-            <th>Credits</th>
+            <th>Notes</th>
             <th>Actions</th>
           </tr>
           </thead>
@@ -24,10 +25,11 @@
           <tfoot>
             <tr>
               <th>ID</th>
-              <th>Notes</th>
+              <th>Name</th>
+              <th>Credits</th>
               <th>Semester</th>
               <th>Ordering</th>
-              <th>Credits</th>
+              <th>Notes</th>
               <th>Actions</th>
             </tr>
           </tfoot>

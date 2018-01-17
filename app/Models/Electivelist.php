@@ -13,11 +13,18 @@ class Electivelists extends Model
     }
 
     public function degreerequirements(){
-        return $this->hasMany('App\Models\Degreeelectivecourse');
+      return $this->morphMany('App\Models\Degreerequirement', 'requireable');
     }
 
     public function planrequirements(){
         return $this->hasMany('App\Models\Planelectivecourse');
+    }
+
+    public function scopeFilterName($query, $name)
+    {
+            $filter = str_replace('"', "", $name);
+            $queryStr = "electivelists.name LIKE \"%" . $filter . "%\"";
+            return $query->whereRaw($queryStr);
     }
 
 }

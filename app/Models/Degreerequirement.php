@@ -18,9 +18,14 @@ class Degreerequirement extends Validatable
 
     protected $rules = array(
       'degreeprogram_id' => 'required|exists:degreeprograms,id',
+      'semester' => 'required|integer',
+      'ordering' => 'required|integer',
+      'credits' => 'required|integer',
       'notes' => 'string',
+      'course_id' => 'required_without:electivelist_id|exists:courses,id',
+      'electivelist_id' => 'required_without:course_id|exists:electivelists,id',
     );
 
-    protected $fillable = ['notes', 'degreeprogram_id'];
+    protected $fillable = ['notes', 'degreeprogram_id', 'semester', 'ordering', 'credits'];
 
 }

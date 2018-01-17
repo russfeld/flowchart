@@ -151,6 +151,11 @@ Route::post('admin/newcompletedcourse', 'DashboardController@postNewcompletedcou
 Route::post('admin/deletecompletedcourse', 'DashboardController@postDeletecompletedcourse');
 
 /*
+ * Routes for ElectivelistsController
+ */
+Route::get('electivelists/electivelistfeed', 'ElectivelistsController@getElectivelistfeed');
+
+/*
  * Routes for Authentication
  */
 Route::get('auth/login', 'Auth\AuthController@CASLogin');

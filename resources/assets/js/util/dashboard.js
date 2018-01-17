@@ -69,7 +69,6 @@ exports.ajaxmodalsave = function(data, url, element){
       site.clearFormErrors();
       $('#spin').addClass('hide-spin');
       $(element).modal('hide');
-      resetForm();
       $('#table').DataTable().ajax.reload();
       site.displayMessage(response.data, "success");
     })
@@ -170,15 +169,3 @@ exports.ajaxautocomplete = function(id, url){
 	    }
 	});
 }
-
-/*
- * Function to reset the form on this page
- */
-var resetForm = function(){
-  $(':input','#form')
-    .not(':button, :submit, :reset, :hidden, :disabled')
-    .val('')
-    .removeAttr('checked')
-    .removeAttr('selected');
-	site.clearFormErrors();
-};

@@ -26,6 +26,10 @@ class Course extends Model
     	return $this->prefix . ' ' . $this->numberStr . ' - ' . $this->title;
     }
 
+    public function getShortTitleAttribute(){
+      return $this->prefix . ' ' . $this->numberStr;
+    }
+
     public function getNameAttribute(){
       return $this->title;
     }
@@ -37,6 +41,10 @@ class Course extends Model
             $filter = str_replace('"', "", $name);
             $queryStr = "concat(courses.prefix, \" \", lpad(courses.number, 3, 0), \" \",  courses.title) LIKE \"%" . $filter . "%\"";
             return $query->whereRaw($queryStr);
+    }
+
+    public function degreerequirements(){
+      return $this->morphMany('App\Models\Degreerequirement', 'requireable');
     }
 
 }

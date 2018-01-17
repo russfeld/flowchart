@@ -9,7 +9,17 @@
         <form id="form">
           @include('forms.hidden', ['field' => 'degreeprogram_id', 'label' => 'Degree Program', 'value' => $degreeprogram->id, 'displayvalue' => $degreeprogram->name, 'disabled' => 'disabled="disabled"'])
           @include('forms.text', ['field' => 'id', 'label' => 'ID', 'value' => '', 'disabled' => 'disabled'])
+          @include('forms.text', ['field' => 'credits', 'label' => 'Credits', 'value' => ''])
+          @include('forms.text', ['field' => 'semester', 'label' => 'Semester', 'value' => ''])
+          @include('forms.text', ['field' => 'ordering', 'label' => 'Ordering', 'value' => ''])
           @include('forms.text', ['field' => 'notes', 'label' => 'Notes', 'value' => ''])
+          @include('forms.radio', ['field' => 'requireable', 'label1' => 'Required Course', 'label2' => 'Elective Course'])
+          <div id="requiredcourse">
+            @include('forms.autofill', ['field' => 'course_id', 'label' => 'Course:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course'])
+          </div>
+          <div id="electivecourse" hidden>
+            @include('forms.autofill', ['field' => 'electivelist_id', 'label' => 'Elective:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Elective List'])
+          </div>
         </form>
       </div>
       <div class="modal-footer">

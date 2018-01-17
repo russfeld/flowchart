@@ -559,7 +559,7 @@ class DashboardController extends Controller
       if($id < 0){
         return redirect ('admin/degreeprograms');
       }else{
-        $degreeprogram = Degreeprogram::withTrashed()->with('requirements')->findOrFail($id);
+        $degreeprogram = Degreeprogram::withTrashed()->findOrFail($id);
         return view('dashboard.degreeprogramdetail')->with('degreeprogram', $degreeprogram)->with('page_title', "Degree Program Details");
       }
     }
@@ -568,18 +568,28 @@ class DashboardController extends Controller
       if($id < 0){
         abort(404);
       }else{
-        $degreeprogram = Degreeprogram::withTrashed()->with('requirements')->findOrFail($id);
-
+        $degreeprogram = Degreeprogram::withTrashed()->with('requirements.requireable')->findOrFail($id);
         $resource = new Collection($degreeprogram->requirements, function($requirement) {
-            return[
-                'id' => $requirement->id,
-                'notes' => $requirement->notes,
-                'semester' => $requirement->semester,
-                'ordering' => $requirement->ordering,
-                'credits' => $requirement->credits,
-            ];
+            if($requirement->requireable_type == "App\\Models\\Course"){
+              return[
+                  'id' => $requirement->id,
+                  'notes' => $requirement->notes,
+                  'semester' => $requirement->semester,
+                  'ordering' => $requirement->ordering,
+                  'credits' => $requirement->credits,
+                  'name' => $requirement->requireable->shortTitle,
+              ];
+            }else if($requirement->requireable_type == "App\\Models\\Electivelist"){
+              return[
+                  'id' => $requirement->id,
+                  'notes' => $requirement->notes,
+                  'semester' => $requirement->semester,
+                  'ordering' => $requirement->ordering,
+                  'credits' => $requirement->credits,
+                  'name' => $requirement->requireable->name,
+              ];
+            }
         });
-
         $this->fractal->setSerializer(new JsonSerializer());
     	  return $this->fractal->createData($resource)->toJson();
       }
@@ -589,18 +599,33 @@ class DashboardController extends Controller
       if($id < 0){
         abort(404);
       }else{
-        $degreerequirement = Degreerequirement::findOrFail($id);
+        $degreerequirement = Degreerequirement::with('requireable')->findOrFail($id);
 
         $resource = new Item($degreerequirement, function($requirement) {
+          if($requirement->requireable_type == "App\\Models\\Course"){
             return[
                 'id' => $requirement->id,
                 'notes' => $requirement->notes,
                 'semester' => $requirement->semester,
                 'ordering' => $requirement->ordering,
                 'credits' => $requirement->credits,
+                'type' => 'course',
+                'course_id' => $requirement->requireable->id,
+                'course_name' => $requirement->requireable->fullTitle,
             ];
+          }else if($requirement->requireable_type == "App\\Models\\Electivelist"){
+            return[
+                'id' => $requirement->id,
+                'notes' => $requirement->notes,
+                'semester' => $requirement->semester,
+                'ordering' => $requirement->ordering,
+                'credits' => $requirement->credits,
+                'type' => 'electivelist',
+                'electivelist_id' => $requirement->requireable->id,
+                'electivelist_name' => $requirement->requireable->name,
+            ];
+          }
         });
-
         $this->fractal->setSerializer(new JsonSerializer());
     	  return $this->fractal->createData($resource)->toJson();
       }
@@ -727,8 +752,15 @@ class DashboardController extends Controller
       $degreerequirement = new Degreerequirement();
       if($degreerequirement->validate($data)){
         $degreerequirement->fill($data);
-        $degreerequirement->save();
-        return response()->json(trans('messages.item_saved'));
+        if($request->has('course_id')){
+          $course = Course::findOrFail($request->input('course_id'));
+          $course->degreerequirements()->save($degreerequirement);
+          return response()->json(trans('messages.item_saved'));
+        }else if($request->has('electivelist_id')){
+          $electivelist = Electivelist::findOrFail($request->input('electivelist_id'));
+          $electivelist->degreerequirements()->save($degreerequirement);
+          return response()->json(trans('messages.item_saved'));
+        }
       }else{
         return response()->json($degreerequirement->errors(), 422);
       }
@@ -742,8 +774,15 @@ class DashboardController extends Controller
         $degreerequirement = Degreerequirement::findOrFail($id);
         if($degreerequirement->validate($data)){
           $degreerequirement->fill($data);
-          $degreerequirement->save();
-          return response()->json(trans('messages.item_saved'));
+          if($request->has('course_id')){
+            $course = Course::findOrFail($request->input('course_id'));
+            $course->degreerequirements()->save($degreerequirement);
+            return response()->json(trans('messages.item_saved'));
+          }else if($request->has('electivelist_id')){
+            $electivelist = Electivelist::findOrFail($request->input('electivelist_id'));
+            $electivelist->degreerequirements()->save($degreerequirement);
+            return response()->json(trans('messages.item_saved'));
+          }
         }else{
           return response()->json($degreerequirement->errors(), 422);
         }
