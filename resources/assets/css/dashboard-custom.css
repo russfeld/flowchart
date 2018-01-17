@@ -5709,3 +5709,9 @@ a.nounderline{
   text-decoration: none;
   color: #000000;
 }
+
+.dashboard-detail{
+  background-color: #EEEAF3;
+  border: 1px solid #374850;
+  margin-bottom: 10px;
+}

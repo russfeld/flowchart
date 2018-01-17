@@ -124,7 +124,11 @@ Route::post('admin/deletegroupsession', 'DashboardController@postDeletegroupsess
 Route::get('admin/settings', 'DashboardController@getSettings');
 Route::post('admin/newsetting', 'DashboardController@postNewsetting');
 Route::post('admin/savesetting', 'DashboardController@postSavesetting');
-Route::get('admin/degreeprograms/{id?}', 'DashboardController@getDegreeprograms');
+Route::get('admin/degreeprograms', 'DashboardController@getDegreeprograms');
+Route::get('admin/degreeprograms/{id?}', 'DashboardController@getDegreeprogramDetail');
+Route::post('admin/newdegreerequirement/', 'DashboardController@postNewdegreerequirement');
+Route::post('admin/degreerequirement/{id?}', 'DashboardController@postDegreerequirement');
+Route::get('admin/degreeprograms/{id?}/edit', 'DashboardController@getDegreeprograms');
 Route::get('admin/newdegreeprogram', 'DashboardController@getNewdegreeprogram');
 Route::post('admin/degreeprograms/{id?}', 'DashboardController@postDegreeprograms');
 Route::post('admin/newdegreeprogram', 'DashboardController@postNewdegreeprogram');

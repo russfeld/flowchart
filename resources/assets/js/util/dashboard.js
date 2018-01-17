@@ -55,6 +55,29 @@ exports.ajaxsave = function(data, url, id, loadpicture){
 }
 
 /**
+ * Function save via AJAX on modal form
+ *
+ * @param data - the data to save
+ * @param url - the url to send data to
+ * @param id - the id of the item to be save-dev
+ * @param element - the modal element to close
+ */
+exports.ajaxmodalsave = function(data, url, element){
+  $('#spin').removeClass('hide-spin');
+  window.axios.post(url, data)
+    .then(function(response){
+      site.clearFormErrors();
+      $('#spin').addClass('hide-spin');
+      $(element).modal('hide');
+      resetForm();
+      site.displayMessage(response.data, "success");
+    })
+    .catch(function(error){
+      site.handleError('save', '#', error)
+    });
+}
+
+/**
  * Function to load a picture via AJAX
  *
  * @param id - the user ID of the picture to reload
@@ -146,3 +169,11 @@ exports.ajaxautocomplete = function(id, url){
 	    }
 	});
 }
+
+/*
+ * Function to reset the form on this page
+ */
+var resetForm = function(){
+  $(this).find('form')[0].reset();
+	site.clearFormErrors();
+};

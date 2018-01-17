@@ -35,7 +35,11 @@
       @if ($degreeprogram->trashed())
         <button type="button" class="btn btn-success" id="restore">Restore</button>
       @endif
-      <a type="button" class="btn btn-warning" href="{{ url('/admin/degreeprograms/')}}">Back</a>
+      @if (isset($degreeprogram->id))
+        <a type="button" class="btn btn-warning" href="{{ url('/admin/degreeprograms/' . $degreeprogram->id )}}">Back</a>
+      @else
+        <a type="button" class="btn btn-warning" href="{{ url('/admin/degreeprograms/')}}">Back</a>
+      @endif
     </form>
   </div>
 </div>

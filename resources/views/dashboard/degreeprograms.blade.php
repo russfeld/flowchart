@@ -25,7 +25,7 @@
             <td>{{ $degreeprogram->abbreviation }}</td>
             <td>{{ $degreeprogram->effectivetext }}</td>
             <td>{{ $degreeprogram->department->name or "Unassigned" }}</td>
-            <td><a class="btn btn-primary btn-sm" href="{{url('/admin/degreeprograms/' . $degreeprogram->id)}}" role="button">Edit</a></td>
+            <td><a class="btn btn-primary btn-sm" href="{{url('/admin/degreeprograms/' . $degreeprogram->id)}}" role="button">Details</a></td>
           </tr>
           @endforeach
           <tfoot>

@@ -554,6 +554,15 @@ class DashboardController extends Controller
       }
     }
 
+    public function getDegreeprogramDetail(Request $request, $id = -1){
+      if($id < 0){
+        return redirect ('admin/degreeprograms');
+      }else{
+        $degreeprogram = Degreeprogram::withTrashed()->with('requirements')->findOrFail($id);
+        return view('dashboard.degreeprogramdetail')->with('degreeprogram', $degreeprogram)->with('page_title', "Degree Program Details");
+      }
+    }
+
     public function getDegreeprograms(Request $request, $id = -1){
         if($id < 0){
           if($request->has('deleted')){
@@ -667,6 +676,34 @@ class DashboardController extends Controller
         return response()->json(trans('messages.item_forcedeleted'));
       }else{
         return response()->json(trans('errors.not_trashed'), 404);
+      }
+    }
+
+    public function postNewdegreerequirement(Request $request){
+      $data = $request->all();
+      $degreerequirement = new Degreerequirement();
+      if($degreerequirement->validate($data)){
+        $degreerequirement->fill($data);
+        $degreerequirement->save();
+        return response()->json(trans('messages.item_saved'));
+      }else{
+        return response()->json($degreerequirement->errors(), 422);
+      }
+    }
+
+    public function postDegreerequirement(Request $request, $id = -1){
+      if($id < 0){
+        abort(404);
+      }else{
+        $data = $request->all();
+        $degreerequirement = Degreerequirement::findOrFail($id);
+        if($degreerequirement->validate($data)){
+          $degreerequirement->fill($data);
+          $degreerequirement->save();
+          return response()->json(trans('messages.item_saved'));
+        }else{
+          return response()->json($degreerequirement->errors(), 422);
+        }
       }
     }
 

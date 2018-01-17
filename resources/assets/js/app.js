@@ -120,7 +120,12 @@ var App = {
 				var degreeprogramedit = require('./pages/dashboard/degreeprogramedit');
 				degreeprogramedit.init();
 			},
-			//admin/newdegreeprogream
+			//admin/degreeprogram/{id}
+			getDegreeprogramDetail: function() {
+				var degreeprogramedit = require('./pages/dashboard/degreeprogramdetail');
+				degreeprogramedit.init();
+			},
+			//admin/newdegreeprogram
 			getNewdegreeprogram: function() {
 				var degreeprogramedit = require('./pages/dashboard/degreeprogramedit');
 				degreeprogramedit.init();
