@@ -4,9 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Electivelists extends Model
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Electivelist extends Validatable
 {
     protected $dates = ['created_at', 'updated_at'];
+
+    use softDeletes;
+
+    protected $rules = array(
+      'name' => 'required|string',
+      'abbreviation' => 'required|string|max:10',
+    );
+
+    protected $fillable = ['name', 'abbreviation'];
 
     public function courses(){
         return $this->hasMany('App\Models\Electivelistcourse');

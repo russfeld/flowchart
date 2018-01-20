@@ -127,7 +127,6 @@ class DegreeprogramsController extends Controller
     $degreeprogram = Degreeprogram::withTrashed()->findOrFail($request->input('id'));
     if($degreeprogram->trashed()){
       foreach($degreeprogram->requirements()->get() as $requirement){
-        $requirement->requireable()->delete();
         $requirement->delete();
       }
       foreach($degreeprogram->plans()->get() as $plan){

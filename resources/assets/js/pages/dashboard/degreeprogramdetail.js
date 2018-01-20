@@ -60,7 +60,11 @@ exports.init = function(){
   });
 
   $('#delete').on('click', function(){
-
+    var url = "/admin/deletedegreerequirement";
+    var data = {
+      id: $('#id').val(),
+    };
+    dashboard.ajaxmodaldelete(data, url, '#degreerequirementform');
   });
 
   $('#degreerequirementform').on('shown.bs.modal', showselected);
@@ -112,7 +116,7 @@ exports.init = function(){
   $('input[name=requireable]').on('change', showselected);
 
   dashboard.ajaxautocomplete('course_id', '/courses/coursefeed');
-  dashboard.ajaxautocomplete('electivelist_id', 'electivelists/electivelistfeed');
+  dashboard.ajaxautocomplete('electivelist_id', '/electivelists/electivelistfeed');
 };
 
 /**

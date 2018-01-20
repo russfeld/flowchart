@@ -11,4 +11,5 @@
   <a class="btn btn-primary" href="{{url('/admin/degreeprograms/' . $degreeprogram->id . '/edit')}}" role="button">Edit</a>
   <a type="button" class="btn btn-warning" href="{{ url('/admin/degreeprograms/')}}">Back</a>
 @endif
+  </p>
 </div>

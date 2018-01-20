@@ -156,6 +156,24 @@ var App = {
 			},
 		},
 
+		ElectivelistsController: {
+			//admin/degreeprograms
+			getElectivelists: function() {
+				var electivelistedit = require('./pages/dashboard/electivelistedit');
+				electivelistedit.init();
+			},
+			//admin/degreeprogram/{id}
+			getElectivelistDetail: function() {
+				var electivelistedit = require('./pages/dashboard/electivelistdetail');
+				electivelistedit.init();
+			},
+			//admin/newdegreeprogram
+			getNewelectivelist: function() {
+				var electivelistedit = require('./pages/dashboard/electivelistedit');
+				electivelistedit.init();
+			},
+		},
+
 		PlansController: {
 			//admin/plans
 			getPlans: function() {

@@ -148,7 +148,21 @@ Route::post('admin/newdegreerequirement/', 'Dashboard\DegreerequirementsControll
 Route::get('admin/degreeprogramrequirements/{id?}', 'Dashboard\DegreerequirementsController@getDegreerequirementsForProgram');
 Route::get('admin/degreerequirement/{id?}', 'Dashboard\DegreerequirementsController@getDegreerequirement');
 Route::post('admin/degreerequirement/{id?}', 'Dashboard\DegreerequirementsController@postDegreerequirement');
+Route::post('admin/deletedegreerequirement', 'Dashboard\DegreerequirementsController@postDeletedegreerequirement');
 
+Route::get('admin/electivelists', 'Dashboard\ElectivelistsController@getElectivelists');
+Route::get('admin/electivelists/{id?}', 'Dashboard\ElectivelistsController@getElectivelistDetail');
+Route::get('admin/electivelists/{id?}/edit', 'Dashboard\ElectivelistsController@getElectivelists');
+Route::get('admin/newelectivelist', 'Dashboard\ElectivelistsController@getNewelectivelist');
+Route::post('admin/electivelists/{id?}', 'Dashboard\ElectivelistsController@postElectivelists');
+Route::post('admin/newelectivelist', 'Dashboard\ElectivelistsController@postNewelectivelist');
+Route::post('admin/deleteelectivelist', 'Dashboard\ElectivelistsController@postDeleteelectivelist');
+Route::post('admin/restoreelectivelist', 'Dashboard\ElectivelistsController@postRestoreelectivelist');
+Route::post('admin/forcedeleteelectivelist', 'Dashboard\ElectivelistsController@postForcedeleteelectivelist');
+
+Route::get('admin/electivelistcourses/{id?}', 'Dashboard\ElectivelistcoursesController@getElectivelistcoursesforList');
+Route::post('admin/newelectivelistcourse/', 'Dashboard\ElectivelistcoursesController@postNewelectivelistcourse');
+Route::post('admin/deleteelectivecourse', 'Dashboard\ElectivelistcoursesController@postDeleteelectivelistcourse');
 
 Route::get('admin/plans/{id?}', 'Dashboard\PlansController@getPlans');
 Route::get('admin/newplan', 'Dashboard\PlansController@getNewplan');

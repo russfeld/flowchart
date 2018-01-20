@@ -14,6 +14,12 @@ use App\Http\Controllers\Controller;
 
 class ElectivelistsController extends Controller
 {
+
+  public function __construct()
+  {
+        $this->fractal = new Manager();
+  }
+
   public function getElectivelistfeed(Request $request){
     $this->validate($request, [
           'query' => 'required|string',

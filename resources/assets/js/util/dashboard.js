@@ -59,7 +59,6 @@ exports.ajaxsave = function(data, url, id, loadpicture){
  *
  * @param data - the data to save
  * @param url - the url to send data to
- * @param id - the id of the item to be save-dev
  * @param element - the modal element to close
  */
 exports.ajaxmodalsave = function(data, url, element){
@@ -112,6 +111,31 @@ exports.ajaxdelete = function (data, url, retUrl, soft = false){
     window.axios.post(url, data)
       .then(function(response){
         $(location).attr('href', retUrl);
+      })
+      .catch(function(error){
+        site.handleError('delete', '#', error)
+      });
+  }
+}
+
+/**
+ * Function to delete an item from a modal form
+ *
+ * @param data - the data containing the item to delete
+ * @param url - the URL to send the data to
+ * @param element - the modal element to close
+ */
+exports.ajaxmodaldelete = function (data, url, element){
+  var choice = confirm("Are you sure?");
+	if(choice === true){
+    $('#spin').removeClass('hide-spin');
+    window.axios.post(url, data)
+      .then(function(response){
+        site.clearFormErrors();
+        $('#spin').addClass('hide-spin');
+        $(element).modal('hide');
+        $('#table').DataTable().ajax.reload();
+        site.displayMessage(response.data, "success");
       })
       .catch(function(error){
         site.handleError('delete', '#', error)
