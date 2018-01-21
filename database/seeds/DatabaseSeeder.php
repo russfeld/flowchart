@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SchedulerSeeder::class);
         $this->call(StudentSeeder::class);
         //$this->call(MeetingSeeder::class);
+        $this->call(DegreeProgramSeeder::class);
         Model::reguard();
     }
 }
