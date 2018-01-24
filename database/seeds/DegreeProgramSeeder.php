@@ -27,12 +27,12 @@ class DegreeProgramSeeder extends Seeder
         $degreeprogram -> save();
 
         $this->addElectivelist(1, "CS Natural Science", "CS-NATSCI");
-        $this->addElectivecourses(1, "PHYS 213");
-        $this->addElectivecourses(1, "PHYS 214");
-        $this->addElectivecourses(1, "CHM 210");
-        $this->addElectivecourses(1, "CHM 230");
-        $this->addElectivecourses(1, "BIOL 198");
-        $this->addElectivecourses(1, "BIOL 201");
+        $this->addElectivecourses(1, "PHYS", "213", null);
+        $this->addElectivecourses(1, "PHYS", "214", null);
+        $this->addElectivecourses(1, "CHM", "210", null);
+        $this->addElectivecourses(1, "CHM", "230", null);
+        $this->addElectivecourses(1, "BIOL", "198", null);
+        $this->addElectivecourses(1, "BIOL", "201", null);
 
         $this->addDegreeRequirement(1, 1, 1, 3, "CIS 115", "");
         $this->addDegreeRequirement(1, 2, 1, 3, "CIS 200", "");
@@ -47,9 +47,8 @@ class DegreeProgramSeeder extends Seeder
       $degreerequirement -> ordering = $ordering;
       $degreerequirement -> credits = $credits;
       $degreerequirement -> notes = $notes;
-
-      $course = Course::filterName($courseid)->first();
-      $course->degreerequirements()->save($degreerequirement);
+      $degreerequirement -> course_name = $courseid;
+      $degreerequirement -> save();
     }
 
     public function addDegreeElective($progid, $semester, $ordering, $credits, $elid, $notes){
@@ -59,9 +58,8 @@ class DegreeProgramSeeder extends Seeder
       $degreerequirement -> ordering = $ordering;
       $degreerequirement -> credits = $credits;
       $degreerequirement -> notes = $notes;
-
-      $electivelist = Electivelist::findOrFail($elid);
-      $electivelist->degreerequirements()->save($degreerequirement);
+      $degreerequirement -> electivelist_id = $elid;
+      $degreerequirement -> save();
     }
 
     public function addElectivelist($id, $name, $abbr){
@@ -72,14 +70,12 @@ class DegreeProgramSeeder extends Seeder
       $electivelist -> save();
     }
 
-    public function addElectivecourses($electivelist, $query){
-      $courses = Course::filterName($query)->get();
-
-      foreach($courses as $course){
-        $electivelistcourse = new Electivelistcourse();
-        $electivelistcourse -> electivelist_id = $electivelist;
-        $electivelistcourse -> course_id = $course -> id;
-        $electivelistcourse -> save();
-      }
+    public function addElectivecourses($electivelist, $prefix, $min, $max){
+      $electivelistcourse = new Electivelistcourse();
+      $electivelistcourse -> electivelist_id = $electivelist;
+      $electivelistcourse -> course_prefix = $prefix;
+      $electivelistcourse -> course_min_number = $min;
+      $electivelistcourse -> course_max_number = $max;
+      $electivelistcourse -> save();
     }
 }
