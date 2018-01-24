@@ -1,4 +1,7 @@
 var dashboard = require('../../util/dashboard');
+require('codemirror');
+require('codemirror/mode/xml/xml.js');
+require('summernote');
 
 exports.init = function(){
   var options = dashboard.dataTableOptions;
@@ -6,6 +9,24 @@ exports.init = function(){
   dashboard.init(options);
 
   $("div.newbutton").html('<a type="button" class="btn btn-success" href="/admin/newadvisor">New Advisor</a>');
+
+  $('#notes').summernote({
+		focus: true,
+		toolbar: [
+			// [groupName, [list of buttons]]
+			['style', ['style', 'bold', 'italic', 'underline', 'clear']],
+			['font', ['strikethrough', 'superscript', 'subscript', 'link']],
+			['para', ['ul', 'ol', 'paragraph']],
+			['misc', ['fullscreen', 'codeview', 'help']],
+		],
+		tabsize: 2,
+		codemirror: {
+			mode: 'text/html',
+			htmlMode: true,
+			lineNumbers: true,
+			theme: 'monokai'
+		},
+	});
 
 
   $('#save').on('click', function(){
