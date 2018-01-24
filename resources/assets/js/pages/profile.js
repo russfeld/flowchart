@@ -1,6 +1,27 @@
 var site = require('../util/site');
+require('codemirror');
+require('codemirror/mode/xml/xml.js');
+require('summernote');
 
 exports.init = function(){
+
+	$('#notes').summernote({
+		focus: true,
+		toolbar: [
+			// [groupName, [list of buttons]]
+			['style', ['style', 'bold', 'italic', 'underline', 'clear']],
+			['font', ['strikethrough', 'superscript', 'subscript', 'link']],
+			['para', ['ul', 'ol', 'paragraph']],
+			['misc', ['fullscreen', 'codeview', 'help']],
+		],
+		tabsize: 2,
+		codemirror: {
+			mode: 'text/html',
+			htmlMode: true,
+			lineNumbers: true,
+			theme: 'monokai'
+		},
+	});
 
 	//bind click handler for save button
 	$('#saveProfile').on('click', function(){
