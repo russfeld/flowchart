@@ -130,7 +130,7 @@ class AppServiceProvider extends ServiceProvider
 
             $mail->isSMTP();                                      // Set mailer to use SMTP
             $mail->Host = config('mail.host');  // Specify main and backup SMTP servers
-            if(config('mail.encryption') !== "null"){
+            if(config('mail.encryption') !== "off"){
                 $mail->SMTPAuth = true;                               // Enable SMTP authentication
                 $mail->Username = config('mail.username');                 // SMTP username
                 $mail->Password = config('mail.password');                           // SMTP password
