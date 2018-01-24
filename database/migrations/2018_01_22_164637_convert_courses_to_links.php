@@ -49,7 +49,7 @@ class ConvertCoursesToLinks extends Migration
         $table->dropColumn('course_prefix');
         $table->dropColumn('course_min_number');
         $table->dropColumn('course_max_number');
-        $table->integer('course_id')->unsigned();
+        $table->integer('course_id')->unsigned()->nullable();
         $table->foreign('course_id')->references('id')->on('courses');
       });
     }

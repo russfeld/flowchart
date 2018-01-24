@@ -21,10 +21,18 @@ class Electivelistcourse extends Validatable
 
     public function getFullRangeAttribute(){
       if(is_null($this->course_max_number)){
-        return $this->course_prefix . ' ' . $this->course_min_number;
+        return $this->course_prefix . ' ' . $this->min_str;
       }else{
-        return $this->course_prefix . ' ' . $this->course_min_number . ' - ' . $this->course_max_number;
+        return $this->course_prefix . ' ' . $this->min_str . ' - ' . $this->max_str;
       }
+    }
+
+    public function getMinStrAttribute(){
+    	return str_pad($this->course_min_number, 3, '0', STR_PAD_LEFT);
+    }
+
+    public function getMaxStrAttribute(){
+    	return str_pad($this->course_max_number, 3, '0', STR_PAD_LEFT);
     }
 
 
