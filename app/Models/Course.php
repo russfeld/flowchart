@@ -43,8 +43,4 @@ class Course extends Model
             return $query->whereRaw($queryStr);
     }
 
-    public function degreerequirements(){
-      return $this->morphMany('App\Models\Degreerequirement', 'requireable');
-    }
-
 }

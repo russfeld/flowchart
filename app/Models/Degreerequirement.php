@@ -12,8 +12,8 @@ class Degreerequirement extends Validatable
         return $this->belongsTo('App\Models\Degreeprogram')->withTrashed();
     }
 
-    public function requireable(){
-      return $this->morphTo();
+    public function electivelist(){
+        return $this->belongsTo('App\Models\Electivelist')->withTrashed();
     }
 
     protected $rules = array(
@@ -22,10 +22,10 @@ class Degreerequirement extends Validatable
       'ordering' => 'required|integer',
       'credits' => 'required|integer',
       'notes' => 'string',
-      'course_id' => 'required_without:electivelist_id|exists:courses,id',
-      'electivelist_id' => 'required_without:course_id|exists:electivelists,id',
+      'course_name' => 'required_without:electivelist_id|string',
+      'electivelist_id' => 'required_without:course_name|exists:electivelists,id',
     );
 
-    protected $fillable = ['notes', 'degreeprogram_id', 'semester', 'ordering', 'credits'];
+    protected $fillable = ['notes', 'degreeprogram_id', 'semester', 'ordering', 'credits', 'course_name', 'electivelist_id'];
 
 }

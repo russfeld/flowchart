@@ -41,9 +41,7 @@ exports.init = function(){
     if (selected.length > 0) {
         var selectedVal = selected.val();
         if(selectedVal == 1){
-          if($('#course_id').val() > 0){
-            data.course_id = $('#course_id').val();
-          }
+          data.course_name = $('#course_name').val();
         }else if(selectedVal == 2){
           if($('#electivelist_id').val() > 0){
             data.electivelist_id = $('#electivelist_id').val();
@@ -92,8 +90,7 @@ exports.init = function(){
         $('#notes').val(message.data.notes);
         $('#degreeprogram_idview').val($('#degreeprogram_idview').attr('value'));
         if(message.data.type == "course"){
-          $('#course_id').val(message.data.course_id);
-          $('#course_idtext').html("Selected: (" + message.data.course_id + ") " + message.data.course_name);
+          $('#course_name').val(message.data.course_name);
           $('#requireable1').prop('checked', true);
           $('#requiredcourse').show();
           $('#electivecourse').hide();
@@ -115,7 +112,6 @@ exports.init = function(){
 
   $('input[name=requireable]').on('change', showselected);
 
-  dashboard.ajaxautocomplete('course_id', '/courses/coursefeed');
   dashboard.ajaxautocomplete('electivelist_id', '/electivelists/electivelistfeed');
 };
 
@@ -145,10 +141,12 @@ var resetForm = function(){
   $('#credits').val("");
   $('#notes').val("");
   $('#degreeprogram_idview').val($('#degreeprogram_idview').attr('value'));
-  $('#course_id').val("-1");
-  $('#course_idauto').val("");
+  $('#course_name').val("");
   $('#electivelist_id').val("-1");
   $('#electivelist_idauto').val("");
+  $('#electivelist_idtext').html("Selected (0) ");
+  $('#requireable1').prop('checked', true);
+  $('#requireable2').prop('checked', false);
   $('#requiredcourse').show();
   $('#electivecourse').hide();
 }

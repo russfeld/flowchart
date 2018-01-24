@@ -7,10 +7,7 @@
     <div class="box">
       <div class="box-body">
         @include('dashboard._electivelist', ['_electivelist' => $electivelist, 'buttons' => true])
-          <form id="form">
-            @include('forms.autofill', ['field' => 'course_id', 'label' => 'Course:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course'])
-            <a id="save" class="btn btn-success" href="#" role="button">Add Course</a> <span id="spin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
-          </form>
+
         <table id="table" class="table table-bordered table-striped">
           <thead>
           <tr>
@@ -38,5 +35,7 @@
 <!-- /.col -->
 </div>
 <!-- /.row -->
+
+@include('dashboard._electivelistcourseform', ['electivelist' => $electivelist])
 
 @endsection

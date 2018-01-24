@@ -15,7 +15,7 @@
           @include('forms.text', ['field' => 'notes', 'label' => 'Notes', 'value' => ''])
           @include('forms.radio', ['field' => 'requireable', 'label1' => 'Required Course', 'label2' => 'Elective Course'])
           <div id="requiredcourse">
-            @include('forms.autofill', ['field' => 'course_id', 'label' => 'Course:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course'])
+            @include('forms.text', ['field' => 'course_name', 'label' => 'Course', 'value' => ''])
           </div>
           <div id="electivecourse" hidden>
             @include('forms.autofill', ['field' => 'electivelist_id', 'label' => 'Elective:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Elective List'])

@@ -24,11 +24,7 @@ class Electivelist extends Validatable
     }
 
     public function degreerequirements(){
-      return $this->morphMany('App\Models\Degreerequirement', 'requireable');
-    }
-
-    public function planrequirements(){
-        return $this->hasMany('App\Models\Planelectivecourse');
+      return $this->hasMany('App\Models\Degreerequirement');
     }
 
     public function scopeFilterName($query, $name)

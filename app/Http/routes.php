@@ -163,6 +163,8 @@ Route::post('admin/forcedeleteelectivelist', 'Dashboard\ElectivelistsController@
 Route::get('admin/electivelistcourses/{id?}', 'Dashboard\ElectivelistcoursesController@getElectivelistcoursesforList');
 Route::post('admin/newelectivelistcourse/', 'Dashboard\ElectivelistcoursesController@postNewelectivelistcourse');
 Route::post('admin/deleteelectivecourse', 'Dashboard\ElectivelistcoursesController@postDeleteelectivelistcourse');
+Route::post('admin/electivecourse/{id?}', 'Dashboard\ElectivelistcoursesController@postElectivelistcourse');
+Route::get('admin/electivecourse/{id?}', 'Dashboard\ElectivelistcoursesController@getElectivelistcourse');
 
 Route::get('admin/plans/{id?}', 'Dashboard\PlansController@getPlans');
 Route::get('admin/newplan', 'Dashboard\PlansController@getNewplan');

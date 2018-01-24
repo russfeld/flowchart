@@ -13,8 +13,6 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Electivelist;
 use App\Models\Electivelistcourse;
-use App\Models\Course;
-
 class ElectivelistcoursesController extends Controller
 {
 
@@ -34,7 +32,25 @@ class ElectivelistcoursesController extends Controller
       $resource = new Collection($electivelist->courses, function($course) {
           return[
               'id' => $course->id,
-              'name' => $course->course->fullTitle,
+              'name' => $course->full_range,
+          ];
+      });
+      $this->fractal->setSerializer(new JsonSerializer());
+      return $this->fractal->createData($resource)->toJson();
+    }
+  }
+
+  public function getElectivelistcourse(Request $request, $id = -1){
+    if($id < 0){
+      abort(404);
+    }else{
+      $electivelistcourse = Electivelistcourse::findOrFail($id);
+      $resource = new Item($electivelistcourse, function($course) {
+          return[
+              'id' => $course->id,
+              'course_prefix' => $course->course_prefix,
+              'course_min_number' => $course->course_min_number,
+              'course_max_number' => $course->course_max_number,
           ];
       });
       $this->fractal->setSerializer(new JsonSerializer());
@@ -47,10 +63,32 @@ class ElectivelistcoursesController extends Controller
     $electivelistcourse = new Electivelistcourse();
     if($electivelistcourse->validate($data)){
       $electivelistcourse->fill($data);
+      if(!$request->has('course_max_number')){
+        $electivelistcourse->course_max_number = null;
+      }
       $electivelistcourse->save();
       return response()->json(trans('messages.item_saved'));
     }else{
       return response()->json($electivelistcourse->errors(), 422);
+    }
+  }
+
+  public function postElectivelistcourse(Request $request, $id = 1){
+    if($id < 0){
+      abort(404);
+    }else{
+      $data = $request->all();
+      $electivelistcourse = Electivelistcourse::findOrFail($id);
+      if($electivelistcourse->validate($data)){
+        $electivelistcourse->fill($data);
+        if(!$request->has('course_max_number')){
+          $electivelistcourse->course_max_number = null;
+        }
+        $electivelistcourse->save();
+        return response()->json(trans('messages.item_saved'));
+      }else{
+        return response()->json($electivelistcourse->errors(), 422);
+      }
     }
   }
 
