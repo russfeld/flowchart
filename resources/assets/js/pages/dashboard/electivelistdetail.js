@@ -50,7 +50,7 @@ exports.init = function(){
   });
 
   $('#delete').on('click', function(){
-    var url = "/admin/deletedegreerequirement";
+    var url = "/admin/deleteelectivecourse";
     var data = {
       id: $('#id').val(),
     };
