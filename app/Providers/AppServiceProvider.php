@@ -144,7 +144,7 @@ class AppServiceProvider extends ServiceProvider
             $mail->Port = config('mail.port');                                    // TCP port to connect to
 
             $mail->From = $meeting->advisor->email;
-            $mail->FromName = 'CS Advising Scheduler';
+            $mail->FromName = 'Engineering Advising';
             $mail->addAddress($meeting->student->email, $meeting->student->name);     // Add a recipient
             $mail->addAddress($meeting->advisor->email, $meeting->advisor->name);               // Name is optional
 
@@ -190,7 +190,7 @@ PRODID:-//Microsoft Corporation//Outlook 11.0 MIMEDIR//EN
 VERSION:2.0
 METHOD:REQUEST
 BEGIN:VEVENT
-ORGANIZER;CN=Engineering Advising:MAILTO:noreply@cs.ksu.edu
+ORGANIZER;CN=Engineering Advising:MAILTO:'.$meeting->advisor->email.'
 ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN='.$meeting->advisor->email.':MAILTO:'.$meeting->advisor->email.'
 ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN='.$meeting->student->email.':MAILTO:'.$meeting->student->email.'
 DTSTART:'.$dtstart.'
@@ -215,7 +215,7 @@ PRODID:-//Microsoft Corporation//Outlook 11.0 MIMEDIR//EN
 VERSION:2.0
 METHOD:CANCEL
 BEGIN:VEVENT
-ORGANIZER;CN=Engineering Advising:MAILTO:noreply@cs.ksu.edu
+ORGANIZER;CN=Engineering Advising:MAILTO:'.$meeting->advisor->email.'
 ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN='.$meeting->advisor->email.':MAILTO:'.$meeting->advisor->email.'
 DTSTART:'.$dtstart.'
 DTEND:'.$dtend.'
