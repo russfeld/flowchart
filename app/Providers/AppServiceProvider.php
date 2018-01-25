@@ -143,7 +143,7 @@ class AppServiceProvider extends ServiceProvider
             }
             $mail->Port = config('mail.port');                                    // TCP port to connect to
 
-            $mail->From = 'noreply@cs.ksu.edu';
+            $mail->From = $meeting->advisor->email;
             $mail->FromName = 'CS Advising Scheduler';
             $mail->addAddress($meeting->student->email, $meeting->student->name);     // Add a recipient
             $mail->addAddress($meeting->advisor->email, $meeting->advisor->name);               // Name is optional
