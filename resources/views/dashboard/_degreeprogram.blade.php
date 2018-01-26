@@ -5,7 +5,7 @@
   <div class="visible-xs-block">
   	<h3>{{ $degreeprogram->name }} ({{ $degreeprogram->abbreviation }})<br><small>{{ $degreeprogram->department->name or "Unassigned" }}</small></h3>
   </div>
-	<p><b>Description: </b>{{ $degreeprogram->description }}</a><br>
+	<p><b>Description: </b>{{ $degreeprogram->description }}<br>
 	<b>Effective: </b>{{ $degreeprogram->effectivetext }}<br>
 @if($buttons)
   <a class="btn btn-primary" href="{{url('/admin/degreeprograms/' . $degreeprogram->id . '/edit')}}" role="button">Edit</a>

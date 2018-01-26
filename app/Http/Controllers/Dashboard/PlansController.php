@@ -41,6 +41,15 @@ class PlansController extends Controller
     }
   }
 
+  public function getPlanDetail(Request $request, $id = -1){
+    if($id < 0){
+      return redirect ('admin/plans');
+    }else{
+      $plan = Plan::withTrashed()->findOrFail($id);
+      return view('dashboard.plandetail')->with('plan', $plan)->with('page_title', "Plan Details");
+    }
+  }
+
   public function getNewplan(){
       $plan = new Plan();
       $degreeprograms = Degreeprogram::all();

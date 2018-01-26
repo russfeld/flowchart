@@ -39,7 +39,11 @@
       @if ($plan->trashed())
         <button type="button" class="btn btn-success" id="restore">Restore</button>
       @endif
-      <a type="button" class="btn btn-warning" href="{{ url('/admin/plans/')}}">Back</a>
+      @if (isset($plan->id))
+        <a type="button" class="btn btn-warning" href="{{ url('/admin/plans/' . $plan->id )}}">Back</a>
+      @else
+        <a type="button" class="btn btn-warning" href="{{ url('/admin/plans/')}}">Back</a>
+      @endif
     </form>
   </div>
 </div>

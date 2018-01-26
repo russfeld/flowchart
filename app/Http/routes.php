@@ -166,7 +166,9 @@ Route::post('admin/deleteelectivecourse', 'Dashboard\ElectivelistcoursesControll
 Route::post('admin/electivecourse/{id?}', 'Dashboard\ElectivelistcoursesController@postElectivelistcourse');
 Route::get('admin/electivecourse/{id?}', 'Dashboard\ElectivelistcoursesController@getElectivelistcourse');
 
-Route::get('admin/plans/{id?}', 'Dashboard\PlansController@getPlans');
+Route::get('admin/plans', 'Dashboard\PlansController@getPlans');
+Route::get('admin/plans/{id?}', 'Dashboard\PlansController@getPlanDetail');
+Route::get('admin/plans/{id?}/edit', 'Dashboard\PlansController@getPlans');
 Route::get('admin/newplan', 'Dashboard\PlansController@getNewplan');
 Route::post('admin/plans/{id?}', 'Dashboard\PlansController@postPlans');
 Route::post('admin/newplan', 'Dashboard\PlansController@postNewplan');
@@ -174,6 +176,11 @@ Route::post('admin/deleteplan', 'Dashboard\PlansController@postDeleteplan');
 Route::post('admin/restoreplan', 'Dashboard\PlansController@postRestoreplan');
 Route::post('admin/forcedeleteplan', 'Dashboard\PlansController@postForcedeleteplan');
 
+Route::post('admin/newplanrequirement/', 'Dashboard\PlanrequirementsController@postNewplanrequirement');
+Route::get('admin/planrequirements/{id?}', 'Dashboard\PlanrequirementsController@getPlanrequirementsForPlan');
+Route::get('admin/planrequirement/{id?}', 'Dashboard\PlanrequirementsController@getPlanrequirement');
+Route::post('admin/planrequirement/{id?}', 'Dashboard\PlanrequirementsController@postPlanrequirement');
+Route::post('admin/deleteplanrequirement', 'Dashboard\PlanrequirementsController@postDeleteplanrequirement');
 
 Route::get('admin/completedcourses/{id?}', 'Dashboard\CompletedcoursesController@getCompletedcourses');
 Route::get('admin/newcompletedcourse', 'Dashboard\CompletedcoursesController@getNewcompletedcourse');

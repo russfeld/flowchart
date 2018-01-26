@@ -180,6 +180,11 @@ var App = {
 				var planedit = require('./pages/dashboard/planedit');
 				planedit.init();
 			},
+			//admin/plan/{id}
+			getPlanDetail: function() {
+				var plandetail = require('./pages/dashboard/plandetail');
+				plandetail.init();
+			},
 			//admin/newplan
 			getNewplan: function() {
 				var planedit = require('./pages/dashboard/planedit');
