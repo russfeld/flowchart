@@ -56,7 +56,7 @@
             </div>
           </div>
         	<div class="form-group">
-        		<label class="control-label" for="desc">Description</label>
+        		<label class="control-label" for="desc">Reason for appointment (please be specific):</label>
         		<input type="text" class="form-control" id="desc" aria-describedby="deschelp" >
         		<span id="deschelp" class="help-block"></span>
         	</div>
