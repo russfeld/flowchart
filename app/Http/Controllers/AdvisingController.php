@@ -216,11 +216,13 @@ class AdvisingController extends Controller
         $blackout = Blackout::find($id);
 
         $user = Auth::user();
-        if($user->is_advisor){
-            if($user->advisor->id != $blackout->advisor_id){
-                return response()->json("Cannot edit a blackout not assigned to your advisor record", 500);
-            }
-        }
+
+				// cis640
+				//if($user->is_advisor){
+        //    if($user->advisor->id != $blackout->advisor_id){
+        //        return response()->json("Cannot edit a blackout not assigned to your advisor record", 500);
+        //    }
+        //}
 
         $resource = new Item($blackout, function($blackout){
             return[
@@ -250,13 +252,15 @@ class AdvisingController extends Controller
         $meeting = Meeting::find($id);
 
         $user = Auth::user();
-        if($user->is_advisor){
-            if($user->advisor->id != $meeting->advisor_id){
-                return response()->json("Cannot request a meeting not assigned to your advisor record", 500);
-            }
-        }else{
-            return response()->json("Students cannot request individual meetings", 500);
-        }
+
+				// cis640
+        //if($user->is_advisor){
+        //    if($user->advisor->id != $meeting->advisor_id){
+        //        return response()->json("Cannot request a meeting not assigned to your advisor record", 500);
+        //    }
+        //}else{
+        //    return response()->json("Students cannot request individual meetings", 500);
+        //}
 
         $resource = new Item($meeting, function($meeting){
             return[
@@ -314,7 +318,9 @@ class AdvisingController extends Controller
         $this->validate($request, [
             'id' => 'required|exists:advisors,id',
             'start' => 'required|date',
-            'end' => 'required|date|after:start',
+						// cis640
+            //end' => 'required|date|after:start',
+						'end' => 'required|date',
             'title' => 'required|string',
             'desc' => 'required|string',
             'meetingid' => 'sometimes|required|exists:meetings,id',
@@ -332,15 +338,18 @@ class AdvisingController extends Controller
 		$endTime = Carbon::parse($request->input('end'));
 		$advisorId = $request->input('id');
 
-        if(!$user->is_advisor){
-    		if($endTime->diffInMinutes($startTime) > 60){
-                return response()->json("Meeting cannot be longer than one hour.", 500);
-    		}//Is the scheduled meeting longer than one hour?
+				// cis640
+				/*
+				if(!$user->is_advisor){
+		    		if($endTime->diffInMinutes($startTime) > 60){
+		                return response()->json("Meeting cannot be longer than one hour.", 500);
+		    		}//Is the scheduled meeting longer than one hour?
 
             if(!($startTime->isSameDay($endTime))){
                 return response()->json("Meetings must begin and end on the same date.", 500);
             }
         }
+				*/
 
         if($request->has('meetingid')){
             $collisions = Meeting::where('advisor_id', $advisorId)->where('end', '>', $startTime)->where('start', '<', $endTime)->where('id', '!=', $request->input('meetingid'))->get();
@@ -348,15 +357,21 @@ class AdvisingController extends Controller
             $collisions = Meeting::where('advisor_id', $advisorId)->where('end', '>', $startTime)->where('start', '<', $endTime)->get();
         }
 
+				/*
+				// cis640
         if(!$collisions->isEmpty()){
             return response()->json("There is another meeting scheduled during that time.", 500);
         }
+				*/
 
         $blackouts = Blackoutevent::where('advisor_id', $advisorId)->where('end', '>', $startTime)->where('start', '<', $endTime)->get();
 
+				/*
+				// cis640
         if(!$blackouts->isEmpty()){
             return response()->json("That time is blacked out by the advisor.", 500);
         }
+				*/
 
         if(!$user->is_advisor){
             $this->validate($request, [
@@ -371,9 +386,12 @@ class AdvisingController extends Controller
         if($request->has('meetingid')){
             $meeting = Meeting::find($request->input('meetingid'));
             if(!$user->is_advisor){
+							/*
+							//  cis640
                 if($meeting->student_id != $user->student->id){
                     return response()->json("Cannot modify an appointment not assigned to your student record", 500);
                 }
+								*/
             }
             $meeting->sequence++;
         }else{
@@ -409,9 +427,12 @@ class AdvisingController extends Controller
         $meeting = Meeting::find($request->input('meetingid'));
 
         if(!$user->is_advisor){
+					/*
+					// cis640
             if($meeting->student_id != $user->student->id){
                 return response()->json("Cannot delete an appointment not assigned to your student record", 500);
             }
+						*/
         }
 
         $meeting->delete();
