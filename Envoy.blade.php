@@ -32,7 +32,7 @@ $release = 'release_' . date('YmdHis');
 @task('fetch_repo', ['on' => 'web'])
     [ -d {{ $release_dir }} ] || mkdir {{ $release_dir }};
     cd {{ $release_dir }};
-    git clone -b master {{ $repo }} {{ $release }};
+    git clone -b cis640 {{ $repo }} {{ $release }};
 @endtask
 
 @task('fetch_repo_cis', ['on' => 'cis'])
