@@ -13,36 +13,36 @@ class UpdateCompleteTransferCourses extends Migration
      */
     public function up()
     {
-        Schema::table('completedcourses', function (Blueprint $table) {
-            $table->dropColumn('course_id');
-            $table->dropColumn('planrequirement_id');
-        });
+      Schema::table('completedcourses', function (Blueprint $table) {
+          $table->dropColumn('course_id');
+          $table->dropColumn('planrequirement_id');
+      });
 
-        Schema::table('transfercourses', function (Blueprint $table) {
-            $table->dropColumn('course_id');
-            $table->dropColumn('name');
-            $table->dropColumn('grade');
-            $table->dropColumn('credits');
-            $table->dropColumn('semester');
-            $table->dropColumn('year');
-            $table->foreign('completedcourse_id')->references('id')->on('completedcourses')
-        });
+      Schema::table('transfercourses', function (Blueprint $table) {
+          $table->dropColumn('course_id');
+          $table->dropColumn('name');
+          $table->dropColumn('grade');
+          $table->dropColumn('credits');
+          $table->dropColumn('semester');
+          $table->dropColumn('year');
+          $table->foreign('completedcourse_id')->references('id')->on('completedcourses');
+      });
 
-        Schema::table('planrequirements', function(Blueprint $table){
-          $table->integer('degreerequirement_id')->nullable()->unsigned();
-          $table->foreign('degreerequirement_id')->references('id')->on('degreerequirements');
-        });
+      Schema::table('planrequirements', function(Blueprint $table){
+        $table->integer('degreerequirement_id')->nullable()->unsigned();
+        $table->foreign('degreerequirement_id')->references('id')->on('degreerequirements');
+      });
 
-        Schema::create('completedcourse_planrequirement', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('planrequirement_id')->unsigned();
-            $table->integer('completedcourse_id')->unsigned();
-            $table->integer('user_id')->nullable()->unsigned();
-            $table->foreign('planrequirement_id')->references('id')->on('planrequirements');
-            $table->foreign('completedcourse_id')->references('id')->on('completedcourses');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->timestamps();
-        });
+      Schema::create('completedcourse_planrequirement', function (Blueprint $table) {
+          $table->increments('id');
+          $table->integer('planrequirement_id')->unsigned();
+          $table->integer('completedcourse_id')->unsigned();
+          $table->integer('user_id')->nullable()->unsigned();
+          $table->foreign('planrequirement_id')->references('id')->on('planrequirements');
+          $table->foreign('completedcourse_id')->references('id')->on('completedcourses');
+          $table->foreign('user_id')->references('id')->on('users');
+          $table->timestamps();
+      });
     }
 
     /**
