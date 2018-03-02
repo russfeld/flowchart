@@ -128,7 +128,7 @@ class PostDeploy extends Command
           $editable->contents= "<div class='jumbotron'>
   <div class='container'>
     <h1>Engineering Advising</h1>
-    <p>Welcome to the new K-State Engineering Advising System. This is your one-stop-shop to find classes, view your flowcharts and degree progress, schedule advising appointments, and more! Check out the sections below to get started.</p>
+    <p>Welcome to the new K-State Engineering Advising System. This is your one-stop-shop to find classes, view your flowcharts and degree progress, schedule advising appointments, and more! Check out the sections below to get started.<br>Naughty students kept breaking my website, so no more HTML edits for you!</p>
     <p><a class='btn btn-primary btn-lg' href='/about' role='button'>Learn more &raquo;</a></p>
   </div>
 </div>";

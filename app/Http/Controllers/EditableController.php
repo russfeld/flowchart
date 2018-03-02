@@ -10,6 +10,7 @@ use Auth;
 class EditableController extends Controller
 {
   public function postSave($id = -1, Request $request){
+    /*
     $user = Auth::user();
     if($user->is_advisor){
       if($id < 0){
@@ -29,7 +30,8 @@ class EditableController extends Controller
         }
       }
     }else{
-      return response()->json(trans('errors.advisors_only'), 403);
-    }
+    */
+      return response()->json(trans('errors.unimplmented'), 403);
+    //}
   }
 }
