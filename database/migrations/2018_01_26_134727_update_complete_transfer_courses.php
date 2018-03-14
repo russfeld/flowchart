@@ -25,6 +25,8 @@ class UpdateCompleteTransferCourses extends Migration
           $table->dropColumn('credits');
           $table->dropColumn('semester');
           $table->dropColumn('year');
+          $table->dropForeign('transfercourses_student_id_foreign');
+          $table->dropColumn('student_id');
           $table->foreign('completedcourse_id')->references('id')->on('completedcourses');
       });
 
@@ -68,6 +70,8 @@ class UpdateCompleteTransferCourses extends Migration
           $table->tinyInteger('semester')->unsigned()->default(0);
           $table->smallInteger('year')->unsigned();
           $table->dropForeign('transfercourses_completedcourse_id_foreign');
+          $table->integer('student_id')->unsigned()->nullable();
+          $table->foreign('student_id')->references('id')->on('students');
       });
 
       Schema::table('planrequirements', function(Blueprint $table){

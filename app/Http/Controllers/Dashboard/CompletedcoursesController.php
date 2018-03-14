@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Models\Completedcourse;
+use App\Models\Transfercourse;
 
 class CompletedcoursesController extends Controller
 {
@@ -19,7 +20,7 @@ class CompletedcoursesController extends Controller
 
   public function getCompletedcourses(Request $request, $id = -1){
     if($id < 0){
-      $completedcourses = Completedcourse::with('course', 'student', 'requirement')->get();
+      $completedcourses = Completedcourse::with('student', 'requirement', 'transfercourse')->get();
       return view('dashboard.completedcourses')->with('completedcourses', $completedcourses)->with('page_title', "Completed Courses");
     }else{
       $completedcourse = Completedcourse::findOrFail($id);
@@ -53,6 +54,25 @@ class CompletedcoursesController extends Controller
       if($completedcourse->validate($data)){
         $completedcourse->fill($data);
         $completedcourse->save();
+        if($data['transfer']){
+          if(count($completedcourse->transfercourse)){
+            $transfercourse = $completedcourse->transfercourse;
+          }else{
+            $transfercourse = new Transfercourse();
+          }
+          if($transfercourse->validate($data)){
+            $transfercourse->fill($data);
+            $transfercourse->completedcourse_id = $completedcourse->id;
+            $transfercourse->save();
+          }else{
+            return response()->json($transfercourse->errors(), 422);
+          }
+        }else{
+          if(count($completedcourse->transfercourse)){
+            $transfercourse = $completedcourse->transfercourse;
+            $transfercourse->delete();
+          }
+        }
         return response()->json(trans('messages.item_saved'));
       }else{
         return response()->json($completedcourse->errors(), 422);
@@ -65,7 +85,19 @@ class CompletedcoursesController extends Controller
     $completedcourse = new Completedcourse();
     if($completedcourse->validate($data)){
       $completedcourse->fill($data);
-      $completedcourse->save();
+      if($data['transfer']){
+        $transfercourse = new Transfercourse();
+        if($transfercourse->validate($data)){
+          $completedcourse->save();
+          $transfercourse->fill($data);
+          $transfercourse->completedcourse_id = $completedcourse->id;
+          $transfercourse->save();
+        }else{
+          return response()->json($transfercourse->errors(), 422);
+        }
+      }else{
+        $completedcourse->save();
+      }
       return response()->json(url('admin/completedcourses/' . $completedcourse->id));
     }else{
       return response()->json($completedcourse->errors(), 422);

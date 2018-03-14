@@ -68,7 +68,6 @@
                     <li class="{{ Request::is('admin/electivelists*') ? 'active' : '' }}" ><a href="{{ url('/admin/electivelists') }}">Elective Lists</a></li>
                     <li class="{{ Request::is('admin/plans*') ? 'active' : '' }}" ><a href="{{ url('/admin/plans') }}">Plans</a></li>
                     <li class="{{ Request::is('admin/completedcourses*') ? 'active' : '' }}" ><a href="{{ url('/admin/completedcourses') }}">Completed Courses</a></li>
-                    <li class="{{ Request::is('admin/transfercourses*') ? 'active' : '' }}" ><a href="{{ url('/admin/transfercourses') }}">Transfer Courses</a></li>
                 </ul>
             </li>
             <li class="{{ Request::is('admin/settings*') ? 'active' : '' }}"><a href="{{ url('/admin/settings') }}"><span>Settings</span></a></li>

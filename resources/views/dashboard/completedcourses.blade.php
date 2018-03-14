@@ -16,7 +16,6 @@
               <th>Grade</th>
               <th>Credits</th>
               <th>Student</th>
-              <th>Matched As</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -30,7 +29,6 @@
             <td>{{ $completedcourse->grade }}</td>
             <td>{{ $completedcourse->credits }}</td>
             <td>{{ $completedcourse->student->name or "Unassigned" }}</td>
-            <td>{{ $completedcourse->course->fullTitle or "Unassigned" }}</td>
             <td><a class="btn btn-primary btn-sm" href="{{url('/admin/completedcourses/' . $completedcourse->id)}}" role="button">Edit</a></td>
           </tr>
           @endforeach
@@ -44,7 +42,6 @@
               <th>Grade</th>
               <th>Credits</th>
               <th>Student</th>
-              <th>Matched As</th>
               <th>Actions</th>
             </tr>
           </tfoot>
