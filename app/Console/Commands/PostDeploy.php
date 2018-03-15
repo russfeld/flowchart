@@ -40,11 +40,18 @@ class PostDeploy extends Command
     public function handle()
     {
         $this->info('PostDeploy routine beginning...');
-        $settings = array("groupsessionenabled", "showmessage", "navbar_showcourses", "navbar_showflowcharts", "navbar_showgroupsession");
-        $bar = $this->output->createProgressBar(count($settings));
-        foreach($settings as $setting){
+        $settings_off = array("groupsessionenabled", "showmessage", "navbar_showcourses");
+        $settings_on = array("navbar_showflowcharts", "navbar_showgroupsession");
+        $bar = $this->output->createProgressBar(count($settings_off) + count($settings_on));
+        foreach($settings_off as $setting){
           if(!DbConfig::has($setting)){
             DbConfig::store($setting, false);
+          }
+          $bar->advance();
+        }
+        foreach($settings_on as $setting){
+          if(!DbConfig::has($setting)){
+            DbConfig::store($setting, true);
           }
           $bar->advance();
         }

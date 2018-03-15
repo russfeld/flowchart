@@ -24,6 +24,7 @@ class PlansSeeder extends Seeder
       $plan->degreeprogram_id = 1;
       $plan->student_id = 1;
       $plan->save();
+      $plan->fillRequirementsFromDegree();
 
       $this->addCompletedCourse(1, "CIS 115", "12345", 3, 2018, "LEC", "A", 3, 1);
       $this->addCompletedCourse(2, "CIS 200", "12346", 3, 2018, "LEC", "A", 4, 1);

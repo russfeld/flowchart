@@ -60,7 +60,7 @@ class Plan extends Validatable
       $degreeprogram = $this->degreeprogram;
       foreach($degreeprogram->requirements as $requirement){
         $planrequirement = new Planrequirement();
-        $planrequirement->fill($requirement->getAttributes());
+        $planrequirement->fill(collect($requirement->getAttributes())->except(['degreeprogram_id'])->toArray());
         $planrequirement->degreerequirement_id = $requirement->id;
         $planrequirement->plan_id = $this->id;
         $planrequirement->save();
