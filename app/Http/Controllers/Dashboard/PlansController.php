@@ -88,10 +88,21 @@ class PlansController extends Controller
     if($plan->validate($data)){
       $plan->fill($data);
       $plan->save();
+      $plan->fillRequirementsFromDegree();
       return response()->json(url('admin/plans/' . $plan->id));
     }else{
       return response()->json($plan->errors(), 422);
     }
+  }
+
+  public function postPopulateplan(Request $request){
+    $this->validate($request, [
+      'id' => 'required|exists:plans',
+    ]);
+    $plan = Plan::findOrFail($request->input('id'));
+    $plan->removeRequirements();
+    $plan->fillRequirementsFromDegree();
+    return response()->json(trans('messages.item_populated'));
   }
 
   public function postDeleteplan(Request $request){

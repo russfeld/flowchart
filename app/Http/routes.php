@@ -175,6 +175,7 @@ Route::post('admin/newplan', 'Dashboard\PlansController@postNewplan');
 Route::post('admin/deleteplan', 'Dashboard\PlansController@postDeleteplan');
 Route::post('admin/restoreplan', 'Dashboard\PlansController@postRestoreplan');
 Route::post('admin/forcedeleteplan', 'Dashboard\PlansController@postForcedeleteplan');
+Route::post('admin/populateplan', 'Dashboard\PlansController@postPopulateplan');
 
 Route::post('admin/newplanrequirement/', 'Dashboard\PlanrequirementsController@postNewplanrequirement');
 Route::get('admin/planrequirements/{id?}', 'Dashboard\PlanrequirementsController@getPlanrequirementsForPlan');

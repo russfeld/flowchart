@@ -52,6 +52,17 @@ exports.init = function(){
     dashboard.ajaxrestore(data, url, retUrl);
   });
 
+  $('#repopulate').on('click', function(){
+    var choice = confirm("Are you sure? This will permanently remove all requirements and repopulate them based on the selected degree program. You cannot undo this action.");
+  	if(choice === true){
+      var url = "/admin/populateplan";
+      var data = {
+        id: $('#id').val(),
+      };
+      dashboard.ajaxsave(data, url, id);
+    }
+  })
+
   dashboard.ajaxautocomplete('student_id', '/profile/studentfeed');
 
 };

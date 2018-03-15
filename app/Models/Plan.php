@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Planrequirement;
+use App\Models\Degreeprogram;
+use App\Models\Degreerequirement;
 
 class Plan extends Validatable
 {
@@ -45,5 +48,22 @@ class Plan extends Validatable
           default:
             return "Semester " . $this->start_semester . " " . $this->start_year;
         }
+    }
+
+    public function removeRequirements(){
+      foreach($this->requirements as $requirement){
+        $requirement->delete();
+      }
+    }
+
+    public function fillRequirementsFromDegree(){
+      $degreeprogram = $this->degreeprogram;
+      foreach($degreeprogram->requirements as $requirement){
+        $planrequirement = new Planrequirement();
+        $planrequirement->fill($requirement->getAttributes());
+        $planrequirement->degreerequirement_id = $requirement->id;
+        $planrequirement->plan_id = $this->id;
+        $planrequirement->save();
+      }
     }
 }

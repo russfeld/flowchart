@@ -41,6 +41,7 @@
       @endif
       @if (isset($plan->id))
         <a type="button" class="btn btn-warning" href="{{ url('/admin/plans/' . $plan->id )}}">Back</a>
+        <button type="button" class="btn btn-info" id="repopulate">Reset Degree Requirements</a>
       @else
         <a type="button" class="btn btn-warning" href="{{ url('/admin/plans/')}}">Back</a>
       @endif
