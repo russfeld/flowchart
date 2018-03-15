@@ -205,6 +205,14 @@ var App = {
 			},
 		},
 
+		FlowchartsController: {
+			//flowcharts/view/
+			getFlowchart: function() {
+				var flowchart = require('./pages/flowchart');
+				flowchart.init();
+			},
+		},
+
 	},
 
 	//Function that is called by the page at load. Defined in resources/views/includes/scripts.blade.php

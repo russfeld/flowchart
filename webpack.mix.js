@@ -34,6 +34,8 @@ mix.setPublicPath('public')
 
 mix.sass('resources/assets/sass/app.scss', 'public/css');
 
+mix.sass('resources/assets/sass/flowchart.scss', 'public/css')
+
 mix.styles([
     //'node_modules/admin-lte/dist/css/AdminLTE.css',
     "resources/assets/css/dashboard-custom.css",
@@ -45,7 +47,7 @@ mix.styles([
 //Global Javascript Stuff
 
 mix.js('resources/assets/js/app.js', 'public/js')
-    .extract(['jquery', 'bootstrap', 'lodash', 'axios', 'summernote', 'codemirror', 'fullcalendar', 'devbridge-autocomplete', 'moment', 'eonasdan-bootstrap-datetimepicker-russfeld', 'vue', 'pusher-js', 'ion-sound', 'laravel-echo', 'admin-lte', 'datatables.net', 'datatables.net-bs'])
+    .extract(['jquery', 'bootstrap', 'lodash', 'axios', 'summernote', 'codemirror', 'fullcalendar', 'devbridge-autocomplete', 'moment', 'eonasdan-bootstrap-datetimepicker-russfeld', 'vue', 'pusher-js', 'ion-sound', 'laravel-echo', 'admin-lte', 'datatables.net', 'datatables.net-bs', 'muuri', 'hammerjs', 'web-animations-js'])
     .sourceMaps();
 
 mix.copy('node_modules/ion-sound/sounds/door_bell*', 'public/sounds');

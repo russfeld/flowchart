@@ -23,15 +23,18 @@
     "eonasdan-bootstrap-datetimepicker-russfeld": "git+https://github.com/russfeld/bootstrap-datetimepicker.git",
     "font-awesome": "^4.7.0",
     "fullcalendar": "^3.8.0",
+    "hammerjs": "^2.0.8",
     "ion-sound": "^3.0.7",
     "jquery": "^3.1.1",
     "laravel-echo": "^1.3.3",
     "laravel-mix": "1.*",
     "lodash": "^4.17.4",
     "moment": "^2.20.1",
+    "muuri": "^0.5.4",
     "pusher-js": "^4.2.2",
     "summernote": "^0.8.9",
-    "vue": "^2.1.10"
+    "vue": "^2.1.10",
+    "web-animations-js": "^2.3.1"
   },
   "dependencies": {}
 }
