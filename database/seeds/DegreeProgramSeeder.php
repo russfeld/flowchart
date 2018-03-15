@@ -259,7 +259,7 @@ class DegreeProgramSeeder extends Seeder
         $this->addDegreeRequirement(1, 2, 1, 4, "CIS 200", "");
         $this->addDegreeRequirement(1, 2, 2, 4, "MATH 221", "");
         $this->addDegreeRequirement(1, 2, 3, 3, "ECE 241", "");
-        $this->addDegreeElective(1, 2, 3, 4, 1, "1 of 4");
+        $this->addDegreeElective(1, 2, 4, 4, 1, "1 of 4");
 
         $this->addDegreeRequirement(1, 3, 1, 3, "CIS 300", "");
         $this->addDegreeRequirement(1, 3, 2, 3, "CIS 301", "");
@@ -293,11 +293,11 @@ class DegreeProgramSeeder extends Seeder
         $this->addDegreeElective(1, 7, 4, 3, 7, "");
         $this->addDegreeElective(1, 7, 5, 3, 9, "");
 
-        $this->addDegreeElective(1, 7, 1, 3, 4, "");
-        $this->addDegreeElective(1, 7, 2, 3, 4, "");
-        $this->addDegreeElective(1, 7, 3, 4, 1, "4 of 4");
-        $this->addDegreeElective(1, 7, 4, 3, 8, "5 of 5");
-        $this->addDegreeElective(1, 7, 5, 3, 9, "");
+        $this->addDegreeElective(1, 8, 1, 3, 4, "");
+        $this->addDegreeElective(1, 8, 2, 3, 4, "");
+        $this->addDegreeElective(1, 8, 3, 4, 1, "4 of 4");
+        $this->addDegreeElective(1, 8, 4, 3, 8, "5 of 5");
+        $this->addDegreeElective(1, 8, 5, 3, 9, "");
     }
 
     public function addDegreeRequirement($progid, $semester, $ordering, $credits, $courseid, $notes){

@@ -29,6 +29,34 @@ exports.init = function(){
 
   $("div.newbutton").html('<a type="button" class="btn btn-success" href="#" id="new">New Plan Requirement</a>');
 
+  //added for new semesters table
+  var options2 = {
+    "pageLength": 50,
+    "lengthChange": false,
+  }
+  options2.dom = '<"newbutton2">frtip';
+  options2.ajax = {
+      url: '/admin/plans/plansemesters/' + id,
+      dataSrc: '',
+  };
+  options2.columns = [
+    {'data': 'id'},
+    {'data': 'name'},
+    {'data': 'number'},
+    {'data': 'ordering'},
+    {'data': 'id'},
+  ];
+  options2.columnDefs = [{
+            "targets": -1,
+            "data": 'id',
+            "render": function(data, type, row, meta) {
+              return "<a class=\"btn btn-primary btn-sm editsem\" href=\"/admin/plans/plansemester/" + data + "\" role=\"button\">Edit</a>";
+            }
+  }]
+  $('#tablesem').DataTable(options2);
+
+  $("div.newbutton2").html('<a type="button" class="btn btn-success" href="/admin/plans/newplansemester/' + id + '" id="new2">New Semester</a>');
+
   $('#save').on('click', function(){
     var data = {
       notes: $('#notes').val(),

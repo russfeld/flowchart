@@ -192,6 +192,19 @@ var App = {
 			},
 		},
 
+		PlansemestersController: {
+			//admin/plansemester
+			getPlanSemester: function() {
+				var plansemesteredit = require('./pages/dashboard/plansemesteredit');
+				plansemesteredit.init();
+			},
+			//admin/newplansemester
+			getNewPlanSemester: function() {
+				var plansemesteredit = require('./pages/dashboard/plansemesteredit');
+				plansemesteredit.init();
+			},
+		},
+
 		CompletedcoursesController: {
 			//admin/completedcourses
 			getCompletedcourses: function() {

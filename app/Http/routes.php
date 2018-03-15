@@ -184,6 +184,14 @@ Route::get('admin/planrequirement/{id?}', 'Dashboard\PlanrequirementsController@
 Route::post('admin/planrequirement/{id?}', 'Dashboard\PlanrequirementsController@postPlanrequirement');
 Route::post('admin/deleteplanrequirement', 'Dashboard\PlanrequirementsController@postDeleteplanrequirement');
 
+Route::get('admin/plans/plansemesters/{id?}', 'Dashboard\PlansemestersController@getPlanSemestersForPlan');
+Route::get('admin/plans/plansemester/{id?}', 'Dashboard\PlansemestersController@getPlanSemester');
+Route::get('admin/plans/newplansemester/{id?}', 'Dashboard\PlansemestersController@getNewPlanSemester');
+Route::post('admin/plans/newplansemester/{id?}', 'Dashboard\PlansemestersController@postNewPlanSemester');
+Route::post('admin/plans/plansemester/{id?}', 'Dashboard\PlansemestersController@postPlanSemester');
+Route::post('admin/plans/deleteplansemester/{id?}', 'Dashboard\PlansemestersController@postDeletePlanSemester');
+
+
 Route::get('admin/completedcourses/{id?}', 'Dashboard\CompletedcoursesController@getCompletedcourses');
 Route::get('admin/newcompletedcourse', 'Dashboard\CompletedcoursesController@getNewcompletedcourse');
 Route::post('admin/completedcourses/{id?}', 'Dashboard\CompletedcoursesController@postCompletedcourses');
