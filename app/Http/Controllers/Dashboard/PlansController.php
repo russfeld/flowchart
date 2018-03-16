@@ -89,6 +89,8 @@ class PlansController extends Controller
       $plan->fill($data);
       $plan->save();
       $plan->fillRequirementsFromDegree();
+      $request->session()->put('message', trans('messages.item_saved'));
+      $request->session()->put('type', 'success');
       return response()->json(url('admin/plans/' . $plan->id));
     }else{
       return response()->json($plan->errors(), 422);

@@ -69,6 +69,8 @@ class ElectivelistsController extends Controller
     if($electivelist->validate($data)){
       $electivelist->fill($data);
       $electivelist->save();
+      $request->session()->put('message', trans('messages.item_saved'));
+      $request->session()->put('type', 'success');
       return response()->json(url('admin/electivelists/' . $electivelist->id));
     }else{
       return response()->json($electivelist->errors(), 422);

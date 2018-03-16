@@ -98,6 +98,8 @@ class CompletedcoursesController extends Controller
       }else{
         $completedcourse->save();
       }
+      $request->session()->put('message', trans('messages.item_saved'));
+      $request->session()->put('type', 'success');
       return response()->json(url('admin/completedcourses/' . $completedcourse->id));
     }else{
       return response()->json($completedcourse->errors(), 422);

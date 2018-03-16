@@ -13,7 +13,7 @@ class Electivelistcourse extends Validatable
     }
 
     protected $rules = array(
-      'electivelist_id' => 'required|exists:degreeprograms,id',
+      'electivelist_id' => 'required|exists:electivelists,id',
       'course_prefix' => 'required|string',
       'course_min_number' => 'required|integer|min:0|max:999',
       'course_max_number' => 'sometimes|required|integer|min:0|max:999',

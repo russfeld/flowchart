@@ -94,6 +94,8 @@ class AdvisorsController extends Controller
           $advisor->savePic($request->file('pic'));
         }
         $advisor->save();
+        $request->session()->put('message', trans('messages.item_saved'));
+        $request->session()->put('type', 'success');
         return response()->json(url('admin/advisors/' . $advisor->id));
       }else{
         return response()->json($advisor->errors(), 422);

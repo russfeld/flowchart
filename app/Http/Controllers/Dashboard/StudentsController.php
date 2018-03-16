@@ -96,6 +96,8 @@ class StudentsController extends Controller
         $student->fill($data);
         $student->user()->associate($user);
         $student->save();
+        $request->session()->put('message', trans('messages.item_saved'));
+        $request->session()->put('type', 'success');
         return response()->json(url('admin/students/' . $student->id));
       }else{
         return response()->json($student->errors(), 422);

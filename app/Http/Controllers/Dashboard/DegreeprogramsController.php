@@ -92,6 +92,8 @@ class DegreeprogramsController extends Controller
     if($degreeprogram->validate($data)){
       $degreeprogram->fill($data);
       $degreeprogram->save();
+      $request->session()->put('message', trans('messages.item_saved'));
+      $request->session()->put('type', 'success');
       return response()->json(url('admin/degreeprograms/' . $degreeprogram->id));
     }else{
       return response()->json($degreeprogram->errors(), 422);

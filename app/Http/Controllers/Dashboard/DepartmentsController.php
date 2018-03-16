@@ -60,6 +60,8 @@ class DepartmentsController extends Controller
     if($department->validate($data)){
       $department->fill($data);
       $department->save();
+      $request->session()->put('message', trans('messages.item_saved'));
+      $request->session()->put('type', 'success');
       return response()->json(url('admin/departments/' . $department->id));
     }else{
       return response()->json($department->errors(), 422);
