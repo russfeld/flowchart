@@ -10,6 +10,8 @@ class Semester extends Validatable
 {
     protected $dates = ['created_at', 'updated_at'];
 
+    //https://github.com/felixkiss/uniquewith-validator
+
     protected function rules($params){
       if($params[0] < 0){
         return array(

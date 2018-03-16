@@ -16,6 +16,8 @@ class Degreerequirement extends Validatable
         return $this->belongsTo('App\Models\Electivelist')->withTrashed();
     }
 
+    //https://github.com/felixkiss/uniquewith-validator
+
     protected function rules($params){
       if($params[0] < 0){
         return array(
