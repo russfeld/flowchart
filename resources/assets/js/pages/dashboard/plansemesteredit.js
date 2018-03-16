@@ -13,7 +13,7 @@ exports.init = function(){
     };
     var id = $('#id').val();
     if(id.length == 0){
-      var url = '/admin/plans/newplansemester';
+      var url = '/admin/plans/newplansemester/' + $('#plan_id').val();
     }else{
       var url = '/admin/plans/plansemester/' + id;
     }

@@ -69,7 +69,7 @@ class PlansemestersController extends Controller
       $semester->save();
       $request->session()->put('message', trans('messages.item_saved'));
       $request->session()->put('type', 'success');
-      return response()->json(url('admin/plansemester/' . $semester->id));
+      return response()->json(url('admin/plans/plansemester/' . $semester->id));
     }else{
       return response()->json($semester->errors(), 422);
     }
