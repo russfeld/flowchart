@@ -78,4 +78,78 @@ class FlowchartsController extends Controller
       }
     }
 
+    public function getFlowchartData($id = -1){
+      if($id < 0){
+        abort(404);
+      }else{
+        $user = Auth::user();
+        $plan = Plan::with('requirements.electivelist')->findOrFail($id);
+        if($user->is_advisor || (!$user->is_advisor && $user->student->id == $plan->student_id)){
+          $resource = new Collection($plan->requirements, function($requirement) {
+              if($requirement->electivelist_id === null){
+                return[
+                    'id' => $requirement->id,
+                    'notes' => $requirement->notes,
+                    'semester' => $requirement->semester,
+                    'ordering' => $requirement->ordering,
+                    'credits' => $requirement->credits,
+                    'name' => $requirement->course_name,
+                    'electivelist_name' => '',
+                    'electivelist_id' => -1,
+                ];
+              }else if(!empty($requirement->course_name)){
+                return[
+                    'id' => $requirement->id,
+                    'notes' => $requirement->notes,
+                    'semester' => $requirement->semester,
+                    'ordering' => $requirement->ordering,
+                    'credits' => $requirement->credits,
+                    'name' => $requirement->course_name,
+                    'electivelist_name' => $requirement->electivelist->abbreviation,
+                    'electivelist_id' => $requirement->electivelist_id,
+                ];
+              }else{
+                return[
+                    'id' => $requirement->id,
+                    'notes' => $requirement->notes,
+                    'semester' => $requirement->semester,
+                    'ordering' => $requirement->ordering,
+                    'credits' => $requirement->credits,
+                    'name' => '',
+                    'electivelist_name' => $requirement->electivelist->abbreviation,
+                    'electivelist_id' => $requirement->electivelist_id,
+                ];
+              }
+          });
+          $this->fractal->setSerializer(new JsonSerializer());
+          return $this->fractal->createData($resource)->toJson();
+        }else{
+          abort(404);
+        }
+      }
+    }
+
+    public function getSemesterData($id = -1){
+      if($id < 0){
+        abort(404);
+      }else{
+        $user = Auth::user();
+        $plan = Plan::with('semesters')->findOrFail($id);
+        if($user->is_advisor || (!$user->is_advisor && $user->student->id == $plan->student_id)){
+          $resource = new Collection($plan->semesters, function($semester) {
+              return[
+                  'id' => $semester->id,
+                  'name' => $semester->name,
+                  'number' => $semester->number,
+                  'ordering' => $semester->ordering,
+              ];
+          });
+          $this->fractal->setSerializer(new JsonSerializer());
+          return $this->fractal->createData($resource)->toJson();
+        }else{
+          abort(404);
+        }
+      }
+    }
+
 }

@@ -47,7 +47,7 @@ mix.styles([
 //Global Javascript Stuff
 
 mix.js('resources/assets/js/app.js', 'public/js')
-    .extract(['jquery', 'bootstrap', 'lodash', 'axios', 'summernote', 'codemirror', 'fullcalendar', 'devbridge-autocomplete', 'moment', 'eonasdan-bootstrap-datetimepicker-russfeld', 'vue', 'pusher-js', 'ion-sound', 'laravel-echo', 'admin-lte', 'datatables.net', 'datatables.net-bs', 'muuri', 'hammerjs', 'web-animations-js'])
+    .extract(['jquery', 'bootstrap', 'lodash', 'axios', 'summernote', 'codemirror', 'fullcalendar', 'devbridge-autocomplete', 'moment', 'eonasdan-bootstrap-datetimepicker-russfeld', 'vue', 'pusher-js', 'ion-sound', 'laravel-echo', 'admin-lte', 'datatables.net', 'datatables.net-bs', 'sortablejs', 'vuedraggable'])
     .sourceMaps();
 
 mix.copy('node_modules/ion-sound/sounds/door_bell*', 'public/sounds');

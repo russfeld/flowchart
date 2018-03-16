@@ -43,6 +43,8 @@ Route::get('courses/coursefeed', 'CoursesController@getCoursefeed');
 //Route::controller('flowcharts', 'FlowchartsController');
 Route::get('flowcharts/{id?}', 'FlowchartsController@getIndex');
 Route::get('flowcharts/view/{id}', 'FlowchartsController@getFlowchart');
+Route::get('flowcharts/data/{id}', 'FlowchartsController@getFlowchartData');
+Route::get('flowcharts/semesters/{id}', 'FlowchartsController@getSemesterData');
 
 /*
  * Routes for the AdvisingController

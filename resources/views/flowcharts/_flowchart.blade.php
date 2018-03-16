@@ -1,4 +1,4 @@
-<div class="row bg-light-purple rounded">
+<div class="row bg-light-purple rounded flowchart-header">
 	<div class="col-xs-12">
 	@if($link)
   		<div class="hidden-xs">
@@ -20,7 +20,10 @@
 	</div>
 	<div class="col-xs-12">
 		@if(!$link)
-			<p><a href="{{ url('flowcharts/' . $plan->student_id)}}" class="btn btn-primary">Select a Different Flowchart</a></p>
+			<p>
+				<a href="{{ url('flowcharts/' . $plan->student_id)}}" class="btn btn-primary">Select a Different Flowchart</a>
+				<button class="btn btn-success" id="addsemester">Add a Semester</button>
+			</p>
 		@endif
 	</div>
 </div>

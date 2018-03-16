@@ -1,0 +1,41 @@
+//https://medium.com/@fionnachan/dynamic-number-of-rows-and-columns-with-css-grid-layout-and-css-variables-cb8e8381b6f2
+
+:root{
+  --colNum: 8;
+}
+
+.flowchart{
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(var(--colNum), auto);
+}
+
+.flowchart .sortable-ghost{
+  opacity: 0.4;
+  background-color: gray;
+}
+
+.flowchart .semester{
+  margin: 2px;
+}
+
+.flowchart-header{
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.flowchart .course{
+  height: 75px;
+}
+
+.flowchart .list-group{
+  min-height: 75px;
+}
+
+.flowchart .panel{
+  height: 100%;
+}
+
+.flowchart .course p{
+  margin-bottom: 0px;
+}
