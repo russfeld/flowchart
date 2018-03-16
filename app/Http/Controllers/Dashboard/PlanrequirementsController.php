@@ -104,7 +104,7 @@ class PlanrequirementsController extends Controller
   public function postNewplanrequirement(Request $request){
     $data = $request->all();
     $planrequirement = new Planrequirement();
-    if($planrequirement->validate($data)){
+    if($planrequirement->validateWithParams($data, array(-1, $data['plan_id']))){
       $planrequirement->fill($data);
       if(!$request->has("electivelist_id")){
         $planrequirement->electivelist_id = null;
@@ -122,7 +122,7 @@ class PlanrequirementsController extends Controller
     }else{
       $data = $request->all();
       $planrequirement = Planrequirement::findOrFail($id);
-      if($planrequirement->validate($data)){
+      if($planrequirement->validateWithParams($data, array($id, $data['plan_id']))){
         $planrequirement->fill($data);
         if(!$request->has("electivelist_id")){
           $planrequirement->electivelist_id = null;

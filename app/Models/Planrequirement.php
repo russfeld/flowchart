@@ -17,15 +17,29 @@ class Planrequirement extends Validatable
         return $this->belongsTo('App\Models\Electivelist')->withTrashed();
     }
 
-    protected $rules = array(
-      'plan_id' => 'required|exists:plans,id',
-      'semester' => 'required|integer',
-      'ordering' => 'required|integer',
-      'credits' => 'required|integer',
-      'notes' => 'string',
-      'course_name' => 'required_without:electivelist_id|string',
-      'electivelist_id' => 'required_without:course_name|exists:electivelists,id',
-    );
+    protected function rules($params){
+      if($params[0] < 0){
+        return array(
+          'plan_id' => 'required|exists:plans,id',
+          'semester' => 'required|integer|exists:semesters,number,plan_id,' . $params[1] .'|unique_with:planrequirements,ordering,degreeprogram_id',
+          'ordering' => 'required|integer|unique_with:planrequirements,semester,degreeprogram_id',
+          'credits' => 'required|integer',
+          'notes' => 'string',
+          'course_name' => 'required_without:electivelist_id|string',
+          'electivelist_id' => 'required_without:course_name|exists:electivelists,id',
+        );
+      }else{
+        return array(
+          'plan_id' => 'required|exists:plans,id',
+          'semester' => 'required|integer|exists:semesters,number,plan_id,' . $params[1] .'|unique_with:planrequirements,ordering,degreeprogram_id,' . $params[0],
+          'ordering' => 'required|integer|unique_with:planrequirements,semester,degreeprogram_id,' . $params[0],
+          'credits' => 'required|integer',
+          'notes' => 'string',
+          'course_name' => 'required_without:electivelist_id|string',
+          'electivelist_id' => 'required_without:course_name|exists:electivelists,id',
+        );
+      }
+    }
 
     protected $fillable = ['notes', 'plan_id', 'semester', 'ordering', 'credits', 'course_name', 'electivelist_id'];
 }

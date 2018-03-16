@@ -151,6 +151,7 @@ return [
         Xavrsl\Cas\CasServiceProvider::class,
         Terbium\DbConfig\DbConfigServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
+        Felixkiss\UniqueWithValidator\ServiceProvider::class,
     ],
 
     /*

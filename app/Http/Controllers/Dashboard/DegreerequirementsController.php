@@ -94,7 +94,7 @@ class DegreerequirementsController extends Controller
   public function postNewdegreerequirement(Request $request){
     $data = $request->all();
     $degreerequirement = new Degreerequirement();
-    if($degreerequirement->validate($data)){
+    if($degreerequirement->validateWithParams($data, array(-1))){
       $degreerequirement->fill($data);
       if($request->has("course_name")){
         $degreerequirement->electivelist_id = null;
@@ -115,7 +115,7 @@ class DegreerequirementsController extends Controller
     }else{
       $data = $request->all();
       $degreerequirement = Degreerequirement::findOrFail($id);
-      if($degreerequirement->validate($data)){
+      if($degreerequirement->validateWithParams($data, array($id))){
         $degreerequirement->fill($data);
         if($request->has("course_name")){
           $degreerequirement->electivelist_id = null;

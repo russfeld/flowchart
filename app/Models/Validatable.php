@@ -30,6 +30,23 @@ class Validatable extends Model
         return true;
     }
 
+    public function validateWithParams($data, $params)
+    {
+        // make a new validator object
+        $v = Validator::make($data, $this->rules($params));
+
+        // check for failure
+        if ($v->fails())
+        {
+            // set errors and return false
+            $this->errors = $v->errors();
+            return false;
+        }
+
+        // validation pass
+        return true;
+    }
+
     public function errors()
     {
         return $this->errors;

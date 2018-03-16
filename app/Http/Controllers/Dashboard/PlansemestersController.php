@@ -64,7 +64,7 @@ class PlansemestersController extends Controller
   public function postNewPlanSemester(Request $request){
     $data = $request->all();
     $semester = new Semester();
-    if($semester->validate($data)){
+    if($semester->validateWithParams($data, array(-1))){
       $semester->fill($data);
       $semester->save();
       $request->session()->put('message', trans('messages.item_saved'));
@@ -81,7 +81,7 @@ class PlansemestersController extends Controller
     }else{
       $data = $request->all();
       $semester = Semester::findOrFail($id);
-      if($semester->validate($data)){
+      if($semester->validateWithParams($data, array($id))){
         $semester->fill($data);
         $semester->save();
         return response()->json(trans('messages.item_saved'));
