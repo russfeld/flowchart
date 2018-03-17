@@ -224,6 +224,10 @@ var App = {
 				var flowchart = require('./pages/flowchart');
 				flowchart.init();
 			},
+			getIndex: function() {
+				var flowchart = require('./pages/flowchartlist');
+				flowchart.init();
+			}
 		},
 
 	},
