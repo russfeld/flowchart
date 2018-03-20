@@ -30,7 +30,7 @@ class DegreeprogramsController extends Controller
         }
       }else{
         $degreeprogram = Degreeprogram::withTrashed()->findOrFail($id);
-        $departments = Department::all();
+        $departments = Department::orderBy('name', 'asc')->get();
         $deptUnknown = new Department();
         $deptUnknown->name = "Unassigned";
         $deptUnknown->id = 0;
@@ -56,7 +56,7 @@ class DegreeprogramsController extends Controller
 
   public function getNewdegreeprogram(){
       $degreeprogram = new DegreeProgram();
-      $departments = Department::all();
+      $departments = Department::orderBy('name', 'asc')->get();
       $deptUnknown = new Department();
       $deptUnknown->name = "Unassigned";
       $deptUnknown->id = 0;

@@ -33,7 +33,7 @@ class AdvisorsController extends Controller
       }
     }else{
       $advisor = Advisor::withTrashed()->findOrFail($id);
-      $departments = Department::all();
+      $departments = Department::orderBy('name', 'asc')->get();
       $deptUnknown = new Department();
       $deptUnknown->name = "Unassigned";
       $deptUnknown->id = 0;
@@ -45,7 +45,7 @@ class AdvisorsController extends Controller
   public function getNewadvisor(){
     $advisor = new Advisor();
     $advisor->pic = "";
-    $departments = Department::all();
+    $departments = Department::orderBy('name', 'asc')->get();
     $deptUnknown = new Department();
     $deptUnknown->name = "Unassigned";
     $deptUnknown->id = 0;

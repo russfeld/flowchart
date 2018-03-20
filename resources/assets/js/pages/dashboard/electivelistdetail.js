@@ -21,6 +21,9 @@ exports.init = function(){
               return "<a class=\"btn btn-primary btn-sm edit\" href=\"#\" data-id=\"" + data + "\" role=\"button\">Edit</a>";
             }
   }]
+  options.order = [
+    [1, "asc"],
+  ];
   dashboard.init(options);
 
   $("div.newbutton").html('<a type="button" class="btn btn-success" href="#" id="new">Add Course</a>');

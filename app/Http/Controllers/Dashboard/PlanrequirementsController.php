@@ -35,7 +35,7 @@ class PlanrequirementsController extends Controller
             return[
                 'id' => $requirement->id,
                 'notes' => $requirement->notes,
-                'semester' => $requirement->semester->name,
+                'semester' => $requirement->semester->ordering . " - " . $requirement->semester->name,
                 'ordering' => $requirement->ordering,
                 'credits' => $requirement->credits,
                 'name' => $requirement->course_name,
@@ -44,7 +44,7 @@ class PlanrequirementsController extends Controller
             return[
                 'id' => $requirement->id,
                 'notes' => $requirement->notes,
-                'semester' => $requirement->semester->name,
+                'semester' => $requirement->semester->ordering . " - " . $requirement->semester->name,
                 'ordering' => $requirement->ordering,
                 'credits' => $requirement->credits,
                 'name' => $requirement->course_name . " from " . $requirement->electivelist->name,
@@ -53,7 +53,7 @@ class PlanrequirementsController extends Controller
             return[
                 'id' => $requirement->id,
                 'notes' => $requirement->notes,
-                'semester' => $requirement->semester->name,
+                'semester' => $requirement->semester->ordering . " - " . $requirement->semester->name,
                 'ordering' => $requirement->ordering,
                 'credits' => $requirement->credits,
                 'name' => $requirement->electivelist->name,

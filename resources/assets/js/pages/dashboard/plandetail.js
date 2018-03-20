@@ -24,7 +24,11 @@ exports.init = function(){
             "render": function(data, type, row, meta) {
               return "<a class=\"btn btn-primary btn-sm edit\" href=\"#\" data-id=\"" + data + "\" role=\"button\">Edit</a>";
             }
-  }]
+  }];
+  options.order = [
+    [3, "asc"],
+    [4, "asc"],
+  ];
   dashboard.init(options);
 
   $("div.newbutton").html('<a type="button" class="btn btn-success" href="#" id="new">New Plan Requirement</a>');
@@ -51,7 +55,10 @@ exports.init = function(){
             "render": function(data, type, row, meta) {
               return "<a class=\"btn btn-primary btn-sm editsem\" href=\"/admin/plans/plansemester/" + data + "\" role=\"button\">Edit</a>";
             }
-  }]
+  }];
+  options2.order = [
+    [2, "asc"],
+  ];
   $('#tablesem').DataTable(options2);
 
   $("div.newbutton2").html('<a type="button" class="btn btn-success" href="/admin/plans/newplansemester/' + id + '" id="new2">New Semester</a>');

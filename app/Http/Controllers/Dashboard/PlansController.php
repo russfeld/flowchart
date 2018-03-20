@@ -30,7 +30,7 @@ class PlansController extends Controller
       }
     }else{
       $plan = Plan::withTrashed()->findOrFail($id);
-      $degreeprograms = Degreeprogram::all();
+      $degreeprograms = Degreeprogram::orderBy('name', 'asc')->get();
       $semesters = collect([
         (object)['id' => 0, 'name' => 'Unassigned'],
         (object)['id' => 1, 'name' => 'Spring'],
@@ -52,7 +52,7 @@ class PlansController extends Controller
 
   public function getNewplan(){
       $plan = new Plan();
-      $degreeprograms = Degreeprogram::all();
+      $degreeprograms = Degreeprogram::orderBy('name', 'asc')->get();
       $degreeprogramUnknown = new Degreeprogram();
       $degreeprogramUnknown->name = "Unassigned";
       $degreeprogramUnknown->id = 0;

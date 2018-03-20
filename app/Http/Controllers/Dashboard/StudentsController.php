@@ -32,12 +32,12 @@ class StudentsController extends Controller
         }
       }else{
         $student = Student::withTrashed()->findOrFail($id);
-        $departments = Department::all();
+        $departments = Department::orderBy('name', 'asc')->get();
         $deptUnknown = new Department();
         $deptUnknown->name = "Unassigned";
         $deptUnknown->id = 0;
         $departments->prepend($deptUnknown);
-        $advisors = Advisor::all();
+        $advisors = Advisor::orderBy('name', 'asc')->get();
         $advUnknown = new Advisor();
         $advUnknown->name = "Unassigned";
         $advUnknown->id = 0;
@@ -48,12 +48,12 @@ class StudentsController extends Controller
 
   public function getNewstudent(){
     $student = new Student();
-    $departments = Department::all();
+    $departments = Department::orderBy('name', 'asc')->get();
     $deptUnknown = new Department();
     $deptUnknown->name = "Unassigned";
     $deptUnknown->id = 0;
     $departments->prepend($deptUnknown);
-    $advisors = Advisor::all();
+    $advisors = Advisor::orderBy('name', 'asc')->get();
     $advUnknown = new Advisor();
     $advUnknown->name = "Unassigned";
     $advUnknown->id = 0;
