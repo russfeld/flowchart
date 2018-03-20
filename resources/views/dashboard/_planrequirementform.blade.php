@@ -9,8 +9,9 @@
         <form id="form">
           @include('forms.hidden', ['field' => 'plan_id', 'label' => 'Plan', 'value' => $plan->id, 'displayvalue' => $plan->name, 'disabled' => 'disabled="disabled"'])
           @include('forms.text', ['field' => 'id', 'label' => 'ID', 'value' => '', 'disabled' => 'disabled'])
+          @include('forms.text', ['field' => 'degreerequirement_id', 'label' => 'Degree Requirement ID', 'value' => '', 'disabled' => 'disabled'])
           @include('forms.text', ['field' => 'credits', 'label' => 'Credits', 'value' => ''])
-          @include('forms.text', ['field' => 'semester', 'label' => 'Semester', 'value' => ''])
+          @include('forms.selectajax', ['field' => 'semester_id', 'label' => 'Semester', 'value' => ''])
           @include('forms.text', ['field' => 'ordering', 'label' => 'Ordering', 'value' => ''])
           @include('forms.text', ['field' => 'notes', 'label' => 'Notes', 'value' => ''])
           @include('forms.radio', ['field' => 'requireable', 'label1' => 'Required Course', 'label2' => 'Elective Course'])

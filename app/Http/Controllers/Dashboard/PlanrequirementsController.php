@@ -35,7 +35,7 @@ class PlanrequirementsController extends Controller
             return[
                 'id' => $requirement->id,
                 'notes' => $requirement->notes,
-                'semester' => $requirement->semester,
+                'semester' => $requirement->semester->name,
                 'ordering' => $requirement->ordering,
                 'credits' => $requirement->credits,
                 'name' => $requirement->course_name,
@@ -44,7 +44,7 @@ class PlanrequirementsController extends Controller
             return[
                 'id' => $requirement->id,
                 'notes' => $requirement->notes,
-                'semester' => $requirement->semester,
+                'semester' => $requirement->semester->name,
                 'ordering' => $requirement->ordering,
                 'credits' => $requirement->credits,
                 'name' => $requirement->course_name . " from " . $requirement->electivelist->name,
@@ -53,7 +53,7 @@ class PlanrequirementsController extends Controller
             return[
                 'id' => $requirement->id,
                 'notes' => $requirement->notes,
-                'semester' => $requirement->semester,
+                'semester' => $requirement->semester->name,
                 'ordering' => $requirement->ordering,
                 'credits' => $requirement->credits,
                 'name' => $requirement->electivelist->name,
@@ -76,23 +76,25 @@ class PlanrequirementsController extends Controller
           return[
               'id' => $requirement->id,
               'notes' => $requirement->notes,
-              'semester' => $requirement->semester,
+              'semester_id' => $requirement->semester->id,
               'ordering' => $requirement->ordering,
               'credits' => $requirement->credits,
               'type' => 'course',
               'course_name' => $requirement->course_name,
+              'degreerequirement_id' => $requirement->degreerequirement_id == null ? '' : $requirement->degreerequirement_id,
           ];
         }else{
           return[
               'id' => $requirement->id,
               'notes' => $requirement->notes,
-              'semester' => $requirement->semester,
+              'semester_id' => $requirement->semester->id,
               'ordering' => $requirement->ordering,
               'credits' => $requirement->credits,
               'type' => 'electivelist',
               'course_name' => $requirement->course_name,
               'electivelist_id' => $requirement->electivelist->id,
               'electivelist_name' => $requirement->electivelist->name,
+              'degreerequirement_id' => $requirement->degreerequirement_id == null ? '' : $requirement->degreerequirement_id,
           ];
         }
       });

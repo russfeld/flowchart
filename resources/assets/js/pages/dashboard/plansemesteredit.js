@@ -7,7 +7,6 @@ exports.init = function(){
   $('#save').on('click', function(){
     var data = {
       name: $('#name').val(),
-      number: $('#number').val(),
       ordering: $('#ordering').val(),
       plan_id: $('#plan_id').val(),
     };

@@ -303,8 +303,8 @@ class DegreeProgramSeeder extends Seeder
     public function addDegreeRequirement($progid, $semester, $ordering, $credits, $courseid, $notes){
       $degreerequirement = new Degreerequirement();
       $degreerequirement -> degreeprogram_id = $progid;
-      $degreerequirement -> semester = $semester;
-      $degreerequirement -> ordering = $ordering;
+      $degreerequirement -> semester = $semester - 1;
+      $degreerequirement -> ordering = $ordering - 1;
       $degreerequirement -> credits = $credits;
       $degreerequirement -> notes = $notes;
       $degreerequirement -> course_name = $courseid;
@@ -314,8 +314,8 @@ class DegreeProgramSeeder extends Seeder
     public function addDegreeElective($progid, $semester, $ordering, $credits, $elid, $notes){
       $degreerequirement = new Degreerequirement();
       $degreerequirement -> degreeprogram_id = $progid;
-      $degreerequirement -> semester = $semester;
-      $degreerequirement -> ordering = $ordering;
+      $degreerequirement -> semester = $semester - 1;
+      $degreerequirement -> ordering = $ordering - 1;
       $degreerequirement -> credits = $credits;
       $degreerequirement -> notes = $notes;
       $degreerequirement -> electivelist_id = $elid;

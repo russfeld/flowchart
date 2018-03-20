@@ -42,7 +42,6 @@ exports.init = function(){
   options2.columns = [
     {'data': 'id'},
     {'data': 'name'},
-    {'data': 'number'},
     {'data': 'ordering'},
     {'data': 'id'},
   ];
@@ -61,10 +60,12 @@ exports.init = function(){
     var data = {
       notes: $('#notes').val(),
       plan_id: $('#plan_id').val(),
-      semester: $('#semester').val(),
       ordering: $('#ordering').val(),
       credits: $('#credits').val(),
     };
+    if($('#semester_id').val() > 0){
+      data.semester_id = $('#semester_id').val();
+    }
     var selected = $("input[name='requireable']:checked");
     if (selected.length > 0) {
         var selectedVal = selected.val();
@@ -113,10 +114,10 @@ exports.init = function(){
     window.axios.get(url)
       .then(function(message){
         $('#id').val(message.data.id);
-        $('#semester').val(message.data.semester);
         $('#ordering').val(message.data.ordering);
         $('#credits').val(message.data.credits);
         $('#notes').val(message.data.notes);
+        $('#degreerequirement_id').val(message.data.degreerequirement_id);
         $('#plan_idview').val($('#plan_idview').attr('value'));
         if(message.data.type == "course"){
           $('#course_name').val(message.data.course_name);
@@ -132,7 +133,24 @@ exports.init = function(){
           $('#electivecourse').show();
         }
         $('#delete').show();
-        $('#planrequirementform').modal('show');
+
+        var semester_id = message.data.semester_id;
+
+        //load semesters
+        var planid = $('#plan_id').val();
+        window.axios.get('/admin/plans/plansemesters/' + planid)
+          .then(function(message){
+            var listitems = '';
+            $.each(message.data, function(key, value){
+              listitems += '<option value=' + value.id + '>' + value.name +'</option>';
+            });
+            $('#semester_id').find('option').remove().end().append(listitems);
+            $('#semester_id').val(semester_id);
+            $('#planrequirementform').modal('show');
+          })
+          .catch(function(error){
+            site.handleError('retrieve semesters', '', error);
+          });
       })
       .catch(function(error){
         site.handleError('retrieve requirement', '', error);
@@ -170,6 +188,7 @@ var resetForm = function(){
   $('#ordering').val("");
   $('#credits').val("");
   $('#notes').val("");
+  $('#degreerequirement_id').val("");
   $('#plan_idview').val($('#plan_idview').attr('value'));
   $('#course_name').val("");
   $('#electivelist_id').val("-1");

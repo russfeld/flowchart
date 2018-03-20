@@ -66,31 +66,67 @@ class Plan extends Validatable
 
     public function fillRequirementsFromDegree(){
       $degreeprogram = $this->degreeprogram;
+      $maxSemester = $degreeprogram->requirements->max('semester');
+      $sem = $this->start_semester;
+      $year = $this->start_year;
+      $order = 0;
+      $semesters = array();
+      if($sem == 2){
+        $semester = new Semester();
+        $semester->name = "Summer " . $year;
+        $semester->ordering = $order++;
+        $semester->plan_id = $this->id;
+        $sem = 3;
+        $semester->save();
+        $semesters[$maxSemester + 1] = $semester->id;
+      }
+      for($i = 0; $i <= $maxSemester; $i++){
+        if($sem == 1){
+          $semester = new Semester();
+          $semester->name = "Spring " . $year;
+          $semester->ordering = $order++;
+          $semester->plan_id = $this->id;
+          $sem = 3;
+          $semester->save();
+          $semesters[$i] = $semester->id;
+        }else if ($sem == 3){
+          $semester = new Semester();
+          $semester->name = "Fall " . $year;
+          $semester->ordering = $order++;
+          $semester->plan_id = $this->id;
+          $sem = 1;
+          $year++;
+          $semester->save();
+          $semesters[$i] = $semester->id;
+        }
+      }
       foreach($degreeprogram->requirements as $requirement){
+        $data = collect($requirement->getAttributes())->except(['degreeprogram_id', 'semester'])->toArray();
+        $data['semester_id'] = $semesters[$requirement->semester];
         $planrequirement = new Planrequirement();
-        $planrequirement->fill(collect($requirement->getAttributes())->except(['degreeprogram_id'])->toArray());
+        $planrequirement->fill($data);
         $planrequirement->degreerequirement_id = $requirement->id;
         $planrequirement->plan_id = $this->id;
         $planrequirement->save();
       }
-      $this->fillSemesters();
+
     }
 
     private function fillSemesters(){
       $maxSemester = $this->requirements->max('semester');
       $sem = $this->start_semester;
       $year = $this->start_year;
-      $order = 1;
+      $order = 0;
       if($sem == 2){
         $semester = new Semester();
         $semester->name = "Summer " . $year;
-        $semester->number = 0;
+        $semester->number = $maxSemester + 1;
         $semester->ordering = $order++;
         $semester->plan_id = $this->id;
         $sem = 3;
         $semester->save();
       }
-      for($i = 1; $i <= $maxSemester; $i++){
+      for($i = 0; $i <= $maxSemester; $i++){
         if($sem == 1){
           $semester = new Semester();
           $semester->name = "Spring " . $year;

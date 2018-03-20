@@ -42,7 +42,6 @@
           <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Number</th>
             <th>Ordering</th>
             <th>Actions</th>
           </tr>
@@ -54,7 +53,6 @@
             <tr>
               <th>ID</th>
               <th>Name</th>
-              <th>Number</th>
               <th>Ordering</th>
               <th>Actions</th>
             </tr>

@@ -34,7 +34,6 @@ class PlansemestersController extends Controller
           return[
               'id' => $semester->id,
               'name' => $semester->name,
-              'number' => $semester->number,
               'ordering' => $semester->ordering,
           ];
       });

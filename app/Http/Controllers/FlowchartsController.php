@@ -91,34 +91,37 @@ class FlowchartsController extends Controller
                 return[
                     'id' => $requirement->id,
                     'notes' => $requirement->notes,
-                    'semester' => $requirement->semester,
+                    'semester_id' => $requirement->semester_id,
                     'ordering' => $requirement->ordering,
                     'credits' => $requirement->credits,
                     'name' => $requirement->course_name,
                     'electivelist_name' => '',
                     'electivelist_id' => -1,
+                    'degreerequirement_id' => $requirement->degreerequirement_id == null ? '' : $requirement->degreerequirement_id,
                 ];
               }else if(!empty($requirement->course_name)){
                 return[
                     'id' => $requirement->id,
                     'notes' => $requirement->notes,
-                    'semester' => $requirement->semester,
+                    'semester_id' => $requirement->semester_id,
                     'ordering' => $requirement->ordering,
                     'credits' => $requirement->credits,
                     'name' => $requirement->course_name,
                     'electivelist_name' => $requirement->electivelist->abbreviation,
                     'electivelist_id' => $requirement->electivelist_id,
+                    'degreerequirement_id' => $requirement->degreerequirement_id == null ? '' : $requirement->degreerequirement_id,
                 ];
               }else{
                 return[
                     'id' => $requirement->id,
                     'notes' => $requirement->notes,
-                    'semester' => $requirement->semester,
+                    'semester_id' => $requirement->semester_id,
                     'ordering' => $requirement->ordering,
                     'credits' => $requirement->credits,
                     'name' => '',
                     'electivelist_name' => $requirement->electivelist->abbreviation,
                     'electivelist_id' => $requirement->electivelist_id,
+                    'degreerequirement_id' => $requirement->degreerequirement_id == null ? '' : $requirement->degreerequirement_id,
                 ];
               }
           });
@@ -141,7 +144,6 @@ class FlowchartsController extends Controller
               return[
                   'id' => $semester->id,
                   'name' => $semester->name,
-                  'number' => $semester->number,
                   'ordering' => $semester->ordering,
                   'courses' => array(),
               ];
@@ -212,14 +214,12 @@ class FlowchartsController extends Controller
           $semester = new Semester();
           $semester->plan_id = $plan->id;
           $semester->name = "New Semester";
-          $semester->number = $plan->semesters->max('number') + 1;
           $semester->ordering = $plan->semesters->max('ordering') + 1;
           $semester->save();
           $resource = new Item($semester, function($semester) {
               return[
                   'id' => $semester->id,
                   'name' => $semester->name,
-                  'number' => $semester->number,
                   'ordering' => $semester->ordering,
                   'courses' => array(),
               ];

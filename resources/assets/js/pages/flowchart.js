@@ -14,6 +14,7 @@ exports.init = function(){
       editSemester: editSemester,
       saveSemester: saveSemester,
       deleteSemester: deleteSemester,
+      dropSemester: dropSemester,
     },
     components: {
       draggable,
@@ -40,7 +41,7 @@ var loadData = function(){
     .then(function(response){
       $.each(response.data, function(index, value){
         var semester = window.vm.semesters.find(function(element){
-          return element.number == value.semester;
+          return element.id == value.semester_id;
         })
         semester.courses.push(value);
       })
@@ -79,24 +80,27 @@ var saveSemester = function(event){
 }
 
 var deleteSemester = function(event){
-  var id = $('#id').val();
-  var semid = $(event.target).data('id');
-  var data = {
-    id: semid,
-  };
-  window.axios.post('/flowcharts/semesters/' + id + '/delete', data)
-    .then(function(response){
-      for(var i = 0; i < window.vm.semesters.length; i++){
-        if(window.vm.semesters[i].id == semid){
-          window.vm.semesters.splice(i, 1);
-          break;
+  var choice = confirm("Are you sure?");
+    if(choice === true){
+    var id = $('#id').val();
+    var semid = $(event.target).data('id');
+    var data = {
+      id: semid,
+    };
+    window.axios.post('/flowcharts/semesters/' + id + '/delete', data)
+      .then(function(response){
+        for(var i = 0; i < window.vm.semesters.length; i++){
+          if(window.vm.semesters[i].id == semid){
+            window.vm.semesters.splice(i, 1);
+            break;
+          }
         }
-      }
-      site.displayMessage(response.data, "success");
-    })
-    .catch(function(error){
-      site.displayMessage("AJAX Error", "danger");
-    })
+        site.displayMessage(response.data, "success");
+      })
+      .catch(function(error){
+        site.displayMessage("AJAX Error", "danger");
+      });
+  }
 }
 
 var addSemester = function(){
@@ -113,4 +117,8 @@ var addSemester = function(){
     .catch(function(error){
       site.displayMessage("AJAX Error", "danger");
     })
+}
+
+var dropSemester = function(event){
+  console.log(event);
 }
