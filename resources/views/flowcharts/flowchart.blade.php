@@ -14,11 +14,22 @@
   <template v-for="(semester, index) in semesters">
     <div class="semester" v-bind:data-id="semester.id" :key="semester.id">
       <div class="panel panel-default">
-        <div class="panel-heading clearfix move">
+        <div v-bind:id="'sem-panelhead-' + semester.id" class="panel-heading clearfix move">
           <h4 class="panel-title pull-left">@{{ semester.name }}</h4>
           <div class="btn-group pull-right">
-            <button type="button" class="edit-sem btn btn-default btn-xs" aria-label="Edit"><i class="fa fa-pencil"></i></button>
-            <button type="button" class="delete-sem btn btn-default btn-xs" aria-label="Delete"><i class="fa fa-times"></i></button>
+            <button type="button" class="edit-sem btn btn-default btn-xs" aria-label="Edit" v-bind:data-id="semester.id" title="Edit Semester" v-on:click="editSemester"><i class="fa fa-pencil"></i></button>
+            <template v-if="semester.courses.length == 0">
+              <button type="button" class="delete-sem btn btn-default btn-xs" aria-label="Delete" v-bind:data-id="semester.id" title="Delete Semester" v-on:click="deleteSemester"><i class="fa fa-times"></i></button>
+            </template>
+          </div>
+        </div>
+
+        <div v-bind:id="'sem-paneledit-' + semester.id" class="panel-heading clearfix" hidden>
+          <div class="input-group">
+            <input v-bind:id="'sem-text-' + semester.id" type="text" class="form-control input-sm" v-bind:data-id="semester.id" v-model="semester.name">
+            <div class="input-group-btn">
+              <button type="button" class="save-sem btn btn-success btn-sm" v-bind:data-id="semester.id" aria-label="Save" title="Save Semester" v-on:click="saveSemester"><i class="fa fa-check"></i></button>
+            </div>
           </div>
         </div>
 
@@ -56,7 +67,7 @@
 
 </div>
 
-<button class="btn btn-primary" id="reset">Reset</button>
+<button class="btn btn-primary" id="reset"><i class="fa fa-undo"></i> Reset</button>
 
 
 

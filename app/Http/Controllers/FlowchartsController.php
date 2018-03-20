@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Models\Student;
 use App\Models\Advisor;
 use App\Models\Plan;
+use App\Models\Semester;
 
 class FlowchartsController extends Controller
 {
@@ -142,11 +143,91 @@ class FlowchartsController extends Controller
                   'name' => $semester->name,
                   'number' => $semester->number,
                   'ordering' => $semester->ordering,
+                  'courses' => array(),
               ];
           });
           $this->fractal->setSerializer(new JsonSerializer());
           return $this->fractal->createData($resource)->toJson();
         }else{
+          abort(404);
+        }
+      }
+    }
+
+    public function postSemesterSave(Request $request, $id = -1){
+      if($id < 0){
+        //id not found
+        abort(404);
+      }else{
+        $user = Auth::user();
+        $plan = Plan::with('semesters')->findOrFail($id);
+        if($user->is_advisor || (!$user->is_advisor && $user->student->id == $plan->student_id)){
+          $semester = Semester::findOrFail($request->input('id'));
+          if($semester->plan_id == $id){
+            $semester->name = $request->input('name');
+            $semester->save();
+            return response()->json(trans('messages.item_saved'));
+          }else{
+            //semester id does not match plan id given
+            abort(404);
+          }
+        }else{
+          //cannot edit a plan if you aren't the student or an advisor
+          abort(404);
+        }
+      }
+    }
+
+    public function postSemesterDelete(Request $request, $id = -1){
+      if($id < 0){
+        //id not found
+        abort(404);
+      }else{
+        $user = Auth::user();
+        $plan = Plan::with('semesters')->findOrFail($id);
+        if($user->is_advisor || (!$user->is_advisor && $user->student->id == $plan->student_id)){
+          $semester = Semester::findOrFail($request->input('id'));
+          if($semester->plan_id == $id){
+            $semester->delete();
+            return response()->json(trans('messages.item_deleted'));
+          }else{
+            //semester id does not match plan id given
+            abort(404);
+          }
+        }else{
+          //cannot edit a plan if you aren't the student or an advisor
+          abort(404);
+        }
+      }
+    }
+
+    public function postSemesterAdd(Request $request, $id = -1){
+      if($id < 0){
+        //id not found
+        abort(404);
+      }else{
+        $user = Auth::user();
+        $plan = Plan::with('semesters')->findOrFail($id);
+        if($user->is_advisor || (!$user->is_advisor && $user->student->id == $plan->student_id)){
+          $semester = new Semester();
+          $semester->plan_id = $plan->id;
+          $semester->name = "New Semester";
+          $semester->number = $plan->semesters->max('number') + 1;
+          $semester->ordering = $plan->semesters->max('ordering') + 1;
+          $semester->save();
+          $resource = new Item($semester, function($semester) {
+              return[
+                  'id' => $semester->id,
+                  'name' => $semester->name,
+                  'number' => $semester->number,
+                  'ordering' => $semester->ordering,
+                  'courses' => array(),
+              ];
+          });
+          $this->fractal->setSerializer(new JsonSerializer());
+          return $this->fractal->createData($resource)->toJson();
+        }else{
+          //cannot edit a plan if you aren't the student or an advisor
           abort(404);
         }
       }

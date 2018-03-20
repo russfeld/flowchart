@@ -21,8 +21,8 @@
 	<div class="col-xs-12">
 		@if(!$link)
 			<p>
-				<a href="{{ url('flowcharts/' . $plan->student_id)}}" class="btn btn-primary">Select a Different Flowchart</a>
-				<button class="btn btn-success" id="addsemester">Add a Semester</button>
+				<a href="{{ url('flowcharts/' . $plan->student_id)}}" class="btn btn-primary"><i class="fa fa-list"></i> Select a Different Flowchart</a>
+				<button class="btn btn-success" id="add-sem"><i class="fa fa-plus"></i> Add Semester</button>
 			</p>
 		@endif
 	</div>
