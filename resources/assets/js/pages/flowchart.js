@@ -15,6 +15,7 @@ exports.init = function(){
       saveSemester: saveSemester,
       deleteSemester: deleteSemester,
       dropSemester: dropSemester,
+      dropCourse: dropCourse,
     },
     components: {
       draggable,
@@ -28,14 +29,26 @@ exports.init = function(){
 
 }
 
+/**
+ * Helper function to sort elements based on their ordering
+ *
+ * @param a - first item
+ * @param b - second item
+ * @return - sorting value indicating who should go first
+ */
+var sortFunction = function(a, b){
+	if(a.ordering == b.ordering){
+		return (a.id < b.id ? -1 : 1);
+	}
+	return (a.ordering < b.ordering ? -1 : 1);
+}
+
 var loadData = function(){
   var id = $('#id').val();
   window.axios.get('/flowcharts/semesters/' + id)
   .then(function(response){
     window.vm.semesters = response.data;
-    //for(i = 0; i < window.vm.semesters.length; i++){
-    //  Vue.set(window.vm.semesters[i], 'courses', new Array());
-    //}
+    window.vm.semesters.sort(sortFunction);
     $(document.documentElement)[0].style.setProperty('--colNum', window.vm.semesters.length);
     window.axios.get('/flowcharts/data/' + id)
     .then(function(response){
@@ -44,7 +57,10 @@ var loadData = function(){
           return element.id == value.semester_id;
         })
         semester.courses.push(value);
-      })
+      });
+      $.each(window.vm.semesters, function(index, value){
+        value.courses.sort(sortFunction);
+      });
     })
     .catch(function(error){
       site.handleError('get data', '', error);
@@ -120,5 +136,45 @@ var addSemester = function(){
 }
 
 var dropSemester = function(event){
+  var ordering = [];
+  $.each(window.vm.semesters, function(index, value){
+    ordering.push({
+      id: value.id,
+    });
+  });
+  var data = {
+    ordering: ordering,
+  }
+  var id = $('#id').val();
+  window.axios.post('/flowcharts/semesters/' + id + '/move', data)
+    .then(function(response){
+      site.displayMessage(response.data, "success");
+    })
+    .catch(function(error){
+      site.displayMessage("AJAX Error", "danger");
+    })
+}
+
+var dropCourse = function(event){
   console.log(event);
+  var ordering = [];
+  var toSemIndex = $(event.to).data('id');
+  $.each(window.vm.semesters[toSemIndex].courses, function(index, value){
+    ordering.push({
+      id: value.id,
+    });
+  });
+  var data = {
+    semester_id: window.vm.semesters[toSemIndex].id,
+    course_id: $(event.item).data('id'),
+    ordering: ordering,
+  }
+  var id = $('#id').val();
+  window.axios.post('/flowcharts/data/' + id + '/move', data)
+    .then(function(response){
+      site.displayMessage(response.data, "success");
+    })
+    .catch(function(error){
+      site.displayMessage("AJAX Error", "danger");
+    })
 }

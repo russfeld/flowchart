@@ -15,6 +15,7 @@ use App\Models\Student;
 use App\Models\Advisor;
 use App\Models\Plan;
 use App\Models\Semester;
+use App\Models\Planrequirement;
 
 class FlowchartsController extends Controller
 {
@@ -226,6 +227,110 @@ class FlowchartsController extends Controller
           });
           $this->fractal->setSerializer(new JsonSerializer());
           return $this->fractal->createData($resource)->toJson();
+        }else{
+          //cannot edit a plan if you aren't the student or an advisor
+          abort(404);
+        }
+      }
+    }
+
+    public function postSemesterMove(Request $request, $id = -1){
+      if($id < 0){
+        //id not found
+        abort(404);
+      }else{
+        $user = Auth::user();
+        $plan = Plan::with('semesters')->findOrFail($id);
+        if($user->is_advisor || (!$user->is_advisor && $user->student->id == $plan->student_id)){
+          $semesters = $plan->semesters;
+
+          $ordering = collect($request->input('ordering'));
+
+          if($semesters->count() != $ordering->count()){
+            abort(404);
+          }
+
+          $maxOrder = $semesters->max('ordering') + 1;
+
+          foreach($ordering as $key => $order){
+            $semester = $semesters->where('id', $order['id'])->first();
+            if($semester->ordering != $key){
+              $semester->ordering = $key + $maxOrder;
+              $semester->save();
+            }
+          }
+
+          foreach($semesters as $semester){
+            if($semester->ordering >= $maxOrder){
+              $semester->ordering = $semester->ordering - $maxOrder;
+              $semester->save();
+            }
+          }
+
+          return response()->json(trans('messages.item_saved'));
+        }else{
+          //cannot edit a plan if you aren't the student or an advisor
+          abort(404);
+        }
+      }
+    }
+
+    public function postCourseMove(Request $request, $id = -1){
+      if($id < 0){
+        //id not found
+        abort(404);
+      }else{
+        $user = Auth::user();
+        $plan = Plan::findOrFail($id);
+        if($user->is_advisor || (!$user->is_advisor && $user->student->id == $plan->student_id)){
+          //move requirement to new semester
+          $requirement_moved = Planrequirement::findOrFail($request->input('course_id'));
+          if($requirement_moved->plan_id != $plan->id){
+            //can't move course not on the plan;
+            abort(404);
+          }
+
+          $semester = Semester::findOrFail($request->input('semester_id'));
+          if($semester->plan_id != $plan->id){
+            //can't move course to semester not on the plan;
+            abort(404);
+          }
+
+          //move requirement to new semester
+          if($requirement_moved->semester_id != $semester->id){
+            $maxOrder = $semester->requirements->max('ordering') + 1;
+            $requirement_moved->semester_id = $semester->id;
+            $requirement_moved->ordering = $maxOrder;
+            $requirement_moved->save();
+          }
+
+          //get all requirements for that semester to reorder
+          $requirements = $semester->fresh()->requirements;
+
+          $ordering = collect($request->input('ordering'));
+
+          if($requirements->count() != $ordering->count()){
+            abort(404);
+          }
+
+          $maxOrder = $requirements->max('ordering') + 1;
+
+          foreach($ordering as $key => $order){
+            $requirement = $requirements->where('id', $order['id'])->first();
+            if($requirement->ordering != $key){
+              $requirement->ordering = $key + $maxOrder;
+              $requirement->save();
+            }
+          }
+
+          foreach($requirements as $requirement){
+            if($requirement->ordering >= $maxOrder){
+              $requirement->ordering = $requirement->ordering - $maxOrder;
+              $requirement->save();
+            }
+          }
+
+          return response()->json(trans('messages.item_saved'));
         }else{
           //cannot edit a plan if you aren't the student or an advisor
           abort(404);

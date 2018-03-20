@@ -48,6 +48,8 @@ Route::get('flowcharts/semesters/{id}', 'FlowchartsController@getSemesterData');
 Route::post('flowcharts/semesters/{id}/save', 'FlowchartsController@postSemesterSave');
 Route::post('flowcharts/semesters/{id}/delete', 'FlowchartsController@postSemesterDelete');
 Route::post('flowcharts/semesters/{id}/add', 'FlowchartsController@postSemesterAdd');
+Route::post('flowcharts/semesters/{id}/move', 'FlowchartsController@postSemesterMove');
+Route::post('flowcharts/data/{id}/move', 'FlowchartsController@postCourseMove');
 
 /*
  * Routes for the AdvisingController

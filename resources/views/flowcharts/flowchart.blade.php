@@ -33,7 +33,7 @@
           </div>
         </div>
 
-          <draggable v-model="semester.courses" class="list-group" :options="{group: 'courses', animation: 150}">
+          <draggable v-model="semester.courses" class="list-group" v-bind:data-id="index" :options="{group: 'courses', animation: 150}" @end="dropCourse">
 
               <template v-for="course in semester.courses">
                 <div class="course list-group-item move" v-bind:data-id="course.id" :key="course.id">
