@@ -31,40 +31,17 @@ class PlanrequirementsController extends Controller
     }else{
       $plan = Plan::withTrashed()->with('requirements')->findOrFail($id);
       $resource = new Collection($plan->requirements, function($requirement) {
-          if($requirement->electivelist_id === null){
-            return[
-                'id' => $requirement->id,
-                'notes' => $requirement->notes,
-                'semester' => $requirement->semester->ordering . " - " . $requirement->semester->name,
-                'ordering' => $requirement->ordering,
-                'credits' => $requirement->credits,
-                'name' => $requirement->course_name,
-                'catalog_course' => $requirement->course_id == null ? '' : $requirement->course->fullTitle,
-                'completed_course' => $requirement->completedcourse_id == null ? '' : $requirement->completedcourse->fullTitle,
-            ];
-          }else if(!empty($requirement->course_name)){
-            return[
-                'id' => $requirement->id,
-                'notes' => $requirement->notes,
-                'semester' => $requirement->semester->ordering . " - " . $requirement->semester->name,
-                'ordering' => $requirement->ordering,
-                'credits' => $requirement->credits,
-                'name' => $requirement->course_name . " from " . $requirement->electivelist->name,
-                'catalog_course' => $requirement->course_id == null ? '' : $requirement->course->fullTitle,
-                'completed_course' => $requirement->completedcourse_id == null ? '' : $requirement->completedcourse->fullTitle,
-            ];
-          }else{
-            return[
-                'id' => $requirement->id,
-                'notes' => $requirement->notes,
-                'semester' => $requirement->semester->ordering . " - " . $requirement->semester->name,
-                'ordering' => $requirement->ordering,
-                'credits' => $requirement->credits,
-                'name' => $requirement->electivelist->name,
-                'catalog_course' => $requirement->course_id == null ? '' : $requirement->course->fullTitle,
-                'completed_course' => $requirement->completedcourse_id == null ? '' : $requirement->completedcourse->fullTitle,
-            ];
-          }
+        return[
+            'id' => $requirement->id,
+            'notes' => $requirement->notes,
+            'semester' => $requirement->semester->ordering . " - " . $requirement->semester->name,
+            'ordering' => $requirement->ordering,
+            'credits' => $requirement->credits,
+            'name' => $requirement->course_name,
+            'electivelist_abbr' => $requirement->electivelist_id === null ? '' : $requirement->electivelist->abbreviation,
+            'catalog_course' => $requirement->course_id == null ? '' : $requirement->course->shortTitle,
+            'completed_course' => $requirement->completedcourse_id == null ? '' : $requirement->completedcourse->fullTitle,
+        ];
       });
       $this->fractal->setSerializer(new JsonSerializer());
       return $this->fractal->createData($resource)->toJson();
@@ -78,39 +55,22 @@ class PlanrequirementsController extends Controller
       $planrequirement = Planrequirement::findOrFail($id);
 
       $resource = new Item($planrequirement, function($requirement) {
-        if($requirement->electivelist_id === null){
-          return[
-              'id' => $requirement->id,
-              'notes' => $requirement->notes,
-              'semester_id' => $requirement->semester->id,
-              'ordering' => $requirement->ordering,
-              'credits' => $requirement->credits,
-              'type' => 'course',
-              'course_name' => $requirement->course_name,
-              'degreerequirement_id' => $requirement->degreerequirement_id == null ? '' : $requirement->degreerequirement_id,
-              'catalog_course' => $requirement->course_id == null ? '' : $requirement->course->fullTitle,
-              'course_id' => $requirement->course_id == null ? 0 : $requirement->course_id,
-              'completed_course' => $requirement->completedcourse_id == null ? '' : $requirement->completedcourse->fullTitle,
-              'completedcourse_id' => $requirement->completedcourse_id == null ? 0 : $requirement->completedcourse_id,
-          ];
-        }else{
-          return[
-              'id' => $requirement->id,
-              'notes' => $requirement->notes,
-              'semester_id' => $requirement->semester->id,
-              'ordering' => $requirement->ordering,
-              'credits' => $requirement->credits,
-              'type' => 'electivelist',
-              'course_name' => $requirement->course_name,
-              'electivelist_id' => $requirement->electivelist->id,
-              'electivelist_name' => $requirement->electivelist->name,
-              'degreerequirement_id' => $requirement->degreerequirement_id == null ? '' : $requirement->degreerequirement_id,
-              'catalog_course' => $requirement->course_id == null ? '' : $requirement->course->fullTitle,
-              'course_id' => $requirement->course_id == null ? 0 : $requirement->course_id,
-              'completed_course' => $requirement->completedcourse_id == null ? '' : $requirement->completedcourse->fullTitle,
-              'completedcourse_id' => $requirement->completedcourse_id == null ? 0 : $requirement->completedcourse_id,
-          ];
-        }
+        return[
+            'id' => $requirement->id,
+            'notes' => $requirement->notes,
+            'semester_id' => $requirement->semester->id,
+            'ordering' => $requirement->ordering,
+            'credits' => $requirement->credits,
+            'type' => $requirement->electivelist_id === null ? 'course' : 'electivelist',
+            'course_name' => $requirement->course_name,
+            'electivelist_name' => $requirement->electivelist_id === null ? '' : $requirement->electivelist->name,
+            'electivelist_id' => $requirement->electivelist_id === null ? 0 : $requirement->electivelist_id,
+            'degreerequirement_id' => $requirement->degreerequirement_id == null ? '' : $requirement->degreerequirement_id,
+            'catalog_course' => $requirement->course_id == null ? '' : $requirement->course->fullTitle,
+            'course_id' => $requirement->course_id == null ? 0 : $requirement->course_id,
+            'completed_course' => $requirement->completedcourse_id == null ? '' : $requirement->completedcourse->fullTitle,
+            'completedcourse_id' => $requirement->completedcourse_id == null ? 0 : $requirement->completedcourse_id,
+        ];
       });
       $this->fractal->setSerializer(new JsonSerializer());
       return $this->fractal->createData($resource)->toJson();
@@ -120,7 +80,7 @@ class PlanrequirementsController extends Controller
   public function postNewplanrequirement(Request $request){
     $data = $request->all();
     $planrequirement = new Planrequirement();
-    if($planrequirement->validateWithParams($data, array(-1, $data['plan_id']))){
+    if($planrequirement->validateWithParams($data, array(-1, $data['plan_id'], $data['student_id']))){
       $planrequirement->fill($data);
       if(!$request->has("electivelist_id")){
         $planrequirement->electivelist_id = null;
@@ -138,7 +98,7 @@ class PlanrequirementsController extends Controller
     }else{
       $data = $request->all();
       $planrequirement = Planrequirement::findOrFail($id);
-      if($planrequirement->validateWithParams($data, array($id, $data['plan_id']))){
+      if($planrequirement->validateWithParams($data, array($id, $data['plan_id'], $data['student_id']))){
         $planrequirement->fill($data);
         if(!$request->has("electivelist_id")){
           $planrequirement->electivelist_id = null;

@@ -13,6 +13,7 @@
             <tr>
               <th>ID</th>
               <th>Name</th>
+              <th>Elective</th>
               <th>Credits</th>
               <th>Semester</th>
               <th>Ordering</th>
@@ -29,6 +30,7 @@
             <tr>
               <th>ID</th>
               <th>Name</th>
+              <th>Elective</th>
               <th>Credits</th>
               <th>Semester</th>
               <th>Ordering</th>

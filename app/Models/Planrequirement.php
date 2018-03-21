@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Validator;
 
 class Planrequirement extends Validatable
 {
@@ -42,11 +43,11 @@ class Planrequirement extends Validatable
           'semester_id' => 'required|integer|exists:semesters,id,plan_id,' . $params[1] .'|unique_with:planrequirements,ordering,plan_id',
           'ordering' => 'required|integer|unique_with:planrequirements,semester_id,plan_id',
           'credits' => 'required|integer',
-          'notes' => 'string',
+          'notes' => 'string|max:20',
           'course_name' => 'required_without:electivelist_id|string',
           'electivelist_id' => 'required_without:course_name|exists:electivelists,id',
           'course_id' => 'sometimes|required|exists:courses,id',
-          'completedcourse_id' => 'sometimes|required|exists:completedcourses,id',
+          'completedcourse_id' => 'sometimes|required|exists:completedcourses,id,student_id,' . $params[2],
         );
       }else{
         return array(
@@ -54,13 +55,38 @@ class Planrequirement extends Validatable
           'semester_id' => 'required|integer|exists:semesters,id,plan_id,' . $params[1] .'|unique_with:planrequirements,ordering,plan_id,' . $params[0],
           'ordering' => 'required|integer|unique_with:planrequirements,semester_id,plan_id,' . $params[0],
           'credits' => 'required|integer',
-          'notes' => 'string',
+          'notes' => 'string|max:20',
           'course_name' => 'required_without:electivelist_id|string',
           'electivelist_id' => 'required_without:course_name|exists:electivelists,id',
           'course_id' => 'sometimes|required|exists:courses,id',
-          'completedcourse_id' => 'sometimes|required|exists:completedcourses,id',
+          'completedcourse_id' => 'sometimes|required|exists:completedcourses,id,student_id,' . $params[2],
         );
       }
+    }
+
+    public function customEditValidate($data, $params)
+    {
+        $rules = array(
+          'notes' => 'string|max:20',
+          'course_name' => 'required_without:electivelist_id|string',
+          'electivelist_id' => 'required_without:course_name|exists:electivelists,id',
+          'credits' => 'required|integer',
+          'course_id' => 'sometimes|required|exists:courses,id',
+          'completedcourse_id' => 'sometimes|required|exists:completedcourses,id,student_id,' . $params[0],
+        );
+        // make a new validator object
+        $v = Validator::make($data, $rules);
+
+        // check for failure
+        if ($v->fails())
+        {
+            // set errors and return false
+            $this->errors = $v->errors();
+            return false;
+        }
+
+        // validation pass
+        return true;
     }
 
     protected $fillable = ['notes', 'plan_id', 'semester_id', 'ordering', 'credits', 'course_name', 'electivelist_id', 'course_id', 'completedcourse_id'];

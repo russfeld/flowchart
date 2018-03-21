@@ -27,6 +27,15 @@ exports.init = function(){
   $('#reset').on('click', loadData);
   $('#add-sem').on('click', addSemester);
 
+  $('#saveCourse').on('click', saveCourse);
+  $('#deleteCourse').on('click', deleteCourse);
+
+  ajaxautocomplete('electivelist_id', '/electivelists/electivelistfeed');
+
+  ajaxautocomplete('course_id', '/courses/coursefeed');
+
+  var student_id = $('#student_id').val();
+  ajaxautocomplete('completedcourse_id', '/completedcourses/completedcoursefeed/' + student_id);
 }
 
 /**
@@ -183,14 +192,101 @@ var editCourse = function(event){
   var semIndex = $(event.target).data('sem');
   var course = window.vm.semesters[semIndex].courses[courseIndex];
   $('#course_name').val(course.name);
-  $('#electivelist_name').val(course.electivelist_name);
-  $('#match').val();
   $('#credits').val(course.credits);
   $('#notes').val(course.notes);
+  $('#planrequirement_id').val(course.id);
+  $('#electivelist_idauto').val('');
+  $('#electivelist_idtext').html("Selected: (" + course.electivelist_id + ") " + site.truncateText(course.electivelist_name, 30));
+  $('#course_idauto').val('');
+  $('#course_idtext').html("Selected: (" + course.course_id + ") " + site.truncateText(course.course_name, 30));
+  $('#completedcourse_idauto').val('');
+  $('#completedcourse_idtext').html("Selected: (" + course.completedcourse_id + ") " + site.truncateText(course.completedcourse_name, 30));
+  if(course.degreerequirement_id <= 0){
+    $('#course_name').prop('disabled', false);
+    $('#credits').prop('disabled', false);
+    $('#electivelist_idauto').prop('disabled', false);
+    $('#deleteCourse').show();
+  }else{
+    if(course.electivelist_id <= 0){
+      $('#course_name').prop('disabled', true);
+    }else{
+      $('#course_name').prop('disabled', false);
+    }
+    $('#credits').prop('disabled', true);
+    $('#electivelist_idauto').prop('disabled', true);
+    $('#deleteCourse').hide();
+  }
+
   $('#editCourse').modal('show');
+}
+
+var saveCourse = function(){
+  $('#spin').removeClass('hide-spin');
+  var id = $('#id').val();
+  var planrequirement_id = $('#planrequirement_id').val();
+  var data = {
+    notes: $('#notes').val(),
+  }
+  if($('#planrequirement_id').val().length > 0){
+    data.planrequirement_id = $('#planrequirement_id').val();
+  }
+  if($('#course_id').val() > 0){
+    data.course_id = $('#course_id').val();
+  }
+  if($('#completedcourse_id').val() > 0){
+    data.completedcourse_id = $('#completedcourse_id').val();
+  }
+  if(!$('#course_name').is(':disabled')){
+    data.course_name = $('#course_name').val();
+  }
+  if(!$('#credits').is(':disabled')){
+    data.credits = $('#credits').val();
+  }
+  if(!$('#electivelist_idauto').is(':disabled')){
+    if($('#electivelist_id').val() > 0){
+      data.electivelist_id = $('#electivelist_id').val();
+    }
+  }
+  window.axios.post('/flowcharts/data/' + id + '/save', data)
+    .then(function(response){
+      $('#editCourse').modal('hide');
+      $('#spin').addClass('hide-spin');
+      site.displayMessage(response.data, "success");
+      loadData();
+    })
+    .catch(function(error){
+      site.handleError("save course", "#editCourse", error);
+    });
 
 }
 
 var deleteCourse = function(event){
   console.log($(event.target).data('id'));
+}
+
+/**
+ * Function to autocomplete a field (duplicated from dashboard)
+ *
+ * @param id - the ID of the field
+ * @param url - the URL to request data from
+ */
+var ajaxautocomplete = function(id, url){
+  $('#' + id + 'auto').autocomplete({
+	    serviceUrl: url,
+	    ajaxSettings: {
+	    	dataType: "json"
+	    },
+      minChars: 3,
+	    onSelect: function (suggestion) {
+	        $('#' + id).val(suggestion.data);
+          $('#' + id + 'text').html("Selected: (" + suggestion.data + ") " + site.truncateText(suggestion.value, 30));
+	    },
+	    transformResult: function(response) {
+	        return {
+	            suggestions: $.map(response.data, function(dataItem) {
+	                return { value: dataItem.value, data: dataItem.data };
+	            })
+	        };
+	    }
+	});
 }

@@ -88,43 +88,22 @@ class FlowchartsController extends Controller
         $plan = Plan::with('requirements.electivelist')->findOrFail($id);
         if($user->is_advisor || (!$user->is_advisor && $user->student->id == $plan->student_id)){
           $resource = new Collection($plan->requirements, function($requirement) {
-              if($requirement->electivelist_id === null){
-                return[
-                    'id' => $requirement->id,
-                    'notes' => $requirement->notes,
-                    'semester_id' => $requirement->semester_id,
-                    'ordering' => $requirement->ordering,
-                    'credits' => $requirement->credits,
-                    'name' => $requirement->course_name,
-                    'electivelist_name' => '',
-                    'electivelist_id' => -1,
-                    'degreerequirement_id' => $requirement->degreerequirement_id == null ? '' : $requirement->degreerequirement_id,
-                ];
-              }else if(!empty($requirement->course_name)){
-                return[
-                    'id' => $requirement->id,
-                    'notes' => $requirement->notes,
-                    'semester_id' => $requirement->semester_id,
-                    'ordering' => $requirement->ordering,
-                    'credits' => $requirement->credits,
-                    'name' => $requirement->course_name,
-                    'electivelist_name' => $requirement->electivelist->abbreviation,
-                    'electivelist_id' => $requirement->electivelist_id,
-                    'degreerequirement_id' => $requirement->degreerequirement_id == null ? '' : $requirement->degreerequirement_id,
-                ];
-              }else{
-                return[
-                    'id' => $requirement->id,
-                    'notes' => $requirement->notes,
-                    'semester_id' => $requirement->semester_id,
-                    'ordering' => $requirement->ordering,
-                    'credits' => $requirement->credits,
-                    'name' => '',
-                    'electivelist_name' => $requirement->electivelist->abbreviation,
-                    'electivelist_id' => $requirement->electivelist_id,
-                    'degreerequirement_id' => $requirement->degreerequirement_id == null ? '' : $requirement->degreerequirement_id,
-                ];
-              }
+            return[
+                'id' => $requirement->id,
+                'notes' => $requirement->notes,
+                'semester_id' => $requirement->semester_id,
+                'ordering' => $requirement->ordering,
+                'credits' => $requirement->credits,
+                'name' => empty($requirement->course_name) ? '' : $requirement->course_name,
+                'electivelist_name' => $requirement->electivelist_id === null ? '' : $requirement->electivelist->name,
+                'electivelist_abbr' => $requirement->electivelist_id === null ? '' : $requirement->electivelist->abbreviation,
+                'electivelist_id' => $requirement->electivelist_id === null ? 0 : $requirement->electivelist_id,
+                'degreerequirement_id' => $requirement->degreerequirement_id == null ? 0 : $requirement->degreerequirement_id,
+                'course_name' => $requirement->course_id == null ? '' : $requirement->course->fullTitle,
+                'course_id' => $requirement->course_id == null ? -1 : $requirement->course_id,
+                'completedcourse_name' => $requirement->completedcourse_id == null ? '' : $requirement->completedcourse->fullTitle,
+                'completedcourse_id' => $requirement->completedcourse_id == null ? 0 : $requirement->completedcourse_id,
+            ];
           });
           $this->fractal->setSerializer(new JsonSerializer());
           return $this->fractal->createData($resource)->toJson();
@@ -331,6 +310,43 @@ class FlowchartsController extends Controller
           }
 
           return response()->json(trans('messages.item_saved'));
+        }else{
+          //cannot edit a plan if you aren't the student or an advisor
+          abort(404);
+        }
+      }
+    }
+
+    public function postCourseSave(Request $request, $id = -1){
+      if($id < 0){
+        //id not found
+        abort(404);
+      }else{
+        $user = Auth::user();
+        $plan = Plan::findOrFail($id);
+        if($user->is_advisor || (!$user->is_advisor && $user->student->id == $plan->student_id)){
+          $data = $request->all();
+          if($request->has('planrequirement_id')){
+            $planrequirement = Planrequirement::findOrFail($data['planrequirement_id']);
+            if($planrequirement->degreerequirement_id == null){
+              if($planrequirement->customEditValidate($data, array($planrequirement->plan->student_id))){
+                $planrequirement->fill($data);
+                if(!$request->has("electivelist_id")){
+                  $planrequirement->electivelist_id = null;
+                }
+                $planrequirement->save();
+                return response()->json(trans('messages.item_saved'));
+              }else{
+                return response()->json($planrequirement->errors(), 422);
+              }
+            }else{
+              //is not custom, so only certain fields can be updated
+            }
+          }else{
+            //new requirement
+          }
+
+          abort(403);
         }else{
           //cannot edit a plan if you aren't the student or an advisor
           abort(404);

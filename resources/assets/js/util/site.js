@@ -77,3 +77,19 @@ exports.handleError = function(message, element, error){
 		$(element + 'spin').addClass('hide-spin');
 	}
 }
+
+/**
+ * Function to truncate text
+ *
+ * @param text - the text to truncate
+ * @param length - the maximum length
+ *
+ * http://jsfiddle.net/schadeck/GpCZL/
+ */
+exports.truncateText = function(text, length){
+	if(text.length > length){
+		return $.trim(text).substring(0, length).split(" ").slice(0, -1).join(" ") + "...";
+	}else{
+		return text;
+	}
+}

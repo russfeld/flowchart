@@ -8,35 +8,17 @@
       <div class="modal-body">
       	<form>
 
-      		<div class="form-group">
-        		<label class="control-label" for="course_name">Course Name</label>
-        		<input type="text" class="form-control" id="course_name" aria-describedby="course_namehelp">
-        		<span id="course_namehelp" class="help-block"></span>
-        	</div>
+      		@include('forms.text', ['field' => 'course_name', 'label' => 'Course Title', 'value' => ''])
 
-          <div class="form-group">
-        		<label class="control-label" for="electivelist_name">Elective List</label>
-        		<input type="text" class="form-control" id="electivelist_name" aria-describedby="electivelist_namehelp">
-        		<span id="electivelist_namehelp" class="help-block"></span>
-        	</div>
+          @include('forms.autofill', ['field' => 'electivelist_id', 'label' => 'Elective:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Elective List'])
 
-          <div class="form-group">
-        		<label class="control-label" for="match">Matched As</label>
-        		<input type="text" class="form-control" id="match" aria-describedby="matchhelp">
-        		<span id="matchhelp" class="help-block"></span>
-        	</div>
+          @include('forms.text', ['field' => 'credits', 'label' => 'Credits', 'value' => ''])
 
-          <div class="form-group">
-        		<label class="control-label" for="credits">Credits</label>
-        		<input type="text" class="form-control" id="credits" aria-describedby="creditshelp">
-        		<span id="creditshelp" class="help-block"></span>
-        	</div>
+          @include('forms.text', ['field' => 'notes', 'label' => 'Notes', 'value' => ''])
 
-          <div class="form-group">
-        		<label class="control-label" for="notes">Notes</label>
-        		<input type="text" class="form-control" id="notes" aria-describedby="noteshelp">
-        		<span id="noteshelp" class="help-block"></span>
-        	</div>
+          @include('forms.autofill', ['field' => 'course_id', 'label' => 'Catalog Match:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course'])
+
+          @include('forms.autofill', ['field' => 'completedcourse_id', 'label' => 'Completed Course Match:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course'])
 
         	<input type="hidden" id="planrequirement_id" value="-1" />
 
@@ -45,9 +27,9 @@
 
       <div class="modal-footer">
         <span id="spin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
-      	<button type="button" class="btn btn-danger" id="deleteButton">Delete</button>
+      	<button type="button" class="btn btn-danger" id="deleteCourse">Delete</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="saveButton">Save</button>
+        <button type="button" class="btn btn-primary" id="saveCourse">Save</button>
       </div>
 
     </div>

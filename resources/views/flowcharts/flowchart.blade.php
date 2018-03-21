@@ -39,15 +39,25 @@
                 <div class="course list-group-item move" v-bind:data-id="course.id" :key="course.id">
                   <div class="course-content pull-left">
                     <template v-if="course.name.length != 0">
-                      <p>@{{ course.name }} (@{{ course.credits }})</p>
+                      <template v-if="course.completedcourse_id <= 0">
+                        <p><b>@{{ course.name }} (@{{ course.credits }})</b></p>
+                      </template>
+                      <template v-else>
+                        <p><i class="fa fa-star" aria-hidden="true"></i> <b>@{{ course.name }} (@{{ course.credits }})</b></p>
+                      </template>
                       <template v-if="course.electivelist_name.length != 0">
-                        <p>from @{{ course.electivelist_name }}</p>
+                        <p><i class="fa fa-code-fork text-primary" aria-hidden="true"></i> @{{ course.electivelist_abbr }}</p>
                       </template>
                     </template>
                     <template v-else>
-                      <p>@{{ course.electivelist_name }} (@{{ course.credits }})</p>
+                      <p><i class="fa fa-code-fork text-primary" aria-hidden="true"></i> <b>@{{ course.electivelist_abbr }} (@{{ course.credits }})</b></p>
                     </template>
-                    <p>@{{ course.notes }}</p>
+                    <template v-if="course.completedcourse_name.length != 0">
+                      <p><i><i class="fa fa-check text-success" aria-hidden="true"></i> @{{ course.completedcourse_name }}</i></p>
+                    </template>
+                    <template v-if="course.notes.length != 0">
+                      <p><i class="fa fa-comment-o" aria-hidden="true"></i> @{{ course.notes }}</p>
+                    </template>
                   </div>
 
                   <div class="btn-group pull-right">
@@ -71,5 +81,6 @@
 @include('flowcharts._courseform')
 
 <input type="hidden" id="id" value="{{$plan->id}}">
+<input type="hidden" id="student_id" value="{{$plan->student_id}}">
 
 @endsection

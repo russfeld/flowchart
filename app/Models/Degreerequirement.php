@@ -25,7 +25,7 @@ class Degreerequirement extends Validatable
           'semester' => 'required|integer|unique_with:degreerequirements,ordering,degreeprogram_id',
           'ordering' => 'required|integer|unique_with:degreerequirements,semester,degreeprogram_id',
           'credits' => 'required|integer',
-          'notes' => 'string',
+          'notes' => 'string|max:20',
           'course_name' => 'required_without:electivelist_id|string',
           'electivelist_id' => 'required_without:course_name|exists:electivelists,id',
         );
@@ -35,7 +35,7 @@ class Degreerequirement extends Validatable
           'semester' => 'required|integer|unique_with:degreerequirements,ordering,degreeprogram_id,' . $params[0],
           'ordering' => 'required|integer|unique_with:degreerequirements,semester,degreeprogram_id,' . $params[0],
           'credits' => 'required|integer',
-          'notes' => 'string',
+          'notes' => 'string|max:20',
           'course_name' => 'required_without:electivelist_id|string',
           'electivelist_id' => 'required_without:course_name|exists:electivelists,id',
         );

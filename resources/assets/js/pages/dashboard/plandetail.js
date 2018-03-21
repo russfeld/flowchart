@@ -12,6 +12,7 @@ exports.init = function(){
   options.columns = [
     {'data': 'id'},
     {'data': 'name'},
+    {'data': 'electivelist_abbr'},
     {'data': 'credits'},
     {'data': 'semester'},
     {'data': 'ordering'},
@@ -28,8 +29,8 @@ exports.init = function(){
             }
   }];
   options.order = [
-    [3, "asc"],
     [4, "asc"],
+    [5, "asc"],
   ];
   dashboard.init(options);
 
@@ -71,6 +72,7 @@ exports.init = function(){
       plan_id: $('#plan_id').val(),
       ordering: $('#ordering').val(),
       credits: $('#credits').val(),
+      student_id: $('#student_id').val(),
     };
     if($('#semester_id').val() > 0){
       data.semester_id = $('#semester_id').val();
@@ -120,7 +122,17 @@ exports.init = function(){
     $('#id').val("");
     $('#plan_idview').val($('#plan_idview').attr('value'));
     $('#delete').hide();
-    $('#planrequirementform').modal('show');
+    var planid = $('#plan_id').val();
+    window.axios.get('/admin/plans/plansemesters/' + planid)
+      .then(function(message){
+        var listitems = '';
+        $.each(message.data, function(key, value){
+          listitems += '<option value=' + value.id + '>' + value.name +'</option>';
+        });
+        $('#semester_id').find('option').remove().end().append(listitems);
+        $('#semester_id').val(semester_id);
+        $('#planrequirementform').modal('show');
+      })
   });
 
   $('#table').on('click', '.edit', function(){
@@ -142,15 +154,15 @@ exports.init = function(){
         }else if (message.data.type == "electivelist"){
           $('#course_name').val(message.data.course_name);
           $('#electivelist_id').val(message.data.electivelist_id);
-          $('#electivelist_idtext').html("Selected: (" + message.data.electivelist_id + ") " + message.data.electivelist_name);
+          $('#electivelist_idtext').html("Selected: (" + message.data.electivelist_id + ") " + site.truncateText(message.data.electivelist_name, 30));
           $('#requireable2').prop('checked', true);
           $('#requiredcourse').hide();
           $('#electivecourse').show();
         }
         $('#course_id').val(message.data.course_id);
-        $('#course_idtext').html("Selected: (" + message.data.course_id + ") " + message.data.catalog_course);
+        $('#course_idtext').html("Selected: (" + message.data.course_id + ") " + site.truncateText(message.data.catalog_course, 30));
         $('#completedcourse_id').val(message.data.completedcourse_id);
-        $('#completedcourse_idtext').html("Selected: (" + message.data.completedcourse_id + ") " + message.data.completed_course);
+        $('#completedcourse_idtext').html("Selected: (" + message.data.completedcourse_id + ") " + site.truncateText(message.data.completed_course, 30));
         $('#delete').show();
 
         var semester_id = message.data.semester_id;

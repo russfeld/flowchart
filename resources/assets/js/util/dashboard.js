@@ -182,7 +182,7 @@ exports.ajaxautocomplete = function(id, url){
       minChars: 3,
 	    onSelect: function (suggestion) {
 	        $('#' + id).val(suggestion.data);
-          $('#' + id + 'text').html("Selected: (" + suggestion.data + ") " + suggestion.value);
+          $('#' + id + 'text').html("Selected: (" + suggestion.data + ") " + site.truncateText(suggestion.value, 30));
 	    },
 	    transformResult: function(response) {
 	        return {
