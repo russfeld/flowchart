@@ -36,7 +36,7 @@
           <draggable v-model="semester.courses" class="list-group" v-bind:data-id="index" :options="{group: 'courses', animation: 150}" @end="dropCourse">
 
               <template v-for="(course, cindex) in semester.courses">
-                <div class="course list-group-item move" v-bind:data-id="course.id" :key="course.id">
+                <div class="course list-group-item move" v-bind:class="{'list-group-item-info': course.custom}" v-bind:data-id="course.id" :key="course.id">
                   <div class="course-content pull-left">
                     <template v-if="course.name.length != 0">
                       <template v-if="course.course_id <= 0">
@@ -75,8 +75,6 @@
 </draggable>
 
 </div>
-
-<button class="btn btn-primary" id="reset"><i class="fa fa-undo"></i> Reset</button>
 
 @include('flowcharts._courseform')
 

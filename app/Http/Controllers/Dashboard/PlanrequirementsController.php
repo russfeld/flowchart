@@ -79,6 +79,15 @@ class PlanrequirementsController extends Controller
   public function postNewplanrequirement(Request $request){
     $data = $request->all();
     $planrequirement = new Planrequirement();
+    if(isset($data['course_id']) && $data['course_id'] == 0){
+      $data['course_id'] = null;
+    }
+    if(isset($data['electivelist_id']) && $data['electivelist_id'] == 0){
+      $data['electivelist_id'] = null;
+    }
+    if(isset($data['completedcourse_id']) && $data['completedcourse_id'] == 0){
+      $data['completedcourse_id'] = null;
+    }
     if($planrequirement->validateWithParams($data, array(-1, $data['plan_id'], $data['student_id']))){
       $planrequirement->fill($data);
       if(!$request->has("electivelist_id")){

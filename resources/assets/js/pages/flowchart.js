@@ -26,6 +26,7 @@ exports.init = function(){
 
   $('#reset').on('click', loadData);
   $('#add-sem').on('click', addSemester);
+  $('#add-course').on('click', addCourse);
 
   $('#saveCourse').on('click', saveCourse);
   $('#deleteCourse').on('click', deleteCourse);
@@ -65,6 +66,11 @@ var loadData = function(){
         var semester = window.vm.semesters.find(function(element){
           return element.id == value.semester_id;
         })
+        if(value.degreerequirement_id <= 0){
+          value.custom = true;
+        }else{
+          value.custom = false;
+        }
         semester.courses.push(value);
       });
       $.each(window.vm.semesters, function(index, value){
@@ -265,13 +271,32 @@ var saveCourse = function(){
       loadData();
     })
     .catch(function(error){
+      $('#spin').addClass('hide-spin');
       site.handleError("save course", "#editCourse", error);
     });
 
 }
 
 var deleteCourse = function(event){
-  console.log($(event.target).data('id'));
+  $('#spin').removeClass('hide-spin');
+  var id = $('#id').val();
+  var planrequirement_id = $('#planrequirement_id').val();
+  var data = {
+    planrequirement_id: planrequirement_id,
+  }
+  window.axios.post('/flowcharts/data/' + id + '/delete', data)
+    .then(function(response){
+      $('#editCourse').modal('hide');
+      $('#spin').addClass('hide-spin');
+      site.displayMessage(response.data, "success");
+      site.clearFormErrors();
+      loadData();
+    })
+    .catch(function(error){
+      $('#spin').addClass('hide-spin');
+      site.handleError("delete course", "#editCourse", error);
+    });
+
 }
 
 /**
@@ -286,6 +311,7 @@ var ajaxautocomplete = function(id, url){
 	    ajaxSettings: {
 	    	dataType: "json"
 	    },
+      autoSelectFirst: true,
       minChars: 3,
 	    onSelect: function (suggestion) {
 	        $('#' + id).val(suggestion.data);
@@ -304,4 +330,25 @@ var ajaxautocomplete = function(id, url){
     $('#' + id).val(0);
     $('#' + id + 'text').html("Selected: (" + 0 + ") ");
   })
+}
+
+var addCourse = function(){
+  $('#course_name').val('');
+  $('#credits').val('');
+  $('#notes').val('');
+  $('#planrequirement_id').val('');
+  $('#electlivelist_id').val(0);
+  $('#electivelist_idauto').val('');
+  $('#electivelist_idtext').html("Selected: (" + 0 + ") ");
+  $('#course_id').val(0);
+  $('#course_idauto').val('');
+  $('#course_idtext').html("Selected: (" + 0 + ") ");
+  $('#completedcourse_id').val(0);
+  $('#completedcourse_idauto').val('');
+  $('#completedcourse_idtext').html("Selected: (" + 0 + ") ");
+  $('#course_name').prop('disabled', false);
+  $('#credits').prop('disabled', false);
+  $('#electivelist_idauto').prop('disabled', false);
+  $('#deleteCourse').hide();
+  $('#editCourse').modal('show');
 }

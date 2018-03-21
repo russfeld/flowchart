@@ -10,4 +10,5 @@ return [
   'own_user' => 'Cannot delete your own account!',
   'item_exists' => 'Item already exists!',
   'no_spaces' => 'Spaces not allowed in eIDs',
+  'default_req' => 'Cannot delete default degree requirements!',
 ];

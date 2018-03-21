@@ -180,6 +180,7 @@ exports.ajaxautocomplete = function(id, url){
 	    	dataType: "json"
 	    },
       minChars: 3,
+      autoSelectFirst: true,
 	    onSelect: function (suggestion) {
 	        $('#' + id).val(suggestion.data);
           $('#' + id + 'text').html("Selected: (" + suggestion.data + ") " + site.truncateText(suggestion.value, 30));

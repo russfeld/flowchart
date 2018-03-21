@@ -89,5 +89,28 @@ class Planrequirement extends Validatable
         return true;
     }
 
+    public function defaultEditValidate($data, $params)
+    {
+        $rules = array(
+          'notes' => 'string|max:20',
+          'course_name' => 'sometimes|required|string',
+          'course_id' => 'sometimes|exists_or_null:courses,id',
+          'completedcourse_id' => 'sometimes|exists_or_null:completedcourses,id,student_id,' . $params[0],
+        );
+        // make a new validator object
+        $v = Validator::make($data, $rules);
+
+        // check for failure
+        if ($v->fails())
+        {
+            // set errors and return false
+            $this->errors = $v->errors();
+            return false;
+        }
+
+        // validation pass
+        return true;
+    }
+
     protected $fillable = ['notes', 'plan_id', 'semester_id', 'ordering', 'credits', 'course_name', 'electivelist_id', 'course_id', 'completedcourse_id'];
 }

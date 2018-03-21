@@ -325,9 +325,58 @@ class FlowchartsController extends Controller
         $user = Auth::user();
         $plan = Plan::findOrFail($id);
         if($user->is_advisor || (!$user->is_advisor && $user->student->id == $plan->student_id)){
-          $data = $request->all();
+
           if($request->has('planrequirement_id')){
-            $planrequirement = Planrequirement::findOrFail($data['planrequirement_id']);
+            $planrequirement = Planrequirement::findOrFail($request->input('planrequirement_id'));
+
+            if($planrequirement->plan_id != $plan->id){
+              //can't edit course not on the plan;
+              abort(404);
+            }
+            if($planrequirement->degreerequirement_id == null){
+              $data = $request->all();
+              if(isset($data['course_id']) && $data['course_id'] == 0){
+                $data['course_id'] = null;
+              }
+              if(isset($data['electivelist_id']) && $data['electivelist_id'] == 0){
+                $data['electivelist_id'] = null;
+              }
+              if(isset($data['completedcourse_id']) && $data['completedcourse_id'] == 0){
+                $data['completedcourse_id'] = null;
+              }
+              if($planrequirement->customEditValidate($data, array($planrequirement->plan->student_id))){
+                $planrequirement->fill($data);
+                $planrequirement->save();
+                return response()->json(trans('messages.item_saved'));
+              }else{
+                return response()->json($planrequirement->errors(), 422);
+              }
+            }else{
+              //is not custom, so only certain fields can be updated
+              if($planrequirement->electivelist_id == null){
+                //has no elective list, so course name cannot be changed
+                $data = $request->only(['notes', 'completedcourse_id', 'course_id']);
+              }else{
+                $data = $request->only(['notes', 'completedcourse_id', 'course_id', 'course_name']);
+              }
+              if(isset($data['course_id']) && $data['course_id'] == 0){
+                $data['course_id'] = null;
+              }
+              if(isset($data['completedcourse_id']) && $data['completedcourse_id'] == 0){
+                $data['completedcourse_id'] = null;
+              }
+              if($planrequirement->defaultEditValidate($data, array($planrequirement->plan->student_id))){
+                $planrequirement->fill($data);
+                $planrequirement->save();
+                return response()->json(trans('messages.item_saved'));
+              }else{
+                return response()->json($planrequirement->errors(), 422);
+              }
+            }
+          }else{
+            //new requirement
+            $planrequirement = new PlanRequirement();
+            $data = $request->all();
             if(isset($data['course_id']) && $data['course_id'] == 0){
               $data['course_id'] = null;
             }
@@ -337,25 +386,50 @@ class FlowchartsController extends Controller
             if(isset($data['completedcourse_id']) && $data['completedcourse_id'] == 0){
               $data['completedcourse_id'] = null;
             }
-            if($planrequirement->degreerequirement_id == null){
-              if($planrequirement->customEditValidate($data, array($planrequirement->plan->student_id))){
-                $planrequirement->fill($data);
-                if(!$request->has("electivelist_id")){
-                  $planrequirement->electivelist_id = null;
-                }
-                $planrequirement->save();
-                return response()->json(trans('messages.item_saved'));
-              }else{
-                return response()->json($planrequirement->errors(), 422);
-              }
+            if($planrequirement->customEditValidate($data, array($plan->student_id))){
+              $planrequirement->fill($data);
+              $semester = $plan->semesters->sortByDesc('ordering')->first();
+              $planrequirement->semester_id = $semester->id;
+              $planrequirement->ordering = $semester->requirements->sortByDesc('ordering')->first()->ordering + 1;
+              $planrequirement->plan_id = $plan->id;
+              $planrequirement->save();
+              return response()->json(trans('messages.item_saved'));
             }else{
-              //is not custom, so only certain fields can be updated
+              return response()->json($planrequirement->errors(), 422);
+            }
+          }
+        }else{
+          //cannot edit a plan if you aren't the student or an advisor
+          abort(404);
+        }
+      }
+    }
+
+    public function postCourseDelete(Request $request, $id = -1){
+      if($id < 0){
+        //id not found
+        abort(404);
+      }else{
+        $user = Auth::user();
+        $plan = Plan::findOrFail($id);
+        if($user->is_advisor || (!$user->is_advisor && $user->student->id == $plan->student_id)){
+
+          if($request->has('planrequirement_id')){
+            $planrequirement = Planrequirement::findOrFail($request->input('planrequirement_id'));
+
+            if($planrequirement->plan_id != $plan->id){
+              //can't edit course not on the plan;
+              abort(404);
+            }
+            if($planrequirement->degreerequirement_id == null){
+              $planrequirement->delete();
+              return response()->json(trans('messages.item_deleted'));
+            }else{
+              return response()->json(trans('errors.default_req'), 403);
             }
           }else{
-            //new requirement
+            abort(404);
           }
-
-          abort(403);
         }else{
           //cannot edit a plan if you aren't the student or an advisor
           abort(404);
