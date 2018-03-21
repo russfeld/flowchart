@@ -137,8 +137,6 @@ class DegreerequirementsController extends Controller
     ]);
     $degreerequirement = Degreerequirement::findOrFail($request->input('id'));
     $degreerequirement->delete();
-    $request->session()->put('message', trans('messages.item_deleted'));
-    $request->session()->put('type', 'success');
     return response()->json(trans('messages.item_deleted'));
   }
 

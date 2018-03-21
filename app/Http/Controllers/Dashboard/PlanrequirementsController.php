@@ -61,7 +61,6 @@ class PlanrequirementsController extends Controller
             'semester_id' => $requirement->semester->id,
             'ordering' => $requirement->ordering,
             'credits' => $requirement->credits,
-            'type' => $requirement->electivelist_id === null ? 'course' : 'electivelist',
             'course_name' => $requirement->course_name,
             'electivelist_name' => $requirement->electivelist_id === null ? '' : $requirement->electivelist->name,
             'electivelist_id' => $requirement->electivelist_id === null ? 0 : $requirement->electivelist_id,
@@ -98,6 +97,15 @@ class PlanrequirementsController extends Controller
     }else{
       $data = $request->all();
       $planrequirement = Planrequirement::findOrFail($id);
+      if(isset($data['course_id']) && $data['course_id'] == 0){
+        $data['course_id'] = null;
+      }
+      if(isset($data['electivelist_id']) && $data['electivelist_id'] == 0){
+        $data['electivelist_id'] = null;
+      }
+      if(isset($data['completedcourse_id']) && $data['completedcourse_id'] == 0){
+        $data['completedcourse_id'] = null;
+      }
       if($planrequirement->validateWithParams($data, array($id, $data['plan_id'], $data['student_id']))){
         $planrequirement->fill($data);
         if(!$request->has("electivelist_id")){
@@ -117,8 +125,6 @@ class PlanrequirementsController extends Controller
     ]);
     $planrequirement = Planrequirement::findOrFail($request->input('id'));
     $planrequirement->delete();
-    $request->session()->put('message', trans('messages.item_deleted'));
-    $request->session()->put('type', 'success');
     return response()->json(trans('messages.item_deleted'));
   }
 }

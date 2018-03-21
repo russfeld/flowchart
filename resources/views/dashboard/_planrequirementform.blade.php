@@ -15,13 +15,8 @@
           @include('forms.selectajax', ['field' => 'semester_id', 'label' => 'Semester', 'value' => ''])
           @include('forms.text', ['field' => 'ordering', 'label' => 'Ordering', 'value' => ''])
           @include('forms.text', ['field' => 'notes', 'label' => 'Notes', 'value' => ''])
-          @include('forms.radio', ['field' => 'requireable', 'label1' => 'Required Course', 'label2' => 'Elective Course'])
           @include('forms.text', ['field' => 'course_name', 'label' => 'Course', 'value' => ''])
-          <div id="requiredcourse">
-          </div>
-          <div id="electivecourse" hidden>
-            @include('forms.autofill', ['field' => 'electivelist_id', 'label' => 'Elective:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Elective List'])
-          </div>
+          @include('forms.autofill', ['field' => 'electivelist_id', 'label' => 'Elective:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Elective List'])
           @include('forms.autofill', ['field' => 'course_id', 'label' => 'Catalog Match:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course'])
           @include('forms.autofill', ['field' => 'completedcourse_id', 'label' => 'Completed Course Match:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course'])
         </form>

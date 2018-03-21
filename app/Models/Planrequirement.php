@@ -45,9 +45,9 @@ class Planrequirement extends Validatable
           'credits' => 'required|integer',
           'notes' => 'string|max:20',
           'course_name' => 'required_without:electivelist_id|string',
-          'electivelist_id' => 'required_without:course_name|exists:electivelists,id',
-          'course_id' => 'sometimes|required|exists:courses,id',
-          'completedcourse_id' => 'sometimes|required|exists:completedcourses,id,student_id,' . $params[2],
+          'electivelist_id' => 'required_without:course_name|exists_or_null:electivelists,id',
+          'course_id' => 'sometimes|exists_or_null:courses,id',
+          'completedcourse_id' => 'sometimes|exists_or_null:completedcourses,id,student_id,' . $params[2],
         );
       }else{
         return array(
@@ -57,9 +57,9 @@ class Planrequirement extends Validatable
           'credits' => 'required|integer',
           'notes' => 'string|max:20',
           'course_name' => 'required_without:electivelist_id|string',
-          'electivelist_id' => 'required_without:course_name|exists:electivelists,id',
-          'course_id' => 'sometimes|required|exists:courses,id',
-          'completedcourse_id' => 'sometimes|required|exists:completedcourses,id,student_id,' . $params[2],
+          'electivelist_id' => 'required_without:course_name|exists_or_null:electivelists,id',
+          'course_id' => 'sometimes|exists_or_null:courses,id',
+          'completedcourse_id' => 'sometimes|exists_or_null:completedcourses,id,student_id,' . $params[2],
         );
       }
     }

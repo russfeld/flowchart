@@ -192,4 +192,9 @@ exports.ajaxautocomplete = function(id, url){
 	        };
 	    }
 	});
+
+  $('#' + id + 'clear').on('click', function(){
+    $('#' + id).val(0);
+    $('#' + id + 'text').html("Selected: (" + 0 + ") ");
+  })
 }

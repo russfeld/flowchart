@@ -77,23 +77,21 @@ exports.init = function(){
     if($('#semester_id').val() > 0){
       data.semester_id = $('#semester_id').val();
     }
-    var selected = $("input[name='requireable']:checked");
-    if (selected.length > 0) {
-        var selectedVal = selected.val();
-        if(selectedVal == 1){
-          data.course_name = $('#course_name').val();
-        }else if(selectedVal == 2){
-          if($('#electivelist_id').val() > 0){
-            data.course_name = $('#course_name').val();
-            data.electivelist_id = $('#electivelist_id').val();
-          }
-        }
+    data.course_name = $('#course_name').val();
+    if($('#electivelist_id').val() > 0){
+      data.electivelist_id = $('#electivelist_id').val();
+    }else{
+      data.electivelist_id = '';
     }
     if($('#course_id').val() > 0){
       data.course_id = $('#course_id').val();
+    }else{
+      data.course_id = '';
     }
     if($('#completedcourse_id').val() > 0){
       data.completedcourse_id = $('#completedcourse_id').val();
+    }else{
+      data.completedcourse_id = '';
     }
     var id = $('#id').val();
     if(id.length == 0){
@@ -111,8 +109,6 @@ exports.init = function(){
     };
     dashboard.ajaxmodaldelete(data, url, '#planrequirementform');
   });
-
-  $('#planrequirementform').on('shown.bs.modal', showselected);
 
   $('#planrequirementform').on('hidden.bs.modal', resetForm);
 
@@ -146,19 +142,9 @@ exports.init = function(){
         $('#notes').val(message.data.notes);
         $('#degreerequirement_id').val(message.data.degreerequirement_id);
         $('#plan_idview').val($('#plan_idview').attr('value'));
-        if(message.data.type == "course"){
-          $('#course_name').val(message.data.course_name);
-          $('#requireable1').prop('checked', true);
-          $('#requiredcourse').show();
-          $('#electivecourse').hide();
-        }else if (message.data.type == "electivelist"){
-          $('#course_name').val(message.data.course_name);
-          $('#electivelist_id').val(message.data.electivelist_id);
-          $('#electivelist_idtext').html("Selected: (" + message.data.electivelist_id + ") " + site.truncateText(message.data.electivelist_name, 30));
-          $('#requireable2').prop('checked', true);
-          $('#requiredcourse').hide();
-          $('#electivecourse').show();
-        }
+        $('#course_name').val(message.data.course_name);
+        $('#electivelist_id').val(message.data.electivelist_id);
+        $('#electivelist_idtext').html("Selected: (" + message.data.electivelist_id + ") " + site.truncateText(message.data.electivelist_name, 30));
         $('#course_id').val(message.data.course_id);
         $('#course_idtext').html("Selected: (" + message.data.course_id + ") " + site.truncateText(message.data.catalog_course, 30));
         $('#completedcourse_id').val(message.data.completedcourse_id);
@@ -189,8 +175,6 @@ exports.init = function(){
 
   });
 
-  $('input[name=requireable]').on('change', showselected);
-
   dashboard.ajaxautocomplete('electivelist_id', '/electivelists/electivelistfeed');
 
   dashboard.ajaxautocomplete('course_id', '/courses/coursefeed');
@@ -198,24 +182,6 @@ exports.init = function(){
   var student_id = $('#student_id').val();
   dashboard.ajaxautocomplete('completedcourse_id', '/completedcourses/completedcoursefeed/' + student_id);
 };
-
-/**
- * Determine which div to show in the form
- */
-var showselected = function(){
-  //https://stackoverflow.com/questions/8622336/jquery-get-value-of-selected-radio-button
-  var selected = $("input[name='requireable']:checked");
-  if (selected.length > 0) {
-      var selectedVal = selected.val();
-      if(selectedVal == 1){
-        $('#requiredcourse').show();
-        $('#electivecourse').hide();
-      }else if(selectedVal == 2){
-        $('#requiredcourse').hide();
-        $('#electivecourse').show();
-      }
-  }
-}
 
 var resetForm = function(){
   site.clearFormErrors();
@@ -236,8 +202,4 @@ var resetForm = function(){
   $('#completedcourse_id').val("-1");
   $('#completedcourse_idauto').val("");
   $('#completedcourse_idtext').html("Selected (0) ");
-  $('#requireable1').prop('checked', true);
-  $('#requireable2').prop('checked', false);
-  $('#requiredcourse').show();
-  $('#electivecourse').hide();
 }
