@@ -13,7 +13,7 @@ use App\Models\Blackoutevent;
 use App\Models\Course;
 use App\Models\Degreeprogram;
 use App\Models\Plan;
-use App\Models\Degreerequirement;
+use App\Models\Electivelist;
 use App\Models\Completedcourse;
 use App\Models\Transfercourse;
 
@@ -46,7 +46,7 @@ class DashboardController extends Controller
         $data["courses"] = Course::count();
         $data["plans"] = Plan::count();
         $data["degreeprograms"] = Degreeprogram::count();
-        $data["degreerequirements"] = Degreerequirement::count();
+        $data["electivelists"] = Electivelist::count();
         $data["completedcourses"] = Completedcourse::count();
         $data["transfercourses"] = Transfercourse::count();
         return view('dashboard.index')->with('page_title', "Advising Dashboard")->with('data', $data);

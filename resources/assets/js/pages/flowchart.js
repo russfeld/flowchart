@@ -71,6 +71,11 @@ var loadData = function(){
         }else{
           value.custom = false;
         }
+        if(value.completedcourse_id <= 0){
+          value.complete = false;
+        }else{
+          value.complete = true;
+        }
         semester.courses.push(value);
       });
       $.each(window.vm.semesters, function(index, value){

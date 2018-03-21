@@ -138,8 +138,8 @@
       <!-- Apply any bg-* class to to the icon to color it -->
       <span class="info-box-icon bg-light-blue"><i class="fa fa-book"></i></span>
       <div class="info-box-content">
-        <span class="info-box-text">Requirements</span>
-        <span class="info-box-number">{{ $data["degreerequirements"] }}</span>
+        <span class="info-box-text">Elective Lists</span>
+        <span class="info-box-number">{{ $data["electivelists"] }}</span>
       </div><!-- /.info-box-content -->
     </div><!-- /.info-box -->
     </a>

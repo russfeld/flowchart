@@ -35,7 +35,7 @@ class Completedcourse extends Validatable
     }
 
     public function getFullTitleAttribute(){
-    	return $this->name . ' (' . $this->semestertext . ' - ' . $this->grade .')';
+    	return $this->name . ' (' . $this->shortsemester . ' - ' . $this->grade .')';
     }
 
     public function getSemestertextAttribute(){
@@ -48,6 +48,19 @@ class Completedcourse extends Validatable
             return "Fall " . $this->year;
           default:
             return "Semester " . $this->semester . " " . $this->year;
+        }
+    }
+
+    public function getShortsemesterAttribute(){
+        switch ($this->semester){
+          case 1:
+            return "S" . substr($this->year, -2);
+          case 2:
+            return "Su" . substr($this->year, -2);
+          case 3:
+            return "F" . substr($this->year, -2);
+          default:
+            return $this->semester . "-" . substr($this->year, -2);
         }
     }
 

@@ -29,15 +29,15 @@
           </ul>
         @if( Auth::check())
           <ul class="nav navbar-nav navbar-right">
-              <li><a href="{{ url('/profile') }}">{{ Auth::user()->eid }}</a></li>
+              <li><a href="{{ url('/profile') }}"><i class="fa fa-user" aria-hidden="true"></i> {{ Auth::user()->eid }}</a></li>
               <li><p class="navbar-btn">
-                <a href="{{ url('auth/logout') }}" class="btn btn-success">Logout</a>
+                <a href="{{ url('auth/logout') }}" class="btn btn-success"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
               </p></li>
           </ul>
         @else
           <ul class="nav navbar-nav navbar-right">
               <li><p class="navbar-btn">
-                <a href="{{ url('auth/login') }}" class="btn btn-success">Sign in</a>
+                <a href="{{ url('auth/login') }}" class="btn btn-success"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign in</a>
               </p></li>
           </ul>
         @endif

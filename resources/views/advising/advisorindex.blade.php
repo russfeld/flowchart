@@ -24,10 +24,10 @@
 @include('advising._advisor', ['advisor' => $advisor, 'link' => false])
 
 <div class="col-sm-6">
-  <button id="createMeetingBtn" class="btn btn-primary btn-block">Create an Advising Meeting</button>
+  <button id="createMeetingBtn" class="btn btn-success btn-block"><i class="fa fa-plus"></i> Create an Advising Meeting</button>
 </div>
 <div class="col-sm-6">
-  <button id="createBlackoutBtn" class="btn btn-primary btn-block">Create a Blackout Time</button>
+  <button id="createBlackoutBtn" class="btn btn-info btn-block"><i class="fa fa-plus"></i> Create a Blackout Time</button>
 </div>
 <div class="col-sm-12">
 	<h4>You can also click on the calendar to view meeting details or schedule meetings or blackout times</h4>

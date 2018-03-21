@@ -23,7 +23,7 @@
 	<div class="col-xs-12">
 		{!! $advisor->notes !!}
 		@if(!$link)
-			<p><a href="{{ url('advising/select') }}" class="btn btn-primary">Select a Different Advisor</a></p>
+			<p><a href="{{ url('advising/select') }}" class="btn btn-primary"><i class="fa fa-list"></i> Select a Different Advisor</a></p>
 		@endif
 	</div>
 </div>
