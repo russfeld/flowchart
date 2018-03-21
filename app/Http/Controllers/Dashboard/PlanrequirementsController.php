@@ -39,6 +39,8 @@ class PlanrequirementsController extends Controller
                 'ordering' => $requirement->ordering,
                 'credits' => $requirement->credits,
                 'name' => $requirement->course_name,
+                'catalog_course' => $requirement->course_id == null ? '' : $requirement->course->fullTitle,
+                'completed_course' => $requirement->completedcourse_id == null ? '' : $requirement->completedcourse->fullTitle,
             ];
           }else if(!empty($requirement->course_name)){
             return[
@@ -48,6 +50,8 @@ class PlanrequirementsController extends Controller
                 'ordering' => $requirement->ordering,
                 'credits' => $requirement->credits,
                 'name' => $requirement->course_name . " from " . $requirement->electivelist->name,
+                'catalog_course' => $requirement->course_id == null ? '' : $requirement->course->fullTitle,
+                'completed_course' => $requirement->completedcourse_id == null ? '' : $requirement->completedcourse->fullTitle,
             ];
           }else{
             return[
@@ -57,6 +61,8 @@ class PlanrequirementsController extends Controller
                 'ordering' => $requirement->ordering,
                 'credits' => $requirement->credits,
                 'name' => $requirement->electivelist->name,
+                'catalog_course' => $requirement->course_id == null ? '' : $requirement->course->fullTitle,
+                'completed_course' => $requirement->completedcourse_id == null ? '' : $requirement->completedcourse->fullTitle,
             ];
           }
       });
@@ -82,6 +88,10 @@ class PlanrequirementsController extends Controller
               'type' => 'course',
               'course_name' => $requirement->course_name,
               'degreerequirement_id' => $requirement->degreerequirement_id == null ? '' : $requirement->degreerequirement_id,
+              'catalog_course' => $requirement->course_id == null ? '' : $requirement->course->fullTitle,
+              'course_id' => $requirement->course_id == null ? 0 : $requirement->course_id,
+              'completed_course' => $requirement->completedcourse_id == null ? '' : $requirement->completedcourse->fullTitle,
+              'completedcourse_id' => $requirement->completedcourse_id == null ? 0 : $requirement->completedcourse_id,
           ];
         }else{
           return[
@@ -95,6 +105,10 @@ class PlanrequirementsController extends Controller
               'electivelist_id' => $requirement->electivelist->id,
               'electivelist_name' => $requirement->electivelist->name,
               'degreerequirement_id' => $requirement->degreerequirement_id == null ? '' : $requirement->degreerequirement_id,
+              'catalog_course' => $requirement->course_id == null ? '' : $requirement->course->fullTitle,
+              'course_id' => $requirement->course_id == null ? 0 : $requirement->course_id,
+              'completed_course' => $requirement->completedcourse_id == null ? '' : $requirement->completedcourse->fullTitle,
+              'completedcourse_id' => $requirement->completedcourse_id == null ? 0 : $requirement->completedcourse_id,
           ];
         }
       });

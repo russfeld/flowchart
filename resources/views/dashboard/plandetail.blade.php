@@ -10,15 +10,17 @@
         <h3>Plan Requirements:</h3>
         <table id="table" class="table table-bordered table-striped">
           <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Credits</th>
-            <th>Semester</th>
-            <th>Ordering</th>
-            <th>Notes</th>
-            <th>Actions</th>
-          </tr>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Credits</th>
+              <th>Semester</th>
+              <th>Ordering</th>
+              <th>Notes</th>
+              <th>Catalog</th>
+              <th>Completed</th>
+              <th>Actions</th>
+            </tr>
           </thead>
           <tbody>
             <!-- AJAX FILL -->
@@ -31,6 +33,8 @@
               <th>Semester</th>
               <th>Ordering</th>
               <th>Notes</th>
+              <th>Catalog</th>
+              <th>Completed</th>
               <th>Actions</th>
             </tr>
           </tfoot>

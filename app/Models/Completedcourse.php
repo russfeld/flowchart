@@ -31,7 +31,11 @@ class Completedcourse extends Validatable
     }
 
     public function requirement(){
-        return $this->belongsTo('App\Models\Planrequirement');
+        return $this->hasMany('App\Models\Planrequirement');
+    }
+
+    public function getFullTitleAttribute(){
+    	return $this->name . ' (' . $this->semestertext . ' - ' . $this->grade .')';
     }
 
     public function getSemestertextAttribute(){
@@ -45,6 +49,13 @@ class Completedcourse extends Validatable
           default:
             return "Semester " . $this->semester . " " . $this->year;
         }
+    }
+
+    public function scopeFilterName($query, $name)
+    {
+            $filter = str_replace('"', "", $name);
+            $queryStr = "completedcourses.name LIKE \"%" . $filter . "%\"";
+            return $query->whereRaw($queryStr);
     }
 
 }

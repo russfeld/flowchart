@@ -7,7 +7,8 @@
       </div>
       <div class="modal-body">
         <form id="form">
-          @include('forms.hidden', ['field' => 'plan_id', 'label' => 'Plan', 'value' => $plan->id, 'displayvalue' => $plan->name, 'disabled' => 'disabled="disabled"'])
+          <input type="hidden" id="plan_id" value="{{ $plan->id }}" />
+          <input type="hidden" id="student_id" value="{{ $plan->student_id }}" />
           @include('forms.text', ['field' => 'id', 'label' => 'ID', 'value' => '', 'disabled' => 'disabled'])
           @include('forms.text', ['field' => 'degreerequirement_id', 'label' => 'Degree Requirement ID', 'value' => '', 'disabled' => 'disabled'])
           @include('forms.text', ['field' => 'credits', 'label' => 'Credits', 'value' => ''])
@@ -21,6 +22,8 @@
           <div id="electivecourse" hidden>
             @include('forms.autofill', ['field' => 'electivelist_id', 'label' => 'Elective:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Elective List'])
           </div>
+          @include('forms.autofill', ['field' => 'course_id', 'label' => 'Catalog Match:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course'])
+          @include('forms.autofill', ['field' => 'completedcourse_id', 'label' => 'Completed Course Match:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course'])
         </form>
       </div>
       <div class="modal-footer">

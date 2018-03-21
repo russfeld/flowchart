@@ -38,6 +38,11 @@ Route::get('courses/course/{slug}', 'CoursesController@getCourse');
 Route::get('courses/coursefeed', 'CoursesController@getCoursefeed');
 
 /*
+ * Routes for the CompletedcoursesController
+ */
+Route::get('completedcourses/completedcoursefeed/{id}', 'CompletedcoursesController@getCompletedcoursefeed');
+
+/*
  * Routes for the FlowchartsController
  */
 //Route::controller('flowcharts', 'FlowchartsController');

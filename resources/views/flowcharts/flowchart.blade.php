@@ -35,7 +35,7 @@
 
           <draggable v-model="semester.courses" class="list-group" v-bind:data-id="index" :options="{group: 'courses', animation: 150}" @end="dropCourse">
 
-              <template v-for="course in semester.courses">
+              <template v-for="(course, cindex) in semester.courses">
                 <div class="course list-group-item move" v-bind:data-id="course.id" :key="course.id">
                   <div class="course-content pull-left">
                     <template v-if="course.name.length != 0">
@@ -51,10 +51,7 @@
                   </div>
 
                   <div class="btn-group pull-right">
-                    <template v-if="course.degreerequirement_id.length == 0">
-                      <button type="button" class="delete-course btn btn-default btn-xs" aria-label="Delete" title="Delete Course"><i class="fa fa-times"></i></button>
-                    </template>
-                    <button type="button" class="edit-course btn btn-default btn-xs" aria-label="Edit" title="Edit Course"><i class="fa fa-pencil"></i></button>
+                    <button type="button" class="edit-course btn btn-default btn-xs" aria-label="Edit" title="Edit Course" v-bind:data-id="cindex" v-bind:data-sem="index" v-on:click="editCourse"><i class="fa fa-pencil"></i></button>
                   </div>
                 </div>
               </template>
@@ -71,7 +68,7 @@
 
 <button class="btn btn-primary" id="reset"><i class="fa fa-undo"></i> Reset</button>
 
-
+@include('flowcharts._courseform')
 
 <input type="hidden" id="id" value="{{$plan->id}}">
 

@@ -16,6 +16,8 @@ exports.init = function(){
     {'data': 'semester'},
     {'data': 'ordering'},
     {'data': 'notes'},
+    {'data': 'catalog_course'},
+    {'data': 'completed_course'},
     {'data': 'id'},
   ];
   options.columnDefs = [{
@@ -85,6 +87,12 @@ exports.init = function(){
           }
         }
     }
+    if($('#course_id').val() > 0){
+      data.course_id = $('#course_id').val();
+    }
+    if($('#completedcourse_id').val() > 0){
+      data.completedcourse_id = $('#completedcourse_id').val();
+    }
     var id = $('#id').val();
     if(id.length == 0){
       var url = '/admin/newplanrequirement';
@@ -139,6 +147,10 @@ exports.init = function(){
           $('#requiredcourse').hide();
           $('#electivecourse').show();
         }
+        $('#course_id').val(message.data.course_id);
+        $('#course_idtext').html("Selected: (" + message.data.course_id + ") " + message.data.catalog_course);
+        $('#completedcourse_id').val(message.data.completedcourse_id);
+        $('#completedcourse_idtext').html("Selected: (" + message.data.completedcourse_id + ") " + message.data.completed_course);
         $('#delete').show();
 
         var semester_id = message.data.semester_id;
@@ -168,6 +180,11 @@ exports.init = function(){
   $('input[name=requireable]').on('change', showselected);
 
   dashboard.ajaxautocomplete('electivelist_id', '/electivelists/electivelistfeed');
+
+  dashboard.ajaxautocomplete('course_id', '/courses/coursefeed');
+
+  var student_id = $('#student_id').val();
+  dashboard.ajaxautocomplete('completedcourse_id', '/completedcourses/completedcoursefeed/' + student_id);
 };
 
 /**
@@ -201,6 +218,12 @@ var resetForm = function(){
   $('#electivelist_id').val("-1");
   $('#electivelist_idauto').val("");
   $('#electivelist_idtext').html("Selected (0) ");
+  $('#course_id').val("-1");
+  $('#course_idauto').val("");
+  $('#course_idtext').html("Selected (0) ");
+  $('#completedcourse_id').val("-1");
+  $('#completedcourse_idauto').val("");
+  $('#completedcourse_idtext').html("Selected (0) ");
   $('#requireable1').prop('checked', true);
   $('#requireable2').prop('checked', false);
   $('#requiredcourse').show();

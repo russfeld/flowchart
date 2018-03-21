@@ -21,6 +21,14 @@ class Planrequirement extends Validatable
         return $this->belongsTo('App\Models\Semester');
     }
 
+    public function course(){
+        return $this->belongsTo('App\Models\Course');
+    }
+
+    public function completedcourse(){
+        return $this->belongsTo('App\Models\Completedcourse');
+    }
+
     public function degreerequirement(){
       return $this->belongsTo('App\Models\Degreerequirement');
     }
@@ -37,6 +45,8 @@ class Planrequirement extends Validatable
           'notes' => 'string',
           'course_name' => 'required_without:electivelist_id|string',
           'electivelist_id' => 'required_without:course_name|exists:electivelists,id',
+          'course_id' => 'sometimes|required|exists:courses,id',
+          'completedcourse_id' => 'sometimes|required|exists:completedcourses,id',
         );
       }else{
         return array(
@@ -47,9 +57,11 @@ class Planrequirement extends Validatable
           'notes' => 'string',
           'course_name' => 'required_without:electivelist_id|string',
           'electivelist_id' => 'required_without:course_name|exists:electivelists,id',
+          'course_id' => 'sometimes|required|exists:courses,id',
+          'completedcourse_id' => 'sometimes|required|exists:completedcourses,id',
         );
       }
     }
 
-    protected $fillable = ['notes', 'plan_id', 'semester_id', 'ordering', 'credits', 'course_name', 'electivelist_id'];
+    protected $fillable = ['notes', 'plan_id', 'semester_id', 'ordering', 'credits', 'course_name', 'electivelist_id', 'course_id', 'completedcourse_id'];
 }

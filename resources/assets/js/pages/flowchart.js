@@ -7,7 +7,6 @@ exports.init = function(){
   window.vm = new Vue({
 		el: '#flowchart',
 		data: {
-			plan: [],
       semesters: [],
 		},
     methods: {
@@ -16,6 +15,7 @@ exports.init = function(){
       deleteSemester: deleteSemester,
       dropSemester: dropSemester,
       dropCourse: dropCourse,
+      editCourse: editCourse,
     },
     components: {
       draggable,
@@ -88,7 +88,7 @@ var saveSemester = function(event){
     .then(function(response){
       $("#sem-paneledit-" + semid).hide();
       $("#sem-panelhead-" + semid).show();
-      site.displayMessage(response.data, "success");
+      //site.displayMessage(response.data, "success");
     })
     .catch(function(error){
       site.displayMessage("AJAX Error", "danger");
@@ -111,7 +111,7 @@ var deleteSemester = function(event){
             break;
           }
         }
-        site.displayMessage(response.data, "success");
+        //site.displayMessage(response.data, "success");
       })
       .catch(function(error){
         site.displayMessage("AJAX Error", "danger");
@@ -128,7 +128,7 @@ var addSemester = function(){
       window.vm.semesters.push(response.data);
       //Vue.set(window.vm.semesters[window.vm.semester.length - 1], 'courses', new Array());
       $(document.documentElement)[0].style.setProperty('--colNum', window.vm.semesters.length);
-      site.displayMessage("Item Saved", "success");
+      //site.displayMessage("Item Saved", "success");
     })
     .catch(function(error){
       site.displayMessage("AJAX Error", "danger");
@@ -148,7 +148,7 @@ var dropSemester = function(event){
   var id = $('#id').val();
   window.axios.post('/flowcharts/semesters/' + id + '/move', data)
     .then(function(response){
-      site.displayMessage(response.data, "success");
+      //site.displayMessage(response.data, "success");
     })
     .catch(function(error){
       site.displayMessage("AJAX Error", "danger");
@@ -156,7 +156,6 @@ var dropSemester = function(event){
 }
 
 var dropCourse = function(event){
-  console.log(event);
   var ordering = [];
   var toSemIndex = $(event.to).data('id');
   $.each(window.vm.semesters[toSemIndex].courses, function(index, value){
@@ -172,9 +171,26 @@ var dropCourse = function(event){
   var id = $('#id').val();
   window.axios.post('/flowcharts/data/' + id + '/move', data)
     .then(function(response){
-      site.displayMessage(response.data, "success");
+      //site.displayMessage(response.data, "success");
     })
     .catch(function(error){
       site.displayMessage("AJAX Error", "danger");
     })
+}
+
+var editCourse = function(event){
+  var courseIndex = $(event.target).data('id');
+  var semIndex = $(event.target).data('sem');
+  var course = window.vm.semesters[semIndex].courses[courseIndex];
+  $('#course_name').val(course.name);
+  $('#electivelist_name').val(course.electivelist_name);
+  $('#match').val();
+  $('#credits').val(course.credits);
+  $('#notes').val(course.notes);
+  $('#editCourse').modal('show');
+
+}
+
+var deleteCourse = function(event){
+  console.log($(event.target).data('id'));
 }
