@@ -69,10 +69,10 @@ class Planrequirement extends Validatable
         $rules = array(
           'notes' => 'string|max:20',
           'course_name' => 'required_without:electivelist_id|string',
-          'electivelist_id' => 'required_without:course_name|exists:electivelists,id',
+          'electivelist_id' => 'required_without:course_name|exists_or_null:electivelists,id',
           'credits' => 'required|integer',
-          'course_id' => 'sometimes|required|exists:courses,id',
-          'completedcourse_id' => 'sometimes|required|exists:completedcourses,id,student_id,' . $params[0],
+          'course_id' => 'sometimes|exists_or_null:courses,id',
+          'completedcourse_id' => 'sometimes|exists_or_null:completedcourses,id,student_id,' . $params[0],
         );
         // make a new validator object
         $v = Validator::make($data, $rules);

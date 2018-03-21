@@ -195,10 +195,13 @@ var editCourse = function(event){
   $('#credits').val(course.credits);
   $('#notes').val(course.notes);
   $('#planrequirement_id').val(course.id);
+  $('#electlivelist_id').val(course.electivelist_id);
   $('#electivelist_idauto').val('');
   $('#electivelist_idtext').html("Selected: (" + course.electivelist_id + ") " + site.truncateText(course.electivelist_name, 30));
+  $('#course_id').val(course.course_id);
   $('#course_idauto').val('');
   $('#course_idtext').html("Selected: (" + course.course_id + ") " + site.truncateText(course.course_name, 30));
+  $('#completedcourse_id').val(course.completedcourse_id);
   $('#completedcourse_idauto').val('');
   $('#completedcourse_idtext').html("Selected: (" + course.completedcourse_id + ") " + site.truncateText(course.completedcourse_name, 30));
   if(course.degreerequirement_id <= 0){
@@ -227,14 +230,18 @@ var saveCourse = function(){
   var data = {
     notes: $('#notes').val(),
   }
-  if($('#planrequirement_id').val().length > 0){
-    data.planrequirement_id = $('#planrequirement_id').val();
-  }
   if($('#course_id').val() > 0){
     data.course_id = $('#course_id').val();
+  }else{
+    data.course_id = '';
   }
   if($('#completedcourse_id').val() > 0){
     data.completedcourse_id = $('#completedcourse_id').val();
+  }else{
+    data.completedcourse_id = '';
+  }
+  if($('#planrequirement_id').val().length > 0){
+    data.planrequirement_id = $('#planrequirement_id').val();
   }
   if(!$('#course_name').is(':disabled')){
     data.course_name = $('#course_name').val();
@@ -245,6 +252,8 @@ var saveCourse = function(){
   if(!$('#electivelist_idauto').is(':disabled')){
     if($('#electivelist_id').val() > 0){
       data.electivelist_id = $('#electivelist_id').val();
+    }else{
+      data.electivelist_id = '';
     }
   }
   window.axios.post('/flowcharts/data/' + id + '/save', data)
@@ -252,6 +261,7 @@ var saveCourse = function(){
       $('#editCourse').modal('hide');
       $('#spin').addClass('hide-spin');
       site.displayMessage(response.data, "success");
+      site.clearFormErrors();
       loadData();
     })
     .catch(function(error){
@@ -289,4 +299,9 @@ var ajaxautocomplete = function(id, url){
 	        };
 	    }
 	});
+
+  $('#' + id + 'clear').on('click', function(){
+    $('#' + id).val(0);
+    $('#' + id + 'text').html("Selected: (" + 0 + ") ");
+  })
 }

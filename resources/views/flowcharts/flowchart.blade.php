@@ -39,7 +39,7 @@
                 <div class="course list-group-item move" v-bind:data-id="course.id" :key="course.id">
                   <div class="course-content pull-left">
                     <template v-if="course.name.length != 0">
-                      <template v-if="course.completedcourse_id <= 0">
+                      <template v-if="course.course_id <= 0">
                         <p><b>@{{ course.name }} (@{{ course.credits }})</b></p>
                       </template>
                       <template v-else>

@@ -100,7 +100,7 @@ class FlowchartsController extends Controller
                 'electivelist_id' => $requirement->electivelist_id === null ? 0 : $requirement->electivelist_id,
                 'degreerequirement_id' => $requirement->degreerequirement_id == null ? 0 : $requirement->degreerequirement_id,
                 'course_name' => $requirement->course_id == null ? '' : $requirement->course->fullTitle,
-                'course_id' => $requirement->course_id == null ? -1 : $requirement->course_id,
+                'course_id' => $requirement->course_id == null ? 0 : $requirement->course_id,
                 'completedcourse_name' => $requirement->completedcourse_id == null ? '' : $requirement->completedcourse->fullTitle,
                 'completedcourse_id' => $requirement->completedcourse_id == null ? 0 : $requirement->completedcourse_id,
             ];
@@ -328,6 +328,15 @@ class FlowchartsController extends Controller
           $data = $request->all();
           if($request->has('planrequirement_id')){
             $planrequirement = Planrequirement::findOrFail($data['planrequirement_id']);
+            if(isset($data['course_id']) && $data['course_id'] == 0){
+              $data['course_id'] = null;
+            }
+            if(isset($data['electivelist_id']) && $data['electivelist_id'] == 0){
+              $data['electivelist_id'] = null;
+            }
+            if(isset($data['completedcourse_id']) && $data['completedcourse_id'] == 0){
+              $data['completedcourse_id'] = null;
+            }
             if($planrequirement->degreerequirement_id == null){
               if($planrequirement->customEditValidate($data, array($planrequirement->plan->student_id))){
                 $planrequirement->fill($data);

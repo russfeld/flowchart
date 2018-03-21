@@ -22,6 +22,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        require_once app_path() . '/Http/CustomValidator.php';
+
         Blackout::saved(function ($blackout) {
             if($blackout->repeat_type == 1){ //daily
                 Blackoutevent::where('blackout_id', $blackout->id)->delete();
