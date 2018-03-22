@@ -29,16 +29,10 @@ Install the following Ubuntu packages and all dependencies:
 6. `composer`
   1. Follow the instructions here to download: https://getcomposer.org/download/
   2. To install globally (recommended), run `sudo mv composer.phar /usr/local/bin/composer`
-7. `php-curl`
+7. `php-curl php-zip`
 8. `nodejs npm`
   1. Make sure you get the latest versions. The Ubuntu repositories tend to be woefully out of date. I used this guide: https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-16-04
   2. Because Ubuntu uses the `nodejs` executable name instead of `node`, I always alias it to `node` by running `sudo ln -s /usr/bin/nodejs /usr/bin/node`.
-
-### Node.js Packages
-~~You will also need to install the following Node.js packages using `sudo npm install -g <package>`~~ Shouldn't need this step anymore?
-
-1. ~~`bower`~~
-2. ~~`gulp`~~
 
 ### Optional Packages
 These are packages I use personally for development. They are not required but recommended:
@@ -104,6 +98,21 @@ This will walk you through setting up the required database for the Flowchart sy
 2. Add `export PATH=$PATH:~/.composer/vendor/bin` to `~/.bashrc` so that envoy can be found by the system
 3. Configure SSH keys on any systems that will be used for deployment. Generally it just needs the development system's public key added as an authorized key.
 4. See `Envoy.blade.php` in the root directory of the web application for available tasks
+
+### Setting Up Deployment Server
+1. Install packages listed above
+2. Configure git as above
+3. Create a database user and database
+4. Create directory structure
+  1. /var/www/flowchart_releases
+  2. /var/www/flowchart_data
+    1. /var/www/flowchart_data/.env <-- Copy from repo sample or existing file
+    2. /var/www/flowchart_data/app <-- Set owner to www-data:www-data
+    3. /var/www/flowchart_data/logs <-- Set owner to www-data:www-data
+5. Put server SSH key on github
+6. Pull from git at least once to accept the key
+7. Check settings in Envoy.blade.php
+8. Deploy and test
 
 ## Unit Testing
 Some very minor unit tests are available. To run the, execute `./vendor/bin/phpunit` in the main directory. Currently Laravel 5.1 only supports an older version of phpunit, so using the one in the vendor folder is best
