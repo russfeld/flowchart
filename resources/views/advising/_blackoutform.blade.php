@@ -103,9 +103,9 @@
       </div>
       <div class="modal-footer">
         <span id="createBlackoutspin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
-      	<button type="button" class="btn btn-danger" id="deleteBlackoutButton">Delete</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="saveBlackoutButton">Save</button>
+      	<button type="button" class="btn btn-danger" id="deleteBlackoutButton"><i class="fa fa-trash" aria-hidden="true"></i> Delete</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Close</button>
+        <button type="button" class="btn btn-primary" id="saveBlackoutButton"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
       </div>
     </div>
   </div>
@@ -119,8 +119,14 @@
         <h4 class="modal-title" id="blackoutOptionLabel">This event has multiple occurrences:</h4>
       </div>
       <div class="modal-body">
-        <button type="button" class="btn btn-primary" id="blackoutSeries">Edit the series</button>
-        <button type="button" class="btn btn-primary" id="blackoutOccurrence">Edit this occurrence</button>
+        <div class="row">
+          <div class="col-xs-6">
+            <button type="button" class="btn btn-warning btn-block" id="blackoutSeries"><i class="fa fa-pencil" aria-hidden="true"></i> Edit the series</button>
+          </div>
+          <div class="col-xs-6">
+            <button type="button" class="btn btn-primary btn-block" id="blackoutOccurrence"><i class="fa fa-pencil" aria-hidden="true"></i> Edit this occurrence</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -131,11 +137,17 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="meetingOptionLabel">Create which type of event</h4>
+        <h4 class="modal-title" id="meetingOptionLabel">Choose an event type:</h4>
       </div>
       <div class="modal-body">
-        <button type="button" class="btn btn-primary" id="advisingButton">Advising Meeting</button>
-        <button type="button" class="btn btn-primary" id="blackoutButton">Blackout Time</button>
+        <div class="row">
+          <div class="col-xs-6">
+            <button type="button" class="btn btn-success btn-block" id="advisingButton"><i class="fa fa-plus"></i> Advising Meeting</button>
+          </div>
+          <div class="col-xs-6">
+            <button type="button" class="btn btn-info btn-block" id="blackoutButton"><i class="fa fa-plus"></i> Blackout Time</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

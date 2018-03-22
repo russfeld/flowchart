@@ -26,15 +26,15 @@
       <input type="hidden" id="id" value="{{$plan->id}}">
       <input type="hidden" id="student_id" value="{{$plan->student_id}}">
       <span id="spin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
-      <button type="button" class="btn btn-primary" id="save">Save</button>
+      <button type="button" class="btn btn-primary" id="save"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
       @if (isset($plan->id))
-        <button type="button" class="btn btn-danger" id="delete">Delete</button>
+        <button type="button" class="btn btn-danger" id="delete"><i class="fa fa-trash" aria-hidden="true"></i> Delete</button>
       @endif
       @if (isset($plan->id))
-        <a type="button" class="btn btn-warning" href="{{ url('/flowcharts/view/' . $plan->id )}}">Back</a>
-        <button type="button" class="btn btn-info" id="repopulate">Reset Degree Requirements</a>
+        <a type="button" class="btn btn-warning" href="{{ url('/flowcharts/view/' . $plan->id )}}"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</a>
+        <button type="button" class="btn btn-info" id="repopulate"><i class="fa fa-refresh" aria-hidden="true"></i> Reset Degree Requirements</a>
       @else
-        <a type="button" class="btn btn-warning" href="{{ url('/flowcharts/' . $plan->student_id )}}">Back</a>
+        <a type="button" class="btn btn-warning" href="{{ url('/flowcharts/' . $plan->student_id )}}"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</a>
       @endif
     </form>
   </div>

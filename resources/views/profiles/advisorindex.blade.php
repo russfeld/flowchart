@@ -17,9 +17,9 @@
   @include('forms.textarea', ['field' => 'notes', 'label' => 'Notes', 'value' => $advisor->notes])
   @include('forms.image', ['field' => 'pic', 'label' => 'Image', 'value' => $advisor->pic])
   <span id="profilespin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
-  <button type="button" class="btn btn-primary" id="saveAdvisorProfile">Update Profile</button>
+  <button type="button" class="btn btn-primary" id="saveAdvisorProfile"><i class="fa fa-floppy-o" aria-hidden="true"></i> Update Profile</button>
   @if (!($advisor->user->update_profile))
-  <a id="profileAdvisingBtn" class="btn btn-success hide-spin" href="{{ url(isset($lastUrl) ? $lastUrl : 'advising') }}" role="button">Continue</a>
+  <a id="profileAdvisingBtn" class="btn btn-success hide-spin" href="{{ url(isset($lastUrl) ? $lastUrl : 'advising') }}" role="button"><i class="fa fa-arrow-right" aria-hidden="true"></i> Continue</a>
   @endif
   <br><br>
   <div class="panel panel-primary">

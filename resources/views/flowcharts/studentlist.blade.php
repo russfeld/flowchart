@@ -34,7 +34,7 @@
             <td>{{ $student->last_name }}</td>
             <td>{{ $student->advisor->name or "Unassigned" }}</td>
             <td>{{ $student->department->name or "Unassigned" }}</td>
-            <td><a class="btn btn-primary btn-sm" href="{{url('/flowcharts/' . $student->id)}}" role="button">View Flowcharts</a></td>
+            <td><a class="btn btn-primary btn-sm" href="{{url('/flowcharts/' . $student->id)}}" role="button"><i class="fa fa-list"></i> View Flowcharts</a></td>
           </tr>
           @endforeach
           </tbody>

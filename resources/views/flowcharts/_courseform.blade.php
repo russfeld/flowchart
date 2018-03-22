@@ -27,9 +27,9 @@
 
       <div class="modal-footer">
         <span id="spin" class="fa fa-cog fa-spin fa-lg hide-spin">&nbsp;</span>
-      	<button type="button" class="btn btn-danger" id="deleteCourse">Delete</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="saveCourse">Save</button>
+      	<button type="button" class="btn btn-danger" id="deleteCourse"><i class="fa fa-trash" aria-hidden="true"></i> Delete</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Close</button>
+        <button type="button" class="btn btn-primary" id="saveCourse"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
       </div>
 
     </div>

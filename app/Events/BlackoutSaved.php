@@ -25,7 +25,6 @@ class BlackoutSaved
      */
     public function __construct(Blackout $blackout)
     {
-        echo "make event";
         $this->blackout = $blackout;
     }
 

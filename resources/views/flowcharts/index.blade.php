@@ -6,7 +6,7 @@
 
 <h3 class="top-header">Flowcharts for {{$student->name}}:</h3>
 
-<a type="button" class="btn btn-success" href="/flowcharts/new/{{$student->id}}">New Flowchart</a>
+<a type="button" class="btn btn-success" href="/flowcharts/new/{{$student->id}}"><i class="fa fa-plus"></i> New Flowchart</a>
 
 @foreach($plans as $plan)
   @include('flowcharts._flowchart', ['plan' => $plan, 'link' => true])

@@ -665,9 +665,9 @@ var loadConflicts = function(){
 					$('<div/>', {
 						'id' : 'resolve'+value.id,
 						'class': 'meeting-conflict',
-						'html': 	'<p>&nbsp;<button type="button" class="btn btn-danger pull-right deleteConflict" data-id='+value.id+'>Delete</button>' +
-									'&nbsp;<button type="button" class="btn btn-primary pull-right editConflict" data-id='+value.id+'>Edit</button> ' +
-									'<button type="button" class="btn btn-success pull-right resolveConflict" data-id='+value.id+'>Keep Meeting</button>' +
+						'html': 	'<p>&nbsp;<button type="button" class="btn btn-danger pull-right deleteConflict" data-id='+value.id+'><i class="fa fa-trash" aria-hidden="true"></i> Delete</button>' +
+									'&nbsp;<button type="button" class="btn btn-primary pull-right editConflict" data-id='+value.id+'><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button> ' +
+									'<button type="button" class="btn btn-success pull-right resolveConflict" data-id='+value.id+'><i class="fa fa-floppy-o" aria-hidden="true"></i> Keep</button>' +
 									'<span id="resolve'+value.id+'spin" class="fa fa-cog fa-spin fa-lg pull-right hide-spin">&nbsp;</span>' +
 										'<b>'+value.title+'</b> ('+value.start+')</p><hr>'
 						}).appendTo('#resolveConflictMeetings');
