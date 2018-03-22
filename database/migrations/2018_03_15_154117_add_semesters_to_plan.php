@@ -57,14 +57,17 @@ class AddSemestersToPlan extends Migration
         });
 
         Schema::table('planrequirements', function (Blueprint $table) {
+            $table->dropUnique('planrequirements_plan_id_semester_id_ordering_unique');
+        });
+
+        Schema::table('planrequirements', function (Blueprint $table) {
             $table->dropForeign('planrequirements_semester_id_foreign');
             $table->dropForeign('planrequirements_completedcourse_id_foreign');
             $table->dropForeign('planrequirements_course_id_foreign');
-            $table->dropColumn('semester_id');
             $table->dropColumn('completedcourse_id');
             $table->dropColumn('course_id');
             $table->integer('semester')->unsigned();
-            $table->dropUnique('planrequirements_plan_id_semester_id_ordering_unique');
+            $table->dropColumn('semester_id');
         });
 
         Schema::table('degreerequirements', function (Blueprint $table) {
