@@ -92,14 +92,14 @@ var loadData = function(){
 }
 
 var editSemester = function(event){
-  var semid = $(event.target).data('id');
+  var semid = $(event.currentTarget).data('id');
   $("#sem-paneledit-" + semid).show();
   $("#sem-panelhead-" + semid).hide();
 }
 
 var saveSemester = function(event){
   var id = $('#id').val();
-  var semid = $(event.target).data('id');
+  var semid = $(event.currentTarget).data('id');
   var data = {
     id: semid,
     name: $("#sem-text-" + semid).val()
@@ -119,7 +119,7 @@ var deleteSemester = function(event){
   var choice = confirm("Are you sure?");
     if(choice === true){
     var id = $('#id').val();
-    var semid = $(event.target).data('id');
+    var semid = $(event.currentTarget).data('id');
     var data = {
       id: semid,
     };
@@ -199,8 +199,8 @@ var dropCourse = function(event){
 }
 
 var editCourse = function(event){
-  var courseIndex = $(event.target).data('id');
-  var semIndex = $(event.target).data('sem');
+  var courseIndex = $(event.currentTarget).data('id');
+  var semIndex = $(event.currentTarget).data('sem');
   var course = window.vm.semesters[semIndex].courses[courseIndex];
   $('#course_name').val(course.name);
   $('#credits').val(course.credits);
