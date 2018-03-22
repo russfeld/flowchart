@@ -16,6 +16,7 @@ exports.init = function(){
       dropSemester: dropSemester,
       dropCourse: dropCourse,
       editCourse: editCourse,
+      showPrereqs: showPrereqs,
     },
     components: {
       draggable,
@@ -307,6 +308,13 @@ var deleteCourse = function(event){
       site.handleError("delete course", "#editCourse", error);
     });
 
+}
+
+var showPrereqs = function(event){
+  var courseIndex = $(event.currentTarget).data('id');
+  var semIndex = $(event.currentTarget).data('sem');
+  var course = window.vm.semesters[semIndex].courses[courseIndex];
+  console.log(course);
 }
 
 var addCourse = function(){

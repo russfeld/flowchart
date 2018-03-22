@@ -34,10 +34,10 @@
 <br><br>
 
 @if($course->prerequisites->count() > 0)
-<b>Prerequisites Courses:</b><br>
+<b>Prerequisite Courses:</b><br>
 <ul>
 @foreach($course->prerequisites as $prereq)
-<li><a href="{{ url('courses/' . $prereq->slug) }}">{{ $prereq->fullTitle }}</a></li>
+<li><a href="{{ url('courses/course/' . $prereq->slug) }}">{{ $prereq->fullTitle }}</a></li>
 @endforeach {{--prereqs--}}
 </ul>
 @endif
@@ -46,7 +46,7 @@
 <b>Prerequisite for:</b><br>
 <ul>
 @foreach($course->followers as $prereq)
-<li><a href="{{ url('courses/' . $prereq->slug) }}">{{ $prereq->fullTitle }}</a></li>
+<li><a href="{{ url('courses/course/' . $prereq->slug) }}">{{ $prereq->fullTitle }}</a></li>
 @endforeach {{--followers--}}
 </ul>
 @endif

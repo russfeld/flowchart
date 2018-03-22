@@ -61,6 +61,9 @@
                   </div>
 
                   <div class="btn-group pull-right">
+                    <template v-if="course.course_id > 0">
+                      <button type="button" class="prereqs btn btn-default btn-xs" aria-label="Prerequisites" title="Show Prerequisites" v-bind:data-id="cindex" v-bind:data-sem="index" v-on:click.capture="showPrereqs"><i class="fa fa-arrows-alt" aria-hidden="true"></i></button>
+                    </template>
                     <button type="button" class="edit-course btn btn-default btn-xs" aria-label="Edit" title="Edit Course" v-bind:data-id="cindex" v-bind:data-sem="index" v-on:click.capture="editCourse"><i class="fa fa-pencil"></i></button>
                   </div>
                 </div>
