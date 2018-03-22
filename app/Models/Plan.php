@@ -19,7 +19,7 @@ class Plan extends Validatable
       'name' => 'required|string',
       'description' => 'required|string',
       'start_year' => 'required|integer|digits:4',
-      'start_semester' => 'required|integer|between:0,4',
+      'start_semester' => 'required|integer|between:0,3',
       'degreeprogram_id' => 'required|exists:degreeprograms,id',
       'student_id' => 'required|exists:students,id',
     );
@@ -71,6 +71,9 @@ class Plan extends Validatable
       $year = $this->start_year;
       $order = 0;
       $semesters = array();
+      if($sem == 0){
+        $sem = 3;
+      }
       if($sem == 2){
         $semester = new Semester();
         $semester->name = "Summer " . $year;

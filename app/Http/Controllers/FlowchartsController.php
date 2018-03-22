@@ -16,6 +16,7 @@ use App\Models\Advisor;
 use App\Models\Plan;
 use App\Models\Semester;
 use App\Models\Planrequirement;
+use App\Models\Degreeprogram;
 
 class FlowchartsController extends Controller
 {
@@ -76,6 +77,138 @@ class FlowchartsController extends Controller
           }else{
             abort(404);
           }
+        }
+      }
+    }
+
+    public function newFlowchart($id = -1){
+      if($id < 0){
+        abort(404);
+      }else{
+        $user = Auth::user();
+        $plan = new Plan();
+        if($user->is_advisor){
+          $student = Student::findOrFail($id);
+          $plan->student_id = $student->id;
+        }else{
+          $plan->student_id = $user->student_id;
+        }
+        $degreeprograms = Degreeprogram::orderBy('name', 'asc')->get();
+        $degreeprogramUnknown = new Degreeprogram();
+        $degreeprogramUnknown->name = "Unassigned";
+        $degreeprogramUnknown->id = 0;
+        $degreeprograms->prepend($degreeprogramUnknown);
+        $semesters = collect([
+          (object)['id' => 0, 'name' => 'Unassigned'],
+          (object)['id' => 1, 'name' => 'Spring'],
+          (object)['id' => 2, 'name' => 'Summer'],
+          (object)['id' => 3, 'name' => 'Fall'],
+        ]);
+        return view('flowcharts.edit')->with('plan', $plan)->with('semesters', $semesters)->with('degreeprograms', $degreeprograms);
+      }
+    }
+
+    public function saveNewFlowchart($id = -1, Request $request){
+      if($id < 0){
+        abort(404);
+      }else{
+        $user = Auth::user();
+        $plan = new Plan();
+        $data = $request->all();
+        if($user->is_advisor){
+          $student = Student::findOrFail($id);
+          $data['student_id'] = $student->id;
+        }else{
+          $data['student_id'] = $user->student_id;
+        }
+
+        if($plan->validate($data)){
+          $plan->fill($data);
+          $plan->save();
+          $plan->fillRequirementsFromDegree();
+          $request->session()->put('message', trans('messages.item_saved'));
+          $request->session()->put('type', 'success');
+          return response()->json(url('flowcharts/view/' . $plan->id));
+        }else{
+          return response()->json($plan->errors(), 422);
+        }
+      }
+    }
+
+    public function resetFlowchart(Request $request){
+      $this->validate($request, [
+        'id' => 'required|exists:plans',
+      ]);
+      $user = Auth::user();
+      $plan = Plan::findOrFail($request->input('id'));
+      if($user->is_advisor || (!$user->is_advisor && $user->student->id == $plan->student_id)){
+        $plan->removeRequirements();
+        $plan->fillRequirementsFromDegree();
+        return response()->json(trans('messages.item_populated'));
+      }else{
+        abort(404);
+      }
+    }
+
+    public function deleteFlowchart(Request $request){
+      $this->validate($request, [
+        'id' => 'required|exists:plans',
+      ]);
+      $user = Auth::user();
+      $plan = Plan::findOrFail($request->input('id'));
+      if($user->is_advisor || (!$user->is_advisor && $user->student->id == $plan->student_id)){
+        $plan->delete();
+        $request->session()->put('message', trans('messages.item_deleted'));
+        $request->session()->put('type', 'success');
+        return response()->json(trans('messages.item_deleted'));
+      }else{
+        abort(404);
+      }
+    }
+
+    public function editFlowchart($id = -1){
+      if($id < 0){
+        abort(404);
+      }else{
+        $user = Auth::user();
+        $plan = Plan::findOrFail($id);
+        if($user->is_advisor || (!$user->is_advisor && $user->student->id == $plan->student_id)){
+          $degreeprograms = Degreeprogram::orderBy('name', 'asc')->get();
+          $degreeprogramUnknown = new Degreeprogram();
+          $degreeprogramUnknown->name = "Unassigned";
+          $degreeprogramUnknown->id = 0;
+          $degreeprograms->prepend($degreeprogramUnknown);
+          $semesters = collect([
+            (object)['id' => 0, 'name' => 'Unassigned'],
+            (object)['id' => 1, 'name' => 'Spring'],
+            (object)['id' => 2, 'name' => 'Summer'],
+            (object)['id' => 3, 'name' => 'Fall'],
+          ]);
+          return view('flowcharts.edit')->with('plan', $plan)->with('semesters', $semesters)->with('degreeprograms', $degreeprograms);
+        }else{
+          abort(404);
+        }
+      }
+    }
+
+    public function saveFlowchart($id = -1, Request $request){
+      if($id < 0){
+        abort(404);
+      }else{
+        $user = Auth::user();
+        $plan = Plan::findOrFail($id);
+        $data = $request->all();
+        if($user->is_advisor || (!$user->is_advisor && $user->student->id == $plan->student_id)){
+          $data['student_id'] = $plan->student_id;
+          if($plan->validate($data)){
+            $plan->fill($data);
+            $plan->save();
+            return response()->json(trans('messages.item_saved'));
+          }else{
+            return response()->json($plan->errors(), 422);
+          }
+        }else{
+          abort(404);
         }
       }
     }

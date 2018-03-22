@@ -46,10 +46,15 @@ Route::get('completedcourses/completedcoursefeed/{id}', 'CompletedcoursesControl
  * Routes for the FlowchartsController
  */
 //Route::controller('flowcharts', 'FlowchartsController');
+Route::get('flowcharts/new/{id}', 'FlowchartsController@newFlowchart');
+Route::post('flowcharts/new/{id}', 'FlowchartsController@saveNewFlowchart');
 Route::get('flowcharts/{id?}', 'FlowchartsController@getIndex');
 Route::get('flowcharts/view/{id}', 'FlowchartsController@getFlowchart');
 Route::get('flowcharts/data/{id}', 'FlowchartsController@getFlowchartData');
 Route::get('flowcharts/edit/{id}', 'FlowchartsController@editFlowchart');
+Route::post('flowcharts/edit/{id}', 'FlowchartsController@saveFlowchart');
+Route::post('flowcharts/delete', 'FlowchartsController@deleteFlowchart');
+Route::post('flowcharts/reset', 'FlowchartsController@resetFlowchart');
 Route::get('flowcharts/semesters/{id}', 'FlowchartsController@getSemesterData');
 Route::post('flowcharts/semesters/{id}/save', 'FlowchartsController@postSemesterSave');
 Route::post('flowcharts/semesters/{id}/delete', 'FlowchartsController@postSemesterDelete');
