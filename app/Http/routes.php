@@ -35,7 +35,9 @@ Route::get('images/{filename}', 'RootRouteController@getImage');
 Route::get('courses/', 'CoursesController@getIndex');
 Route::get('courses/category/{category}', 'CoursesController@getCategory');
 Route::get('courses/course/{slug}', 'CoursesController@getCourse');
+Route::get('courses/id/{id}', 'CoursesController@getCourseById');
 Route::get('courses/coursefeed', 'CoursesController@getCoursefeed');
+Route::get('courses/prereqfeed/{id}', 'CoursesController@getPrereqs');
 
 /*
  * Routes for the CompletedcoursesController

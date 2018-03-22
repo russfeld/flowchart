@@ -8,6 +8,9 @@ exports.init = function(){
 		el: '#flowchart',
 		data: {
       semesters: [],
+      course_id: -1,
+      prerequisites: [],
+      followers: [],
 		},
     methods: {
       editSemester: editSemester,
@@ -17,6 +20,7 @@ exports.init = function(){
       dropCourse: dropCourse,
       editCourse: editCourse,
       showPrereqs: showPrereqs,
+      prereqClass: prereqClass,
     },
     components: {
       draggable,
@@ -314,7 +318,43 @@ var showPrereqs = function(event){
   var courseIndex = $(event.currentTarget).data('id');
   var semIndex = $(event.currentTarget).data('sem');
   var course = window.vm.semesters[semIndex].courses[courseIndex];
-  console.log(course);
+  if(course.course_id == window.vm.course_id){
+    window.vm.course_id = -1;
+    window.vm.prerequisites = [];
+    window.vm.followers = [];
+  }else{
+    window.axios.get('/courses/prereqfeed/' + course.course_id)
+      .then(function(message){
+        window.vm.course_id = course.course_id;
+        window.vm.prerequisites = message.data.prerequisites;
+        window.vm.followers = message.data.followers;
+      })
+      .catch(function(error){
+        site.handleError("retrieve prerequisites", "", error);
+      });
+  }
+}
+
+var prereqClass = function(id){
+  var cur = false;
+  var pre = false;
+  var post = false;
+  if(id == window.vm.course_id){
+    cur = true;
+  }
+  if(window.vm.prerequisites.includes(id)){
+    pre = true;
+  }
+  if(window.vm.followers.includes(id)){
+    post = true;
+  }
+  return {
+    'fa': cur || pre || post,
+    'fa-3x': cur || pre || post,
+    'fa-circle': cur,
+    'fa-arrow-circle-right': pre,
+    'fa-arrow-circle-left': post,
+  };
 }
 
 var addCourse = function(){

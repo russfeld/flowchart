@@ -8,6 +8,7 @@ use App\Models\Course;
 
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
+use League\Fractal\Resource\Item;
 use App\JsonSerializer;
 
 use Illuminate\Http\Request;
@@ -53,6 +54,13 @@ class CoursesController extends Controller
         return view('courses/detail')->with('courses', $courses)->with('slug', $slug);
     }
 
+    public function getCourseById($id)
+    {
+        $courses = Course::where('id', $id)->with('prerequisites', 'followers', 'areas')->get();
+
+        return view('courses/detail')->with('courses', $courses)->with('slug', $courses->first()->slug);
+    }
+
     public function getCoursefeed(Request $request){
     	$this->validate($request, [
             'query' => 'required|string',
@@ -69,6 +77,18 @@ class CoursesController extends Controller
 
     	return $this->fractal->createData($resource)->toJson();
 
+    }
+
+    public function getPrereqs($id){
+      $course = Course::findOrFail($id);
+      $resource = new Item($course, function($course) {
+            return[
+                'prerequisites' => $course->prerequisites->pluck(['id'])->toArray(),
+                'followers' => $course->followers->pluck(['id'])->toArray(),
+            ];
+      });
+      $this->fractal->setSerializer(new JsonSerializer());
+      return $this->fractal->createData($resource)->toJson();
     }
 
 }

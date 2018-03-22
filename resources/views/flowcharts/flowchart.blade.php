@@ -37,13 +37,23 @@
 
               <template v-for="(course, cindex) in semester.courses">
                 <div class="course list-group-item move" v-bind:class="{'custom-course': course.custom, 'complete-course': course.complete}" v-bind:data-id="course.id" :key="course.id">
+                  <div class="pull-right">
+                    <div class="btn-group">
+                      <template v-if="course.course_id > 0">
+                        <button type="button" class="prereqs btn btn-default btn-xs" v-bind:class="{active: course.course_id == course_id}" aria-label="Prerequisites" title="Show Prerequisites" v-bind:data-id="cindex" v-bind:data-sem="index" v-on:click.capture="showPrereqs"><i class="fa fa-arrows-alt" aria-hidden="true"></i></button>
+                      </template>
+                      <button type="button" class="edit-course btn btn-default btn-xs" aria-label="Edit" title="Edit Course" v-bind:data-id="cindex" v-bind:data-sem="index" v-on:click.capture="editCourse"><i class="fa fa-pencil"></i></button>
+                    </div>
+                    <p class="text-right prereq-icon"><i v-bind:class="prereqClass(course.course_id)" aria-hidden="true"></i></p>
+                  </div>
+
                   <div class="course-content pull-left">
                     <template v-if="course.name.length != 0">
                       <template v-if="course.course_id <= 0">
                         <p><b>@{{ course.name }} (@{{ course.credits }})</b></p>
                       </template>
                       <template v-else>
-                        <p><i class="fa fa-star" aria-hidden="true"></i> <b>@{{ course.name }} (@{{ course.credits }})</b></p>
+                        <p><a v-bind:href="'/courses/id/' + course.course_id" target="_blank"><i class="fa fa-star" aria-hidden="true"></i></a> <b>@{{ course.name }} (@{{ course.credits }})</b></p>
                       </template>
                       <template v-if="course.electivelist_name.length != 0">
                         <p><i class="fa fa-code-fork text-primary" aria-hidden="true"></i> @{{ course.electivelist_abbr }}</p>
@@ -60,12 +70,6 @@
                     </template>
                   </div>
 
-                  <div class="btn-group pull-right">
-                    <template v-if="course.course_id > 0">
-                      <button type="button" class="prereqs btn btn-default btn-xs" aria-label="Prerequisites" title="Show Prerequisites" v-bind:data-id="cindex" v-bind:data-sem="index" v-on:click.capture="showPrereqs"><i class="fa fa-arrows-alt" aria-hidden="true"></i></button>
-                    </template>
-                    <button type="button" class="edit-course btn btn-default btn-xs" aria-label="Edit" title="Edit Course" v-bind:data-id="cindex" v-bind:data-sem="index" v-on:click.capture="editCourse"><i class="fa fa-pencil"></i></button>
-                  </div>
                 </div>
               </template>
 
