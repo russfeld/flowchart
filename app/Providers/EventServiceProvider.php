@@ -19,6 +19,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\CompletedCourseSaved' => [
             'App\Listeners\UpdateCompletedCoursesMap',
         ],
+        'App\Events\BlackoutSaved' => [
+            'App\Listeners\UpdateBlackoutEvents',
+        ],
     ];
 
     /**

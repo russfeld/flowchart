@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Events\BlackoutSaved;
+
 class Blackout extends Model
 {
     public function advisor(){
@@ -31,4 +33,8 @@ class Blackout extends Model
     }
 
     protected $dates = ['created_at', 'updated_at', 'start', 'end', 'repeat_until'];
+
+    protected $events = [
+      'saved' => BlackoutSaved::class,
+    ];
 }
