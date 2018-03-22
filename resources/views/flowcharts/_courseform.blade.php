@@ -16,9 +16,9 @@
 
           @include('forms.text', ['field' => 'notes', 'label' => 'Notes', 'value' => ''])
 
-          @include('forms.autofill', ['field' => 'course_id', 'label' => 'Catalog Match:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course'])
+          @include('forms.autofilllock', ['field' => 'course_id', 'label' => 'Catalog Match:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course', 'locked' => 0])
 
-          @include('forms.autofill', ['field' => 'completedcourse_id', 'label' => 'Completed Course Match:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course'])
+          @include('forms.autofilllock', ['field' => 'completedcourse_id', 'label' => 'Completed Course Match:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course', 'locked' => 0])
 
         	<input type="hidden" id="planrequirement_id" value="-1" />
 

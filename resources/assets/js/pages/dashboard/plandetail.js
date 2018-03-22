@@ -73,6 +73,8 @@ exports.init = function(){
       ordering: $('#ordering').val(),
       credits: $('#credits').val(),
       student_id: $('#student_id').val(),
+      course_id_lock: $('#course_idlock').val(),
+      completedcourse_id_lock: $('#completedcourse_idlock').val(),
     };
     if($('#semester_id').val() > 0){
       data.semester_id = $('#semester_id').val();
@@ -147,8 +149,10 @@ exports.init = function(){
         $('#electivelist_idtext').html("Selected: (" + message.data.electivelist_id + ") " + site.truncateText(message.data.electivelist_name, 30));
         $('#course_id').val(message.data.course_id);
         $('#course_idtext').html("Selected: (" + message.data.course_id + ") " + site.truncateText(message.data.catalog_course, 30));
+        dashboard.ajaxautocompleteset('course_id', message.data.course_id_lock);
         $('#completedcourse_id').val(message.data.completedcourse_id);
         $('#completedcourse_idtext').html("Selected: (" + message.data.completedcourse_id + ") " + site.truncateText(message.data.completed_course, 30));
+        dashboard.ajaxautocompleteset('completedcourse_id', message.data.completedcourse_id_lock);
         $('#delete').show();
 
         var semester_id = message.data.semester_id;
@@ -178,9 +182,11 @@ exports.init = function(){
   dashboard.ajaxautocomplete('electivelist_id', '/electivelists/electivelistfeed');
 
   dashboard.ajaxautocomplete('course_id', '/courses/coursefeed');
+  dashboard.ajaxautocompletelock('course_id');
 
   var student_id = $('#student_id').val();
   dashboard.ajaxautocomplete('completedcourse_id', '/completedcourses/completedcoursefeed/' + student_id);
+  dashboard.ajaxautocompletelock('completedcourse_id');
 };
 
 var resetForm = function(){
@@ -202,4 +208,6 @@ var resetForm = function(){
   $('#completedcourse_id').val("-1");
   $('#completedcourse_idauto').val("");
   $('#completedcourse_idtext').html("Selected (0) ");
+  dashboard.ajaxautocompleteset('course_id', 0);
+  dashboard.ajaxautocompleteset('completedcourse_id', 0);
 }

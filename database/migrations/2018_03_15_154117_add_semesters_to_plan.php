@@ -32,6 +32,8 @@ class AddSemestersToPlan extends Migration
           $table->integer('course_id')->unsigned()->nullable();
           $table->foreign('completedcourse_id')->references('id')->on('completedcourses');
           $table->foreign('course_id')->references('id')->on('courses');
+          $table->boolean('course_id_lock')->default(false);
+          $table->boolean('completedcourse_id_lock')->default(false);
 
       });
 
@@ -66,6 +68,8 @@ class AddSemestersToPlan extends Migration
             $table->dropForeign('planrequirements_course_id_foreign');
             $table->dropColumn('completedcourse_id');
             $table->dropColumn('course_id');
+            $table->dropColumn('course_id_lock');
+            $table->dropColumn('completedcourse_id_lock');
             $table->integer('semester')->unsigned();
             $table->dropColumn('semester_id');
         });

@@ -49,6 +49,7 @@ Route::get('completedcourses/completedcoursefeed/{id}', 'CompletedcoursesControl
 Route::get('flowcharts/{id?}', 'FlowchartsController@getIndex');
 Route::get('flowcharts/view/{id}', 'FlowchartsController@getFlowchart');
 Route::get('flowcharts/data/{id}', 'FlowchartsController@getFlowchartData');
+Route::get('flowcharts/edit/{id}', 'FlowchartsController@editFlowchart');
 Route::get('flowcharts/semesters/{id}', 'FlowchartsController@getSemesterData');
 Route::post('flowcharts/semesters/{id}/save', 'FlowchartsController@postSemesterSave');
 Route::post('flowcharts/semesters/{id}/delete', 'FlowchartsController@postSemesterDelete');

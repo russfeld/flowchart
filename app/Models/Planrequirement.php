@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Validator;
+use App\Events\PlanRequirementSaved;
 
 class Planrequirement extends Validatable
 {
@@ -48,6 +49,8 @@ class Planrequirement extends Validatable
           'electivelist_id' => 'required_without:course_name|exists_or_null:electivelists,id',
           'course_id' => 'sometimes|exists_or_null:courses,id',
           'completedcourse_id' => 'sometimes|exists_or_null:completedcourses,id,student_id,' . $params[2],
+          'course_id_lock' => 'required|boolean',
+          'completedcourse_id_lock' => 'required|boolean',
         );
       }else{
         return array(
@@ -60,6 +63,8 @@ class Planrequirement extends Validatable
           'electivelist_id' => 'required_without:course_name|exists_or_null:electivelists,id',
           'course_id' => 'sometimes|exists_or_null:courses,id',
           'completedcourse_id' => 'sometimes|exists_or_null:completedcourses,id,student_id,' . $params[2],
+          'course_id_lock' => 'required|boolean',
+          'completedcourse_id_lock' => 'required|boolean',
         );
       }
     }
@@ -73,6 +78,8 @@ class Planrequirement extends Validatable
           'credits' => 'required|integer',
           'course_id' => 'sometimes|exists_or_null:courses,id',
           'completedcourse_id' => 'sometimes|exists_or_null:completedcourses,id,student_id,' . $params[0],
+          'course_id_lock' => 'required|boolean',
+          'completedcourse_id_lock' => 'required|boolean',
         );
         // make a new validator object
         $v = Validator::make($data, $rules);
@@ -96,6 +103,8 @@ class Planrequirement extends Validatable
           'course_name' => 'sometimes|required|string',
           'course_id' => 'sometimes|exists_or_null:courses,id',
           'completedcourse_id' => 'sometimes|exists_or_null:completedcourses,id,student_id,' . $params[0],
+          'course_id_lock' => 'required|boolean',
+          'completedcourse_id_lock' => 'required|boolean',
         );
         // make a new validator object
         $v = Validator::make($data, $rules);
@@ -112,5 +121,9 @@ class Planrequirement extends Validatable
         return true;
     }
 
-    protected $fillable = ['notes', 'plan_id', 'semester_id', 'ordering', 'credits', 'course_name', 'electivelist_id', 'course_id', 'completedcourse_id'];
+    protected $fillable = ['notes', 'plan_id', 'semester_id', 'ordering', 'credits', 'course_name', 'electivelist_id', 'course_id', 'completedcourse_id', 'course_id_lock', 'completedcourse_id_lock'];
+
+    protected $events = [
+      'saved' => PlanRequirementSaved::class,
+    ];
 }

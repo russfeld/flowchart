@@ -103,6 +103,8 @@ class FlowchartsController extends Controller
                 'course_id' => $requirement->course_id == null ? 0 : $requirement->course_id,
                 'completedcourse_name' => $requirement->completedcourse_id == null ? '' : $requirement->completedcourse->fullTitle,
                 'completedcourse_id' => $requirement->completedcourse_id == null ? 0 : $requirement->completedcourse_id,
+                'course_id_lock' => $requirement->course_id_lock,
+                'completedcourse_id_lock' => $requirement->completedcourse_id_lock,
             ];
           });
           $this->fractal->setSerializer(new JsonSerializer());
@@ -355,9 +357,9 @@ class FlowchartsController extends Controller
               //is not custom, so only certain fields can be updated
               if($planrequirement->electivelist_id == null){
                 //has no elective list, so course name cannot be changed
-                $data = $request->only(['notes', 'completedcourse_id', 'course_id']);
+                $data = $request->only(['notes', 'completedcourse_id', 'course_id', 'course_id_lock', 'completedcourse_id_lock']);
               }else{
-                $data = $request->only(['notes', 'completedcourse_id', 'course_id', 'course_name']);
+                $data = $request->only(['notes', 'completedcourse_id', 'course_id', 'course_name', 'course_id_lock', 'completedcourse_id_lock']);
               }
               if(isset($data['course_id']) && $data['course_id'] == 0){
                 $data['course_id'] = null;

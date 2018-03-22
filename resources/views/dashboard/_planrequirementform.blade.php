@@ -17,8 +17,8 @@
           @include('forms.text', ['field' => 'notes', 'label' => 'Notes', 'value' => ''])
           @include('forms.text', ['field' => 'course_name', 'label' => 'Course', 'value' => ''])
           @include('forms.autofill', ['field' => 'electivelist_id', 'label' => 'Elective:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Elective List'])
-          @include('forms.autofill', ['field' => 'course_id', 'label' => 'Catalog Match:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course'])
-          @include('forms.autofill', ['field' => 'completedcourse_id', 'label' => 'Completed Course Match:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course'])
+          @include('forms.autofilllock', ['field' => 'course_id', 'label' => 'Catalog Match:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course', 'locked' => 0])
+          @include('forms.autofilllock', ['field' => 'completedcourse_id', 'label' => 'Completed Course Match:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course', 'locked' => 0])
         </form>
       </div>
       <div class="modal-footer">

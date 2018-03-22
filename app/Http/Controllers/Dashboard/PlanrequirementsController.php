@@ -67,8 +67,11 @@ class PlanrequirementsController extends Controller
             'degreerequirement_id' => $requirement->degreerequirement_id == null ? '' : $requirement->degreerequirement_id,
             'catalog_course' => $requirement->course_id == null ? '' : $requirement->course->fullTitle,
             'course_id' => $requirement->course_id == null ? 0 : $requirement->course_id,
+            'course_id_lock' => $requirement->course_id_lock,
             'completed_course' => $requirement->completedcourse_id == null ? '' : $requirement->completedcourse->fullTitle,
             'completedcourse_id' => $requirement->completedcourse_id == null ? 0 : $requirement->completedcourse_id,
+            'completedcourse_id_lock' => $requirement->completedcourse_id_lock,
+
         ];
       });
       $this->fractal->setSerializer(new JsonSerializer());

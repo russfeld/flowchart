@@ -9,10 +9,10 @@
   		</div>
 		@else
   		<div class="hidden-xs">
-  			<h3>{{ $plan->name }} <small>{{ $plan->degreeprogram->name }}</small></h3>
+  			<h3>{{ $plan->student->name }} - {{ $plan->name }} <small>{{ $plan->degreeprogram->name }}</small></h3>
   		</div>
   		<div class="visible-xs-block">
-  			<h3>{{ $plan->name }}<br><small>{{ $plan->degreeprogram->name }}</small></h3>
+  			<h3>{{ $plan->student->name }} - {{ $plan->name }} <br><small>{{ $plan->degreeprogram->name }}</small></h3>
   		</div>
 		@endif
 		<b>Description: </b>{{ $plan->description }}<br>
@@ -25,6 +25,7 @@
 				<button class="btn btn-default" id="reset" title="Refresh Flowchart"><i class="fa fa-refresh"></i></button>
 				<button class="btn btn-success" id="add-sem"><i class="fa fa-plus"></i> Semester</button>
 				<button class="btn btn-info" id="add-course"><i class="fa fa-plus"></i> Requirement</button>
+				<a href="{{ url('flowcharts/edit/' . $plan->id)}}" class="btn btn-warning"><i class="fa fa-pencil"></i> Edit Plan</a>
 			</p>
 		@endif
 	</div>

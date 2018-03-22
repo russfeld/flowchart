@@ -197,5 +197,24 @@ exports.ajaxautocomplete = function(id, url){
   $('#' + id + 'clear').on('click', function(){
     $('#' + id).val(0);
     $('#' + id + 'text').html("Selected: (" + 0 + ") ");
-  })
+  });
+}
+
+exports.ajaxautocompletelock = function(id){
+  $('#' + id + 'lockBtn').on('click', function(){
+    val = parseInt($('#' + id + 'lock').val());
+    exports.ajaxautocompleteset(id, (val + 1) % 2);
+  });
+}
+
+exports.ajaxautocompleteset = function(id, value){
+  if(value == 1){
+    $('#' + id + 'lock').val(1);
+    $('#' + id + 'lockBtn').addClass("active");
+    $('#' + id + 'lockBtn').html('<i class="fa fa-lock"></i>');
+  }else{
+    $('#' + id + 'lock').val(0);
+    $('#' + id + 'lockBtn').removeClass("active");
+    $('#' + id + 'lockBtn').html('<i class="fa fa-unlock-alt"></i>');
+  }
 }
