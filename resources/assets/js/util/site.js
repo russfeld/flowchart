@@ -93,3 +93,98 @@ exports.truncateText = function(text, length){
 		return text;
 	}
 }
+
+/**
+ * Function to autocomplete a field
+ *
+ * @param id - the ID of the field
+ * @param url - the URL to request data from
+ */
+exports.ajaxautocomplete = function(id, url){
+  $('#' + id + 'auto').autocomplete({
+	    serviceUrl: url,
+	    ajaxSettings: {
+	    	dataType: "json"
+	    },
+      minChars: 3,
+      autoSelectFirst: true,
+	    onSelect: function (suggestion) {
+	        $('#' + id).val(suggestion.data);
+          $('#' + id + 'text').html("Selected: (" + suggestion.data + ") " + exports.truncateText(suggestion.value, 30));
+					$('#' + id + 'auto').val("");
+	    },
+	    transformResult: function(response) {
+	        return {
+	            suggestions: $.map(response.data, function(dataItem) {
+	                return { value: dataItem.value, data: dataItem.data };
+	            })
+	        };
+	    }
+	});
+
+  $('#' + id + 'clear').on('click', function(){
+    $('#' + id).val(0);
+    $('#' + id + 'text').html("Selected: (" + 0 + ") ");
+    $('#' + id + 'auto').val("");
+  });
+}
+
+/**
+ * Function to autocomplete a field with a lock
+ *
+ * @param id - the ID of the field
+ * @param url - the URL to request data from
+ */
+exports.ajaxautocompletelock = function(id, url){
+  $('#' + id + 'auto').autocomplete({
+	    serviceUrl: url,
+	    ajaxSettings: {
+	    	dataType: "json"
+	    },
+      minChars: 3,
+      autoSelectFirst: true,
+	    onSelect: function (suggestion) {
+	        $('#' + id).val(suggestion.data);
+          $('#' + id + 'text').html("Selected: (" + suggestion.data + ") " + exports.truncateText(suggestion.value, 30));
+					$('#' + id + 'auto').val("");
+          exports.ajaxautocompleteset(id, 1);
+	    },
+	    transformResult: function(response) {
+	        return {
+	            suggestions: $.map(response.data, function(dataItem) {
+	                return { value: dataItem.value, data: dataItem.data };
+	            })
+	        };
+	    }
+	});
+
+  $('#' + id + 'clear').on('click', function(){
+    $('#' + id).val(0);
+    $('#' + id + 'text').html("Selected: (" + 0 + ") ");
+    $('#' + id + 'auto').val("");
+    exports.ajaxautocompleteset(id, 0);
+  });
+
+  $('#' + id + 'lockBtn').on('click', function(){
+    val = parseInt($('#' + id + 'lock').val());
+    exports.ajaxautocompleteset(id, (val + 1) % 2);
+  });
+}
+
+/**
+ * Function to update a locked autocomplete button
+ *
+ * @param id - the ID of the field
+ * @param value - the value to set
+ */
+exports.ajaxautocompleteset = function(id, value){
+  if(value == 1){
+    $('#' + id + 'lock').val(1);
+    $('#' + id + 'lockBtn').addClass("active");
+    $('#' + id + 'lockBtn').html('<i class="fa fa-lock"></i>');
+  }else{
+    $('#' + id + 'lock').val(0);
+    $('#' + id + 'lockBtn').removeClass("active");
+    $('#' + id + 'lockBtn').html('<i class="fa fa-unlock-alt"></i>');
+  }
+}

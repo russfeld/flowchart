@@ -181,12 +181,10 @@ exports.init = function(){
 
   dashboard.ajaxautocomplete('electivelist_id', '/electivelists/electivelistfeed');
 
-  dashboard.ajaxautocomplete('course_id', '/courses/coursefeed');
-  dashboard.ajaxautocompletelock('course_id');
+  dashboard.ajaxautocompletelock('course_id', '/courses/coursefeed');
 
   var student_id = $('#student_id').val();
-  dashboard.ajaxautocomplete('completedcourse_id', '/completedcourses/completedcoursefeed/' + student_id);
-  dashboard.ajaxautocompletelock('completedcourse_id');
+  dashboard.ajaxautocompletelock('completedcourse_id', '/completedcourses/completedcoursefeed/' + student_id);
 };
 
 var resetForm = function(){

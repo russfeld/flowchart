@@ -31,14 +31,12 @@ exports.init = function(){
   $('#saveCourse').on('click', saveCourse);
   $('#deleteCourse').on('click', deleteCourse);
 
-  ajaxautocomplete('electivelist_id', '/electivelists/electivelistfeed');
+  site.ajaxautocomplete('electivelist_id', '/electivelists/electivelistfeed');
 
-  ajaxautocomplete('course_id', '/courses/coursefeed');
-  ajaxautocompletelock('course_id');
+  site.ajaxautocompletelock('course_id', '/courses/coursefeed');
 
   var student_id = $('#student_id').val();
-  ajaxautocomplete('completedcourse_id', '/completedcourses/completedcoursefeed/' + student_id);
-  ajaxautocompletelock('completedcourse_id');
+  site.ajaxautocompletelock('completedcourse_id', '/completedcourses/completedcoursefeed/' + student_id);
 }
 
 /**
@@ -214,11 +212,11 @@ var editCourse = function(event){
   $('#course_id').val(course.course_id);
   $('#course_idauto').val('');
   $('#course_idtext').html("Selected: (" + course.course_id + ") " + site.truncateText(course.course_name, 30));
-  ajaxautocompleteset('course_id', course.course_id_lock);
+  site.ajaxautocompleteset('course_id', course.course_id_lock);
   $('#completedcourse_id').val(course.completedcourse_id);
   $('#completedcourse_idauto').val('');
   $('#completedcourse_idtext').html("Selected: (" + course.completedcourse_id + ") " + site.truncateText(course.completedcourse_name, 30));
-  ajaxautocompleteset('completedcourse_id', course.completedcourse_id_lock);
+  site.ajaxautocompleteset('completedcourse_id', course.completedcourse_id_lock);
   if(course.degreerequirement_id <= 0){
     $('#course_name').prop('disabled', false);
     $('#credits').prop('disabled', false);
@@ -310,58 +308,6 @@ var deleteCourse = function(event){
 
 }
 
-/**
- * Function to autocomplete a field (duplicated from dashboard)
- *
- * @param id - the ID of the field
- * @param url - the URL to request data from
- */
-var ajaxautocomplete = function(id, url){
-  $('#' + id + 'auto').autocomplete({
-	    serviceUrl: url,
-	    ajaxSettings: {
-	    	dataType: "json"
-	    },
-      autoSelectFirst: true,
-      minChars: 3,
-	    onSelect: function (suggestion) {
-	        $('#' + id).val(suggestion.data);
-          $('#' + id + 'text').html("Selected: (" + suggestion.data + ") " + site.truncateText(suggestion.value, 30));
-	    },
-	    transformResult: function(response) {
-	        return {
-	            suggestions: $.map(response.data, function(dataItem) {
-	                return { value: dataItem.value, data: dataItem.data };
-	            })
-	        };
-	    }
-	});
-
-  $('#' + id + 'clear').on('click', function(){
-    $('#' + id).val(0);
-    $('#' + id + 'text').html("Selected: (" + 0 + ") ");
-  })
-}
-
-var ajaxautocompletelock = function(id){
-  $('#' + id + 'lockBtn').on('click', function(){
-    val = parseInt($('#' + id + 'lock').val());
-    ajaxautocompleteset(id, (val + 1) % 2);
-  });
-}
-
-var ajaxautocompleteset = function(id, value){
-  if(value == 1){
-    $('#' + id + 'lock').val(1);
-    $('#' + id + 'lockBtn').addClass("active");
-    $('#' + id + 'lockBtn').html('<i class="fa fa-lock"></i>');
-  }else{
-    $('#' + id + 'lock').val(0);
-    $('#' + id + 'lockBtn').removeClass("active");
-    $('#' + id + 'lockBtn').html('<i class="fa fa-unlock-alt"></i>');
-  }
-}
-
 var addCourse = function(){
   $('#course_name').val('');
   $('#credits').val('');
@@ -381,6 +327,6 @@ var addCourse = function(){
   $('#electivelist_idauto').prop('disabled', false);
   $('#deleteCourse').hide();
   $('#editCourse').modal('show');
-  ajaxautocompleteset('course_id', 0);
-  ajaxautocompleteset('completedcourse_id', 0);
+  site.ajaxautocompleteset('course_id', 0);
+  site.ajaxautocompleteset('completedcourse_id', 0);
 }

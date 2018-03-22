@@ -20,7 +20,7 @@ class CompletedcoursesController extends Controller
 
   public function getCompletedcourses(Request $request, $id = -1){
     if($id < 0){
-      $completedcourses = Completedcourse::with('student', 'requirement', 'transfercourse')->get();
+      $completedcourses = Completedcourse::with('student', 'requirements', 'transfercourse')->get();
       return view('dashboard.completedcourses')->with('completedcourses', $completedcourses)->with('page_title', "Completed Courses");
     }else{
       $completedcourse = Completedcourse::findOrFail($id);

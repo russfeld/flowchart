@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Events\CompletedCourseSaved;
 
 class Completedcourse extends Validatable
 {
@@ -30,7 +31,7 @@ class Completedcourse extends Validatable
       return $this->hasOne('App\Models\Transfercourse');
     }
 
-    public function requirement(){
+    public function requirements(){
         return $this->hasMany('App\Models\Planrequirement');
     }
 
@@ -70,5 +71,9 @@ class Completedcourse extends Validatable
             $queryStr = "completedcourses.name LIKE \"%" . $filter . "%\"";
             return $query->whereRaw($queryStr);
     }
+
+    protected $events = [
+      'saved' => CompletedCourseSaved::class,
+    ];
 
 }

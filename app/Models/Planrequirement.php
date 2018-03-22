@@ -100,7 +100,7 @@ class Planrequirement extends Validatable
     {
         $rules = array(
           'notes' => 'string|max:20',
-          'course_name' => 'sometimes|required|string',
+          'course_name' => 'sometimes|string',
           'course_id' => 'sometimes|exists_or_null:courses,id',
           'completedcourse_id' => 'sometimes|exists_or_null:completedcourses,id,student_id,' . $params[0],
           'course_id_lock' => 'required|boolean',
@@ -121,9 +121,16 @@ class Planrequirement extends Validatable
         return true;
     }
 
+    public function scopeFilterName($query, $name)
+    {
+            $filter = str_replace('"', "", $name);
+            $queryStr = "planrequirements.course_name LIKE \"%" . $filter . "%\"";
+            return $query->whereRaw($queryStr);
+    }
+
     protected $fillable = ['notes', 'plan_id', 'semester_id', 'ordering', 'credits', 'course_name', 'electivelist_id', 'course_id', 'completedcourse_id', 'course_id_lock', 'completedcourse_id_lock'];
 
     protected $events = [
-      'saved' => PlanRequirementSaved::class,
+      'saving' => PlanRequirementSaved::class,
     ];
 }

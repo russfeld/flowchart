@@ -167,54 +167,14 @@ exports.ajaxrestore = function(data, url, retUrl){
   }
 }
 
-/**
- * Function to autocomplete a field
- *
- * @param id - the ID of the field
- * @param url - the URL to request data from
- */
 exports.ajaxautocomplete = function(id, url){
-  $('#' + id + 'auto').autocomplete({
-	    serviceUrl: url,
-	    ajaxSettings: {
-	    	dataType: "json"
-	    },
-      minChars: 3,
-      autoSelectFirst: true,
-	    onSelect: function (suggestion) {
-	        $('#' + id).val(suggestion.data);
-          $('#' + id + 'text').html("Selected: (" + suggestion.data + ") " + site.truncateText(suggestion.value, 30));
-	    },
-	    transformResult: function(response) {
-	        return {
-	            suggestions: $.map(response.data, function(dataItem) {
-	                return { value: dataItem.value, data: dataItem.data };
-	            })
-	        };
-	    }
-	});
-
-  $('#' + id + 'clear').on('click', function(){
-    $('#' + id).val(0);
-    $('#' + id + 'text').html("Selected: (" + 0 + ") ");
-  });
+  site.ajaxautocomplete(id, url);
 }
 
-exports.ajaxautocompletelock = function(id){
-  $('#' + id + 'lockBtn').on('click', function(){
-    val = parseInt($('#' + id + 'lock').val());
-    exports.ajaxautocompleteset(id, (val + 1) % 2);
-  });
+exports.ajaxautocompletelock = function(id, url){
+  site.ajaxautocompletelock(id, url);
 }
 
 exports.ajaxautocompleteset = function(id, value){
-  if(value == 1){
-    $('#' + id + 'lock').val(1);
-    $('#' + id + 'lockBtn').addClass("active");
-    $('#' + id + 'lockBtn').html('<i class="fa fa-lock"></i>');
-  }else{
-    $('#' + id + 'lock').val(0);
-    $('#' + id + 'lockBtn').removeClass("active");
-    $('#' + id + 'lockBtn').html('<i class="fa fa-unlock-alt"></i>');
-  }
+  site.ajaxautocompleteset(id, value);
 }
