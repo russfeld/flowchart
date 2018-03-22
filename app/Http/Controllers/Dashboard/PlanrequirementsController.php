@@ -8,6 +8,7 @@ use League\Fractal\Resource\Item;
 use App\JsonSerializer;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\MessageBag;
 
 use App\Http\Controllers\Controller;
 
@@ -96,8 +97,14 @@ class PlanrequirementsController extends Controller
       if(!$request->has("electivelist_id")){
         $planrequirement->electivelist_id = null;
       }
-      $planrequirement->save();
-      return response()->json(trans('messages.item_saved'));
+      if($planrequirement->validateElectiveCourse()){
+        $planrequirement->save();
+        return response()->json(trans('messages.item_saved'));
+      }else{
+        $errors = new MessageBag();
+        $errors->add('course_name', 'Course is not listed in selected elective list');
+        return response()->json($errors, 422);
+      }
     }else{
       return response()->json($planrequirement->errors(), 422);
     }
@@ -123,8 +130,14 @@ class PlanrequirementsController extends Controller
         if(!$request->has("electivelist_id")){
           $planrequirement->electivelist_id = null;
         }
-        $planrequirement->save();
-        return response()->json(trans('messages.item_saved'));
+        if($planrequirement->validateElectiveCourse()){
+          $planrequirement->save();
+          return response()->json(trans('messages.item_saved'));
+        }else{
+          $errors = new MessageBag();
+          $errors->add('course_name', 'Course is not listed in selected elective list');
+          return response()->json($errors, 422);
+        }
       }else{
         return response()->json($planrequirement->errors(), 422);
       }

@@ -10,6 +10,8 @@ use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use App\JsonSerializer;
 
+use Illuminate\Support\MessageBag;
+
 use App\Models\User;
 use App\Models\Student;
 use App\Models\Advisor;
@@ -481,8 +483,14 @@ class FlowchartsController extends Controller
               }
               if($planrequirement->customEditValidate($data, array($planrequirement->plan->student_id))){
                 $planrequirement->fill($data);
-                $planrequirement->save();
-                return response()->json(trans('messages.item_saved'));
+                if($planrequirement->validateElectiveCourse()){
+                  $planrequirement->save();
+                  return response()->json(trans('messages.item_saved'));
+                }else{
+                  $errors = new MessageBag();
+                  $errors->add('course_name', 'Course is not listed in selected elective list');
+                  return response()->json($errors, 422);
+                }
               }else{
                 return response()->json($planrequirement->errors(), 422);
               }
@@ -502,8 +510,14 @@ class FlowchartsController extends Controller
               }
               if($planrequirement->defaultEditValidate($data, array($planrequirement->plan->student_id))){
                 $planrequirement->fill($data);
-                $planrequirement->save();
-                return response()->json(trans('messages.item_saved'));
+                if($planrequirement->validateElectiveCourse()){
+                  $planrequirement->save();
+                  return response()->json(trans('messages.item_saved'));
+                }else{
+                  $errors = new MessageBag();
+                  $errors->add('course_name', 'Course is not listed in selected elective list');
+                  return response()->json($errors, 422);
+                }
               }else{
                 return response()->json($planrequirement->errors(), 422);
               }

@@ -199,6 +199,7 @@ var dropCourse = function(event){
 }
 
 var editCourse = function(event){
+  site.clearFormErrors();
   var courseIndex = $(event.currentTarget).data('id');
   var semIndex = $(event.currentTarget).data('sem');
   var course = window.vm.semesters[semIndex].courses[courseIndex];

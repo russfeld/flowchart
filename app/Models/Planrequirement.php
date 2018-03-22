@@ -121,6 +121,36 @@ class Planrequirement extends Validatable
         return true;
     }
 
+    public function validateElectiveCourse(){
+      if($this->electivelist_id != null){
+        if($this->course_name == null || strlen($this->course_name) == 0){
+          return true;
+        }
+        $electivelist = $this->electivelist;
+        $parts = explode(" ", strtoupper($this->course_name));
+        if(count($parts) != 2){
+          return false;
+        }
+        $prefix = $parts[0];
+        $number = intval($parts[1]);
+        $electivecourses = $electivelist->courses->whereIn('course_prefix', ["*", $prefix]);
+        foreach($electivecourses as $electivecourse){
+          if($electivecourse->course_max_number == null){
+            if($electivecourse->course_min_number == $number){
+              return true;
+            }
+          }else{
+            if($electivecourse->course_min_number <= $number && $electivecourse->course_max_number >= $number){
+              return true;
+            }
+          }
+        }
+        return false;
+      }else{
+        return true;
+      }
+    }
+
     public function scopeFilterName($query, $name)
     {
             $filter = str_replace('"', "", $name);

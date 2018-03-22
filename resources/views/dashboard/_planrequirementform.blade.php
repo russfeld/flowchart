@@ -11,12 +11,12 @@
           <input type="hidden" id="student_id" value="{{ $plan->student_id }}" />
           @include('forms.text', ['field' => 'id', 'label' => 'ID', 'value' => '', 'disabled' => 'disabled'])
           @include('forms.text', ['field' => 'degreerequirement_id', 'label' => 'Degree Requirement ID', 'value' => '', 'disabled' => 'disabled'])
+          @include('forms.text', ['field' => 'course_name', 'label' => 'Course', 'value' => ''])
+          @include('forms.autofill', ['field' => 'electivelist_id', 'label' => 'Elective:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Elective List'])
           @include('forms.text', ['field' => 'credits', 'label' => 'Credits', 'value' => ''])
           @include('forms.selectajax', ['field' => 'semester_id', 'label' => 'Semester', 'value' => ''])
           @include('forms.text', ['field' => 'ordering', 'label' => 'Ordering', 'value' => ''])
           @include('forms.text', ['field' => 'notes', 'label' => 'Notes', 'value' => ''])
-          @include('forms.text', ['field' => 'course_name', 'label' => 'Course', 'value' => ''])
-          @include('forms.autofill', ['field' => 'electivelist_id', 'label' => 'Elective:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Elective List'])
           @include('forms.autofilllock', ['field' => 'course_id', 'label' => 'Catalog Match:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course', 'locked' => 0])
           @include('forms.autofilllock', ['field' => 'completedcourse_id', 'label' => 'Completed Course Match:', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Course', 'locked' => 0])
         </form>
