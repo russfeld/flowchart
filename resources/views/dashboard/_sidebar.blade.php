@@ -33,16 +33,16 @@
             <!-- Optionally, you can add icons to the links -->
             <li class="{{ Request::is('admin') ? 'active' : '' }}"><a href="{{ url('/admin') }}"><span>Home</span></a></li>
             <!--<li><a href="#"><span>Management</span></a></li>-->
-            @if(Request::is('admin/students*') || Request::is('admin/departments*') || Request::is('admin/advisors*'))
+            @if(Request::is('admin/students*') || Request::is('admin/departments*') || Request::is('admin/advisors*') || Request::is('admin/newstudent*') || Request::is('admin/newadvisor*') || Request::is('admin/newdepartment*'))
             <li class="treeview active">
             @else
             <li class="treeview">
             @endif
                 <a href="#"><span>Manage People</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                    <li class="{{ Request::is('admin/students*') ? 'active' : '' }}" ><a href="{{ url('/admin/students') }}">Students</a></li>
-                    <li class="{{ Request::is('admin/advisors*') ? 'active' : '' }}" ><a href="{{ url('/admin/advisors') }}">Advisors</a></li>
-                    <li class="{{ Request::is('admin/departments*') ? 'active' : '' }}" ><a href="{{ url('/admin/departments') }}">Departments</a></li>
+                    <li class="{{ Request::is('admin/students*') || Request::is('admin/newstudent*') ? 'active' : '' }}" ><a href="{{ url('/admin/students') }}">Students</a></li>
+                    <li class="{{ Request::is('admin/advisors*') || Request::is('admin/newadvisor*') ? 'active' : '' }}" ><a href="{{ url('/admin/advisors') }}">Advisors</a></li>
+                    <li class="{{ Request::is('admin/departments*') || Request::is('admin/newdepartment*') ? 'active' : '' }}" ><a href="{{ url('/admin/departments') }}">Departments</a></li>
                 </ul>
             </li>
             @if(Request::is('admin/blackouts*') || Request::is('admin/groupsessions*') || Request::is('admin/meetings*'))
@@ -57,17 +57,17 @@
                     <li class="{{ Request::is('admin/groupsessions*') ? 'active' : '' }}" ><a href="{{ url('/admin/groupsessions') }}">Groupsessions</a></li>
                 </ul>
             </li>
-            @if(Request::is('admin/degreeprograms*') || Request::is('admin/completedcourses*') || Request::is('admin/plans*') || Request::is('admin/electivelists*') || Request::is('admin/transfercourses*'))
+            @if(Request::is('admin/degreeprograms*') || Request::is('admin/completedcourses*') || Request::is('admin/plans*') || Request::is('admin/electivelists*') || Request::is('admin/transfercourses*')  || Request::is('admin/newdegreeprogram') || Request::is('admin/newelectivelist*') || Request::is('admin/newplan*') || Request::is('admin/newcompletedcourse*'))
             <li class="treeview active">
             @else
             <li class="treeview">
             @endif
                 <a href="#"><span>Manage Flowcharts</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                    <li class="{{ Request::is('admin/degreeprograms*') ? 'active' : '' }}" ><a href="{{ url('/admin/degreeprograms') }}">Degree Programs</a></li>
-                    <li class="{{ Request::is('admin/electivelists*') ? 'active' : '' }}" ><a href="{{ url('/admin/electivelists') }}">Elective Lists</a></li>
-                    <li class="{{ Request::is('admin/plans*') ? 'active' : '' }}" ><a href="{{ url('/admin/plans') }}">Plans</a></li>
-                    <li class="{{ Request::is('admin/completedcourses*') ? 'active' : '' }}" ><a href="{{ url('/admin/completedcourses') }}">Completed Courses</a></li>
+                    <li class="{{ Request::is('admin/degreeprograms*') || Request::is('admin/newdegreeprogram') ? 'active' : '' }}" ><a href="{{ url('/admin/degreeprograms') }}">Degree Programs</a></li>
+                    <li class="{{ Request::is('admin/electivelists*') || Request::is('admin/newelectivelist*') ? 'active' : '' }}" ><a href="{{ url('/admin/electivelists') }}">Elective Lists</a></li>
+                    <li class="{{ Request::is('admin/plans*') || Request::is('admin/newplan*') ? 'active' : '' }}" ><a href="{{ url('/admin/plans') }}">Plans</a></li>
+                    <li class="{{ Request::is('admin/completedcourses*') || Request::is('admin/newcompletedcourse*') ? 'active' : '' }}" ><a href="{{ url('/admin/completedcourses') }}">Completed Courses</a></li>
                 </ul>
             </li>
             <li class="{{ Request::is('admin/settings*') ? 'active' : '' }}"><a href="{{ url('/admin/settings') }}"><span>Settings</span></a></li>
