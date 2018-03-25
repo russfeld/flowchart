@@ -59,7 +59,7 @@ class FlowchartsController extends Controller
           //
           }else{
             //if they are not an advisor, redirect to their own page
-            return redirect('flowcharts/index');
+            return redirect('flowcharts');
           }
         }
     }
