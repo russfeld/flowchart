@@ -46,7 +46,7 @@ class FlowchartsController extends Controller
           }else{
             //if student, show their plans
             $plans = $user->student->plans;
-            return view('flowcharts/index')->with('plans', $plans)->with('student', $user->$student);
+            return view('flowcharts/index')->with('plans', $plans)->with('student', $user->student);
           }
         }else{
           //currently authenticated user is an advisor and selecting a particular student
