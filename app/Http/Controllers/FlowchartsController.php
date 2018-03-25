@@ -93,7 +93,7 @@ class FlowchartsController extends Controller
           $student = Student::findOrFail($id);
           $plan->student_id = $student->id;
         }else{
-          $plan->student_id = $user->student_id;
+          $plan->student_id = $user->student->id;
         }
         $degreeprograms = Degreeprogram::orderBy('name', 'asc')->get();
         $degreeprogramUnknown = new Degreeprogram();
