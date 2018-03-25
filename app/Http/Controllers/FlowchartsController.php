@@ -121,7 +121,7 @@ class FlowchartsController extends Controller
           $student = Student::findOrFail($id);
           $data['student_id'] = $student->id;
         }else{
-          $data['student_id'] = $user->student_id;
+          $data['student_id'] = $user->student->id;
         }
 
         if($plan->validate($data)){
