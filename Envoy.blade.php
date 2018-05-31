@@ -1,4 +1,4 @@
-@servers(['web' => 'root@138.197.105.133', 'cis' => 'russfeld@cslinux.cs.ksu.edu'])
+@servers(['web' => 'root@104.131.121.114', 'cis' => 'russfeld@cslinux.cs.ksu.edu'])
 
 <?php
 $repo = 'git@github.com:russfeld/flowchart.git';
