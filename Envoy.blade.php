@@ -2,9 +2,9 @@
 
 <?php
 $repo = 'git@github.com:russfeld/flowchart.git';
-$release_dir = '/var/www/flowchart_releases';
-$data_dir = '/var/www/flowchart_data';
-$app_dir = '/var/www/flowchart';
+$release_dir = '/var/www/schedule_releases';
+$data_dir = '/var/www/schedule_data';
+$app_dir = '/var/www/schedule';
 $release_dir_cis = '/web/cis-advising/flowchart_releases';
 $data_dir_cis = '/web/cis-advising/flowchart_data';
 $app_dir_cis = '/web/cis-advising/html';
@@ -32,7 +32,7 @@ $release = 'release_' . date('YmdHis');
 @task('fetch_repo', ['on' => 'web'])
     [ -d {{ $release_dir }} ] || mkdir {{ $release_dir }};
     cd {{ $release_dir }};
-    git clone -b dev {{ $repo }} {{ $release }};
+    git clone -b schedule {{ $repo }} {{ $release }};
 @endtask
 
 @task('fetch_repo_cis', ['on' => 'cis'])
