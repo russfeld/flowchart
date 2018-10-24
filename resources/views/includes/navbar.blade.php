@@ -8,7 +8,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="{{ url('/') }}">Scheduler</a>
+          <a class="navbar-brand" href="{{ url('/') }}">K-State Engineering</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
@@ -18,7 +18,7 @@
             @if(DbConfig::get('navbar_showflowcharts') === true)
               <li class="{{ Request::is('flowcharts*') ? 'active' : '' }}"><a href="{{ url('/flowcharts') }}">Flowcharts</a></li>
             @endif
-            <li class="{{ Request::is('advising*') ? 'active' : '' }}"><a href="{{ url('/advising') }}">Schedule Meeting</a></li>
+            <li class="{{ Request::is('advising*') ? 'active' : '' }}"><a href="{{ url('/advising') }}">Advising</a></li>
             @if(DbConfig::get('navbar_showgroupsession') === true)
               <li class="{{ Request::is('groupsession*') ? 'active' : '' }}"><a href="{{ url('/groupsession') }}">Group Advising</a></li>
             @endif

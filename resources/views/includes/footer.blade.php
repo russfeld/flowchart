@@ -1,5 +1,5 @@
 <footer class="footer">
   <div class="container">
-    <p class="text-muted">Advising System - <a href="https://github.com/russfeld/flowchart/">Github</a></p>
+    <p class="text-muted">K-State Engineering Advising System - Contact webmaster@cs.ksu.edu for help</p>
   </div>
 </footer>
