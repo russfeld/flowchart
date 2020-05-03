@@ -55,7 +55,7 @@ class CompletedcoursesController extends Controller
         $completedcourse->fill($data);
         $completedcourse->save();
         if($data['transfer']){
-          if(count($completedcourse->transfercourse)){
+          if(isset($completedcourse->transfercourse)){
             $transfercourse = $completedcourse->transfercourse;
           }else{
             $transfercourse = new Transfercourse();
@@ -68,7 +68,7 @@ class CompletedcoursesController extends Controller
             return response()->json($transfercourse->errors(), 422);
           }
         }else{
-          if(count($completedcourse->transfercourse)){
+          if(isset($completedcourse->transfercourse)){
             $transfercourse = $completedcourse->transfercourse;
             $transfercourse->delete();
           }

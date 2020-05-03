@@ -69,7 +69,7 @@ class GroupsessionController extends Controller
       $groupsessions = Groupsession::where('status', '<', 3)->orderBy('status', 'desc')->orderBy('id', 'asc')->get();
 
       $resource = new Collection($groupsessions, function($gs) {
-            if(count($gs->advisor)){
+            if(isset($gs->advisor)){
               return[
                   'id' => (int)$gs->id,
                   'userid' => (int)$gs->student->user_id,
