@@ -31,7 +31,7 @@
             <ol class="breadcrumb">
                 <li><a href="{{url('/admin')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
                 <?php $path = "/admin" ;?>
-                @for($i = 2; $i <= isset(Request::segments()); $i++)
+                @for($i = 2; $i <= count(Request::segments()); $i++)
                 <li>
                   <?php $path = $path . "/" . Request::segment($i);?>
                   <a href="{{url($path)}}">{{ucfirst(Request::segment($i))}}</a>
