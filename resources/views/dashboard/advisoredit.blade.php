@@ -14,7 +14,7 @@
       @include('forms.text', ['field' => 'office', 'label' => 'Office', 'value' => $advisor->office])
       @include('forms.text', ['field' => 'email', 'label' => 'Email', 'value' => $advisor->email])
       @include('forms.text', ['field' => 'phone', 'label' => 'Phone', 'value' => $advisor->phone])
-      @if(count($advisor->department))
+      @if(isset($advisor->department))
         @include('forms.select', ['field' => 'department_id', 'label' => 'Department', 'value' => $advisor->department->id, 'options' => $departments])
       @else
         @include('forms.select', ['field' => 'department_id', 'label' => 'Department', 'value' => 0, 'options' => $departments])

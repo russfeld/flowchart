@@ -15,7 +15,7 @@
         @include('forms.select', ['field' => 'effective_semester', 'label' => 'Effective Semester', 'value' => 0, 'options' => $semesters])
       @endif
       @include('forms.text', ['field' => 'effective_year', 'label' => 'Effective Year', 'value' => $degreeprogram->effective_year])
-      @if(count($degreeprogram->department))
+      @if(isset($degreeprogram->department))
         @include('forms.select', ['field' => 'department_id', 'label' => 'Department', 'value' => $degreeprogram->department->id, 'options' => $departments])
       @else
         @include('forms.select', ['field' => 'department_id', 'label' => 'Department', 'value' => 0, 'options' => $departments])

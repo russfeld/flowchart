@@ -17,7 +17,7 @@
       @include('forms.text', ['field' => 'basis', 'label' => 'Basis', 'value' => $completedcourse->basis])
       @include('forms.text', ['field' => 'credits', 'label' => 'Credits', 'value' => $completedcourse->credits])
       @include('forms.text', ['field' => 'grade', 'label' => 'Grade', 'value' => $completedcourse->grade])
-      @if(count($completedcourse->student))
+      @if(isset($completedcourse->student))
         @include('forms.autofill', ['field' => 'student_id', 'label' => 'Student', 'value' => $completedcourse->student_id, 'valuetext' => $completedcourse->student->name, 'placeholder' => 'Enter Student Name'])
       @else
         @include('forms.autofill', ['field' => 'student_id', 'label' => 'Student', 'value' => 0, 'valuetext' => '', 'placeholder' => 'Enter Student Name'])

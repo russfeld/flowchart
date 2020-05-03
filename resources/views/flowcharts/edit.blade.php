@@ -18,7 +18,7 @@
         @include('forms.select', ['field' => 'start_semester', 'label' => 'Start Semester', 'value' => 0, 'options' => $semesters])
       @endif
       @include('forms.text', ['field' => 'start_year', 'label' => 'Start Year', 'value' => $plan->start_year])
-      @if(count($plan->degreeprogram))
+      @if(isset($plan->degreeprogram))
         @include('forms.select', ['field' => 'degreeprogram_id', 'label' => 'Degree Program', 'value' => $plan->degreeprogram->id, 'options' => $degreeprograms])
       @else
         @include('forms.select', ['field' => 'degreeprogram_id', 'label' => 'Degree Program', 'value' => 0, 'options' => $degreeprograms])

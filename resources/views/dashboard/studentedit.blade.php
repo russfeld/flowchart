@@ -13,12 +13,12 @@
       @include('forms.text', ['field' => 'first_name', 'label' => 'First Name', 'value' => $student->first_name])
       @include('forms.text', ['field' => 'last_name', 'label' => 'Last Name', 'value' => $student->last_name])
       @include('forms.text', ['field' => 'email', 'label' => 'Email Address', 'value' => $student->email])
-      @if(count($student->advisor))
+      @if(isset($student->advisor))
         @include('forms.select', ['field' => 'advisor_id', 'label' => 'Advisor', 'value' => $student->advisor->id, 'options' => $advisors])
       @else
         @include('forms.select', ['field' => 'advisor_id', 'label' => 'Advisor', 'value' => 0, 'options' => $advisors])
       @endif
-      @if(count($student->department))
+      @if(isset($student->department))
         @include('forms.select', ['field' => 'department_id', 'label' => 'Department', 'value' => $student->department->id, 'options' => $departments])
       @else
         @include('forms.select', ['field' => 'department_id', 'label' => 'Department', 'value' => 0, 'options' => $departments])
