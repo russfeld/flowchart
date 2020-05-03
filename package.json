@@ -25,7 +25,7 @@
     "fullcalendar": "^3.9.0",
     "hammerjs": "^2.0.8",
     "ion-sound": "^3.0.7",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "laravel-echo": "^1.4.0",
     "laravel-mix": "1.*",
     "lodash": "^4.17.11",
