@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "admin-lte": "^2.4.8",
-    "axios": "^0.15.3",
+    "axios": "^0.21.1",
     "babel-preset-react": "^6.24.1",
     "bootstrap": "^3.3.7",
     "bootstrap-sass": "^3.3.7",
