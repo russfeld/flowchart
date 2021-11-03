@@ -13,3 +13,7 @@
 
 <!-- favicon -->
 <link href="/favicon.ico" rel="shortcut icon">
+
+<!-- block robots -->
+<meta name='robots' content='noindex,follow' />
+
