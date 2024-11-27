@@ -15,7 +15,7 @@
     "babel-preset-react": "^6.24.1",
     "bootstrap": "^3.3.7",
     "bootstrap-sass": "^3.3.7",
-    "codemirror": "^5.40.2",
+    "codemirror": "^5.58.2",
     "cross-env": "^3.2.3",
     "datatables.net": "^1.10.19",
     "datatables.net-bs": "^1.10.19",
